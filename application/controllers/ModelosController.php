@@ -465,16 +465,17 @@ class ModelosController extends Zend_Controller_Action
 				'tipoConsulta' => 'tradicional'
 			]);
 
-			if ($arrFipe) {
+			if ($arrFipe && isset($arrFipe['Valor'])) {
 				$resultado = [
 					'valor' => $arrFipe['Valor'],
 					'codigo_fipe' => $arrFipe['CodigoFipe'],
 					'combustivel' => $arrFipe['Combustivel'],
-					'ano_modelo' => $arrFipe['AnoModelo']
+					'ano_modelo' => $arrFipe['AnoModelo'],
+					'mes_referencia' => isset($arrFipe['MesReferencia']) ? $arrFipe['MesReferencia'] : ''
 				];
 				echo json_encode($resultado);
 			} else {
-				echo json_encode(null);
+				echo json_encode($arrFipe);
 			}
 
 		}elseif($this->_getParam('fn') == 'get_modelo'){
