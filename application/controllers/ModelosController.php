@@ -523,7 +523,7 @@ class ModelosController extends Zend_Controller_Action
 			}else{
 
 				$dados = array(
-					// 'preco' => $arr['valor'],
+					'preco' => $arr['valor'],
 					'codigo' => $arr['codigo'],
 					'id_usuario_alteracao' => $_SESSION['sessionUser']['id'],
 					'hora_alteracao' => @date("Y-m-d H:i:s"),
@@ -532,7 +532,7 @@ class ModelosController extends Zend_Controller_Action
 				$dbModelos->edt($arrModelos['id'], $dados);
                 echo json_encode([
                     'id' => $arrModelos['id'],
-                    'preco' => 'R$ ' . number_format($arrModelos['preco'], 2, ',', '.')
+                    'preco' => 'R$ ' . number_format($arr['valor'], 2, ',', '.')
                 ]);
 
 				//echo json_encode($arrModelos['id']);
