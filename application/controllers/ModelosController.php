@@ -540,13 +540,76 @@ class ModelosController extends Zend_Controller_Action
 
 		}elseif($this->_getParam('fn') == 'get_valor_fipe'){
 
-			$this->getValorFipeLocal();
+			$this->getValorFipeAtualizado();
 
 		}
 
 	}
 
-    // ===== NOVO MÉTODO: BUSCA FIPE DA TABELA LOCAL =====
+	private function getValorFipeAtualizado()
+	{
+		$cod_fipe = $this->_getParam('cod_fipe');
+		$codigo_ano = $this->_getParam('codigo_ano');
+		$tipo = $this->_getParam('tipo');
+
+		if ($cod_fipe && $codigo_ano) {
+			// Monta o tipo para a BrasilAPI: carros, motos, caminhoes
+			$tipoApi = $tipo;
+			if (!$tipoApi) $tipoApi = 'carros';
+
+			// Extrai o ano do codigo_ano (formato "2024-1")
+			$partes = explode('-', $codigo_ano);
+			$anoModelo = $partes[0];
+
+			// BrasilAPI aceita consulta direta por codigo FIPE
+			$url = 'https://brasilapi.com.br/api/fipe/preco/v1/' . urlencode($cod_fipe);
+
+			$ch = curl_init($url);
+			curl_setopt_array($ch, [
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_TIMEOUT => 10,
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_HTTPHEADER => ['Accept: application/json']
+			]);
+			$response = curl_exec($ch);
+			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+			curl_close($ch);
+
+			if ($httpCode == 200 && $response) {
+				$dados = json_decode($response, true);
+
+				if (is_array($dados)) {
+					// A API retorna array com todos os anos, filtrar pelo ano desejado
+					foreach ($dados as $item) {
+						if (isset($item['anoModelo']) && $item['anoModelo'] == $anoModelo) {
+							echo json_encode([
+								'valor' => $item['valor'],
+								'codigo_fipe' => $item['codigoFipe'],
+								'ano_modelo' => $item['anoModelo'],
+								'combustivel' => isset($item['combustivel']) ? $item['combustivel'] : ''
+							]);
+							return;
+						}
+					}
+
+					// Se não encontrou o ano exato, retorna o primeiro resultado
+					if (!empty($dados[0])) {
+						echo json_encode([
+							'valor' => $dados[0]['valor'],
+							'codigo_fipe' => $dados[0]['codigoFipe'],
+							'ano_modelo' => $dados[0]['anoModelo'],
+							'combustivel' => isset($dados[0]['combustivel']) ? $dados[0]['combustivel'] : ''
+						]);
+						return;
+					}
+				}
+			}
+		}
+
+		// Fallback: busca na tabela local
+		$this->getValorFipeLocal();
+	}
+
 	private function getValorFipeLocal()
 	{
 		try {
