@@ -1,0 +1,32 @@
+<?php
+
+header("Content-Type: text/html; charset=UTF-8",true);
+
+Zend_Session::start();
+$ts = @date('ymdhis');
+?>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#aa0000">
+	<title>Meu Car</title>
+		<link rel="stylesheet" href="/css/loginv2/bootstrap.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="/js/jquery-3.4.2.min.js"></script>
+		<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+	</head>
+	<body>
+
+		
+
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		  <div class="container-fluid">
+		    <a class="navbar-brand" href="#">Meu Car</a>
+		   
+		  </div>
+		</nav>
+		<?php echo $this->layout()->content; ?>
+
+	</body>
+</html>

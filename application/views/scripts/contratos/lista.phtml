@@ -1,0 +1,43 @@
+<div class="inline" style="margin-left:5px; margin-bottom:5px">
+	<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>contratos/add'" />
+</div>
+<table class = "table">
+
+<thead><tr><th>Nome Contrato</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th style="width:25%;">Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->contratos as $e){
+	
+		$dataTmp = explode(" ",$e['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+	
+?>		
+		<tr>
+		<td><?php echo $e['nome']; ?></td>
+		<td><?php echo $e['nome_alteracao']." - ".$e['hora_alteracao'] ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('contrato: <?php echo $e['nome']?>', <?php echo $e['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

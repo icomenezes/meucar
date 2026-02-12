@@ -1,0 +1,102 @@
+<form class="form" action="financiamentos-root" method="post" id="form">
+	
+<div class="inline" id="div_select">
+	<label class="label">Concession&aacute;ria</label>
+	<select name = "id_empresa" id="id_empresa" class="select">
+		<option value = "0">Todas</option>
+		<?php
+		foreach($this->arrEmpresas as $emp){
+		
+			if($emp['id'] == $this->idEmpresa){
+			
+				echo "<option selected='selected' value = '".$emp['id']."'>".$emp['nome_fantasia']."</option>";
+			
+			}else{
+		
+				echo "<option value = '".$emp['id']."'>".$emp['nome_fantasia']."</option>";
+			
+			}
+		
+		}
+		?>
+		</select>
+</div>
+
+
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->dataInicial; ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->dataFinal; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->relatorio; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Financiamentos"/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Financiamentos');"/>
+	</div>
+
+</form>
+
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+	
+	<?php
+	echo $this->relatorio;
+	?>
+
+</div>
+
+<script type="text/javascript">
+
+	function imprimir(id, pg) {
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+
+}
+
+	function geraXls(){
+	
+		$("form").attr("action","gerar-xls");
+		$("form").submit();
+		$("form").attr("action","financiamentos-root");
+	
+	}
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+</script>

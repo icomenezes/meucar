@@ -1,0 +1,77 @@
+<style rel="stylesheet" type="text/css" media="print">
+
+
+body{
+	background-image:url(/arquivos_site/images/logo_meucar_transparente.png);
+	background-repeat: no-repeat;
+	background-size: 600px;
+	background-position:center center;
+}
+	
+*{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+table{
+	width:700px;
+	border: solid 1px;
+}
+
+.espaco{
+	width:15px;
+	border: solid 0px;
+}
+
+table tr td{
+	border-top: solid 1px;
+	border-right: solid 1px;
+}
+
+.titulo{
+	margin-top:7px;
+	font-weight:bold;
+}
+
+.campo{
+	font-weight:bold;
+}
+
+</style>
+
+<?php
+	
+	$dados = $this->arrVeiculo;
+
+?>
+
+
+<center><div style="font-size: 20px;">MeuCar</div></center>
+<div class="titulo">DADOS VEICULO</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+
+	<tr>
+		<td colspan="15"style="border-top:0px;"><span class="campo">Marca:</span><br/><span class="dado"><?php echo ($dados['marca'])?$dados['marca']:"<br/>"; ?></span></td>
+		<td colspan="15"style="border-top:0px;"><span class="campo">Modelo:</span><br/><span class="dado"><?php echo ($dados['modelo'])?$dados['modelo']:"<br/>"; ?></span></td>
+		<td colspan="15"style="border-top:0px;"><span class="campo">Placa:</span><br/><span class="dado"><?php echo ($dados['placa'])?$dados['placa']:"<br/>"; ?></span></td>
+		<td colspan="15"style="border-top:0px; border-right:0px;"><span class="campo">Chassi:</span><br/><span class="dado"><?php echo ($dados['chassi'])?$dados['chassi']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="8"><span class="campo">Renavam:</span><br/><span class="dado"><?php echo ($dados['renavam'])?$dados['renavam']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Ano Fabricação:</span><br/><span class="dado"><?php echo ($dados['ano_fabricacao'])?$dados['ano_fabricacao']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Ano Modelo:</span><br/><span class="dado"><?php echo ($dados['ano_modelo'])?$dados['ano_modelo']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Combustivel:</span><br/><span class="dado"><?php echo ($dados['combustivel'])?$dados['combustivel']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Cor:</span><br/><span class="dado"><?php echo ($dados['cor'])?$dados['cor']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-right:0px;"><span class="campo">Km:</span><br/><span class="dado"><?php echo ($dados['km'])?$dados['km']:"<br/>"; ?></span></td>
+	</tr>
+</table>
+
+
+<script>
+
+	window.print();
+
+</script>

@@ -1,0 +1,245 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Fornecedor</label>
+		<input type="text" id="razao_social" name="razao_social" class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="cpf_cnpj">CNPJ</label>
+		<input type="text" id="cnpj" name="cnpj" class="text" value="" style="width:60%;" />
+		CNPJ<input type="checkbox" checked="checked" id="mask_cnpj" value="1" onClick="mudaMascara(this.id);" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		CPF<input type="checkbox" id="mask_cpf" value="1" onClick="mudaMascara(this.id);"/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Contato</label>
+		<input type="text" id="contato" name="contato" class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular 1</label>
+		<input type="text" id="cel1" name="cel1" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular 2</label>
+		<input type="text" id="cel2" name="cel2" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nextel</label>
+		<input type="text" id="nextel" name="nextel" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ramo de Atividade</label>
+		<input type="text" id="ramo_atividade" name="ramo_atividade" class="text req" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" id="endereco" name="endereco" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro" name="bairro" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado" name="estado" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" id="cep" name="cep" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="telefone" name="telefone" class="text req" value="" />
+	</div>
+		
+	<div class="inline">
+		<label class="label">Email</label>
+		<input type="text" id="email" name="email" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ativo</label>
+		<input type="checkbox" checked="checked" id="ativo" name="ativo" value="1" onClick="mudaAtivo(this.value);"/>
+	</div>
+	
+	<div class="inline" style="width:98%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" value="" class="text"></textarea>
+	</div>
+		<div class="inline" style="clear:both; margin-top: 10px;">
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $_SESSION['sessionUser']['id_empresa'];?>" />
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function mudaAtivo(id){
+
+	if(id == 1){
+	
+		$("#ativo").val("0");
+	
+	}else{
+	
+		$("#ativo").val("1");
+
+	}
+
+}
+
+function mudaMascara(sel){
+
+	if(sel == "mask_cpf"){
+	
+		$("#cpf_cnpj").html("CPF");
+		$("#mask_cnpj").removeAttr("checked");
+		$("#cnpj").mask("999.999.999-99");
+	
+	}
+	
+	if(sel == "mask_cnpj"){
+	
+		$("#cpf_cnpj").html("CNPJ");
+		$("#mask_cpf").removeAttr("checked");
+		$("#cnpj").mask("99.999.999/9999-99");
+	
+	}
+
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#razao_social").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo fornecedor deve ser preenchido.";
+	
+	}
+	
+	if($("#contato").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo contato deve ser preenchido.";
+	
+	}
+	
+	if($("#ramo_atividade").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo ramo de atividade deve ser preenchido.";
+	
+	}
+	
+	
+	if($("#telefone").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo telefone deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+
+	$("#cnpj").mask("99.999.999/9999-99");
+	$("#cep").mask("99999-999");
+	
+	
+	
+	$('#telefone').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	
+	
+	$('#cel1').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	
+	
+	$('#cel2').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

@@ -1,0 +1,249 @@
+
+
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text" value="" />
+	</div>
+
+	<div class="inline" id="div_mes">
+		<label class="label">M&ecirc;s</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					if($mesNum == @date("m") && $anoNum == @date("Y")){
+						
+						$sel = "selected='selected'";
+					
+					}else{
+						
+						$sel = "";
+					
+					}
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option ".$sel." value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo "01/".@date("m")."/".@date("Y");  ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo @date("d", mktime(0, 0, 0, @date("m")+1, 0, @date("Y")))."/".@date("m")."/".@date("Y"); ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<select id="marca" name="marca" class="text" onChange="buscaModelo(this.value, 1);">
+			<option>Selecione</option>
+		</select>
+	</div>
+		
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<select id="veiculo" name="veiculo" class="text">
+			<option value="">Selecione</option>
+		</select>
+	</div>
+	
+	<?php
+	if($_SESSION['sessionUser']['id_perfil'] == 2 || $_SESSION['sessionUser']['id_perfil'] == 4 || $_SESSION['sessionUser']['id_perfil'] == 9){
+	?>
+	<div class="inline">
+		<label class="label">Vendedor</label>
+		<select id="vendedor" name="vendedor" class="text">
+			<option value="">Todos</option>
+			<?php echo $this->strVendedores; ?>
+		</select>
+	</div>
+	<?php
+	}
+	?>
+	
+	<div class="inline" style="clear:both">
+		<input type="button" class="btn-small btn-find" onClick="buscaListaFluxo();" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>clientes/add-cliente-fluxo-auto-salvar'" />
+	</div>
+	
+</form>
+
+	<div id="table"></div>
+
+<script>
+
+	function buscaModelo(strMmarca){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+
+				$("#veiculo").html(data);
+
+			}
+		});
+	
+	}
+
+	function buscaMarcas(){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_marca',
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#marca").html(data);
+				
+			}
+		});
+	
+	}
+
+	function buscaListaFluxo(){
+
+		$("body").prepend('<div id="div_aguarde" style="text-align:center; opacity:0.8; background-color:#000;width:100%; height:1000px; position:fixed; font-size: 30px; color:#fff;"><div style="margin-top:200px;">Atualizando! Aguarde...</div></div>');
+	
+		$.ajax({
+			type: "POST",
+			url: '/clientes/ajax/fn/lista_fluxo_cliente',
+			async: true,
+			dataType:"text",
+			data: ({'nome':$("#nome").val(), 'veiculo':$("#veiculo").val(), 'data_inicial':$("#data_inicial").val(), 'data_final':$("#data_final").val(), 'vendedor':$("#vendedor").val()}),
+			success:function(resp){
+				
+				$("#table").html(resp);
+				
+				$(".resultado_motivo").tipsy({gravity: 'n'});
+				
+				$("#div_aguarde").fadeOut(500);
+
+			}
+
+		});
+	
+	}
+
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}else{
+			
+			$("#data_inicial").val("");
+			$("#data_final").val("");
+		
+		}
+	
+	}
+	
+	$(document).ready(function(){
+	
+		buscaListaFluxo();
+		buscaMarcas();
+
+	});
+</script>

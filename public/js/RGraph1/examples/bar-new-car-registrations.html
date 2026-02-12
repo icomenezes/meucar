@@ -1,0 +1,135 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.key.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    
+    <title>RGraph demo:  A Bar chart showing new car registrations in the UK, 2010-2016</title>
+    
+    
+    <meta name="description" content="A Bar chart showing new car registrations in the UK, 2010-2016" />
+
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+
+    <h1>A Bar chart showing new car registrations in the UK, 2010-2016</h1>
+
+    <div style="display: inline-block; margin: 35px">
+        <canvas id="cvs" width="600" height="300">[No canvas support]</canvas>
+    </div>
+
+    <script>
+        new RGraph.Bar({
+            id: 'cvs',
+            data: [
+                [1075000,910000,10000],
+                [900000,980000,15000],
+                [970000,1050000,30000],
+                [1100000,1120000,40000],
+                [1190000,1230000,50000],
+                [1270000,1260000,70000],
+                [1300000,1150000,75000]
+            ],
+            options: {
+                marginLeft: 100,
+                colors: ['#024E4E','#009997','#9ECECD'],
+                xaxisLabels: ['2010','2011','2012','2013','2014','2015','2016'],
+                axes: false,
+                
+                backgroundGridVlines: false,
+                backgroundGridHlinesCount: 7,
+                
+                yaxisLabelsCount: 7,
+                yaxisScaleMax: 1400000,
+                
+                key: ['Petrol','Diesel','All AFVs'],
+                keyPosition: 'margin',
+                keyLabelsSize: 14,
+                keyPositionX: 100,
+                
+                title: 'New car registrations in the UK, 2010-2016',
+                titleSize: 14,
+                titleX: 100,
+                titleY: 0,
+                titleHalign: 'left'
+            }
+        }).draw();
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.key.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.bar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="display: inline-block; margin: 35px"&gt;
+    &lt;canvas id="cvs" width="600" height="300"&gt;[No canvas support]&lt;/canvas&gt;
+&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    new RGraph.Bar({
+        id: 'cvs',
+        data: [
+            [1075000,910000,10000],
+            [900000,980000,15000],
+            [970000,1050000,30000],
+            [1100000,1120000,40000],
+            [1190000,1230000,50000],
+            [1270000,1260000,70000],
+            [1300000,1150000,75000]
+        ],
+        options: {
+            marginLeft: 100,
+            colors: ['#024E4E','#009997','#9ECECD'],
+            xaxisLabels: ['2010','2011','2012','2013','2014','2015','2016'],
+            axes: false,
+            
+            backgroundGridVlines: false,
+            backgroundGridHlinesCount: 7,
+            
+            yaxisLabelsCount: 7,
+            yaxisScaleMax: 1400000,
+            
+            key: ['Petrol','Diesel','All AFVs'],
+            keyPosition: 'margin',
+            keyLabelsSize: 14,
+            keyPositionX: 100,
+            
+            title: 'New car registrations in the UK, 2010-2016',
+            titleSize: 14,
+            titleX: 100,
+            titleY: 0,
+            titleHalign: 'left'
+        }
+    }).draw();
+&lt;/script&gt;
+</pre>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+
+<div id="add_relatorio">
+<h2 style="margin-left: 11px; margin-top: 10px; margin-bottom: 5px; font-weight: bold;">Mês atual</h2>
+<table class="table">
+	<?php 
+
+		$thead = "<tr><th>RALE</th>";
+		$retorno = "<tr><td><b><span style='font-size: 15px; color: red;'>R</span>etornos Realizados</b></td>";
+		$atendimento = "<tr><td><b><span style='font-size: 15px; color: red;'>A</span>tendimento Loja</b></td>";
+		$ligacoes = "<tr><td><b><span style='font-size: 15px; color: red;'>L</span>igações Recebidas</b></td>";
+		$entregas = "<tr><td><b><span style='font-size: 15px; color: red;'>E</span>ntregas Realizadas</b></td>";
+
+		$totalRetorno = 0;
+		$totalAtendimento = 0;
+		$totalLigacoes = 0;
+		$totalEntregas = 0;
+		
+		if($this->fluxoLoja){
+
+			foreach (array_reverse($this->fluxoLoja) as $key => $value) {
+
+				$thead .= "<th>".substr(implode("/",array_reverse(explode("-",$key))), 0, 5)."</th>";
+				$retorno .= "<td>".$value[6]."</td>";
+				$atendimento .= "<td>".$value[7]."</td>";
+				$ligacoes .= "<td>".$value[8]."</td>";
+				$entregas .= "<td>".$value[9]."</td>";
+
+				$totalRetorno += $value[6];
+				$totalAtendimento += $value[7];
+				$totalLigacoes += $value[8];
+				$totalEntregas += $value[9];
+
+			}
+
+		}
+
+		$thead .= "<th>Total</th></tr>";
+		$retorno .= "<td>".$totalRetorno."</td></tr>";
+		$atendimento .= "<td>".$totalAtendimento."</td></tr>";
+		$ligacoes .= "<td>".$totalLigacoes."</td></tr>";
+		$entregas .= "<td>".$totalEntregas."</td></tr>";
+
+
+		echo $thead.$retorno.$atendimento.$ligacoes.$entregas;
+
+	?>
+
+
+</table>
+	<center>
+	<div id="msg" style="padding: 10px; font-size: 15px; margin-top: 40px; margin-bottom: -30px; color:red; background-color: #F5A9BC; display: none;">
+	</div>
+</center>
+
+<?php
+
+	
+
+	if($_SESSION['sessionUser']['id_perfil'] == 3 || $_SESSION['sessionUser']['id_perfil'] == 9){
+?>
+	<div>
+		<h2 id="h2_data" style="margin-left: 11px; margin-top: 60px; margin-bottom: 5px; font-weight: bold;">Hoje</h2>
+		<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add-novo-relatorio-diario" class="form" method="post">
+
+			<div class="inline" style="width:22%;">
+				<label class="label"><span style="font-size: 15px; color: red;">R</span>etornos Realizados</label>
+				<input type="number" id="6" name="6" class="text" style="width:99%;" value="<?php echo $this->fluxoLoja[@date('Y-m-d')][6]; ?>" />
+			</div>
+
+			<div class="inline" style="width:22%;">
+				<label class="label"><span style="font-size: 15px; color: red;">A</span>tendimento Loja</label>
+				<input type="number" id="7" name="7" class="text" style="width:99%;" value="<?php echo $this->fluxoLoja[@date('Y-m-d')][7]; ?>" />
+			</div>
+
+			<div class="inline" style="width:22%;">
+				<label class="label"><span style="font-size: 15px; color: red;">L</span>igações Recebidas</label>
+				<input type="number" id="8" name="8" class="text" style="width:99%;" value="<?php echo $this->fluxoLoja[@date('Y-m-d')][8]; ?>" />
+			</div>
+
+			<div class="inline" style="width:22%;">
+				<label class="label"><span style="font-size: 15px; color: red;">E</span>ntregas Realizadas</label>
+				<input type="number" id="9" name="9" class="text" style="width:99%;" value="<?php echo $this->fluxoLoja[@date('Y-m-d')][9]; ?>" />
+			</div>
+
+			<div class="inline" style="clear:both; margin-top:10px;">
+				<input type="hidden" id="data" name="data" value="">
+				<input type="button" id="button" name="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo()"/>
+			</div>
+
+			<div class="msg" ></div>
+
+		</form>
+	</div>
+<?php
+	}
+?>
+</div>
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+		if(getParamUrl("obrigatorio") == 1){
+
+			$("body").append('<div id="fundo" style="opacity: 0.5; background-color: #000; position: fixed; width: 100%; height: 100%;"></div>');
+
+			$("body").append('<div style="width: 80%; border: solid 10px #FFF; background-color: #FFF; opacity: 1; position: fixed; z-index: 2000" id="popup"></div>');
+
+			$("#popup").css({
+				"margin-left": "10%",
+				"margin-top": "5%",
+				"-webkit-box-shadow": "7px 7px 5px 0px rgba(50, 50, 50, 0.75)",
+				"-moz-box-shadow": "7px 7px 5px 0px rgba(50, 50, 50, 0.75)",
+				"box-shadow": "7px 7px 5px 0px rgba(50, 50, 50, 0.75)"
+			});
+
+			$("#popup").html($("#add_relatorio").html());
+			$("#add_relatorio").remove()
+			$("#main-title").remove();
+			$("#header").remove();
+
+			var arrData = new Array();
+
+			arrData = getParamUrl("data").split("-");
+
+
+			$("#msg").html("<b>"+
+						   "O sistema não encontrou fluxo de loja cadastrado no dia "+arrData[2]+"/"+arrData[1]+"/"+arrData[0]+".<br>"+
+					       "Por favor, insira o fluxo de loja referente ao dia informado."+
+						   "</b>"
+						  );
+
+			$("#msg").css({"display":"block"});
+
+			$("#h2_data").html("<b>Dia: "+arrData[2]+"/"+arrData[1]+"/"+arrData[0]+"</b>");
+
+			$("#data").val(getParamUrl("data"));
+
+		}
+
+	});
+
+	function getParamUrl(name){
+
+		var arr = new Array();
+		arr = window.location.href.split("/");
+
+		for(x in arr){
+
+			if(arr[x] == name){
+				return arr[parseInt(x)+1];
+			}
+
+		}
+
+	}
+
+	function validaCampo(){
+
+		let erro = false;
+		let msg = "";
+		
+		$(".msg").hide();
+
+		if($("#6").val() == ""){
+			erro = true;
+			msg += '<br>O campo "Retornos Realizados" deve ser preenchido.';
+		}
+		if($("#7").val() == ""){
+			erro = true;
+			msg += '<br>O campo "Atendimento Loja" deve ser preenchido.';
+		}
+		if($("#8").val() == ""){
+			erro = true;
+			msg += '<br>O campo "Ligações Recebidas" deve ser preenchido.';
+		}
+		if($("#9").val() == ""){
+			erro = true;
+			msg += '<br>O campo "Entregas Realizadas" deve ser preenchido.';
+		}
+
+		if(erro){
+			msg = msg.substr(4);
+			$(".msg").removeClass('sucess');
+			$(".msg").addClass('erro');
+			$(".msg").html(msg);
+			$(".msg").show();
+		}else{
+			$("form").submit();
+		}
+
+	}
+
+</script>

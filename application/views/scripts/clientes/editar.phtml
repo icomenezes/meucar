@@ -1,0 +1,940 @@
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="<?php echo URL ?>clientes/edt/id/<?php echo $this->id ?>" class="form" method="post">
+	
+	<div class="inline" style="height:auto;margin-bottom:10px;">
+		<label class="label">DADOS PESSOAIS</label>
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" value="<?php echo $this->cliente['nome']; ?>" />
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->id_empresa; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="cpf_label"></label>
+		<input type="text" style="width:50%" id="cpf" name="cpf" class="text req" value="<?php echo $this->cliente['cpf']; ?>" />&nbsp;&nbsp;<span class="cpnj" >CPF</span><Input type="radio" checked="checked" id="pessoa_fisica_cpf" name="pessoa_fisica" onclick="mudaDocumento(this.id);"/>&nbsp;&nbsp;&nbsp;<span class="cpnj" >CNPJ</span><Input type="radio" id="pessoa_fisica_cnpj" name="pessoa_fisica" onclick="mudaDocumento(this.id);"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="rg_label"></label>
+		<input type="text" id="rg" name="rg" class="text" value="<?php echo $this->cliente['rg']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nacionalidade</label>
+		<input type="text" id="nacionalidade" name="nacionalidade" class="text" value="<?php echo $this->cliente['nacionalidade']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Naturalidade</label>
+		<input type="text" id="naturalidade" name="naturalidade" class="text" value="<?php echo $this->cliente['naturalidade']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Org&atilde;o Expedidor</label>
+		<input type="text" id="orgao_expedidor" name="orgao_expedidor" class="text" value="<?php echo $this->cliente['orgao_expedidor']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Expedi&ccedil;&atilde;o</label>
+		<input type="text" id="data_expedicao" name="data_expedicao" class="text" value="<?php echo $this->cliente['data_expedicao']; ?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" style="background-color:#FFF68F;" id="cep" name="cep" class="text" onkeyup="buscaCep(this.value, 'endereco', 'bairro', 'cidade', 'estado', 'numero_endereco');" value="<?php echo $this->cliente['cep']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<table style="width:100%;">
+			<tr>
+				<td style="width:80%;">
+					<label class="label">Endere&ccedil;o</label>
+					<input type="text" id="endereco" name="endereco" class="text" value="<?php echo $this->cliente['endereco']; ?>" style="width:95%;" />
+				</td>
+				<td>
+					<label class="label">Nº</label>
+					<input type="text" id="numero_endereco" name="numero_endereco" class="text" value="<?php echo $this->cliente['numero_endereco']; ?>" style="width:96%;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro" name="bairro" class="text" value="<?php echo $this->cliente['bairro']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Complemento</label>
+		<input type="text" id="complemento" name="complemento" class="text" value="<?php echo $this->cliente['complemento']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="<?php echo $this->cliente['cidade']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado" name="estado" class="text" value="<?php echo $this->cliente['estado']; ?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Telefone 1</label>
+		<input type="text" id="tel1" name="tel1" class="text req" value="<?php echo $this->cliente['tel1']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular</label>
+		<input type="text" id="tel2" name="tel2" class="text" value="<?php echo $this->cliente['tel2']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 3</label>
+		<input type="text" id="cel" name="cel" class="text" value="<?php echo $this->cliente['cel']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nextel</label>
+		<input type="text" id="nextel" name="nextel" class="text" value="<?php echo $this->cliente['nextel']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Email</label>
+		<input type="text" id="email" name="email" class="text req" value="<?php echo $this->cliente['email']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNH</label>
+		<input type="text" id="cnh" name="cnh" class="text" value="<?php echo $this->cliente['cnh']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Nascimento</label>
+		<input type="text" id="nascimento" name="nascimento" class="text req" value="<?php echo $this->cliente['nascimento']; ?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Estado Civil</label>
+		<select id="estado_civil" name="estado_civil" class="select">
+			<option value="">Selecione</option>
+			<option value="0" <?php echo ($this->cliente['estado_civil'] == 0) ? "selected=\"selected\"" : ""; ?>>Solteiro</option>
+			<option value="1" <?php echo ($this->cliente['estado_civil'] == 1) ? "selected=\"selected\"" : ""; ?>>Casado</option>
+			<option value="2" <?php echo ($this->cliente['estado_civil'] == 2) ? "selected=\"selected\"" : ""; ?>>Divorciado</option>
+			<option value="3" <?php echo ($this->cliente['estado_civil'] == 3) ? "selected=\"selected\"" : ""; ?>>Viuvo</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Sexo</label>
+		<select id="sexo" name="sexo" class="select">
+			<option value="">Selecione</option>
+			<option value="0" <?php echo ($this->cliente['sexo'] == 0) ? "selected=\"selected\"" : ""; ?>>Masculino</option>
+			<option value="1" <?php echo ($this->cliente['sexo'] == 1) ? "selected=\"selected\"" : ""; ?>>Feminino</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Escolaridade</label>
+		<select id="escolaridade" name="escolaridade" class="select">
+			<option value="">Selecione</option>
+			<option value="1" <?php echo ($this->cliente['escolaridade'] == 1) ? "selected=\"selected\"" : ""; ?>>1 Grau</option>
+			<option value="2" <?php echo ($this->cliente['escolaridade'] == 2) ? "selected=\"selected\"" : ""; ?>>2 Grau</option>
+			<option value="3" <?php echo ($this->cliente['escolaridade'] == 3) ? "selected=\"selected\"" : ""; ?>>3 Grau</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Numero de Dependentes</label>
+		<input type="text" id="n_dependentes" name="n_dependentes" class="text" value="<?php echo $this->cliente['n_dependentes']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Tipo Residencia</label>
+		<select id="tipo_residencia" name="tipo_residencia" class="select">
+			<option value="">Selecione</option>
+			<option value="0" <?php echo ($this->cliente['tipo_residencia'] == 0) ? "selected=\"selected\"" : ""; ?>>Propria</option>
+			<option value="1" <?php echo ($this->cliente['tipo_residencia'] == 1) ? "selected=\"selected\"" : ""; ?>>Alugada</option>
+			<option value="2" <?php echo ($this->cliente['tipo_residencia'] == 2) ? "selected=\"selected\"" : ""; ?>>Financiada</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor do Aluguel</label>
+		<input type="text" id="valor_aluguel" name="valor_aluguel" class="text" value="<?php echo $this->cliente['valor_aluguel']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor Financiamento</label>
+		<input type="text" id="valor_financiamento" name="valor_financiamento" class="text" value="<?php echo $this->cliente['valor_financiamento']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Tempo de Residencia</label>
+		<input type="text" id="tempo_residencia" name="tempo_residencia" class="text" value="<?php echo $this->cliente['tempo_residencia']; ?>" />
+	</div>
+	
+		<div class="inline">
+		<label class="label">Nome do Pai</label>
+		<input type="text" id="nome_pai" name="nome_pai" class="text" value="<?php echo $this->cliente['nome_pai']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nome da Mae</label>
+		<input type="text" id="nome_mae" name="nome_mae" class="text" value="<?php echo $this->cliente['nome_mae']; ?>" />
+	</div>
+	<div id="div_endereco_anterior">
+	
+		<div class="inline">
+			<label class="label">CEP Anterior</label>
+			<input type="text" style="background-color:#FFF68F;" id="cep_anterior" name="cep_anterior" class="text" value="<?php echo $this->cliente['cep_anterior']; ?>" onkeyup="buscaCep(this.value, 'endereco_anterior', 'bairro_anterior', 'cidade_anterior', 'estado_anterior', 'numero_endereco_anterior');" />
+		</div>
+		
+		<div class="inline">
+			<table style="width:100%;">
+				<tr>
+					<td style="width:80%;">
+						<label class="label">Endere&ccedil;o Anterior</label>
+						<input type="text" id="endereco_anterior" name="endereco_anterior" class="text" value="<?php echo $this->cliente['endereco_anterior']; ?>" style="width:95%;" />
+					</td>
+					<td>
+						<label class="label">Nº</label>
+						<input type="text" class="text" id="numero_endereco_anterior" name="numero_endereco_anterior" value="<?php echo $this->cliente['numero_endereco_anterior']; ?>" style="width:96%;" />
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="inline">
+			<label class="label">Bairro Residencia Anterior</label>
+			<input type="text" id="bairro_anterior" name="bairro_anterior" class="text" value="<?php echo $this->cliente['bairro_anterior']; ?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Complemento Residencia Anterior</label>
+			<input type="text" id="complemento_anterior" name="complemento_anterior" class="text" value="<?php echo $this->cliente['complemento_anterior']; ?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Cidade Residencia Anterior</label>
+			<input type="text" id="cidade_anterior" name="cidade_anterior" class="text" value="<?php echo $this->cliente['cidade_anterior']; ?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Estado Residencia Anterior</label>
+			<input type="text" id="estado_anterior" name="estado_anterior" class="text" value="<?php echo $this->cliente['estado_anterior']; ?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Tempo Residencia Anterior</label>
+			<input type="text" id="tempo_residencia_anterior" name="tempo_residencia_anterior" class="text" value="<?php echo $this->cliente['tempo_residencia_anterior']; ?>" />
+		</div>
+		
+	</div>
+	
+	
+	
+	
+	<div class="inline" style="clear:both; height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">ATIVIDADE EXERCIDA</label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Empresa em que Trabalha</label>
+		<input type="text" id="nome_empresa" name="nome_empresa" class="text" value="<?php echo $this->cliente['nome_empresa']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNPJ</label>
+		<input type="text" id="cnpj_empresa" name="cnpj_empresa" class="text" value="<?php echo $this->cliente['cnpj_empresa']; ?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" style="background-color:#FFF68F;" id="cep_empresa" name="cep_empresa" class="text" value="<?php echo $this->cliente['cep_empresa']; ?>" onkeyup="buscaCep(this.value, 'endereco_empresa', 'bairro_empresa', 'cidade_empresa', 'estado_empresa', 'numero_endereco_empresa');" />
+	</div>
+
+	<div class="inline">
+		<table style="width:100%;">
+			<tr>
+				<td style="width:80%;">
+					<label class="label">Endere&ccedil;o</label>
+					<input type="text" id="endereco_empresa" name="endereco_empresa" class="text" value="<?php echo $this->cliente['endereco_empresa']; ?>" style="width:95%;" />
+				</td>
+				<td>
+					<label class="label">Nº</label>
+					<input type="text" class="text" id="numero_endereco_empresa" name="numero_endereco_empresa" value="<?php echo $this->cliente['numero_endereco_empresa']; ?>" style="width:96%;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro_empresa" name="bairro_empresa" class="text" value="<?php echo $this->cliente['bairro_empresa']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade_empresa" name="cidade_empresa" class="text" value="<?php echo $this->cliente['cidade_empresa']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado_empresa" name="estado_empresa" class="text" value="<?php echo $this->cliente['estado_empresa']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ramo de Atividade</label>
+		<input type="text" id="ramo_atividade" name="ramo_atividade" class="text" value="<?php echo $this->cliente['ramo_atividade']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone Empresa</label>
+		<input type="text" id="tel_empresa" name="tel_empresa" class="text" value="<?php echo $this->cliente['tel_empresa']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cargo</label>
+		<input type="text" id="cargo" name="cargo" class="text" value="<?php echo $this->cliente['cargo']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Admissao</label>
+		<input type="text" id="data_admissao" name="data_admissao" class="text" value="<?php echo $this->cliente['data_admissao']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Salario</label>
+		<input type="text" id="salario" name="salario" class="text" value="<?php echo $this->cliente['salario']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Outras Rendas</label>
+		<input type="text" id="outras_rendas" name="outras_rendas" class="text" value="<?php echo $this->cliente['outras_rendas']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Num. Carteira de Trabalho</label>
+		<input type="text" id="numero_carteira" name="numero_carteira" class="text" value="<?php echo $this->cliente['numero_carteira']; ?>" />
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+<div id="atividade_anterior">
+	
+	<div class="inline" style="clear:both; height:auto; margin-bottom:10px; margin-top:20px;">
+		<label class="label">ATIVIDADE ANTERIOR</label>
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">Empresa</label>
+		<input type="text" id="nome_empresa_anterior" name="nome_empresa_anterior" class="text" value="<?php echo $this->cliente['nome_empresa_anterior']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="tel_empresa_anterior" name="tel_empresa_anterior" class="text" value="<?php echo $this->cliente['tel_empresa_anterior']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Admiss&atilde;o</label>
+		<input type="text" id="data_admissao_anterior" name="data_admissao_anterior" class="text" value="<?php echo $this->cliente['data_admissao_anterior']; ?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Data de Demiss&atilde;o</label>
+		<input type="text" id="data_demissao_anterior" name="data_demissao_anterior" class="text" value="<?php echo $this->cliente['data_demissao_anterior']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Salario</label>
+		<input type="text" id="salario_anterior" name="salario_anterior" class="text" value="<?php echo $this->cliente['salario_anterior']; ?>" />
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+	<div class="inline" style="clear:both;height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">DADOS DO C&Ocirc;NJUGE</label>
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">Nome do C&ocirc;njuge</label>
+		<input type="text" id="nome_conjuge" name="nome_conjuge" class="text" value="<?php echo $this->cliente['nome_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF</label>
+		<input type="text" id="cpf_conjuge" name="cpf_conjuge" class="text" value="<?php echo $this->cliente['cpf_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">RG</label>
+		<input type="text" id="rg_conjuge" name="rg_conjuge" class="text" value="<?php echo $this->cliente['rg_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Nascimento</label>
+		<input type="text" id="nascimento_conjuge" name="nascimento_conjuge" class="text" value="<?php echo $this->cliente['nascimento_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Empresa</label>
+		<input type="text" id="empresa_conjuge" name="empresa_conjuge" class="text" value="<?php echo $this->cliente['empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" style="background-color:#FFF68F;" id="cep_empresa_conjuge" name="cep_empresa_conjuge" class="text" onkeyup="buscaCep(this.value, 'endereco_empresa_conjuge', 'bairro_empresa_conjuge', 'cidade_empresa_conjuge', 'estado_empresa_conjuge', 'numero_endereco_empresa_conjuge');" value="<?php echo $this->cliente['cep_empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<table style="width:100%;">
+			<tr>
+				<td style="width:80%;">
+					<label class="label">Endere&ccedil;o</label>
+					<input type="text" id="endereco_empresa_conjuge" name="endereco_empresa_conjuge" class="text" value="<?php echo $this->cliente['endereco_empresa_conjuge']; ?>" style="width:95%;" />
+				</td>
+				<td>
+					<label class="label">Nº</label>
+					<input type="text" class="text" id="numero_endereco_empresa_conjuge" name="numero_endereco_empresa_conjuge" value="<?php echo $this->cliente['numero_endereco_empresa_conjuge']; ?>" style="width:96%;" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro_empresa_conjuge" name="bairro_empresa_conjuge" class="text" value="<?php echo $this->cliente['bairro_empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade_empresa_conjuge" name="cidade_empresa_conjuge" class="text" value="<?php echo $this->cliente['cidade_empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado_empresa_conjuge" name="estado_empresa_conjuge" class="text" value="<?php echo $this->cliente['estado_empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone Empresa</label>
+		<input type="text" id="tel_empresa_conjuge" name="tel_empresa_conjuge" class="text" value="<?php echo $this->cliente['tel_empresa_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cargo</label>
+		<input type="text" id="cargo_conjuge" name="cargo_conjuge" class="text" value="<?php echo $this->cliente['cargo_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Renda</label>
+		<input type="text" id="renda_conjuge" name="renda_conjuge" class="text" value="<?php echo $this->cliente['renda_conjuge']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Admissao</label>
+		<input type="text" id="data_admissao_conjuge" name="data_admissao_conjuge" class="text" value="<?php echo $this->cliente['data_admissao_conjuge']; ?>" />
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="inline" style="clear:both;height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">BENS IM&Oacute;VEIS / VE&Iacute;CULOS</label>
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">Tipo / Descri&ccedil;&atilde;o do Bem 1</label>
+		<input type="text" id="bem1" name="bem1" class="text" value="<?php echo $this->cliente['bem1']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor do Bem 1</label>
+		<input type="text" id="valor_bem1" name="valor_bem1" class="text" value="<?php echo $this->cliente['valor_bem1']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bem 1 Financiado?</label>
+		<input type="checkbox" id="financiado_bem1" name="financiado_bem1" <?php echo ($this->cliente['financiado_bem1'] == 1) ? "checked='checked'" : ""; ?> value="1" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Saldo Devedor do Bem 1</label>
+		<input type="text" id="saldo_devedor_bem1" name="saldo_devedor_bem1" class="text" value="<?php echo $this->cliente['saldo_devedor_bem1']; ?>" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Tipo / Descri&ccedil;&atilde;o do Bem 2</label>
+		<input type="text" id="bem2" name="bem2" class="text" value="<?php echo $this->cliente['bem2']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor do Bem 2</label>
+		<input type="text" id="valor_bem2" name="valor_bem2" class="text" value="<?php echo $this->cliente['valor_bem2']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bem 2 Financiado?</label>
+		<input type="checkbox" id="financiado_bem2" name="financiado_bem2" <?php echo ($this->cliente['financiado_bem2'] == 1) ? "checked='checked'" : ""; ?> value="1" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Saldo Devedor do Bem 2</label>
+		<input type="text" id="saldo_devedor_bem2" name="saldo_devedor_bem2" class="text" value="<?php echo $this->cliente['saldo_devedor_bem2']; ?>" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Tipo / Descri&ccedil;&atilde;o do Bem 3</label>
+		<input type="text" id="bem3" name="bem3" class="text" value="<?php echo $this->cliente['bem3']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor do Bem 3</label>
+		<input type="text" id="valor_bem3" name="valor_bem3" class="text" value="<?php echo $this->cliente['valor_bem3']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bem 3 Financiado?</label>
+		<input type="checkbox" id="financiado_bem3" name="financiado_bem3" <?php echo ($this->cliente['financiado_bem3'] == 1) ? "checked='checked'" : ""; ?> value="1" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Saldo Devedor do Bem 3</label>
+		<input type="text" id="saldo_devedor_bem3" name="saldo_devedor_bem3" class="text" value="<?php echo $this->cliente['saldo_devedor_bem3']; ?>" />
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="inline" style="clear:both;height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">REFER&Ecirc;NCIAS BANC&Aacute;RIAS</label>
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">Banco</label>
+		<input type="text" id="banco" name="banco" class="text" value="<?php echo $this->cliente['banco']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Agencia</label>
+		<input type="text" id="agencia" name="agencia" class="text" value="<?php echo $this->cliente['agencia']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Conta Corrente</label>
+		<input type="text" id="cc" name="cc" class="text" value="<?php echo $this->cliente['cc']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cliente Desde</label>
+		<input type="text" id="cliente_desde" name="cliente_desde" class="text" value="<?php echo $this->cliente['cliente_desde']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="cpf_cnpj">Cheque Especial</label>
+		<?php if($this->cliente['cheque']==1){?>
+			Sim<input type="radio" checked="checked" name="cheque" id="cheque" value="1"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			N&atilde;o<input type="radio" name="cheque" id="cheque" value="0" />
+		<?php }else{ ?>
+			Sim<input type="radio"  name="cheque" id="cheque" value="1"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			N&atilde;o<input type="radio" checked="checked" name="cheque" id="cheque" value="0" />
+		<?php } ?>
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="cpf_cnpj">Cart&otilde;es de Cr&eacute;dito. Qual?</label>
+		<?php if($this->cliente['cartao_credito']==1){?>
+			N&atilde;o<input type="radio" name="cartao_credito" id="cartao_credito" value="0"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			Sim<input type="radio" checked="checked" name="cartao_credito" id="cartao_credito" value="1" />
+		<?php }else{ ?>
+			N&atilde;o<input type="radio" checked="checked" name="cartao_credito" id="cartao_credito" value="0"  />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			Sim<input type="radio" name="cartao_credito" id="cartao_credito" value="1" />	
+		<?php } ?>
+		<input type="text" id="nome_cartao" name="nome_cartao" class="text" value="<?php echo $this->cliente['nome_cartao']; ?>" style="width:60%;" />
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="inline" style="clear:both;height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">REFER&Ecirc;NCIAS PESSOAIS</label>
+	</div>
+	
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Referencia 1</label>
+		<input type="text" id="ref1_nome" name="ref1_nome" class="text" value="<?php echo $this->cliente['ref1_nome']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone Referencia 1</label>
+		<input type="text" id="ref1_tel" name="ref1_tel" class="text" value="<?php echo $this->cliente['ref1_tel']; ?>" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Referencia 2</label>
+		<input type="text" id="ref2_nome" name="ref2_nome" class="text" value="<?php echo $this->cliente['ref2_nome']; ?>" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Telefone Referencia 2</label>
+		<input type="text" id="ref2_tel" name="ref2_tel" class="text" value="<?php echo $this->cliente['ref2_tel']; ?>" />
+	</div>
+	
+	<div class="inline" style="width:98%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" value="" class="text"><?php echo $this->cliente['obs']; ?></textarea>
+	</div>
+	
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="button" id="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo('')"/>
+		<input type="button" id="button_imp" class="btn-small-imp" value="Imprimir" onclick="printDiv()"/>
+		<input type="button" id="buttom_nova_negociacao" class="btn-mini" value="Nova Negocia&ccedil;&atilde;o" onclick="javascript:window.location.href='<?php echo URL ?>negociacoes/add'" />
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function mudaDocumento(id){
+
+	var ids = new Array();
+	ids = id.split("_");
+	
+	if(ids[2] == "cpf"){
+	
+		$("#cpf").mask("999.999.999-99");
+		$("#cpf_label").html("CPF");
+		$("#rg").mask("99.999.99?9-*");
+		$("#rg_label").html("RG");
+	
+	}
+	
+	if(ids[2] == "cnpj"){
+	
+		$("#cpf").mask("99.999.999/9999-99");
+		$("#cpf_label").html("CNPJ");
+		$("#rg").unmask();
+		$("#rg_label").html("I.E.");
+	
+	}
+
+}
+
+function printDiv(){
+
+	$("#form").attr("action", "<?php echo URL ?>clientes/impressao/id/<?php echo $this->id ?>");
+	$("#form").attr("target","_blank");
+	$("#form").submit();
+	
+	$("#form").attr("action", "<?php echo URL ?>clientes/edt/id/<?php echo $this->id ?>");
+	$("#form").attr("target","");
+	
+}
+
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#nome").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome deve ser preenchido.";
+	
+	}
+	
+	if($("#cpf").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo CPF deve ser preenchido.";
+	
+	}
+	
+	if($("#tel1").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo telefone deve ser preenchido.";
+	
+	}
+	
+	if($("#nascimento").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nascimento deve ser preenchido.";
+	
+	}
+	
+	if($("#email").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo email deve ser preenchido.";
+	
+	}
+	
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+		return true;
+	
+	}
+
+}
+
+$(function(){
+	
+	//$("#cpf").mask("999.999.999-99");
+	$("#data_expedicao").mask("99/99/9999");
+	$("#nascimento").mask("99/99/9999");
+	$("#data_admissao").mask("99/99/9999");
+	$("#cliente_desde").mask("99/99/9999");
+	$("#rg").mask("99.999.99?9-*");
+	$("#cep").mask("99999-999");
+	$("#cep_anterior").mask("99999-999");
+	$("#cep_empresa").mask("99999-999");
+	$("#cep_empresa_conjuge").mask("99999-999");
+	
+	$("#salario").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#renda_conjuge").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#salario_anterior").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_aluguel").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_financiamento").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_bem1").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_bem2").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_bem3").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#saldo_devedor_bem1").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#saldo_devedor_bem2").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#saldo_devedor_bem3").attr("onkeyup","validaMoedaBR(this.id)");
+	
+	$('#tel1').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#tel2').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#cel').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#tel_empresa').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#ref1_tel').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#ref2_tel').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+		$('#data_expedicao').focus(function(){
+		$(this).calendario({
+			target:'#data_expedicao'
+		});
+	});
+	
+	$('#nascimento').focus(function(){
+		$(this).calendario({
+			target:'#nascimento'
+		});
+	});
+	
+	$('#data_admissao').focus(function(){
+		$(this).calendario({
+			target:'#data_admissao'
+		});
+	});
+	
+	$('#data_admissao_anterior').focus(function(){
+		$(this).calendario({
+			target:'#data_admissao_anterior'
+		});
+	})
+	
+	;$('#nascimento_conjuge').focus(function(){
+		$(this).calendario({
+			target:'#nascimento_conjuge'
+		});
+	});
+	
+	$('#data_admissao_conjuge').focus(function(){
+		$(this).calendario({
+			target:'#data_admissao_conjuge'
+		});
+	});
+	
+	$('#cliente_desde').focus(function(){
+		$(this).calendario({
+			target:'#cliente_desde'
+		});
+	});
+	
+	$('#data_demissao_anterior').focus(function(){
+		$(this).calendario({
+			target:'#data_demissao_anterior'
+		});
+	})
+	
+	cpf = "<?php echo $this->cliente['cpf']; ?>";
+	if(cpf.length == 14){
+		
+		$("#cpf").mask("999.999.999-99");
+		$("#cpf_label").html("CPF");
+		$("#rg").mask("99.999.99?9-*");
+		$("#rg_label").html("RG");
+	
+	}else{
+	
+		$("#cpf").mask("99.999.999/9999-99");
+		$("#cpf_label").html("CNPJ");
+		$("#rg").unmask();
+		$("#rg_label").html("I.E.");
+	
+	}
+
+})
+
+
+	function buscaCep(cep, rua, bairro, cidade, estado, foco){
+
+		if(cep.charAt(8) != "_"){
+	
+			$.ajax({
+				url : '/clientes/ajax/fn/busca_cep/cep/'+cep,
+				type : 'POST',
+				dataType: 'json',
+				success: function(data){
+
+					if(data.sucesso == "1"){
+					
+						$("#"+rua).val(data.rua);
+						$("#"+bairro).val(data.bairro);
+						$("#"+cidade).val(data.cidade);
+						$("#"+estado).val(data.estado);
+	 
+						$("#"+foco).focus();
+
+					}
+				}
+			});
+		
+		}
+ 
+	}
+</script>

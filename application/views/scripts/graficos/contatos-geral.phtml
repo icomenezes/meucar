@@ -1,0 +1,340 @@
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<form class="form" action="lista" method="post">
+
+	<?php
+	if($_SESSION['sessionUser']['id_perfil'] == 2 || $_SESSION['sessionUser']['id_perfil'] == 4 || $_SESSION['sessionUser']['id_perfil'] == 9){
+	?>
+	<div class="inline">
+		<label class="label">Vendedor</label>
+		<select id="vendedor" name="vendedor" class="text">
+			<option value="">Todos</option>
+			<?php echo $this->strVendedores; ?>
+		</select>
+	</div>
+	<?php
+	}
+	?>
+
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td style="width:40%;">
+					<label class="label">M&ecirc;s</label>
+				</td>
+				<td style="width:30%;">
+					<label class="label">Data Inicial</label>
+				</td>
+				<td style="width:30%;">
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select class="select" style="width:90%;" onChange="enviaPeriodo(this.value);" >
+						<option value="0">Selecione</option>
+						<?php
+
+							for($i = @date("m"); $i > (@date("m")-25); $i--){
+							
+								$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+								$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+								$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+								
+								if($mesNum == @date("m") && $anoNum == @date("Y")){
+									
+									$sel = "selected='selected'";
+								
+								}else{
+									
+									$sel = "";
+								
+								}
+								
+								switch ($mesNum){
+									case 1:
+										$option =  "Janeiro - ".$anoNum;
+										break;
+										
+									case 2:
+										$option =  "Fevereiro - ".$anoNum;
+										break;
+									
+									case 3:
+										$option =  "Mar&ccedil;o - ".$anoNum;
+										break;
+										
+									case 4:
+										$option =  "Abril - ".$anoNum;
+										break;
+										
+									case 5:
+										$option =  "Maio - ".$anoNum;
+										break;
+										
+									case 6:
+										$option =  "Junho - ".$anoNum;
+										break;
+										
+									case 7:
+										$option =  "Julho - ".$anoNum;
+										break;
+										
+									case 8:
+										$option =  "Agosto - ".$anoNum;
+										break;
+										
+									case 9:
+										$option =  "Setembro - ".$anoNum;
+										break;
+									
+									case 10:
+										$option =  "Outubro - ".$anoNum;
+										break;
+										
+									case 11:
+										$option =  "Novembro - ".$anoNum;
+										break;
+										
+									case 12:
+										$option =  "Dezembro - ".$anoNum;
+										break;
+						
+								}
+								
+								echo "<option ".$sel." value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+							
+							}
+						
+						?>
+						
+					</select>
+				</td>
+				<td>
+					<input type="text" style="width:90%;" class="text" name="data_inicial" id="data_inicial" value="<?php echo "01/".@date("m")."/".@date("Y");  ?>"/>
+				</td>
+				<td>
+					<input type="text" style="width:90%;" class="text" name="data_final" id="data_final" value="<?php echo @date("d", mktime(0, 0, 0, @date("m")+1, 0, @date("Y")))."/".@date("m")."/".@date("Y"); ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="width:20%;">
+		<label class="label"></br></label>
+		<input type="button" class="btn-small btn-find" onClick="buscaListaFluxo();" value=" " />
+		<input type="button" class="btn-small" value="Leg" title="Exibe ou não a legenda dos gráficos." onclick="javascript: if(legenda == 'none'){legenda = 'right';}else{legenda = 'none';} google.charts.setOnLoadCallback(contatosData);" />
+	</div>
+</form>
+<style>	
+	.graficos tr td{
+		border-bottom:solid 1px #ccc;
+	}
+</style>
+<div id="erro" style="display:none; margin-left:10px; color:red; font-size:15px;">Não há dados para serem exibidos com as características buscada.</div>	
+<table width="99%" class="graficos" id="graficos">
+	<tr>
+		<td width="100%">
+			<div id="contatos_por_dia" style="width: 100%; height: 500px; position:relative; z-index:1"></div>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%">
+			<div id="contatos_por_vendedores" style="margin-top:50px; width: 100%; height: 500px; position:relative; z-index:1"></div>
+		</td>
+	</tr>
+	<tr>
+		<td width="100%">
+			<div id="contatos_por_vendedores_fechados" style="margin-top:50px; width: 100%; height: 500px; position:relative; z-index:1"></div>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	
+	var arrDadosGraficos = new Array();
+	var arrTudo = "";
+	var tresD = false;
+	var legenda = '';
+
+	$(document).ready(function(){
+	
+		$("#data_inicial").mask("99/99/9999");
+		$('#data_inicial').focus(function(){
+			$(this).calendario({
+				target:'#data_inicial'
+			});
+		});
+		
+		$("#data_final").mask("99/99/9999");
+		$('#data_final').focus(function(){
+			$(this).calendario({
+				target:'#data_final'
+			});
+		});
+
+		google.charts.load('current', {'packages':['bar']});
+		buscaListaFluxo();
+		
+		
+
+	});
+
+	function buscaListaFluxo(){
+
+		$("body").prepend('<div id="div_aguarde" style="text-align:center; opacity:0.8; background-color:#000;width:100%; height:1000px; position:fixed; font-size: 30px; color:#fff; z-index:10"><div style="margin-top:200px;">Atualizando! Aguarde...</div></div>');
+	
+		$.ajax({
+			type: "POST",
+			url: '/graficos/ajax/fn/contatos_geral',
+			async: true,
+			dataType:"text",
+			data: ({'nome':$("#nome").val(), 'veiculo':$("#veiculo").val(), 'data_inicial':$("#data_inicial").val(), 'data_final':$("#data_final").val(), 'vendedor':$("#vendedor").val(), 'origem':$("#origem").val(), 'resultado':$("#resultado").val(), 'motivo_pre':$("#motivo_pre").val(), 'filtro':$("#filtro").val()}),
+			success:function(resp){
+				console.log(resp);
+				arrTudo = resp.split("|");
+				$("#div_aguarde").fadeOut(500);
+				google.charts.setOnLoadCallback(contatosData);
+			}
+
+		});
+	
+	}
+
+	function contatosData() {
+		
+		var data = new google.visualization.DataTable();
+		data.addColumn('string');
+		data.addColumn('number', 'Novos');
+		data.addColumn('number', 'Respondidos');
+		data.addColumn('number', 'Visualizados');
+		
+		var arr = arrTudo[0].split(":");
+		
+		for(x in arr){
+			arrTemp = arr[x].split(",");
+			data.addRow([arrTemp[0],parseInt(arrTemp[1]),parseInt(arrTemp[2]),parseInt(arrTemp[3])]);
+		}
+
+        var options = {
+			legend: { position: legenda },
+			hAxis:{
+				textStyle:{fontSize:10}
+			},
+			vAxis:{
+				textStyle:{fontSize:10}
+			},
+			chart: {
+				title: ' Contatos',
+				subtitle: ' Total de contatos novos, respondidos e visualizados por dia',
+			},
+			colors:['#008000','#000080','orange'],
+			is3D: tresD
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('contatos_por_dia'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+
+		google.charts.setOnLoadCallback(contatosVendedor);
+		
+    }
+	
+	function contatosVendedor(){
+		
+		var data = new google.visualization.DataTable();
+		data.addColumn('string');
+		data.addColumn('number', 'Novos');
+		data.addColumn('number', 'Respondidos');
+		data.addColumn('number', 'Visualizados');
+		
+		var arr = arrTudo[1].split(":");
+		
+		for(x in arr){
+			arrTemp = arr[x].split(",");
+			data.addRow([arrTemp[0],parseInt(arrTemp[1]),parseInt(arrTemp[2]),parseInt(arrTemp[3])]);
+		}
+
+        var options = {
+			legend: { position: legenda },
+			hAxis:{
+				textStyle:{fontSize:12}
+			},
+			vAxis:{
+				textStyle:{fontSize:10}
+			},
+			chart: {
+				title: ' Contatos por vendedor',
+				subtitle: ' Total de contatos novos, respondidos e visualizados por vendedor',
+			},
+			colors:['#008000','#000080','orange'],
+			is3D: tresD
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('contatos_por_vendedores'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+		
+		google.charts.setOnLoadCallback(contatosVendedorFechado);
+		
+    }
+	
+	
+	function contatosVendedorFechado(){
+		
+		var data = new google.visualization.DataTable();
+		data.addColumn('string');
+		data.addColumn('number', 'Contatos');
+		data.addColumn('number', 'Fechados');
+		
+		var arr = arrTudo[2].split(":");
+		
+		for(x in arr){
+			arrTemp = arr[x].split(",");
+			data.addRow([arrTemp[0],parseInt(arrTemp[1]),parseInt(arrTemp[2])]);
+		}
+
+        var options = {
+			legend: { position: legenda },
+			hAxis:{
+				textStyle:{fontSize:12}
+			},
+			vAxis:{
+				textStyle:{fontSize:10}
+			},
+			chart: {
+				title: ' Fechados por vendedor',
+				subtitle: ' Total de contatos novos e fechados por vendedor',
+			},
+			colors:['#000080','#008000'],
+			is3D: tresD
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('contatos_por_vendedores_fechados'));
+
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+		
+    }
+	
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}else{
+			
+			$("#data_inicial").val("");
+			$("#data_final").val("");
+		
+		}
+	
+	}
+
+</script>

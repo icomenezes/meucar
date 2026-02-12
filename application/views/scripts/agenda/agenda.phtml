@@ -1,0 +1,1151 @@
+<?php
+if(false && $_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239){
+	if($_SESSION['sessionUser']['id_perfil'] == 3){
+?>
+    <div onclick="javascript: window.location.href='http://sistemameucar.com.br/estatisticas/projecao'" class="inline" id="projetado" name="projetado" style="cursor:pointer; width:98%; height:400px; overflow:auto; margin-bottom:10px;"> 
+	<link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap.css">
+	<style>
+            #gauge_vendedores td {
+                text-align:center;
+                border-left: solid 1px #fff;
+            }
+        </style>
+
+<div class="container-fluid">
+	<table width="100%" id="gauge_vendedores"></table>
+
+	 <div class="card text-dark bg-light mb-3">
+  		<div class="card-header"><strong>PREPARAÇÃO</strong></div>
+  		<div class="card-body">
+			<table width="100%" id="tabela_preparacao"  class='jumbotron'>
+				<tr>
+					<td><br><br></td>
+				</tr>
+				<tr>
+					<td id="inicio"></td>
+					<td id="fim"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	
+</table>
+</div>
+</div>
+
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" src="/js/projetado.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+			atualizaVendedor(<?php echo $_SESSION['sessionUser']['id']; ?>);
+		});
+
+	</script>
+
+<?php
+	}elseif($_SESSION['sessionUser']['id_perfil'] == 9){	
+?>
+		<div class="inline" id="projetado" name="projetado" onclick="javascript: window.location.href='http://sistemameucar.com.br/estatisticas/projecao'" style="cursor:pointer; width:98%; height:400px; overflow:auto; margin-bottom:10px;"> 
+        <link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap.css">
+        <style>
+            #gauge_total td,
+            #gauge_lojas td,
+            #gauge_vendedores td,
+            #tabela td,
+            #tabela th {
+                text-align:center;
+                border-left: solid 1px #fff;
+            }
+        </style>
+
+        <div class="container-fluid">
+            <table width="100%" id="gauge_total" style="display: none;"></table>
+            <table width="100%" id="gauge_lojas" ></table>
+            <table width="100%" id="gauge_vendedores" style="display: none;"></table>
+
+
+             <div class="card text-dark bg-light mb-3">
+		  		<div class="card-header"><strong>PREPARAÇÃO</strong></div>
+		  		<div class="card-body">
+					<table width="100%" id="tabela_preparacao"  class='jumbotron'>
+						<tr>
+							<td><br><br></td>
+						</tr>
+						<tr>
+							<td id="inicio"></td>
+							<td id="fim"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+
+            <table width="100%" id="tabela" class="table table-hover" style="display: none;"></table>
+        </div>
+	</div>
+	
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript" src="/js/projetado.js"></script>
+
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+			atualiza(<?php echo $_SESSION['sessionUser']['id_empresa']; ?>);
+		});
+
+	</script>
+
+<?php
+	}elseif($_SESSION['sessionUser']['id_perfil'] == 11){
+?>
+
+<div class="inline" id="projetado" name="projetado" onclick="javascript: window.location.href='http://sistemameucar.com.br/estatisticas/projecao'" style="cursor:pointer; width:98%; height:400px; overflow:auto; margin-bottom:10px;"> 
+        <link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap.css">
+        <style>
+            #gauge_total td,
+            #gauge_lojas td,
+            #gauge_vendedores td,
+            #tabela td,
+            #tabela th {
+                text-align:center;
+                border-left: solid 1px #fff;
+            }
+        </style>
+
+        <div class="container-fluid">
+            <table width="100%" id="gauge_total"></table>
+            <table width="100%" id="gauge_lojas"></table>
+            <table width="100%" id="gauge_vendedores"></table>
+
+
+            <div class="card text-dark bg-light mb-3">
+		  		<div class="card-header"><strong>PREPARAÇÃO</strong></div>
+		  		<div class="card-body">
+					<table width="100%" id="tabela_preparacao"  class='jumbotron'>
+						<tr>
+							<td><br><br></td>
+						</tr>
+						<tr>
+							<td id="inicio"></td>
+							<td id="fim"></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+
+            <table width="100%" id="tabela" class="table table-hover"></table>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="/js/projetado.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+
+		$(document).ready(function(){
+			atualiza("");
+		});
+
+	</script>
+<?php
+}
+}
+?>
+
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" class="form" method="post">
+
+	<?php $display=$this->display;?>
+	
+	
+	
+	<div class="inline" id="fluxo_clientes" name="fluxo_clientes" style="width:97%; height:350px; overflow:auto"> 
+		
+		<label style="font-size:20px;padding:5px;padding-left:10px;">Fluxo de Clientes</label>
+		
+		<div class="inline">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text" value="" />
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td style="width:40%;">
+					<label class="label">M&ecirc;s</label>
+				</td>
+				<td style="width:30%;">
+					<label class="label">Data Inicial</label>
+				</td>
+				<td style="width:30%;">
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select class="select" style="width:90%;" onChange="enviaPeriodo(this.value);" >
+						<option value="0">Selecione</option>
+						<?php
+
+							for($i = @date("m"); $i > (@date("m")-25); $i--){
+							
+								$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+								$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+								$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+								
+								if($mesNum == @date("m") && $anoNum == @date("Y")){
+									
+									$sel = "selected='selected'";
+								
+								}else{
+									
+									$sel = "";
+								
+								}
+								
+								switch ($mesNum){
+									case 1:
+										$option =  "Janeiro - ".$anoNum;
+										break;
+										
+									case 2:
+										$option =  "Fevereiro - ".$anoNum;
+										break;
+									
+									case 3:
+										$option =  "Mar&ccedil;o - ".$anoNum;
+										break;
+										
+									case 4:
+										$option =  "Abril - ".$anoNum;
+										break;
+										
+									case 5:
+										$option =  "Maio - ".$anoNum;
+										break;
+										
+									case 6:
+										$option =  "Junho - ".$anoNum;
+										break;
+										
+									case 7:
+										$option =  "Julho - ".$anoNum;
+										break;
+										
+									case 8:
+										$option =  "Agosto - ".$anoNum;
+										break;
+										
+									case 9:
+										$option =  "Setembro - ".$anoNum;
+										break;
+									
+									case 10:
+										$option =  "Outubro - ".$anoNum;
+										break;
+										
+									case 11:
+										$option =  "Novembro - ".$anoNum;
+										break;
+										
+									case 12:
+										$option =  "Dezembro - ".$anoNum;
+										break;
+						
+								}
+								
+								echo "<option ".$sel." value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+							
+							}
+						
+						?>
+						
+					</select>
+				</td>
+				<td>
+					<input type="text" style="width:90%;" class="text" name="data_inicial" id="data_inicial" value="<?php echo "01/".@date("m")."/".@date("Y");  ?>"/>
+				</td>
+				<td>
+					<input type="text" style="width:90%;" class="text" name="data_final" id="data_final" value="<?php echo @date("d", mktime(0, 0, 0, @date("m")+1, 0, @date("Y")))."/".@date("m")."/".@date("Y"); ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td width="50%">
+					<label class="label">Marca</label>
+				</td>
+				<td>
+					<label class="label">Modelo</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select id="marca" name="marca" class="text" onChange="buscaModelo(this.value, 1);">
+						<option>Selecione</option>
+					</select>
+				</td>
+				<td>
+					<select id="veiculo" name="veiculo" class="text">
+						<option value="">Selecione</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		
+	</div>
+	
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td width="50%">
+					<label class="label">Origem</label>
+				</td>
+				<td>
+					<label class="label">Resultado</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select id="origem" name="origem" class="text">
+						<option>Todos</option>
+					</select>
+				</td>
+				<td>
+					<select title="Selecione a situação." id="resultado" name="resultado" class="text" onChange="javascript: if(this.value == 'Desistiu' || this.value == 'Concorrente'){ $('#motivo_pre').parent().css('display','inline');}else{ $('#motivo_pre').parent().css('display','none'); $('#motivo_pre').val('');}">
+						<option title="Selecione a situação." style="background-color:white; color:#333;" value="">Todos</option>
+						<option title="Desistiu de comprar." style="background-color:pink; color:#333;" value="Desistiu">Desistiu</option>
+						<option title="Fechou a venda conosco." style="background-color:green; color:white;" value="Fechou">Fechou</option>
+						<option title="Comprou do concorrente." style="background-color:red; color:white;" value="Concorrente">Concorrente</option>
+						<option title="Este em negociação." style="background-color:yellow; color:#333;" value="Negociação">Negociação</option>
+						<option title="Vai fechar." style="background-color:orange; color:#FFF;" value="Vai fechar">Vai fechar</option>
+						<option title="Só venda." style="background-color:blue; color:#FFF;" value="Só venda">Só venda</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="display:none;">
+		<label class="label">Motivo</label>
+		<select title="Selecione o motivo." id="motivo_pre" name="motivo_pre" class="text" onchange="">
+			<option value="">Todos</option>
+			<?php
+			foreach($this->arrMotivos as $motivo){
+				echo '<option value="'.$motivo['id'].'">'.$motivo['descricao'].'</option>';
+			}
+			?>
+		</select>
+	</div>
+
+	<div class="inline" style="width:10%;">
+		<label class="label">Filtros</label>
+		<select id="filtro" name="filtro" class="text">
+			<option value="">Selecione</option>
+			<option value="Agendada">Agendadas</option>
+			<option value="Atrasada">Atrasadas</option>
+			<option value="Hoje">Hoje</option>
+		</select>
+	</div>
+
+	<div class="inline" style="width:20%;">
+		<label class="label"><br></label>
+		<input type="button" class="btn-small btn-find" onClick="buscaListaFluxo();" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>clientes/add-cliente-fluxo-auto-salvar'" />
+	</div>
+
+		<div id="table_fluxo_clientes" style="clear:both">
+			<label class="label">AGUARDE CARREGANDO.......</label>
+		</div>
+		
+		
+	</div>
+	
+	<div class="inline" id="negociacoes" name="negociacoes" style="width:48%; height:300px; overflow:auto"> 
+		<label class="label">Negocia&ccedil;&otilde;es</label>
+	</div> 
+	
+	<div class="inline" id="pendencias" name="pendencias" style="width:48%; height:300px; overflow:auto"> 
+		<label class="label">Pend&ecirc;ncias</label>
+	</div> 
+
+	<div class="inline" id="agenda" name="agenda" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">Agenda</label>
+	</div>
+	
+	<div class="inline" id="recebimentos_pendentes" name="recebimentos_pendentes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;<?php echo $this->display?>"> 
+		<label class="label">Recebimentos Pendentes</label>
+	</div>
+	<!-- 
+	<div class="inline" id="pagamentos_pendentes" name="pagamentos_pendentes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;<?php echo $this->dsplay?>"> 
+		<label class="label">Pagamentos Pendentes</label>
+	</div>	
+	 -->
+	<div class="inline" id="veiculos" name="veiculos" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">&Uacute;ltimos Ve&iacute;culos</label>
+	</div> 
+
+	<div class="inline" id="fluxo_loja" name="fluxo_loja" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">Fluxo de Loja</label>
+	</div>
+
+	<div class="inline" id="aniversariantes" name="aniversariantes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+
+		<?php echo "<div class=\"inline\" style=\"width:98%;height:auto\"><label style=\"font-size:20px;padding:5px;padding-left:0px;\">Aniversariantes</label></div>
+
+			<table class = 'table'>
+
+			<thead><tr><th>Nome</th><th>Telefone</th><th>Data Nascimento</th></tr></thead>
+			<tbody>";		
+
+			foreach($this->aniversariantes as $a){		
+
+				echo "<tr><td>".$a['nome']."</td><td>".$a['tel1']."</td><td>".$a['nascimento']."</td><tr>";	
+
+			}
+			echo "</tbody></table>";	
+
+		?>
+	</div> 
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+
+
+<script type="text/javascript">
+	
+	function buscaModelo(strMmarca){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: false,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+
+				$("#veiculo").html(data);
+
+			}
+		});
+	
+	}
+
+	function buscaMarcas(){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_marca',
+			async: false,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#marca").html(data);
+				
+			}
+		});
+	
+	}
+	
+	$(document).ready(function(){
+		
+		$.ajax({
+			url : '/clientes/ajax/fn/busca_origem',
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+					
+				$("#origem").html(data);
+
+			}
+		});
+		
+	});
+
+
+function buscaListaFluxo(){
+	
+	buscaMarcas();
+	
+	$("#table_fluxo_clientes").html("<label class='label'>AGUARDE CARREGANDO.......</label>");
+	
+	$.ajax({
+		type: "POST",
+		url: '/clientes/ajax/fn/lista_fluxo_cliente',
+		async: true,
+		dataType:"text",
+		data: ({'nome':$("#nome").val(), 'veiculo':$("#veiculo").val(), 'data_inicial':$("#data_inicial").val(), 'data_final':$("#data_final").val(), 'vendedor':$("#vendedor").val(), 'origem':$("#origem").val(), 'resultado':$("#resultado").val(), 'motivo_pre':$("#motivo_pre").val(), 'filtro':$("#filtro").val()}),
+		success:function(resp){
+			$("#table_fluxo_clientes").html(resp);
+			getNegociacoes();
+			$(".resultado_motivo").tipsy({gravity: 'n'});
+		}
+
+	});
+	
+}
+
+function baixaAgenda(id, c){
+
+	if(!confirm('Deseja realmente baixar este compromisso.')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaAgenda/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	getAgenda();
+	
+}
+
+function baixaPendencia(id, c){
+
+	if(!confirm('Deseja realmente baixar esta pendencia.')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPendencia/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	getPendencias();
+}
+
+function baixaPagamento(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+	$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPagamento/id/' + id,
+	async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+
+	$("#linha_pgto_p_"+id).remove();
+}
+
+function baixaLancamentoRecorrente(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+	$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPagamentoRecorrente/id/' + id,
+	async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	$("#linha_p_r"+id).remove();
+
+}
+
+function baixaLancamento(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaLancamento/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	$("#linha_p_"+id).remove();
+}
+
+function getNegociacoes(){
+
+	var dataInicial = $("#data_inicial_negociacoes").val();
+	var dataFinal = $("#data_final_negociacoes").val();
+
+	if(!dataInicial && !dataFinal){
+		dataInicial = "<?php echo @date('Y-m')."-01"; ?>";
+		dataFinal = "<?php echo @date('Y-m-d'); ?>";
+		
+		$("#data_inicial_negociacoes").val(dataInicial);
+		$("#data_final_negociacoes").val(dataFinal);
+		
+	}
+
+	$.ajax({
+		type: "POST",
+		url: '<?php echo URL ?>agenda/ajax/fn/getNegociacoes/agenda/1',
+		async: false,
+		dataType:"text",
+		data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+		success:function(resp){
+			//getPagamentosPendentes();
+			getRecebimentosPendentes();
+			$("#negociacoes").html(resp);
+		}
+
+	});
+
+}
+
+function getAgenda(){
+
+	var dataInicial = $("#data_inicial_agenda").val();
+	var dataFinal = $("#data_final_agenda").val();
+	if($("#baixado_agenda").attr('checked') == true || $("#baixado_agenda").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;	
+
+		$("#agenda").html(resp);
+
+	}else{
+		
+		if(dataInicial && dataFinal){	
+
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#agenda").html(resp);
+
+		}else{
+			
+			if(baixado){	
+
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#agenda").html(resp);
+
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#agenda").html(resp);
+			
+			}
+			
+		}
+
+	}
+
+	getVeiculos();
+	
+}
+
+function getRecebimentosPendentes(){
+
+	var dataInicial = $("#data_inicial_recebimentos_pendentes").val();
+	var dataFinal = $("#data_final_recebimentos_pendentes").val();
+	if($("#baixado_recebimentos_pendentes").attr('checked') == true || $("#baixado_recebimentos_pendentes").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){		
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#recebimentos_pendentes").html(resp);
+		
+	}else{
+	
+		if(dataInicial && dataFinal){
+		
+			var resp = $.ajax({
+			url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+				async: false,
+				type: 'POST',
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				dataType: 'text'
+			}).responseText;
+
+			$("#recebimentos_pendentes").html(resp);
+		
+		}else{
+		
+			if(baixado){
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#recebimentos_pendentes").html(resp);
+			
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#recebimentos_pendentes").html(resp);
+			
+			}
+		
+		}
+		
+	}
+
+	getAgenda();
+	
+}
+
+function getPagamentosPendentes(){
+
+	var dataInicial = $("#data_inicial_pagamentos_pendentes").val();
+	var dataFinal = $("#data_final_pagamentos_pendentes").val();
+	if($("#baixado_pagamentos_pendentes").attr('checked') == true || $("#baixado_pagamentos_pendentes").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+
+	if(dataInicial && dataFinal && baixado){	
+
+		$.ajax({
+			type: "POST",
+			url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+			async: false,
+			dataType:"text",
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			success:function(resp){
+				$("#pagamentos_pendentes").html(resp);
+			}
+
+		});
+
+	}else{
+		
+		if(dataInicial && dataFinal){
+
+			$.ajax({
+				type: "POST",
+				url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+				async: false,
+				dataType:"text",
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				success:function(resp){
+					$("#pagamentos_pendentes").html(resp);
+				}
+
+			});
+		
+		}else{
+		
+			if(baixado){
+
+				$.ajax({
+					type: "POST",
+					url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+					async: false,
+					dataType:"text",
+					data: ({'baixado':baixado}),
+					success:function(resp){
+						$("#pagamentos_pendentes").html(resp);
+					}
+
+				});
+
+			}else{
+
+				$.ajax({
+					type: "POST",
+					url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+					async: false,
+					dataType:"text",
+					data: ({}),
+					success:function(resp){
+						$("#pagamentos_pendentes").html(resp);
+					}
+
+				});
+				
+			}
+		
+		}
+		
+		
+	}
+	
+	getRecebimentosPendentes();
+
+}
+
+function getVeiculos(){
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/getVeiculos',
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+
+	$("#veiculos").html(resp);
+	
+	getPendencias();
+	//getRecebimentosPendentes();
+	
+}
+
+function getPendencias(){
+
+	var dataInicial = $("#data_inicial_pendencias").val();
+	var dataFinal = $("#data_final_pendencias").val();	
+	if($("#baixado_pendencias").attr('checked') == true || $("#baixado_pendencias").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#pendencias").html(resp);
+		
+	}else{	
+		
+		if(dataInicial && dataFinal){
+		
+			var resp = $.ajax({
+			url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+				async: false,
+				type: 'POST',
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				dataType: 'text'
+			}).responseText;
+
+			$("#pendencias").html(resp);
+		
+		}else{
+			
+			if(baixado){
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#pendencias").html(resp);
+			
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#pendencias").html(resp);
+			
+			}
+		
+		}
+		
+	}
+	
+	getFluxoLoja();
+	
+}
+
+function getFluxoLoja(){
+
+	var dataInicial = $("#data_inicial_fluxoLoja").val();
+	var dataFinal = $("#data_final_fluxoLoja").val();
+
+	if(dataInicial && dataFinal){	
+
+		// var resp = $.ajax({
+		// url: '<?php echo URL ?>agenda/ajax/fn/getFluxoLoja',
+		// async: true,
+		// 	type: 'POST',
+		// 	data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+		// 	dataType: 'text'
+		// }).responseText;
+
+		// $("#fluxo_loja").html(resp);
+
+		$.ajax({
+			type: "POST",
+			url: '/agenda/ajax/fn/getFluxoLoja',
+			async: false,
+			dataType:"text",
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+			success:function(resp){
+				$("#fluxo_loja").html(resp);
+			}
+
+		});
+
+
+	}else{
+
+
+		$.ajax({
+			type: "POST",
+			url: '/agenda/ajax/fn/getFluxoLoja',
+			async: false,
+			dataType:"text",
+			success:function(resp){
+				$("#fluxo_loja").html(resp);
+			}
+
+		});
+
+		// var resp = $.ajax({
+		// url: '<?php echo URL ?>agenda/ajax/fn/getFluxoLoja',
+		// 	async: true,
+		// 	type: 'POST',
+		// 	data: ({}),
+		// 	dataType: 'text'
+		// }).responseText;	
+
+		// $("#fluxo_loja").html(resp);
+	}
+
+}
+
+$(function(){
+
+	$("#data_inicial_negociacoes").mask("99/99/9999");
+	$("#data_final_negociacoes").mask("99/99/9999");	
+
+	$("#data_inicial_agenda").mask("99/99/9999");
+	$("#data_final_agenda").mask("99/99/9999");	
+
+	$("#data_inicial_pendencias").mask("99/99/9999");
+	$("#data_final_pendencias").mask("99/99/9999");	
+
+	$("#data_inicial_fluxoLoja").mask("99/99/9999");
+	$("#data_final_fluxoLoja").mask("99/99/9999");
+
+	if($("#msg").html().length > 0){		
+
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+
+		$("#msg").addClass('sucess');		
+
+		}else{		
+
+			$("#msg").addClass('erro');
+
+		}
+	}
+
+	$('#data_inicial_negociacoes').focus(function(){
+	
+		$(this).calendario({
+			target:'#data_inicial_negociacoes'
+		});
+	});
+
+	$('#data_final_negociacoes').focus(function(){
+		$(this).calendario({
+			target:'#data_final_negociacoes'
+		});
+	});
+
+	$('#data_inicial_agenda').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_agenda'
+		});
+	});
+
+	$('#data_final_agenda').focus(function(){
+		$(this).calendario({
+			target:'#data_final_agenda'
+		});
+	});
+
+		$('#data_inicial_pendencias').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_pendencias'
+		});
+	});	
+
+		$('#data_final_pendencias').focus(function(){
+		$(this).calendario({
+			target:'#data_final_pendencias'
+		});
+	});
+
+	$('#data_final_fluxoLoja').focus(function(){
+		$(this).calendario({
+			target:'#data_final_fluxoLoja'
+		});
+	});
+
+	$('#data_inicial_fluxoLoja').focus(function(){		
+	$(this).calendario({
+			target:'#data_inicial_fluxoLoja'
+		});
+	});
+
+	$('#data_inicial_recebimentos_pendentes').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_recebimentos_pendentes'
+		});
+	});
+
+	$('#data_final_recebimentos_pendentes').focus(function(){		
+	$(this).calendario({
+			target:'#data_final_recebimentos_pendentes'
+		});
+	});
+	
+	$('#data_inicial_pagamentos_pendentes').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_pagamentos_pendentes'
+		});
+	});
+
+	$('#data_final_pagamentos_pendentes').focus(function(){		
+	$(this).calendario({
+			target:'#data_final_pagamentos_pendentes'
+		});
+	});
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+	
+	
+	buscaListaFluxo();
+
+
+});
+
+	function enviaPeriodo(valor, id){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+
+			if(id){
+				$("#data_inicial_"+id).val(dataInicial);
+				$("#data_final_"+id).val(datafinal);
+			}else{
+				$("#data_inicial").val(dataInicial);
+				$("#data_final").val(datafinal);
+			}
+			
+		}else{
+			
+			$("#data_inicial").val("");
+			$("#data_final").val("");
+		
+		}
+	
+	}
+	
+</script>
+ 

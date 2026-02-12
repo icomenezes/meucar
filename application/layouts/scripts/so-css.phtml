@@ -1,0 +1,36 @@
+<?php
+
+Zend_Session::start();
+
+$ts = @date('Ymdhis');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>.:: Sistema de Acompanhamento de Desempenho APSA  ::.</title>
+
+<?php 
+	$file = "/css/default.css?ts=$ts";
+	$this->headLink()->appendStylesheet($file); 
+	$file = "/css/style.css?ts=$ts";
+ 	echo $this->headLink()->appendStylesheet($file); 
+?>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+<?php 
+	$file = "/js/functions.js?ts=$ts";
+	$this->headScript()->appendFile($file);
+	$file = "/js/option-transfer.js?ts=$ts";
+	$this->headScript()->appendFile($file);
+	$file = "/js/jquery-ui-1.8.17.custom.min.js?ts=$ts";
+	$this->headScript()->appendFile($file);
+	echo $this->headScript()->appendFile('/js/interface.js'); 
+?>
+	
+</head>
+<body>
+	<?php echo $this->layout()->content; ?>
+</body>
+</html>
+

@@ -1,0 +1,117 @@
+public function _get($arr = array()){
+		
+		$row = $this->select();
+		$row->setIntegrityCheck(false);
+		$row->from(
+			array('n'=>'negociacoes'),
+			array('*')
+		);
+		
+		$row->joinInner(
+			array('v'=>'veiculos'),
+			'v.id = n.id_veiculo',
+			array('placa')
+		);
+		
+		$row->joinInner(
+			array('m'=>'modelos'),
+			'm.id = v.id_modelo',
+			array('ano_modelo','modelo')
+		);
+		
+		$row->joinInner(
+			array('c'=>'clientes'),
+			'n.id_cliente = c.id',
+			array('nome')
+		);
+		
+		$row->joinInner(
+			array('u'=>'usuarios'),
+			'n.id_usuario = u.id',
+			array('id_perfil', 'nomeUsuario'=>'nome')
+		);
+		
+		if($arr['buscaTroca']){
+			
+			$row->joinLeft(
+				array('v2'=>'veiculos'),
+				'v2.id_negociacao = n.id',
+				array('id_troca'=>'id')
+			);
+		
+		}
+	
+		if($arr['id']){
+		
+			$row->where('n.id = ' . $arr['id']);
+		
+		}
+		
+		if($arr['id_empresa']){
+		
+			$row->where('n.id_empresa = ' . $arr['id_empresa']);
+		
+		}
+		
+		if($arr['id_perfil']){
+			
+			if($arr['id_perfil'] == 2){
+			
+				$row->where('u.id_perfil = 2 OR u.id_perfil = 4 OR u.id_perfil = 3');
+			
+			}elseif($arr['id_perfil'] == 4){
+			
+				$row->where('u.id_perfil = 4 OR u.id_perfil = 3');
+			
+			}elseif($arr['id_perfil'] == 3){
+			
+				$row->where('u.id_perfil = 3');
+			
+			}
+			
+		}
+		
+		if(isset($arr['aprovada']) && $arr['aprovada'] != ""){
+		
+			$row->where('n.aprovada = ' . $arr['aprovada']);
+		
+		}
+		
+		if(!$arr['parcial']){
+			
+			if($arr['placa']){
+				
+				$row->where("v.placa = '" . $arr['placa'] . "' OR v.renavam = '".$arr['placa']."'");
+			
+			}
+			
+			if($arr['nome']){
+			
+				$row->where("c.nome = '".$arr['nome']."' OR c.cpf = '".$arr['nome']."' ");
+			
+			}
+			
+		}else{
+			
+			if($arr['placa']){
+				
+				$row->where("v.placa LIKE '" . $arr['placa'] . "%' OR v.renavam LIKE '".$arr['placa']."%'");
+			
+			}
+			
+			if($arr['nome']){
+			
+				$row->where("c.nome LIKE '".$arr['nome']."%' OR c.cpf LIKE '".$arr['nome']."%'");
+			
+			}
+			
+		}
+	
+		$row->order('n.data_abertura');
+		$row->order('n.data_concretizacao');
+
+		return $row->query()->fetchAll
+		
+	}
+	
+	}

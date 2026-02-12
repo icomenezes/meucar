@@ -1,0 +1,110 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="./demos.js" ></script>
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.waterfall.js" ></script>
+    
+    <title>RGraph demo: An offset X axis Waterfall chart</title>
+    
+    
+    <meta name="description" content="An offset X axis Waterfall chart" />
+     
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    
+
+    <h1>An offset X axis Waterfall chart</h1>
+    
+
+    <div style="float: right">
+        <canvas id="cvs" width="700" height="450">[No canvas support]</canvas>
+    </div>
+    <p>
+        The Waterfall chart now supports having an offset X axis instead of it
+        just being in the center or at the bottom.
+    </p>
+    
+    <p>
+        For this you'd leave the <span class="inline-code-highlight">xaxisPosition</span>
+        setting at <b>bottom</b> and use the <span class="inline-code-highlight">yaxisScaleMax</span>
+        and the <span class="inline-code-highlight">yaxisScaleMin</span> settings to
+        determine the scale.
+    </p>
+    
+    <p>
+        Using an offset scale can mean that you have less wasted space on your canvas
+        (or your SVG tag) so your chart is clearer.
+    </p>
+    
+    <p>
+        Other than this the Waterfall chart is pretty standard - using the
+        <span class="inline-code-highlight">yaxisScaleDecimals</span> and
+        <span class="inline-code-highlight">yaxisScaleUnitsPre</span> settings. It also
+        has X axis labels and a slightly increased <span class="inline-code-highlight">hmargin</span> setting.
+    </p>
+    
+    <p>
+        Keep in mind that by default the scale on a chart like this has five
+        'segments' whereas this chart has six so as to make the chart use rounded
+        numbers. To facilitate this the Y axis tickmarks, Y axis labels and
+        background grid horizontal lines have custom numbers (ie 6).
+    </p>
+    
+    <div style="clear: both"></div>
+    
+    <script>
+        new RGraph.Waterfall({
+            id: 'cvs',
+            data: [5,4,11,-30,4,5,3],
+            options: {
+                backgroundGridHlinesCount: 6,
+                backgroundGridVlines: false,
+                backgroundGridBorder: false,
+                xaxisLabels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun',''],
+                yaxisLabelsCount: 6,
+                yaxisScaleMin: -10,
+                yaxisScaleMax: 20,
+                yaxisScaleDecimals: 2,
+                yaxisScaleUnitsPre: '$',
+                yaxisTickmarksCount: 6,
+                marginLeft: 50,
+                hmargin: 15
+            }
+        }).draw();
+    </script>
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.waterfall.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="700" height="450" &gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+
+    <div id="dynamic-source-code"></div>
+    <script>showSource()</script>
+
+
+
+</body>
+</html>

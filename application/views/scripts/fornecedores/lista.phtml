@@ -1,0 +1,75 @@
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Fornecedor</label>
+		<input type="text" id="razao_social" name="razao_social" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNPJ</label>
+		<input type="text" id="cnpj" name="cnpj" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ramo de Atividade</label>
+		<input type="text" id="ramo_atividade" name="ramo_atividade" class="text" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>fornecedores/add'" />
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Fornecedor</th><th>Ramo de Atividade</th><th>Contato</th><th>Telefone</th><th>Ativo</th><th>Observa&ccedil;&otilde;es</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th style="width:145px;">A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->fornecedores as $f){
+	
+		$dataTmp = explode(" ",$f['hora_alteracao']);
+
+		if(isset($dataTmp[0])){
+
+			$dataTmp2 = explode("-",$dataTmp[0]);
+			$f['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+			if(isset($dataTmp[1])){
+				$f['hora_alteracao'] = $f['hora_alteracao'] . " " . $dataTmp[1];
+			}
+
+		}
+?>		
+		<tr>
+		<td><?php echo $f['razao_social']?></td>
+		<td><?php echo $f['ramo_atividade']?></td>
+		<td><?php echo $f['contato']?></td>
+		<td><?php echo $f['telefone']?></td>
+		<td><?php echo ($f['ativo'] == "1") ? "Sim" : "N&atilde;o"; ?></td>
+		<td><?php echo $f['obs']?></td>
+		<td><?php echo $f['nome']." - ".$f['hora_alteracao']; ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $f['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Fornecedor: <?php echo $f['razao_social']?>', <?php echo $f['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

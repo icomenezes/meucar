@@ -1,0 +1,122 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add" class="form" method="post">
+	
+	<table class = 'table'>
+
+		<thead><tr><th>Origem Cliente</th><th>Quantidade</th></tr></thead>
+
+	<tbody>
+	
+	<?php
+		
+		//var_export($this->origemClientes);exit;
+		foreach($this->origemClientes as $origem){
+			
+			if($this->fluxoLoja){
+			
+				foreach($this->fluxoLoja as $fluxoLoja){
+				
+					if($fluxoLoja['id_origem_cliente'] == $origem['id']){
+					
+						echo "<tr><td>".$origem['descricao']."</td><td>				
+						<label class=\"label\">Quantidade</label>
+						<input type=\"text\" id=\"qtd_".$origem['id']."\" name=\"qtd_".$origem['id']."\" class=\"text\" value=\"".$fluxoLoja['qtd']."\" />
+						</td></tr>";
+					
+					}
+				
+				}
+			
+			}else{
+			
+				echo "<tr><td>".$origem['descricao']."</td><td>
+				
+				<label class=\"label\">Quantidade</label>
+				<input type=\"text\" id=\"qtd_".$origem['id']."\" name=\"qtd_".$origem['id']."\" class=\"text\" value=\"\" />
+				</td></tr>";
+				
+			}
+
+		}
+	
+	?>
+	
+	</tbody>
+	</table>
+	
+	<!--<div class="inline">
+		<label class="label">Data</label>
+		<input type="text" id="data" name="data" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Quantidade</label>
+		<input type="text" id="qtd" name="qtd" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label>Origem do(s) Cliente(s)</label>
+		<select name="id_origem_cliente" id="id_origem_cliente" class="text req" title="Origem do Cliente">
+			<option value="0">SELECIONE</option>			
+			<?php
+				
+				//foreach($this->origemClientes as $origemCliente){
+					
+					//echo "<option value=\"" . $origemCliente['id'] . "\" label = \"" . $origemCliente['descricao'] ."\">  ". $origemCliente['descricao'] ." </option>";
+					
+				//}
+			
+			?>
+			
+		</select>
+	</div>-->
+	
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+
+	$("#data").mask("99/99/9999");
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

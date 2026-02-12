@@ -1,0 +1,86 @@
+<form id="perfis" name="perfis" enctype="application/x-www-form-urlencoded" action="add-perfil" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Perfil</label>
+		<input type="text" id="perfil" name="perfil" class="text" title="Nome do Perfil" value="" />
+	</div>
+	
+	<div class="inline"">
+		<label class="label">Permissões</label><br/>
+		<!--<p><input type="checkbox"  id="cidades" name="cidades" title="Ativar módulo Cidades" value="1" />Cidades</p><br/>-->
+		<!--<p><input type="checkbox"  id="clientes" name="clientes" title="Ativar módulo Clientes" value="1" />Clientes</p><br/>-->
+		<!--<p><input type="checkbox"  id="complementos_hierarquias" name="complementos_hierarquias" title="Ativar módulo Clientes" value="1" />Complementos Hierarquias</p><br/>-->
+		<!--<p><input type="checkbox"  id="empresas" name="empresas" title="Ativar módulo Empresas" value="1" />Empresas</p><br/>-->
+		<!--<p><input type="checkbox"  id="estados" name="estados" title="Ativar módulo Estados" value="1" />Estados</p><br/>-->
+		<p><input type="checkbox"  id="hierarquias" name="hierarquias" title="Ativar módulo Hierarquias" value="1" />Hierarquias</p><br/>
+		<!--<p><input type="checkbox"  id="nfs" name="nfs" title="Ativar módulo NFS" value="1" />NFS</p><br/>-->
+		<!--<p><input type="checkbox"  id="paradas" name="paradas" title="Ativar módulo Paradas" value="1" />Paradas</p><br/>-->
+		<p><input type="checkbox"  id="perfis" name="perfis" title="Ativar módulo Perfis" value="1" />Perfis</p><br/>
+		<!--<p><input type="checkbox"  id="produtos" name="produtos" title="Ativar módulo Produtos" value="1" />Produtos</p><br/>-->
+		<!--<p><input type="checkbox"  id="roteiros" name="roteiros" title="Ativar módulo Roteiros" value="1" />Roteiros</p><br/>-->
+		<p><input type="checkbox"  id="tipos" name="tipos" title="Ativar módulo Tipos" value="1" />Tipos</p><br/>
+		<p><input type="checkbox"  id="usuarios" name="usuarios" title="Ativar módulo Usuários" value="1" />Usuários</p><br/>
+		<p><input type="checkbox"  id="uploads" name="uploads" title="Ativar módulo Uploads" value="1" />Uploads</p><br/>
+		<!--<p><input type="checkbox"  id="vendedores" name="vendedores" title="Ativar módulo Vendedores" value="1" />Vendedores</p><br/>-->
+		<!--<p><input type="checkbox"  id="visitas" name="visitas" title="Ativar módulo Visitas" value="1" />Visitas</p><br/>-->
+		
+		<!--São colunas que ainda não tem na tabela de permissoes, mas tabelas que já tem no MER.-->
+		
+	</div>
+	
+	<div>
+		<input type="button" id="button" name="button" class="btn-small" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#perfil").val() == 0){
+		
+		erro = true;
+		
+		msg += "<br>O campo perfil deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

@@ -1,0 +1,119 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="./demos.js" ></script>
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.svg.rose.js" ></script>
+    
+    <title>RGraph demo: A basic rose chart</title>
+
+
+    
+    <meta name="description" content="A grouped Rose chart" />
+     
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    
+
+    <h1>A grouped Rose chart</h1>
+
+    <div style="float: right">
+        <div id="cc" style="width: 700px; height: 500px"></div>
+    </div>
+    
+    <p>
+        Here we have a variation on a standard Rosse chart which produces a grouping
+        effect. The property that causes the offset is called
+        <span class="inline-code-highlight">segmentsAngleOffset</span> and on one Rose
+        chart (there are two)it is set to -0.15 whilst on the other it is set at 0.15.
+        This "rotates" one Rose chart backwards whilst the other is "rotated" forwards.
+    </p>
+    
+    <p>
+        Both charts use the <span class="inline-code-highlight">grow()</span> animation
+        effect.
+    </p>
+    
+    <div style="clear: both"></div>
+    
+    <script>
+        rose1 = new RGraph.SVG.Rose({
+            id: 'cc',
+            data: [4,6,3,5,2,8,9],
+            options: {
+                amargin: .3,
+                segmentsAngleOffset: -.15,
+                labels: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],
+                tooltips: [
+                    'Richard on Monday: 4%',
+                    'Richard on Tuesday: 6%',
+                    'Richard on Wednesday: 3%',
+                    'Richard on Thursday: 5%',
+                    'Richard on Friday: 2%',
+                    'Richard on Saturday: 8%',
+                    'Richard on Sunday: 9%'
+                ],
+                labelsSize: 24
+            }
+        }).grow();
+
+        rose2 = new RGraph.SVG.Rose({
+            id: 'cc',
+            data: [5,8,6,3,2,9,9],
+            options: {
+                colors: ['black'],
+                amargin: .3,
+                segmentsAngleOffset: .15,
+                backgroundGrid: false,
+                tooltips: [
+                    'Jane on Monday: 5%',
+                    'Jane on Tuesday: 8%',
+                    'Jane on Wednesday: 6%',
+                    'Jane on Thursday: 3%',
+                    'Jane on Friday: 2%',
+                    'Jane on Saturday: 9%',
+                    'Jane on Sunday: 9%'
+                ],
+            }
+        }).grow();
+        
+        RGraph.SVG.tooltips.style.color           = 'white';
+        RGraph.SVG.tooltips.style.backgroundColor = 'black';
+        RGraph.SVG.tooltips.style.fontWeight      = 'bold';
+        RGraph.SVG.tooltips.style.fontSize        = '20pt';
+        RGraph.SVG.tooltips.style.padding         = '15px';
+    </script>
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.common.tooltips.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.rose.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div id="cc" style="width: 1000px; height: 700px"&gt;&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <div id="dynamic-source-code"></div>
+    <script>showSource()</script>
+
+
+    
+
+</body>
+</html>

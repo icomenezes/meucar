@@ -1,0 +1,105 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.hbar.js" ></script>
+    
+    <title>RGraph demo: A basic HBar chart</title>
+    
+    
+    
+    <meta name="description" content="A basic Horizontal Bar chart" />
+     
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    <h1>A basic horizontal bar chart</h1>
+
+    <canvas id="cvs" width="600" height="450">[No canvas support]</canvas>
+    
+    <script>
+        new RGraph.HBar({
+            id: 'cvs',
+            data: [5,8,6,4,3,2,1,6,5],
+            options: {
+                yaxisLabels: ['Venus','Felicity Jones-Arthur','Cynthia','Frederick','Hoolio','Peter','Jennifer','Richard','Joathan']
+            }
+        }).draw();
+
+        // This onadjust event listener makes it so that when you adjust the
+        // chart the bar being adjusted snaps to the nearest whole value.
+        //
+        //.on('adjust', function (e)
+        //{
+        //    var shape   = RGraph.Registry.get('chart.adjusting.shape'),
+        //        obj     = shape.object,
+        //        idx     = shape.index,
+        //        indexes = RGraph.sequentialIndexToGrouped(idx, obj.data);
+        //        group   = indexes[0],
+        //        index   = indexes[1];
+
+        //    obj.data[group][index] = Math.round(obj.data[group][index]);
+        //    
+        //    RGraph.redraw();
+        //});
+    </script>
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.hbar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="600" height="450"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    new RGraph.HBar({
+        id: 'cvs',
+        data: [5,8,6,4,3,2,1,6,8],
+        options: {
+            yaxisLabels: ['Venus','Felicity Jones-Arthur','Cynthia','Frederick','Hoolio','Peter','Jennifer','Richard','Joathan']
+        }
+    }).draw();
+
+    <span>// This onadjust event listener makes it so that when you adjust the
+    // chart the bar being adjusted snaps to the nearest whole value.
+    //
+    //.on('adjust', function (e)
+    //{
+    //    var shape   = RGraph.Registry.get('chart.adjusting.shape'),
+    //        obj     = shape.object,
+    //        idx     = shape.index,
+    //        indexes = RGraph.sequentialIndexToGrouped(idx, obj.data);
+    //        group   = indexes[0],
+    //        index   = indexes[1];
+
+    //    obj.data[group][index] = Math.round(obj.data[group][index]);
+    //    
+    //    RGraph.redraw();
+    //});</span>
+&lt;/script&gt;
+</pre>
+
+
+
+    
+
+</body>
+</html>

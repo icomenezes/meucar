@@ -1,0 +1,579 @@
+
+<style>
+table{
+	border-right:solid 1px;
+	border-bottom:solid 1px;
+	width: 100%;
+}
+
+th{
+	padding: 3px;
+	border-left:solid 1px;
+	border-top:solid 1px;
+	border-bottom:solid 1px;
+	text-align:center;
+}
+
+td{
+	padding: 3px;
+	border-left:solid 1px;
+	border-top:solid 1px;
+	text-align:left;
+}
+
+.marca{
+	background-color:#999999;
+	border:solid 0px;
+	color:#FFFFFF;
+	height:25px;
+	font-weight:bold;
+}
+
+table tr td select{
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	width: 95px;
+	color:#666666;
+}
+
+.div_modelo{
+	background-color:#FFFFFF;
+	border:solid 1px #CCCCCC;
+	width:500px;
+	height:200px;
+	position:absolute;
+	left: 50%;
+	margin-left: -250px;
+	top: 50%;
+	margin-top: -120px;
+}
+
+.div_aguarde{
+	background-color:#FFFFFF;
+	border:solid 1px #CCCCCC;
+	width:200px;
+	height:50px;
+	position:absolute;
+	left: 50%;
+	margin-left: -100px;
+	top: 50%;
+	margin-top: -25px;
+}
+
+.span_modelo{
+	position:absolute;
+	margin-left: 30px;
+	margin-top: 40px;
+}
+
+.span_aguarde{
+	position:absolute;
+	margin-left: 65px;
+	margin-top: 15px;
+}
+
+.label_modelo{
+	position:absolute;
+	margin-left: 30px;
+	margin-top: 80px;
+	font-size:17px;
+}
+
+.select_modelo{
+	position:absolute;
+	margin-left:90px;
+	margin-top: 75px;
+	border:solid 1px #CCCCCC;
+	height:25px;
+	width:370px;
+}
+
+.bnt_modelo{
+	position:absolute;
+	margin-left:90px;
+	margin-top: 120px;
+	height:25px;
+	width:370px;
+}
+
+.fechar_modelo{
+	position:absolute;
+	margin-left:450px;
+	margin-top: 10px;
+}
+
+
+</style>
+
+<div id="transparente" style="position: fixed; top: 0px; left: 0px; z-index: 10; width: 100%; height:100%; background-image:url('/images/ponto_transparente.png'); display:none; ">
+	
+	<div class="div_modelo">
+		<a class="fechar_modelo" href="#" onclick="fecharTransparencia();">Fechar</a>
+		<span class="span_modelo" style="font-size:17px;">O modelo deste veículo não consta no site Icarros.<br/>Por favor, selecione o modelo do veículo e clique em pronto</span><br><br>
+		<label class="label_modelo">Modelo</label>
+		<select class="select_modelo">
+			<option>Selecione</option>
+		</select>
+		<input class="bnt_modelo" type="button" value="Pronto" onclick="mudaVersao();" />
+	</div>
+
+</div>
+
+<div id="aguarde" style="position: fixed; top: 0px; left: 0px; z-index: 10; width: 100%; height:100%; background-image:url('/images/ponto_transparente.png'); display:none; ">
+	
+	<div class="div_aguarde">
+		<span class="span_aguarde" style="font-size:17px;">Aguarde...</span>
+	</div>
+
+</div>
+
+
+<div id="msg" style="text-align:center; position:fixed; z-index:3; background-color:#FF6666; color:#FFFFFF; width:90%; display:none; font-size:15px; font-weight:bold;"><br/>Não há mais espaço para o plano contratado no Icarros<br/><br/></div>
+<table>
+	<tr>
+		<th>Nº</th>
+		<th>MODELO</th>
+		<th>PLACA</th>
+		<th>COR</th>
+		<th>ANO</th>
+		<th>KM</th>
+		<th>OPC</th>
+		<th>VENDA</th>
+		<th>ATIVO</th>
+		<th>CONSI.</th>
+		<th>FOTOS</th>
+		<th>EM EST.</th>
+		<th>ICARROS <span id="qtd_planos_icarros"></span></th>
+		<th>WEB MOTORS</th>
+	</tr>
+	
+<?php
+	
+	$coutCarros = 0;
+	
+	//var_export($this->stoqueIcarros);
+	//var_export($this->veiculos);
+	
+	foreach($this->veiculos as $key=>$veiculo){
+		
+		$coutCarros++;
+		
+		if($veiculo['marca'] != $this->veiculos[($key-1)]['marca']){
+			
+			echo "<tr><td class='marca' colspan='14'>".mb_convert_encoding($veiculo['marca'], 'UTF-8', 'ISO-8859-1')."</td></tr>";
+		
+		}
+		
+		if($veiculo['descricao_site']){
+			
+			$veiculo['modelo'] = $veiculo['descricao_site'];
+		
+		}
+
+		if($veiculo['ativo']){
+			
+			$veiculo['ativo'] = "Sim";
+		
+		}else{
+			
+			$veiculo['ativo'] = "N&atilde;o";
+		
+		}
+		
+		if($veiculo['consignado']){
+			
+			$veiculo['consignado'] = "Sim";
+		
+		}else{
+			
+			$veiculo['consignado'] = "N&atilde;o";
+		
+		}
+		
+		if($veiculo['km'] == ""){
+			
+			$veiculo['km'] = 1;
+		
+		}
+		
+		if($veiculo['km'] == 0){
+			
+			$veiculo['km'] = 1;
+		
+		}
+	
+		if($veiculo['fotos'] == ""){
+			
+			$veiculo['fotos'] = 0;
+		
+		}
+		
+		
+		echo "  <tr>
+					<td>".$coutCarros."</td>
+					<td>".substr($veiculo['modelo'],0,26)."</td>
+					<td>".strtoupper($veiculo['placa'])."</td>
+					<td>".$veiculo['cor']."</td>
+					<td>".$veiculo['ano_fabricacao']."/".$veiculo['ano_modelo']."</td>
+					<td>".$veiculo['km']."</td>
+					<td style='text-align:center;'> <img width='15px' src='/images/info.png' title='OPCIONAIS:\n".$veiculo['opcionais']."'/></td>
+					<td>R$ ".money_format("%i",$veiculo['valor_venda'])."</td>
+					<td>".$veiculo['ativo']."</td>
+					<td>".$veiculo['consignado']."</td>
+					<td>".$veiculo['fotos']."</td>
+					<td>".$veiculo['de']."</td>
+					<td>
+						<input type='hidden' id='versao_".$veiculo['id']."' value='".$veiculo['versao_id']."' />
+						<select id='".$veiculo['id']."' name='".$veiculo['id_icarros']."' title='Icarros' onchange='triagem(this.id);' onclick='ultimoPlano();'>
+							<option value=''>N&atilde;o Anunciado</option>
+							".$veiculo['id_plano_icarros']."
+						</select>
+					</td>
+					<td>
+						<select>
+							<option value=''>Desenvolvimento</option>
+						</select>
+					</td>
+				</tr>";
+	
+	}
+	
+	
+?>
+
+
+</table>
+
+
+
+<script>
+
+	var arrPlanos = new Array();
+	var arrTemp = new Array();
+	var arrNomePlanos = new Array();
+	var arrAtivosPlanos = new Array();
+	var arrDisponiveisPlanos = new Array();
+	var arrErro = new Array();
+	var ativos = 0;
+	var disponiveis = 0;
+	var ultimo = "";
+	var str = "";
+	var strTem = "";
+	var versaoId = "";
+	var height = $(window).height();
+	var primeira = false;
+	
+
+	
+	$("#msg").css("margin-top",height-128+"px");
+
+	
+	
+	function triagem(id){
+		
+		idPlano = "";
+		nome = "";
+		versaoId = "";
+		
+		idPlano = $("#"+id).val();
+		versaoId = $("#versao_"+id).val();
+		nome = $("#"+id).attr("name");
+		
+		
+		
+		if(nome == "" && id != "" && versaoId == ""){
+			
+			$("#aguarde").fadeIn("slow");
+			
+			$.ajax({                 
+				type: "POST",
+				url:"/icarros/ajax",
+				async: false,
+				dataType:"html",
+				data:{"id_veiculo":id, "fn":"get_modelos_fipe"},                       
+				success:function(retorno){
+					
+					$("#aguarde").fadeOut("slow");
+
+					$(".select_modelo").html(retorno);
+					
+					
+					$(".fechar_modelo").attr("onclick","fecharTransparencia("+id+");");
+					$(".bnt_modelo").attr("onclick","mudaVersao("+id+");");
+					
+					$("#transparente").fadeIn("slow");
+				
+				}
+			
+			});
+
+		}else{
+			
+			if(nome != "" && id != "" && versaoId != "" && idPlano != ""){
+
+				mudaSelect(id);
+				
+				
+			}else{
+			
+				if(nome != "" && id != "" && versaoId != "" && idPlano == ""){
+
+					mudaSelect(id);
+		
+				
+				}
+			
+			}
+		
+		}
+	
+	}
+	
+	
+	function mudaSelect(id){
+	
+		idPlano = "";
+		nome = "";
+		versaoId = "";
+
+		$("#aguarde").fadeIn("slow");
+	
+		if(id != ""){
+		
+			if($("#"+id).val() == ""){
+		
+				idPlano = "";
+			
+			}else{
+				
+				idPlano = $("#"+id).val();
+			
+			}
+			
+			if($("#"+id).attr("name") == ""){
+			
+				nome = "";
+			
+			}else{
+				
+				nome = $("#"+id).attr("name");
+			
+			}
+			
+			versaoId = $("#versao_"+id).val();
+
+		}
+
+		$.ajax({
+			type: "POST",
+			url:"/icarros/ajax",
+			async: true,
+			dataType:"html",
+			data:{"id_plano":idPlano, "id_veiculo":id, "name":nome, "fn":"altera_icarros", "versao_id":versaoId},                       
+			success:function(retorno){
+			
+				arrErro = retorno.split("|");
+
+				$("#aguarde").fadeOut("slow");
+				
+				if(arrErro[0] == "ERRO"){
+					
+					$("#msg").html("<br/>"+arrErro[1]+".<br/>Esse erro pode ter sido causado por lentidão ou falta de comunicação com os servidores do site Icarros.<br/>Por favor tente novamente.<br/>Caso o erro persista, tente mais terde ou contate o administrador do sistema.<br/>Para evitar conflitos, essa tela será recarregada em 5 segundos.<br/><br/>");
+					$("#msg").css("background-color","#FF6666");
+					$("#msg").fadeIn("slow");
+					$("#msg").css("margin-top",height/2-$("#msg").height()+"px");
+			
+					setTimeout(function(){
+			
+						location.reload();
+			
+					}, 15000);
+					
+				}else{
+					
+					arrErro = retorno.split("/");
+					
+					if(arrErro[0] == "EXCLUIR"){
+						
+						$("#versao_"+id).val("");
+						$("#"+id).attr("name","");
+					
+					}else{
+
+						if(id != ""){
+						
+							if($("#"+id).attr("name") == ""){
+
+								$("#"+id).attr("name", arrErro[0]);
+							
+							}
+						
+						}
+					
+					}
+					
+					/*
+					if(idPlano == ""){
+						
+						$("#"+id).attr("name","");
+					
+					}
+					
+					*/
+			
+					
+					strPlanos = arrErro[1];
+					
+					if(id != ""){
+						
+						$("#msg").html("<br/>Alterações efetuadas com sucesso!<br/><br/>");
+						$("#msg").css("background-color","#008000");
+						$("#msg").fadeIn("slow");
+						setTimeout(function(){
+							$("#msg").fadeOut("slow");
+						}, 5000);
+					
+					}
+			
+	
+				ativos = 0;
+				disponiveis = 0;
+				str = "";
+			
+				$arrTemp = strPlanos.split("|");
+			
+				for(x in $arrTemp){
+			
+					$arrTemp2 = $arrTemp[x].split(":");
+
+					arrNomePlanos[$arrTemp2[0]] = $arrTemp2[1];
+					arrAtivosPlanos[$arrTemp2[0]] = parseInt($arrTemp2[2]);
+					arrDisponiveisPlanos[$arrTemp2[0]] = parseInt($arrTemp2[3]);
+				
+				}
+			
+				for(a in arrAtivosPlanos){
+				
+					ativos += parseInt(arrAtivosPlanos[a]);
+			
+				}
+				
+				for(d in arrDisponiveisPlanos){
+				
+					disponiveis += parseInt(arrDisponiveisPlanos[d]);
+					
+					if(arrDisponiveisPlanos[d] > arrAtivosPlanos[d]){
+						
+						str += "<option value='"+d+"'>"+arrNomePlanos[d]+"</option>";
+					
+					}
+			
+				}
+
+				$("#qtd_planos_icarros").html(ativos+"/"+disponiveis);
+
+				$("select").each(function(){
+				
+					if($(this).attr("title") == "Icarros"){
+						
+						if($(this).val() == ""){
+						
+							$(this).css("background-color","#FF6666");
+							$(this).css("border","outset 1px #FF6666");
+							$(this).css("color","#FFFFFF");
+							
+							strV = "<option selected='selected' value=''>Não anunciado</option>";
+							
+							$(this).html(str+strV);
+						
+						}else{
+							
+							$(this).css("background-color","#00FF7F");
+							$(this).css("border","inset 1px #00FF7F");
+							$(this).css("color","#666666");
+							
+							strTem = "";
+							
+							for(d in arrDisponiveisPlanos){
+					
+								if($(this).val() == d){
+									
+									strSelected = "<option value=''>Não anunciado</option>";
+									strSelected += "<option selected='selected' value='"+d+"'>"+arrNomePlanos[d]+"</option>";
+									
+								}
+					
+								if(arrDisponiveisPlanos[d] > arrAtivosPlanos[d]){
+
+									if($(this).val() != d){
+						
+										strTem += "<option value='"+d+"'>"+arrNomePlanos[d]+"</option>";
+									
+									}
+					
+								}
+			
+							}
+							
+							$(this).html(strSelected+strTem);
+							
+						}
+						
+					}
+				
+				});
+			
+				}
+	
+			}
+
+		});
+	
+	}
+
+	function ultimoPlano(){
+		
+		if(ativos >= disponiveis){
+	
+			$("#msg").html("<br/>"+ativos+"/"+disponiveis+"<br/><br/>");
+			$("#msg").fadeIn("slow");
+			
+			setTimeout(function(){
+			
+				$("#msg").fadeOut("slow");
+			
+			}, 1000);
+
+		}
+	
+	}
+	
+	function fecharTransparencia(id){
+		
+		$("#transparente").fadeOut("slow");
+		
+		$("#"+id).children().each(function(){
+		
+			if($(this).val() == ''){
+			
+				$(this).attr('selected',true);
+				
+			}
+			
+		});
+	
+	}
+	
+	function mudaVersao(id){
+		
+		$("#transparente").fadeOut("slow");
+		
+		$("#versao_"+id).val($(".select_modelo").val());
+
+		mudaSelect(id);
+
+	}
+
+	mudaSelect("");
+	
+</script>

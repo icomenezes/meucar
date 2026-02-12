@@ -1,0 +1,39 @@
+<?php
+
+header("Content-Type: text/html; charset=UTF-8",true);
+Zend_Session::start();
+
+if(!$_SESSION){header("Location: ".URL);}
+
+$ts = @date('Ymdhis');
+?>
+
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<?php 
+
+	$file = "/css/whatsapp/bootstrap.css?ts=$ts";
+	$this->headLink()->appendStylesheet($file); 
+	$file = "/css/whatsapp/custom.css?ts=$ts";
+	echo $this->headLink()->appendStylesheet($file); 
+
+	$file = "/js/whatsapp/jquery.min.js?ts=$ts";
+	$this->headScript()->appendFile($file); 
+	$file = "/js/whatsapp/bootstrap.bundle.min.js?ts=$ts";
+	echo $this->headScript()->appendFile($file); 
+?>
+
+
+	<title>Whatsapp - <?php echo $_SESSION['sessionUser']['nome_fantasia']; ?></title>
+</head>
+<body>
+	
+	
+	<?php echo $this->layout()->content; ?>
+
+</body>
+</html>

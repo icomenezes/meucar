@@ -1,0 +1,27 @@
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<br><br><br><br>
+<div class="inline" style="float:left; display:inline; width:215px; margin-bottom:5px;">
+<a href="<?php echo URL; ?>financeiras/lista"><h1>Voltar</h1></a>
+</div>
+
+<script type="text/javascript">
+
+$(function(){
+
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

@@ -1,0 +1,255 @@
+<style>
+	.table tr td{
+		padding:3px;
+	}
+</style>
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label>Item</label>
+		<select name="item" id="item" class="text" title="Baixado">
+		    <option value="">SELECIONE</option>
+			
+			<?php
+				foreach($this->itens as $itens){
+				
+					echo " <option value='".$itens['id']."'>".$itens['item']."</option>";
+				
+				}
+			?>
+			
+		</select>
+	</div>
+
+	<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table style="border: solid 0px;">
+			<tr>
+				<td style="border: solid 0px; padding:0px;">
+					<label class="label">Data Inicial</label>
+				</td>
+				<td style="border: solid 0px; padding:0px;">
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td style="border: solid 0px; padding:0px;">
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->dataInicial; ?>"/>
+				</td>
+				<td style="border: solid 0px; padding:0px;">
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->dataFinal; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<label>Baixado</label>
+		<select name="baixado" id="baixado" class="text" title="Baixado">
+		    <option value="">SELECIONE</option>
+			<option value="2">N&Atilde;O</option>
+			<option value="1">SIM</option>			
+			
+		</select>
+	</div>
+
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>lancamentos-financeiros/add'" />
+	</div>
+
+</form>
+<div style="margin-left:6px;">
+	<span style="font-size:15px;">Clique em Adicionar para adicionar um lançamento de uma despesa que não é recorrente, por exemplo, material de limpeza ou papelaria</span>
+</div>
+<br/>
+<br/>
+<table class = 'table'>
+
+<thead><tr><th>Grupo Financeiro</th><th>Item</th><th>Observações</th><th>Data Lan&ccedil;amento</th><th>Valor</th><th>Baixado</th><th>&Uacute;lltima Atualiza&ccedil;&atilde;o</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+	
+	foreach($this->lancamentosFinanceiros as $e){
+	
+		$dataTmp = explode(" ",$e['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1]
+	
+?>		
+		<tr>
+		<td><?php echo $e['descricao']; ?></td>
+		
+		<td width="15%"><?php echo $e['item']; ?></td>
+		
+		<td width="15%"><?php echo $e['observacoes']; ?></td>
+		<td><?php 
+				
+				$dataTmp = explode("-",$e['data_lancamento']);
+				$e['data_lancamento'] = implode("/",array_reverse($dataTmp));
+				
+				echo $e['data_lancamento'];
+			
+		?></td>
+		<td><?php echo "R$ ".money_format("%i",$e['valor']); ?></td>
+		<td><?php if($e['baixado'] == 0){
+		
+			echo "Não";
+		
+		}else{
+
+			echo "Sim";?></td>
+		
+		<?php
+		}
+		?>
+		<td width="15%"><?php echo $e['ultimoUsuario'] ?> - <?php echo $e['hora_alteracao'] ?></td>
+		<td width="130px;"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('lan&ccedil;amento', <?php echo $e['id']?>)" /></td>		
+		</tr>
+		
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+	<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir este "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+	
+	$(function(){
+	
+		$("#data_inicial").mask("99/99/9999");
+		$("#data_final").mask("99/99/9999");
+		
+		if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+ 
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+	});
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

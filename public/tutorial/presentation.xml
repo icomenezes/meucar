@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<presentation title="Vídeo 2" width="720.0000000" height="540.0000000" thmbWidth="120.0000000" thmbHeight="90.0000000" frameRate="24.0000000" looping="0" startingSlideShow="" pptVersion="2010" type="compound" hasExternalAudio="0" uid="{7889B13B-76DB-4B5F-BEC5-4C46197D1F22}">
+	<presenters>
+		<presenter name="Guilherme de Oliveira Rosa" title="" email="contato@vendedorouoferecedor.com.br" web="http://www.vendedorouoferecedor.com.br" phone="">
+			<bio>Guilherme de Oliveira Rosa começou a trabalhar como vendedor aos 17 anos, começou com vendas porta a porta, passando por vendas de consórcio de imóveis e automóveis, vendas de financiamentos, vendas de veículos novos e seminovos,  gerencia de vendas e atualmente é proprietário de um loja de veículos seminovos, além de ministrar treinamentos e palestras sobre técnicas de vendas e outros temas relacionados. É formado em gestão financeira e empreendedorismo e pesquisador incansável sobre técnicas de vendas, neurolinguistica, psicologia e comunicação. Todos esses anos de experiência bem sucedida na área comercial e constantes estudos permitiram que fosse criado o livro "Vendedor ou oferecedor? O que você é?" que pode ser considerado um excelente manual de vendas, ferramenta essencial para qualquer vendedor que deseja aumentar suas vendas, seus resultados e seus ganhos constantemente! </bio>
+			<photo src="data/photo1.swf" embedded="0"/>
+			<company>
+				<logo src="data/logo1.swf" embedded="0" href="http://www.vendedorouoferecedor.com.br" target="_self"/>
+			</company>
+		</presenter>
+	</presenters>
+	<company>
+		<logo src="" embedded="0" href="" target="_self"/>
+	</company>
+	<references/>
+	<soundAssets/>
+	<backgroundSound soundAssetId="" looping="0"/>
+	<narration/>
+	<settings>
+		<navigation>
+			<keyboard enabled="1"/>
+			<mouse enabled="1" target="step"/>
+		</navigation>
+		<skin>
+			<misc>
+				<embedFonts>1</embedFonts>
+				<size>
+					<height>540</height>
+					<width>720</width>
+					<autoSize>1</autoSize>
+				</size>
+			</misc>
+			<presenter>
+				<enabled>1</enabled>
+				<hideVideo>Hide video</hideVideo>
+				<showVideo>Show video</showVideo>
+				<enableVideo>1</enableVideo>
+				<email>E-mail:</email>
+				<phone>Phone:</phone>
+				<homePage>Home page:</homePage>
+				<lessInfo>Less info</lessInfo>
+				<moreInfo>More info</moreInfo>
+				<enablePhoto>1</enablePhoto>
+				<noVideo>No video</noVideo>
+				<videoModeSwitching>
+					<enabled>1</enabled>
+					<defaultVideoSize>small</defaultVideoSize>
+					<maxVideoResolution>
+						<width>640</width>
+						<height>480</height>
+					</maxVideoResolution>
+				</videoModeSwitching>
+			</presenter>
+			<company>
+				<enableLogo>1</enableLogo>
+			</company>
+			<controlPanel>
+				<volumeControl>
+					<enabled>1</enabled>
+				</volumeControl>
+				<marker>
+					<highlighterColor>16776960</highlighterColor>
+					<penColor>16711680</penColor>
+					<enabled>1</enabled>
+				</marker>
+				<timeLine>
+					<enabled>1</enabled>
+					<type>presentation</type>
+					<slideLabel>Slide</slideLabel>
+				</timeLine>
+				<navigation>
+					<type>slides</type>
+				</navigation>
+			</controlPanel>
+			<titleBar>
+				<presentationTime>
+					<enabled>1</enabled>
+				</presentationTime>
+				<closeButton>
+					<enabled>1</enabled>
+				</closeButton>
+				<fullScreenButton>
+					<enabled>1</enabled>
+				</fullScreenButton>
+			</titleBar>
+			<references>
+				<title>References</title>
+				<enabled>1</enabled>
+				<order>4</order>
+			</references>
+			<search>
+				<slideTitles>Slide titles</slideTitles>
+				<slideNotes>Slide notes</slideNotes>
+				<slideText>Slide text</slideText>
+				<searchIn>Search in</searchIn>
+				<searchFor>Search for</searchFor>
+				<title>Search</title>
+				<enabled>1</enabled>
+				<order>3</order>
+			</search>
+			<notes>
+				<time>Time: {MINUTES} min {SECONDS} sec</time>
+				<title>Notes</title>
+				<enabled>1</enabled>
+				<order>2</order>
+			</notes>
+			<thumbnails>
+				<title>Thumbnails</title>
+				<enabled>1</enabled>
+				<order>1</order>
+				<zoom>1</zoom>
+				<type>normal</type>
+				<showExtraThumbnail>0</showExtraThumbnail>
+				<extraThumbnailSize>
+					<width>400</width>
+					<height>300</height>
+				</extraThumbnailSize>
+			</thumbnails>
+			<outline>
+				<title>Outline</title>
+				<multiLevelNavigation>1</multiLevelNavigation>
+				<enabled>1</enabled>
+				<order>0</order>
+				<showTooltips>1</showTooltips>
+			</outline>
+			<colors>
+				<presenterTitle>0</presenterTitle>
+				<presenterName>16777215</presenterName>
+				<presenterPanel>8355711</presenterPanel>
+				<slideCountAndDuration>1644825</slideCountAndDuration>
+				<currentSlideAndPosition>2838410</currentSlideAndPosition>
+				<buttonCaptions>16777215</buttonCaptions>
+				<presentationTitle>1644825</presentationTitle>
+				<icons>5000268</icons>
+				<panelsAndButtons>16777215</panelsAndButtons>
+				<timeline>11851254</timeline>
+			</colors>
+			<defaultTab>thumbnails</defaultTab>
+			<messages>
+				<leaveSlideWarning>You must complete the quiz before leaving this slide.</leaveSlideWarning>
+				<leaveSlideWarningTitle>Warning</leaveSlideWarningTitle>
+				<resumeText>Would you like to resume the presentation from the last slide viewed?</resumeText>
+				<resumeTitle>Resume Presentation</resumeTitle>
+				<precedingQuizNotCompletedWindowText>You must attempt the quiz at slide %SLIDE_INDEX% to advance.</precedingQuizNotCompletedWindowText>
+				<precedingQuizNotCompletedWindowTitle>Warning</precedingQuizNotCompletedWindowTitle>
+				<precedingQuizNotPassedWindowText>You must pass the quiz at slide %SLIDE_INDEX% to advance.</precedingQuizNotPassedWindowText>
+				<precedingQuizNotPassedWindowTitle>Warning</precedingQuizNotPassedWindowTitle>
+				<ok>OK</ok>
+				<no>No</no>
+				<yes>Yes</yes>
+			</messages>
+			<sidePanel>
+				<enabled>1</enabled>
+				<left>1</left>
+			</sidePanel>
+		</skin>
+		<colorScheme>
+			<primaryColor>0.5686482;0.5208360;-0.0894842;0.0000000;0.0000000;0.1655884;0.6967325;0.1376791;0.0000000;0.0000000;0.3927516;0.2936727;0.3135757;0.0000000;0.0000000;0.0000000;0.0000000;0.0000000;1.0000000;0.0000000;</primaryColor>
+		</colorScheme>
+		<appearance fullScreen="0"/>
+		<playback autoStart="1" resumePresentationPlayback="1" syncWithVideoNarration="1" enableVideoControl="1"/>
+	</settings>
+	<slides embedded="0">
+		<slide index="0" title="Vídeo 2" titleNormalized="vídeo 2" src="data/slide1.swf" size="33156" advanceOnTime="1" framesCount="4927" hasEmbeddedFlashClip="0" hidden="0" level="0" advanceOnClick="1" thumbnailSrc="data/thmb1.swf" presenterIndex="0">
+			<sounds/>
+			<videos>
+				<video id="video0" videoClipId="show0_9293182"/>
+			</videos>
+			<transitionEffect name="" duration="0.0000000" soundId="" looped="0"/>
+			<soundCommands/>
+			<videoCommands>
+				<playVideo frameIndex="0" videoId="video0" slides="1" repeat="1" volume="0.8000000" startPos="0.0000000"/>
+			</videoCommands>
+			<animationSteps>
+				<step start="0" end="4926" playTime="205.2500000" pauseTime="0.0000000"/>
+			</animationSteps>
+			<notes/>
+			<notesNormalized/>
+			<notesHtml/>
+			<text>vídeo 2</text>
+		</slide>
+		<slide index="1" title="Vídeo 3" titleNormalized="vídeo 3" src="data/slide2.swf" size="33559" advanceOnTime="1" framesCount="4927" hasEmbeddedFlashClip="0" hidden="0" level="0" advanceOnClick="1" thumbnailSrc="data/thmb2.swf" presenterIndex="0">
+			<sounds/>
+			<videos>
+				<video id="video1" videoClipId="show0_9353773"/>
+			</videos>
+			<transitionEffect name="" duration="0.0000000" soundId="" looped="0"/>
+			<soundCommands/>
+			<videoCommands>
+				<playVideo frameIndex="0" videoId="video1" slides="1" repeat="1" volume="0.8000000" startPos="0.0000000"/>
+			</videoCommands>
+			<animationSteps>
+				<step start="0" end="4926" playTime="205.2500000" pauseTime="0.0000000"/>
+			</animationSteps>
+			<notes/>
+			<notesNormalized/>
+			<notesHtml/>
+			<text>vídeo 3</text>
+		</slide>
+	</slides>
+	<actions>
+		<action name="playPause">
+			<shortcut code="32" control="0" shift="0"/>
+		</action>
+		<action name="nextSlide">
+			<shortcut code="34" control="0" shift="0"/>
+		</action>
+		<action name="previousSlide">
+			<shortcut code="33" control="0" shift="0"/>
+		</action>
+		<action name="nextStep">
+			<shortcut code="13" control="0" shift="0"/>
+		</action>
+		<action name="previousStep">
+			<shortcut code="13" control="0" shift="1"/>
+		</action>
+		<action name="seekForward">
+			<shortcut code="39" control="0" shift="0"/>
+		</action>
+		<action name="seekBackward">
+			<shortcut code="37" control="0" shift="0"/>
+		</action>
+		<action name="firstSlide">
+			<shortcut code="36" control="1" shift="0"/>
+		</action>
+		<action name="lastSlide">
+			<shortcut code="35" control="1" shift="0"/>
+		</action>
+		<action name="lastViewedSlide">
+			<shortcut code="8" control="0" shift="0"/>
+		</action>
+		<action name="slideStart">
+			<shortcut code="36" control="0" shift="0"/>
+		</action>
+		<action name="slideEnd">
+			<shortcut code="35" control="0" shift="0"/>
+		</action>
+		<action name="volumeUp">
+			<shortcut code="38" control="0" shift="0"/>
+		</action>
+		<action name="volumeDown">
+			<shortcut code="40" control="0" shift="0"/>
+		</action>
+		<action name="toggleFullscreen">
+			<shortcut code="70" control="1" shift="0"/>
+		</action>
+	</actions>
+</presentation>

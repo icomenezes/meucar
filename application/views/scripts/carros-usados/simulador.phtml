@@ -1,0 +1,415 @@
+<table id="table_busca">
+	<tr>
+		
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			<table>
+				<tr>
+					<td>
+						<img id="button_carro" src="/arquivos_site/images/button_carro.gif" onclick="buscaMarca();" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img id="button_moto" src="/arquivos_site/images/button_moto.gif" onclick="buscaMarca(1);" />
+					</td>
+				</tr>
+				<input type="hidden" id="segmento" name="segmento" value="carro" />
+			</table>
+		</td>
+		<td>
+			
+			&nbsp;&nbsp;<b>Marca</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b> De <input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit" style="width:60px;" id="buttom_busca"  value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+
+
+<?php
+	if($this->resposta == 1){
+?>
+
+<script>
+	$("#menu_busca").remove();
+	buscaMarca();
+</script>
+
+<style>
+
+	#div_resultado{
+		border: solid 2px #CD0000;
+		width:97.7%;
+		height:240px;
+		background-color:#EEEEEE;
+		text-align:left;
+		#float:right;
+		margin-left:11px;
+		#margin-bottom:5px;
+		border-radius:3px;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+		
+	}
+	
+	.carros{
+		margin-bottom:10px;
+		width:97.9%;
+		height:100px;
+	}
+	
+	.carros :hover{
+		background-color:#EEEEEE;
+	}
+	
+	.carros tr td{
+		border:solid 1px #CCCCCC;
+		color:#000000;
+		vertical-align:middle;
+		color:#555555;
+		text-align:center;
+	}
+
+</style>
+
+</header>
+	<div id="div_resultado">
+		<div id="placar" style="font-size:20px; color:#CD0000; margin-top:40px;">
+			<center><b>VOC&Ecirc; PODE ADQUIRIR UM VE&Iacute;CULO NO VALOR APROXIMADO DE <b>R$ <?php echo money_format("%i",$this->resultado); ?></b><br/><br/> COM<b> R$ <?php echo money_format("%i",$this->entrada); ?></b> DE ENTRADA E MAIS <b><?php echo $this->numeroParcelas; ?></b> PARCELAS DE <b>R$ <?php echo money_format("%i",$this->parcela); ?></b>.</b></center>
+		</div>
+		<div style="margin-top:20px; font-size:13px;">
+			<center><b>Importante:</b> Os valores acima s&atilde;o aproximados, s&atilde;o apenas uma no&ccedil;&atilde;o de valores para facilitar sua busca pelo ve&iacute;culo desejado. Esses valores<br> podem variar de acordo com a financeira escolhida e o ano do ve&iacute;culo. Algumas financeiras exigem entrada m&iacute;nima de acordo com o prazo escolhido.<br>Cr&eacute;dito sujeito a aprova&ccedil;&atilde;o.</center>
+		</div>
+		<br>
+		<center><a style="font-size:13px; padding:5px 50px 5px 50px;" class="button-6" href="/carros-usados/simulador">Nova simula&ccedil;&atilde;o</a></center>
+	</div>
+	<div id="placar" style="font-size:15px; color:#999999; margin-top:20px;">
+		<center><b>VE&Iacute;CULOS COM VALORES APROXIMADOS</b></center>
+	</div>
+	<center><table id="cabeca"><tr><td style="width:35%">VE&Iacute;CULO</td><td style="width:5%">ANO</td><td style="width:10%">COMBUST&Iacute;VEL</td><!--<td style="width:7%">PORTAS</td>--><td style="width:10%">VALOR</td><td style="width:10%">CIDADE</td><td>LOJISTA / PARTICULAR</td><td style="width:3%"></td></tr></table></center>
+	<?php
+	$count=0;
+	$i=0;
+		foreach($this->veiculos as $veiculo){
+		
+			if($veiculo['descricao_site']){
+			
+				$veiculo['modelo'] = $veiculo['descricao_site'];
+			
+			}
+		
+		$i++;
+		$count++;
+	?>	
+		<center><a href="/carros-usados/veiculo/id/<?php echo $veiculo['id'];?>" style=""><table class="carros" style="font-size:13px;"><tr><td style="width:14%;"><img align="left" style="margin-left:5px; border: solid 2px #CCCCCC;" width="90%" <?php echo($veiculo['path'])?"src='/".$veiculo['path']."'":"src='/arquivos_site/images/preparacao_final.jpg'"; ?>></td><td style="width:21%;"><?php echo $veiculo['marca']." - ".$veiculo['modelo']; ?></td><td style="width:5%"><?php echo $veiculo['ano_modelo']; ?></td><td style="width:10%"><?php echo $veiculo['combustivel']; ?></td><!--<td style="width:7%">4 Portas</td>--><td style="width:10%"><?php if($veiculo['exibir_valor_site']== 1){ echo "R$ ".money_format("%i",$veiculo['valor_venda']); }else{ echo "Consulte-nos"; } ?></td><td style="width:10%"><?php echo $veiculo['cidade']; ?></td><td><span onmouseover="tooltipo(this);" legend="<?php echo $veiculo['id_empresa'];?>"><?php echo $veiculo['nome_fantasia']; ?></span></td><td style="width:3%"><!--<img id="favorito_<?php echo $veiculo['id'];?>" name="favorito_<?php echo $veiculo['id'];?>" src="/arquivos_site/images/favoritos_cinza.png" style="width:80%;"/>--></td></tr></table></a></center>
+	<?php
+		
+			if($count == 5){
+				
+				
+				$maximo = rand(0,count($this->arrPropagandasP)-1);
+						
+				echo "<center><a target='new' href='".$this->arrPropagandasP[$maximo]['link']."'><img style='width:620px;' src='/".$this->arrPropagandasP[$maximo]['path']."'/></a></center><br>";
+
+			}
+	
+		}
+	?>
+	
+	<script type="text/javascript">
+	
+		function exibeEndereco(){
+		
+			$("#endereco").css("display","block");
+			$("#a_endereco").css("display","none");
+		
+		}
+		
+		function exibeTelefone(){
+		
+			$("#telefone").css("display","block");
+			$("#a_telefone").css("display","none");
+		
+		}
+	
+		$('img').mousedown(function(){
+			
+			var arrId = new Array();
+		
+			id = this.id;
+			
+			arrId = id.split("_");
+			
+			
+			if($(this).attr("src") == "/arquivos_site/images/favoritos_vermelha.png"){
+			
+				if(arrId[0] == "favorito"){
+			
+					$(this).attr("src","/arquivos_site/images/favoritos_cinza.png");
+				
+				}
+				
+			}else{
+			
+				if(arrId[0] == "favorito"){
+			
+					$(this).attr("src","/arquivos_site/images/favoritos_vermelha.png");
+			
+				}
+				
+			}
+			
+		});
+	
+	</script>
+<?php
+	}else{
+?>
+
+</header>
+
+<section id="content">
+
+<center>
+<div id="avaliador">
+<form method="post" id="simular" action="/carros-usados/simulador">
+
+<table style="margin-top:30px; font-size:13px;">
+	<tr>
+		<td colspan="2" style="font-size:15px;">
+			Por favor nos informe os dados abaixo que nosso sistema irá direcionar você aos veículos que estão dentro do seu orçamento.
+			<br/>
+			<br/>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			
+		</td>
+		<td>
+			*Campos obrigat&oacute;rios
+		<br>
+		<br>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">	
+			<b>Ano Modelo*</b><br/><br/>
+		</td>
+	
+		<td>
+			<select id="ano_modelo" name="ano_modelo" style="width:200px; height:27px;" onChange="mudaParcelas(this.value);">
+				<option value="">Selecione</option>
+				<option value="<?php echo @date("Y")+1 ?>"><?php echo @date("Y")+1 ?></option>
+				<?php
+					
+					for($i=0;$i<34;$i++){
+					
+						echo "<option value='". (@date("Y")-$i) ."'>". (@date("Y")-$i) ."</option>";
+					
+					}
+					
+				?>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td align="right" width="140px">	
+			<b>Número de Parcelas*</b><br/><br/>
+		</td>
+	
+		<td>
+			<select id="numero_parcelas" name="numero_parcelas" style="width:200px; height:27px;">
+				<option value="">Selecione</option>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td align="right">	
+			<b>Valor de Entrada*</b><br/><br/>
+		</td>
+	
+		<td>
+			<input type="text" id="entrada" name="entrada" style="width:200px; height:22px;" onKeyUp="validaMoedaBR(this.id)"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td align="right">	
+			<b>Valor das Parcelas*</b><br/><br/>
+		</td>
+	
+		<td>
+			<input type="text" id="parcelas" name="parcelas" style="width:200px; height:22px;" onKeyUp="validaMoedaBR(this.id)"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td align="right">	
+			<b>Nome</b><br/><br/>
+		</td>
+	
+		<td>
+			<input type="text" id="nome" name="nome" style="width:200px; height:22px;"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td align="right">	
+			<b>E-mail</b><br/><br/>
+		</td>
+	
+		<td>
+			<input type="text" id="email" name="email" style="width:200px; height:22px;"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>	
+		
+		</td>
+		<td>
+			<input type="checkbox" checked="checked" id="receber_email" name="receber_email"/>Desejo receber promo&ccedil;&otilde;es e ofertas<br> do MeuCar e de seus parceiros.
+			<br>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<a class="button-6" id="avaliar_veiculo" href="javascript:validaCampo();">&nbsp;&nbsp; Simular &nbsp;&nbsp;</a>
+			<br>
+			
+			<br>
+			<br>
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</center>
+
+<script type="text/javascript">
+
+	function mudaParcelas(ano){
+	
+		var anoLimite = <?php echo (@date("Y")-7); ?>;
+		
+		if(ano < anoLimite){
+		
+			$("#numero_parcelas").html("<option value=''>Selecione</option><option value='12'>12 - Parcelas</option><option value='24'>24 - Parcelas</option><option value='36'>36 - Parcelas</option><option value='48'>48 - Parcelas</option>");
+		
+		}else{
+		
+			$("#numero_parcelas").html("<option value=''>Selecione</option><option value='12'>12 - Parcelas</option><option value='24'>24 - Parcelas</option><option value='36'>36 - Parcelas</option><option value='48'>48 - Parcelas</option><option value='60'>60 - Parcelas</option>");
+		
+		}
+	
+	}
+
+	function validaCampo(){
+	
+		var msg = "";
+		var erro = false;
+		
+		if($("#ano_modelo").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#numero_parcelas").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#entrada").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#parcelas").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if(erro){
+		
+			alert("Os campos marcados com '*' devem ser selecionados");
+		
+		}else{
+		
+			$("#simular").submit();
+		
+		}
+		
+	}
+	
+	buscaMarca();
+	
+</script>
+
+<script>
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	 
+	ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+	ga('send', 'pageview');
+ 
+</script>
+
+<?php
+	}
+?>
+</section>

@@ -1,0 +1,188 @@
+<style>
+
+	.elementos{
+	
+		#border:solid 0px;
+	
+	}
+
+</style>
+
+<script type="text/javascript" src="/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
+tinyMCE.init({
+        // General options
+        mode : "textareas",
+        theme : "advanced",
+        plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,print,insertdatetime,preview,media,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+
+        // Theme options
+        theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,formatselect,fontselect,fontsizeselect,bullist,numlist,hr,|,outdent,indent,blockquote,code,|,forecolor,backcolor,print,fullscreen",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",//"tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+        theme_advanced_buttons4 : "",//"insertlayer,moveforward,movebackward,absolute,|,styleprops,spellchecker,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,blockquote,pagebreak,|,insertfile,insertimage",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : true,
+
+        // Skin options
+        skin : "o2k7",
+        skin_variant : "silver",
+
+        // Example content CSS (should be your site CSS)
+        content_css : "css/example.css",
+
+        // Drop lists for link/image/media/template dialogs
+        template_external_list_url : "js/template_list.js",
+        external_link_list_url : "js/link_list.js",
+        external_image_list_url : "js/image_list.js",
+        media_external_list_url : "js/media_list.js",
+
+        // Replace values for the template plugin
+        template_replace_values : {
+                username : "Some User",
+                staffid : "991234"
+        }
+});
+</script>
+
+<form class="form" action="/contratos/edt" method="post">
+
+	
+	<!--<div class="inline" style="clear:both;">
+		<label class="label">Nome Contrato</label>
+		<input type="text" id="nome_contrato" name="nome_contrato" class="text" value="<?php echo $this->contratos['nome'] ?>" />
+	</div>
+	
+
+	<div class="inline" style="width:98.1%; height:10%; border: solid 0px;">
+		<label class="label">Elementos Cliente</label>
+		<input type="text" readonly="readonly" style="width:95px;" class="elementos" id="bairro_cliente" value=" {[bairro_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:160px;" class="elementos" id="complemento_endereco_cliente" value=" {[comple_endereco_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:98px;" class="elementos" id="cidade_cliente" value=" {[cidade_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:80px;" class="elementos" id="cpf_cliente" value=" {[cpf_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:80px" class="elementos" id="cnh_cliente" value=" {[cnh_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:80px" class="elementos" id="cep_cliente" value=" {[cep_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:160px" class="elementos" id="data_nascimento_cliente" value=" {[data_nascimento_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:130px" class="elementos" id="estado_civil_cliente" value=" {[estado_civil_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:94px" class="elementos" id="email_cliente" value=" {[email_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:115px" class="elementos" id="endereco_cliente" value=" {[endereco_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:105px" class="elementos" id="estado_cliente" value=" {[estado_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:95px" class="elementos" id="nome_cliente" value=" {[nome_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:95px" class="elementos" id="nacionalidade_cliente" value=" {[nacionalidade_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:115px" class="elementos" id="profissao_cliente" value=" {[profissao_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:75px" class="elementos" id="rg_cliente" value=" {[rg_cliente]} "/>
+		<input type="text" readonly="readonly" style="width:105px" class="elementos" id="telefone_cliente" value=" {[telefone_cliente]} "/>
+	</div>
+	
+	<div class="inline" style="width:98.1%; height:10%; border: solid 0px; margin-top:10px;">
+		<label class="label">Elementos Concession&aacute;ria</label>
+		<input type="text" readonly="readonly" style="width:145px;" class="elementos" id="bairro_concessionaria" value=" {[bairro_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:185px;" class="elementos" id="razao_social_concessionaria" value=" {[razao_social_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:135px;" class="elementos" id="cnpj_concessionaria" value=" {[cnpj_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:195px;" class="elementos" id="nome_fantasia_concessionaria" value=" {[nome_fantasia_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:165px;" class="elementos" id="endereco_concessionaria" value=" {[endereco_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:245px;" class="elementos" id="complemento_endereco_concessionaria" value=" {[complemento_endereco_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:149px;" class="elementos" id="cidade_concessionaria" value=" {[cidade_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:149px;" class="elementos" id="estado_concessionaria" value=" {[estado_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:129px;" class="elementos" id="cep_concessionaria" value=" {[cep_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:159px;" class="elementos" id="telefone_concessionaria" value=" {[telefone_concessionaria]} "/>
+		<input type="text" readonly="readonly" style="width:143px;" class="elementos" id="email_concessionaria" value=" {[email_concessionaria]} "/>
+	</div>
+	
+	<div class="inline" style="width:98.1%; height:10%; border: solid 0px; margin-top:10px;">
+		<label class="label">Elementos Ve&iacute;culo</label>
+		<input type="text" readonly="readonly" style="width:108px;" class="elementos" id="modelo_veiculo" value=" {[modelo_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:150px;" class="elementos" id="ano_fabricacao_veiculo" value=" {[ano_fabricacao_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:80px;" class="elementos" id="cor_veiculo" value=" {[cor_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:80px;" class="elementos" id="km_veiculo" value=" {[km_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:130px;" class="elementos" id="combustivel_veiculo" value=" {[combustivel_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:100px;" class="elementos" id="chassi_veiculo" value=" {[chassi_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:130px;" class="elementos" id="valor_venda_veiculo" value=" {[valor_venda_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:95px;" class="elementos" id="placa_veiculo" value=" {[placa_veiculo]} "/>
+		<input type="text" readonly="readonly" style="width:111px;" class="elementos" id="renavam_veiculo" value=" {[renavam_veiculo]} "/>
+	</div>-->
+	
+	<div style=" margin-left:10px; top:20px; clear:both; width:98%;"><br>
+		<textarea id="conteudo" name="conteudo" style="height:700px; width:98%;"><?php echo $this->conteudo ?></textarea>
+	</div>
+	
+	<div class="inline" style="margin-top:10px;" >
+		<input type="hidden" name="id" id="id" value="<?php echo $this->contratos['id'] ?>"/>
+	</div>
+
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+
+	$(document).ready(function(){
+
+		$('input:text').mouseenter(function(){
+			
+			//$(this).val($(this).val());
+			//$(this).mask($(this).val());
+			$(this).select();
+		
+		});
+		
+		$('input:text').mouseleave(function(){
+			
+			//$(this).val($(this).val());
+			//$(this).mask($(this).val());
+			$(this).select();
+		
+		});
+		
+	});
+	
+	function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#nome_contrato").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome contrato deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+
+</script>

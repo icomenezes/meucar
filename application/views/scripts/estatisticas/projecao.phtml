@@ -1,0 +1,232 @@
+<link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap.css">
+<style>
+
+	td{
+		border-left: solid 1px #AAA;
+	}
+	td>div{
+		width:100%;
+	}
+
+	th, td{
+		text-align:center;
+		border-left: solid 1px #fff;
+	}
+</style>
+
+<div class="container-fluid">
+
+	<form class="form" action="projecao" method="post">
+
+	<div class="inline" id="div_mes">
+		<label class="label">M&ecirc;s</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				$select = true;
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Mar&ccedil;o - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					if($select){
+					
+						$arr = explode("/", $this->dataFinal);
+
+						if($mesNum == $arr[1]){
+
+							echo "<option selected='selected' value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+							$select = false;
+
+						}else{
+							echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+						}
+						
+					}else{
+						
+						echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+					
+					}
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" style="display: none;">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->dataInicial; ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->dataFinal; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<br>
+		<input type="button" class="btn-small btn-find" onClick="submit();" value="Pesquisar" />
+	</div>
+	
+</form>
+
+	<table width="100%" id="gauge_total"></table>
+	<table width="100%" id="gauge_lojas"></table>
+	<table width="100%" id="gauge_vendedores"></table>
+
+	<div class="card text-dark bg-light mb-3">
+  		<div class="card-header"><strong>PREPARAÇÃO</strong></div>
+  		<div class="card-body">
+			<table width="100%" id="tabela_preparacao"  class='jumbotron'>
+				<tr>
+					<td><br><br></td>
+				</tr>
+				<tr>
+					<td id="inicio"></td>
+					<td id="fim"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<div class="card text-dark bg-light mb-3">
+  		<div class="card-header"><strong>PROJETADO GERAL</strong></div>
+  		<div class="card-body">
+			<table width="100%" id="tabela" class="table table-hover table-striped"></table>
+		</div>
+	</div>
+	<div class="card text-black bg-light mb-3">
+  		<div class="card-header"><strong>CURSOS REALIZADOS</strong></div>
+  		<div class="card-body">
+			<table width="100%" id="tabela_cursos" class="table table-hover table-striped"> </table>
+		</div>
+	</div>
+
+	<div class="card text-black bg-light mb-3">
+  		<div class="card-header"><strong>RALE</strong></div>
+  		<div class="card-body" id="tabela_rale_total"></div>
+  		<div class="card-body" id="tabela_rale_lojas"></div>
+  		<div class="card-body" id="tabela_rale_vendedores"></div>
+	</div>
+
+</div>
+
+<script type="text/javascript" src="/js/projetado.js"></script>
+<!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/avaliacoes/bootstrap.min.js"></script> -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
+<script type="text/javascript">
+
+
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}else{
+			
+			$("#data_inicial").val("");
+			$("#data_final").val("");
+		
+		}
+	
+	}
+
+
+	$(document).ready(function(){
+
+		$("#data_inicial").mask("99/99/9999");
+		$('#data_inicial').focus(function(){
+			$(this).calendario({
+				target:'#data_inicial'
+			});
+		});
+		
+		$("#data_final").mask("99/99/9999");
+		$('#data_final').focus(function(){
+			$(this).calendario({
+				target:'#data_final'
+			});
+		});
+
+		atualiza("");
+		tabelaCursos();
+		getRale();
+
+	});
+
+</script>
+

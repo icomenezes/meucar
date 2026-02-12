@@ -1,0 +1,2925 @@
+<link href="/css/select2.min.css" rel="stylesheet" />
+<script src="/js/select2.min.js"></script>
+
+<style>
+	.select2-container--default .select2-selection--single {
+		border-radius: 0;
+		
+	}
+	.select2-container--default .select2-selection--single .select2-selection__rendered {
+		color: #777;
+	}
+</style>
+
+<?php
+// echo "<pre>";
+// var_export($this->fipe);
+// echo "</pre>";
+?>
+
+<form id="form" name="form" enctype="multipart/form-data" action="/veiculos/edt" class="form" method="post">
+
+	<br>
+	<div class="inline" style="width: 10%;">
+
+		<label class="label">Tipo</label>
+		<select class="text" id="tipo" onChange="buscaMarcas(this.value)">
+			<option value="carros" selected="selected">CARRO</option>
+			<option value="motos">MOTO</option>
+		</select>&nbsp;&nbsp;
+	</div>
+	<div class="inline" style="width: 27.6%;">
+		<label class="label">Marca</label>
+		<select class="text req" id="id_marca" onChange="buscaModelo(this.value)" disabled="disabled">
+		</select>
+	</div>
+
+	<div class="inline" style="width: 27.6%;">
+		<label class="label">Modelo</label>
+		<select class="text req" id="id_modelos" name="id_modelos" onChange="buscaAno(this.value)" disabled="disabled">
+			<option value="">Selecione</option>
+		</select>
+	</div>
+	<div class="inline" style="width: 27.6%;">
+		<label class="label">Ano Modelo</label>
+		<select class="text req" id="id_ano_modelo" name="id_ano_modelo" onChange="buscaFipe(this.value)" disabled="disabled">
+			<option value="">Selecione</option>
+		</select>
+	</div>
+
+	<input type="hidden" name="id_modelo"  id="id_modelo" value="<?php echo $this->veiculo['id_modelo']?>">
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input class="text" id="descricao_site" name="descricao_site" class="text"  value="<?php echo $this->veiculo['descricao_site']?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Placa</label>
+		<input class="text req" id="placa" name="placa" class="text" value="<?php echo $this->veiculo['placa']?>" />
+	</div>
+
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+
+		<div class="inline">
+			<label class="label" >Renavam</label>
+			<input type="text" id="renavam" name="renavam" class="text" value="<?php echo $this->veiculo['renavam']?>" />
+		</div>
+
+	<?php
+		}else{
+	?>
+
+		<input type="hidden" id="renavam" name="renavam" value="<?php echo @date("Ymdhis"); ?>" />
+
+	<?php
+		}
+	?>
+
+	<div class="inline">
+		<label class="label" >Fipe</label>
+		<input type="text" id="fipe" name="fipe" class="text" value="Aguarde..." readonly="readonly" />
+	</div>
+
+<table class="table">
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+		<tr id="subAbas">
+			<td <?php echo (!$this->ativaPendencia) ? "class=\"selecionado\"" : "" ; ?>><a href="#" onclick="ativaSubAba('dados_gerais', this)" />Dados Gerais</a></td>
+			<td><a href="#" onclick="ativaSubAba('check_list', this)" />Check-List</a></td>
+			<td><a href="#" id="aba_foto" onclick="ativaSubAba('fotos', this)" />Fotos / Vídeo</a></td>
+			<td><a href="#" onclick="ativaSubAba('opcionais', this)" />Opcionais</a></td>
+			<td><a href="#" onclick="ativaSubAba('anexos', this)" />Anexos</a></td>
+		<?php
+			if($_SESSION['sessionUser']['id_perfil'] != 3 && $_SESSION['sessionUser']['id_perfil'] != 5){
+		?>
+				<td><a href="#" onclick="ativaSubAba('despesa', this)" />Revis&otilde;es</a></td>
+		<?php
+			}
+		?>	
+			<td <?php echo ($this->ativaPendencia) ? "class=\"selecionado\"" : "" ; ?>><a href="#" onclick="ativaSubAba('pendencias', this)" />Pend&ecirc;ncias</a></td>
+		<?php
+			if($_SESSION['sessionUser']['id_perfil'] != 3 && $_SESSION['sessionUser']['id_perfil'] != SUPERVISOR && $_SESSION['sessionUser']['id_perfil'] != 5){
+		?>
+				<td><a href="#" onclick="ativaSubAba('valores', this)" />Valores</a></td>
+		<?php
+			}
+		?>	
+		</tr>
+	<?php
+		}elseif(false){
+	?>	
+			<tr id="subAbas">
+				<td <?php echo (!$this->ativaPendencia) ? "class=\"selecionado\"" : "" ; ?>><a href="#" onclick="ativaSubAba('dados_gerais', this)" />Dados Gerais</a></td>
+				<td><a href="#" id="aba_foto" onclick="ativaSubAba('fotos', this)" />Fotos</a></td>
+				<td><a href="#" onclick="ativaSubAba('opcionais', this)" />Opcionais</a></td>
+			</tr>
+	<?php
+		}
+	?>	
+</table>
+
+<?php 
+	if($_SESSION['sessionUser']['id_perfil'] != 10){
+?>
+		<div id="dados_gerais" style="width:98.1%;<?php echo ($this->ativaPendencia) ? "display:none;" : "" ; ?>">
+<?php
+	}
+?>	
+
+<?php 
+	if($_SESSION['sessionUser']['id_perfil'] == 10){
+?>
+		<div id="dados_gerais" style="width:98.1%;">
+<?php
+	}
+?>	
+
+<?php 
+	
+	if($_SESSION['sessionUser']['id_perfil'] == 10){
+		echo "<div class='inline' style='font-weight:bold; color:#FFFFFF; background-color:#DD4444; width:100%; height:20px; border:solid 1px #CCC; margin-top:0px; margin-bottom:20px;'>
+				<div style='margin-top:4px; margin-left:15px;' >Dados Gerais</div>
+			  </div>";
+	} 
+	
+?>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">0KM / Usado</label>
+		<select class="text req" id="novo_usado" name="novo_usado">
+			<option value="">Selecione</option>
+	<?php if($this->veiculo['novo_usado'] == 0){?>
+	
+			<option value="0" selected="selected">0KM</option>
+			<option value="1">Usado</option>
+			
+	<?php }else{ ?>
+			
+			<option value="0">0KM</option>
+			<option value="1" selected="selected">Usado</option>
+	
+	<?php } ?>
+		</select>
+	</div>
+	<div class="inline">
+		<label class="label">Ano de Fabrica&ccedil;&atilde;o</label>
+		<input type="text" id="ano_fabricacao" name="ano_fabricacao" class="text req" value="<?php echo $this->veiculo['ano_fabricacao']?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" id="cor" name="cor" class="text req" value="<?php echo $this->veiculo['cor']?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">KM</label>
+		<input type="text" id="km" name="km" class="text" value="<?php echo $this->veiculo['km']?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Combust&iacute;vel</label>
+		<select id="combustivel" name="combustivel" class="text req">
+			<option value="">Selecione</option>
+			<option <?php if($this->veiculo['combustivel'] == "Diesel"){ echo "selected='selected'";}?> value="Diesel">Diesel</option>
+			<option <?php if($this->veiculo['combustivel'] == "Etanol"){ echo "selected='selected'";}?> value="Etanol">Etanol</option>
+			<option <?php if($this->veiculo['combustivel'] == "Eletricidade"){ echo "selected='selected'";}?> value="Eletricidade">Eletricidade</option>
+			<option <?php if($this->veiculo['combustivel'] == "Hibrido"){ echo "selected='selected'";}?> value="Hibrido">Hibrido</option>
+			<option <?php if($this->veiculo['combustivel'] == "Flex"){ echo "selected='selected'";}?> value="Flex">Flex</option>
+			<option <?php if($this->veiculo['combustivel'] == "Gasolina"){ echo "selected='selected'";}?> value="Gasolina">Gasolina</option>
+			<option <?php if($this->veiculo['combustivel'] == "G&aacute;s-Natural"){ echo "selected='selected'";}?> value="GNV">G&aacute;s-Natural</option>
+		</select>
+	</div>
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+	
+		<div class="inline">
+			<label class="label">Chassi</label>
+			<input type="text" id="chassi" name="chassi" class="text" value="<?php echo $this->veiculo['chassi']?>" />
+		</div>
+	
+	<?php
+		}else{
+	?>
+	
+		<input type="hidden" id="chassi" name="chassi" value="<?php echo @date("YmdHis");?>" />
+	
+	<?php
+		}
+	?>
+	
+	<div class="inline">
+		<label class="label">Motor</label>
+		<input type="text" id="motor" name="motor" class="text" value="<?php echo $this->veiculo['motor']?>" />
+	</div>
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 3 && $_SESSION['sessionUser']['id_perfil'] != SUPERVISOR && $_SESSION['sessionUser']['id_perfil'] != 5  && $_SESSION['sessionUser']['id_perfil'] != 11){
+	?>
+	
+		<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+		?>
+	
+		<div class="inline">
+			<label class="label">Valor Compra</label>
+			<input type="text" id="valor_aquisicao" name="valor_aquisicao" class="text req" value="<?php echo $this->veiculo['valor_aquisicao']?>" onkeyup="validaMoedaBR(this.id)"/>
+		</div>
+		
+		<?php
+		}else{
+		?>
+			
+			<input type="hidden" id="valor_aquisicao" name="valor_aquisicao" value="101010"/>
+		
+		<?php
+		}
+		?>
+	
+	<?php } ?>
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+	
+	<div class="inline">
+		<label class="label">Data da Compra</label>
+		<input type="text" id="data_aquisicao" name="data_aquisicao" class="text req" value="<?php echo implode("/",array_reverse(explode("-",$this->veiculo['data_aquisicao'])))?>"/>
+	</div>
+	
+	<?php
+		}else{
+	?>
+	
+		<input type="hidden" id="data_aquisicao" name="data_aquisicao" value="<?php echo @date("Y-m-d");?>"/>
+	
+	<?php
+		}
+	?>
+	<?php
+		$disabled = '';
+		if(($_SESSION['sessionUser']['vend_nao_edit_valor'] == 1) &&  
+			($_SESSION['sessionUser']['id_perfil'] != CONCESSIONARIO && 
+			$_SESSION['sessionUser']['id_perfil'] != GERENTE && 
+			$_SESSION['sessionUser']['id_perfil'] != SUPERVISOR )
+		){
+			$disabled = 'disabled="disabled"';
+		}
+	?>
+	<div class="inline">
+		<label class="label">Valor Venda</label>
+		<input type="text" id="valor_venda" name="valor_venda" class="text req" <?php echo $disabled; ?> value="<?php echo $this->veiculo['valor_venda']?>" onkeyup="validaMoedaBR(this.id)"/>
+	</div>
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+	
+	<div class="inline">
+		<label class="label">Origem</label>
+		<select class="text req" id="origem" name="origem" onchange="origemOutros(this.value);">
+			<option value="Selecione">Selecione</option>
+			<option value="Compra">Compra</option>
+			<option value="Concession&aacute;ria">Concession&aacute;ria</option>
+			<option value="Indica&ccedil;&atilde;o">Indica&ccedil;&atilde;o</option>
+			<option value="Leil&atilde;o">Leil&atilde;o</option>
+			<option value="Troca">Troca</option>
+			<option value="0">Outros</option>
+			<option selected="selected" value="<?php echo $this->veiculo['origem']?>"><?php echo $this->veiculo['origem']?></option>
+		</select>
+	</div>
+	
+	<div class="inline" id="outros_origem">
+
+
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estoque / Consignado / Repasse</label>
+		<select class="text" id="consignado" name="consignado">
+			<option <?php if($this->veiculo['consignado'] == 0){echo "selected='selected'";}?> value="0">E - Estoque</option>
+			<option <?php if($this->veiculo['consignado'] == 1){echo "selected='selected'";}?> value="1">C - Consignado</option>
+			<option <?php if($this->veiculo['consignado'] == 3){echo "selected='selected'";}?> value="3">CV - Consignado Virtual</option>
+			<option <?php if($this->veiculo['consignado'] == 2){echo "selected='selected'";}?> value="2">R - Repasse</option>
+		</select>
+	</div>
+	
+	<?php
+		if($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239){
+	?>
+	<div class="inline">
+		<label class="label">Loja</label>
+		<select class="text" id="id_empresa" name="id_empresa">
+		<?php 
+		if($this->veiculo['id_empresa'] == 3){
+			echo "<option selected='selected' value='3'>Loja 1</option>";
+			echo "<option value='239'>Loja 2</option>";
+		}elseif($this->veiculo['id_empresa'] == 239){
+			echo "<option value='3'>Loja 1</option>";
+			echo "<option selected='selected' value='239'>Loja 2</option>";
+		}else{
+			echo "<option value='3'>Loja 1</option>";
+			echo "<option value='239'>Loja 2</option>";
+		}
+		?>
+		</select>
+	</div>
+
+	<div class="inline">
+		<label class="label">Data início preparação</label>
+		<input type="text" id="data_inicio_preparacao" name="data_inicio_preparacao" class="text" value="<?php echo implode("/",array_reverse(explode("-", $this->veiculo['data_inicio_preparacao']))); ?>" />
+	</div>
+
+	<div style="clear:both; margin-left:8px; margin-bottom:10px;">
+	
+	<style>
+	
+	.green {
+		position: relative;
+		background: green;
+		border: 3px solid #fff;
+		height: 44px;
+		color: #fff;
+	}
+	.green:after, .green:before {
+		left: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.green:after {
+		border-color: rgba(0, 128, 0, 0);
+		border-left-color: green;
+		border-width: 22px;
+		margin-top: -42px;
+	}
+	.green:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #fff;
+		border-width: 26px;
+		margin-top: -4px;
+	}
+	
+	.silver {
+		position: relative;
+		background: silver;
+		border: 3px solid #fff;
+		height: 44px;
+		color: #fff;
+	}
+	.silver:after, .silver:before {
+		left: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.silver:after {
+		border-color: rgba(0, 128, 0, 0);
+		border-left-color: silver;
+		border-width: 22px;
+		margin-top: -42px;
+	}
+	.silver:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #fff;
+		border-width: 26px;
+		margin-top: -4px;
+	}
+	
+	.red {
+		position: relative;
+		background: red;
+		border: 3px solid #fff;
+		height: 44px;
+		color: #fff;
+	}
+	.red:after, .red:before {
+		left: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.red:after {
+		border-color: rgba(0, 128, 0, 0);
+		border-left-color: red;
+		border-width: 22px;
+		margin-top: -42px;
+	}
+	.red:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #fff;
+		border-width: 26px;
+		margin-top: -4px;
+	}
+	
+	.yellow {
+		position: relative;
+		background: #FFD700;
+		border: 3px solid #fff;
+		height: 44px;
+		color: #fff;
+	}
+	.yellow:after, .yellow:before {
+		left: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.yellow:after {
+		border-color: rgba(0, 128, 0, 0);
+		border-left-color: #FFD700;
+		border-width: 22px;
+		margin-top: -42px;
+	}
+	.yellow:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #fff;
+		border-width: 26px;
+		margin-top: -4px;
+	}
+	
+	.blue {
+		position: relative;
+		background: #436EEE;
+		border: 3px solid #fff;
+		height: 44px;
+		color: #fff;
+	}
+	.blue:after, .blue:before {
+		left: 100%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	.blue:after {
+		border-color: rgba(0, 128, 0, 0);
+		border-left-color: #436EEE;
+		border-width: 22px;
+		margin-top: -42px;
+	}
+	.blue:before {
+		border-color: rgba(194, 225, 245, 0);
+		border-left-color: #fff;
+		border-width: 26px;
+		margin-top: -4px;
+	}
+	
+	.arrow_text{
+		color:#fff;
+		padding: 15px;
+		padding-left: 26px;
+		padding-right: 0px;
+		cursor:pointer;
+	}
+	
+</style>
+	
+		<table width="96%">
+
+
+<tr>
+	<td>
+		<div class="<?php if($this->veiculo['mecanico']==0){echo "yellow";}elseif($this->veiculo['mecanico']==1){echo "green";}elseif($this->veiculo['mecanico']==2){echo "silver";}elseif($this->veiculo['mecanico']==4){echo "blue";}else{echo "red";} ?>" style="z-index:13;" title="<?php echo $this->veiculo['mecanico_obs']; ?>">
+			<div class="arrow_text" style="margin-left: -15px;">
+				Mecânico<?php if($this->veiculo['mecanico_obs']){echo "&nbsp;<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['funilaria']==0){echo "yellow";}elseif($this->veiculo['funilaria']==1){echo "green";}elseif($this->veiculo['funilaria']==2){echo "silver";}elseif($this->veiculo['funilaria']==4){echo "blue";}else{echo "red";} ?>" style="z-index:12;" title="<?php echo $this->veiculo['funilaria_obs']; ?>">
+			<div class="arrow_text">
+				Funilaria<?php if($this->veiculo['funilaria_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['martelinho']==0){echo "yellow";}elseif($this->veiculo['martelinho']==1){echo "green";}elseif($this->veiculo['martelinho']==2){echo "silver";}elseif($this->veiculo['martelinho']==4){echo "blue";}else{echo "red";} ?>" style="z-index:11;" title="<?php echo $this->veiculo['martelinho_obs']; ?>">
+			<div class="arrow_text">
+				Martelinho<?php if($this->veiculo['martelinho_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td> 
+		<div class="<?php if($this->veiculo['eletrica']==0){echo "yellow";}elseif($this->veiculo['eletrica']==1){echo "green";}elseif($this->veiculo['eletrica']==2){echo "silver";}elseif($this->veiculo['eletrica']==4){echo "blue";}else{echo "red";} ?>" style="z-index:10;" title="<?php echo $this->veiculo['eletrica_obs']; ?>">
+			<div class="arrow_text">
+				Elétrica<?php if($this->veiculo['eletrica_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['tapecaria']==0){echo "yellow";}elseif($this->veiculo['tapecaria']==1){echo "green";}elseif($this->veiculo['tapecaria']==2){echo "silver";}elseif($this->veiculo['tapecaria']==4){echo "blue";}else{echo "red";} ?>" style="z-index:9;" title="<?php echo $this->veiculo['tapecaria_obs']; ?>">
+			<div class="arrow_text">
+				Tapeçaria<?php if($this->veiculo['tapecaria_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['lavacar']==0){echo "yellow";}elseif($this->veiculo['lavacar']==1){echo "green";}elseif($this->veiculo['lavacar']==2){echo "silver";}elseif($this->veiculo['lavacar']==4){echo "blue";}else{echo "red";} ?>" style="z-index:8;" title="<?php echo $this->veiculo['lavacar_obs']; ?>">
+			<div class="arrow_text">
+				Lavacar<?php if($this->veiculo['lavacar_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['volante']==0){echo "yellow";}elseif($this->veiculo['volante']==1){echo "green";}elseif($this->veiculo['volante']==2){echo "silver";}elseif($this->veiculo['volante']==4){echo "blue";}else{echo "red";} ?>" style="z-index:7;" title="<?php echo $this->veiculo['volante_obs']; ?>">
+			<div class="arrow_text">
+				Volante<?php if($this->veiculo['volante_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['calotas']==0){echo "yellow";}elseif($this->veiculo['calotas']==1){echo "green";}elseif($this->veiculo['calotas']==2){echo "silver";}elseif($this->veiculo['calotas']==4){echo "blue";}else{echo "red";} ?>" style="z-index:6;" title="<?php echo $this->veiculo['calotas_obs']; ?>">
+			<div class="arrow_text">
+				Calotas<?php if($this->veiculo['calotas_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['pneus']==0){echo "yellow";}elseif($this->veiculo['pneus']==1){echo "green";}elseif($this->veiculo['pneus']==2){echo "silver";}elseif($this->veiculo['pneus']==4){echo "blue";}else{echo "red";} ?>" style="z-index:5;" title="<?php echo $this->veiculo['pneus_obs']; ?>">
+			<div class="arrow_text">
+				Pneus<?php if($this->veiculo['pneus_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['chaveiro']==0){echo "yellow";}elseif($this->veiculo['chaveiro']==1){echo "green";}elseif($this->veiculo['chaveiro']==2){echo "silver";}elseif($this->veiculo['chaveiro']==4){echo "blue";}else{echo "red";} ?>" style="z-index:4;" title="<?php echo $this->veiculo['chaveiro_obs']; ?>">
+			<div class="arrow_text">
+				Chaveiro<?php if($this->veiculo['chaveiro_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['pincelar']==0){echo "yellow";}elseif($this->veiculo['pincelar']==1){echo "green";}elseif($this->veiculo['pincelar']==2){echo "silver";}elseif($this->veiculo['pincelar']==4){echo "blue";}else{echo "red";} ?>" style="z-index:3;" title="<?php echo $this->veiculo['pincelar_obs']; ?>">
+			<div class="arrow_text">
+				Pincelar<?php if($this->veiculo['pincelar_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['outros']==0){echo "yellow";}elseif($this->veiculo['outros']==1){echo "green";}elseif($this->veiculo['outros']==2){echo "silver";}elseif($this->veiculo['outros']==4){echo "blue";}else{echo "red";} ?>" style="z-index:2;" title="<?php echo $this->veiculo['outros_obs']; ?>">
+			<div class="arrow_text">
+				Outros<?php if($this->veiculo['outros_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="<?php if($this->veiculo['concluido']==0){echo "yellow";}elseif($this->veiculo['concluido']==1){echo "green";}elseif($this->veiculo['concluido']==2){echo "silver";}elseif($this->veiculo['concluido']==4){echo "blue";}else{echo "red";} ?>" style="z-index:1;" title="<?php echo $this->veiculo['concluido_obs']; ?>">
+			<div class="arrow_text">
+				Lista&nbsp;final<?php if($this->veiculo['concluido_obs']){echo "<i style='font-weight:bold;'>!</i>";} ?>
+			</div>
+		</div>
+	</td>
+</tr>
+</table>
+	
+	</div>	
+	
+	<?php
+	}
+	?>
+	
+	<?php
+		}else{
+	?>
+		
+		<input type="hidden" id="origem" name="origem" value="Compra"/>
+	
+	<?php
+		}
+	?>
+	
+	
+	
+	<?php
+	if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+
+	<div class="inline">
+		<label class="label">Exibir Ve&iacute;culo</label>
+		<input type="checkbox" id="lista_estoque" name="exibir_site_estoque_1" value="1" <?php if($this->veiculo['exibir_site_estoque'] == 1 || $this->veiculo['exibir_site_estoque'] == 3){ echo "checked='checked'";}?>/>Lista de Estoque&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="checkbox" id="exibir_site" name="exibir_site_estoque_2" value="2" <?php if($this->veiculo['exibir_site_estoque'] == 2 || $this->veiculo['exibir_site_estoque'] == 3){ echo "checked='checked'";}?> />Site
+	</div>
+	<?php
+	}else{
+	?>
+	
+		<input type="hidden" id="consignado" name="consignado" value="0"/>
+		<input type="hidden" id="lista_estoque" name="exibir_site_estoque_1" value="1"/>
+		<input type="hidden" id="exibir_site" name="exibir_site_estoque_2" value="2"/>
+	
+	<?php
+	}
+	?>
+	
+	<div class="inline">
+		<label class="label">Exibir KM</label>
+		<input type="checkbox" id="site" name="exibir_km_2" value="2" <?php if($this->veiculo['exibir_km'] == 2 || $this->veiculo['exibir_km'] == 3){ echo "checked='checked'";}?> />Site
+	</div>
+	
+	<div class="inline">
+		<label class="label">Exibir no Site</label>
+		<input type="radio" id="exibir_valor" name="exibir_valor_site" value="1" <?php if($this->veiculo['exibir_valor_site'] == 1){ echo "checked='checked'";}?> />Valor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="radio" id="consulte_nos" name="exibir_valor_site" value="0" <?php if($this->veiculo['exibir_valor_site'] == 0){ echo "checked='checked'";}?> />Consulte-nos
+	</div>
+	
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+	
+		<div class="inline">
+			<label class="label">Ativo</label>
+			<input type="checkbox" id="ativo" name="ativo" value="1" <?php echo($this->veiculo['ativo'])?"checked='checked'":"";?>/>
+		</div>
+	<?php
+		}else{
+	?>
+		<input type="hidden" id="ativo" name="ativo" value="1"/>
+	<?php
+		}
+	?>
+	
+	<div class="inline" style="width:96%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es Internas</label>
+		<textarea id="obs_interna" name="obs_interna" class="text"><?php echo $this->veiculo['obs_interna']?></textarea>
+	</div>
+
+	<div class="inline" style="width:96%; height:30%; margin-top:10px;">
+		<label class="label">Observa&ccedil;&otilde;es Site</label>
+		<textarea id="obs_site" name="obs_site" class="text req"><?php echo $this->veiculo['obs_site']?></textarea>
+	</div>
+	
+</div>
+
+<div id="fotos" style="width:98.1%;  <?php if($_SESSION['sessionUser']['id_perfil'] != 10){ echo "display:none;"; } ?>">
+
+<?php 
+	
+	if($_SESSION['sessionUser']['id_perfil'] == 10){
+		echo "<div class='inline' style='font-weight:bold; color:#FFFFFF; background-color:#DD4444; width:100%; height:20px; border:solid 1px #CCC; margin-top:50px; margin-bottom:20px;'>
+				<div style='margin-top:4px; margin-left:15px;' >Fotos</div>
+			  </div>";
+	} 
+	
+?>	
+
+<div class="inline" style="width:96%; height:30%; margin-bottom:20px;">
+	<b>Procure utilizar fotos com tamanho de at&eacute; 200kb (VGA), assim o cadastramento das fotos fica mais r&aacute;pido.</b>
+</div>
+
+	
+	<?php
+		if($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239) {
+	?>
+		<div class="inline" style="clear:both; height: 100px;">
+			<label class="label">Vídeo</label>
+			<textarea id="video" name="video" class="text"><?php echo $this->veiculo['video']; ?></textarea>
+		</div>
+	<?php
+		}
+	?>
+
+
+	<?php 
+	if($this->fotos) {
+	?>
+	<table class="table" style="clear:both;">
+	<thead>
+		<tr>
+			<th>Capa</th>
+			<th>Fotos</th>
+			<th>Capa</th>
+			<th>Op&ccedil;&otilde;es</th>
+		</tr>
+	</thead>
+		<tbody>
+		
+		
+<?php 
+	$cont=1;
+	$contId=0;
+	$capa="";
+	
+	foreach($this->fotos as $chave=>$foto){
+		
+		if($foto['capa'] == 1 || $capa == "" && $this->fotos[$chave+1]['id'] == "" ){
+		
+			$capa = "<tr>
+				<td style='width:640px; height:480px;' rowspan='9'><img id='foto_capa' style='width:640px; height:480px;' src='/".$foto['path']."'></td>
+					<td id='coluna_foto_".$foto['id']."' style='width:86px; height:60px; text-align:center;'><img id='fot_".$foto['id']."' style='width:86px; height:60px;' src='/".$foto['path']."'><br/><a href='/veiculos/download/path/".str_replace("/","|",$foto['path'])."'>Baixar foto</a></td>
+					<td id='coluna_radio_".$foto['id']."'><input type='radio' id='capa' name='capa' checked='checked' value='".$foto['id']."' onclick='mudaFoto(".$foto['id'].");'></td>
+					<td id='coluna_button_".$foto['id']."'><input type='button' class='btn-small btn-del' value='Deletar' onclick='confirmaDelete(".$foto['id'].")'/></td></td>
+			</tr>";
+			
+		}else{
+		
+			$fotosRestantes .= "<tr>
+					<td id='coluna_foto_".$foto['id']."' style='width:86px; height:60px; text-align:center;'><img id='fot_".$foto['id']."' style='width:86px; height:60px;' src='/".$foto['path']."'><br/><a href='/veiculos/download/path/".str_replace("/","|",$foto['path'])."'>Baixar foto</a></td>
+					<td id='coluna_radio_".$foto['id']."' ><input type='radio' id='capa' name='capa' value='".$foto['id']."' onclick='mudaFoto(".$foto['id'].");'></td>
+					<td id='coluna_button_".$foto['id']."'><input type='button' class='btn-small btn-del' value='Deletar' onclick='confirmaDelete(".$foto['id'].")'/></td></td>
+			</tr>";
+
+		}
+		
+		$cont++;
+		
+	}
+	
+	
+	
+	if($cont <= 9){
+
+		for($i=$cont; $i<=9;$i++){
+		
+			$fotosNovas .= "<tr>	
+								<td id='td_input_".$contId."' colspan='3'><input type='file' id='foto' name='foto[]' title='Fotos' onchange='converte(this,".$contId.");' /></td>
+							</tr>";
+		
+			$contId++;
+		
+		}
+	
+	}
+
+	echo $capa.$fotosRestantes.$fotosNovas;
+
+?>
+		</tbody>
+	</table>
+	
+	<?php 
+	}else{
+	?>
+		
+		<div class="inline">
+			<label class="label">Fotos</label>
+			<input type="file" id="foto_multiple" name="foto[]" class="text" title="Fotos" multiple="multiple" />
+			Segure a tecla Ctrl para selecionar multiplas fotos
+		</div>
+	<div class="inline" style="clear:both; margin-top:30px; margin-bottom:50px;">	
+		<table>
+			<tr>
+				<td style="background-color:#999999; color:#FFFFFF; height:20px; vertical-align:middle;" colspan="9"><b id="texto_capa" style="display:none;">Selecione a foto de capa (Borda vermelha) e clique em salvar.</b></td>
+			</tr>
+			<tr id="images">
+				
+			</tr>
+		</table>
+	</div>
+	<?php 
+	}
+	?>
+	
+</div>
+
+<script src="/js/heic2any.min.js"></script>
+<script>
+
+	var msgFoto = false;
+
+	async function converte(ele, id) {
+
+		const file = ele.files[0];
+
+		//console.log(file);
+		if(file.name.split(".").slice(-1) == "heic") {
+
+			try {
+				// Converte o arquivo HEIC para JPEG usando heic2any
+				const convertedBlob = await heic2any({
+					blob: file,
+					toType: 'image/jpeg',
+					quality: 1, // Qualidade do JPEG (0.0 a 1.0)
+				});
+
+				// Cria um novo arquivo Blob para representar o JPEG convertido
+				const convertedFile = new File([convertedBlob], file.name.replace(/\.heic$/i, '.jpeg'), {
+					type: 'image/jpeg',
+				});
+
+				const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(convertedFile);
+               	ele.files = dataTransfer.files;
+
+				previewUnico(ele, id)
+
+			} catch (error) {
+				console.error('Erro ao converter HEIC:', error);
+				alert('Não foi possível converter o arquivo HEIC.');
+			}
+
+		}else{
+			previewUnico(ele, id);
+		}
+
+	}
+
+
+	// document.getElementById('foto_multiple').addEventListener('change', async function (event) {
+	// 	const files = event.target.files;
+	// 	const dataTransfer = new DataTransfer();
+	// 	const jpegInput = document.getElementById('foto_multiple');
+
+	// 	$('#images').html('<h2 style="padding: 5px; background-color: red; color: white;">Aguarde...</h2>');
+
+	// 	for (const file of files) {
+
+	// 		if(file.name.split(".").slice(-1) == "heic") {
+	// 			//console.log(file.name.split(".").slice(-1)[0]);
+
+	// 			try {
+	// 				// Converte o arquivo HEIC para JPEG usando heic2any
+	// 				const convertedBlob = await heic2any({
+	// 					blob: file,
+	// 					toType: 'image/jpeg',
+	// 					quality: 1, // Qualidade do JPEG (0.0 a 1.0)
+	// 				});
+
+	// 				// Cria um novo arquivo Blob para representar o JPEG convertido
+	// 				const convertedFile = new File([convertedBlob], file.name.replace(/\.heic$/i, '.jpeg'), {
+	// 					type: 'image/jpeg',
+	// 				});
+
+	// 				// Adiciona o arquivo convertido ao input de arquivos
+	// 				dataTransfer.items.add(convertedFile);
+
+	// 				// Habilita o input convertido
+	// 				jpegInput.disabled = false;
+
+	// 			} catch (error) {
+	// 				console.error('Erro ao converter HEIC:', error);
+	// 				alert('Não foi possível converter o arquivo HEIC.');
+	// 			}
+
+	// 		}else{
+	// 			dataTransfer.items.add(file);
+	// 		}
+
+	// 	}
+
+	// 	jpegInput.files = dataTransfer.files;
+
+	// 	preview(jpegInput);
+
+	// });
+
+    document.getElementById('foto_multiple').addEventListener('change', async function (event) {
+    const files = event.target.files;
+    const dataTransfer = new DataTransfer();
+    const jpegInput = document.getElementById('foto_multiple');
+
+    $('#images').html('<h2 style="padding: 5px; background-color: red; color: white;">Aguarde...</h2>');
+
+    for (const file of files) {
+        // ✅ CORREÇÃO 1: Verificação correta da extensão
+        const extensao = file.name.split(".").pop().toLowerCase();
+
+        if (extensao === "heic" || extensao === "heif") { // Suporta ambos formatos Apple
+            try {
+                // Converte o arquivo HEIC para JPEG
+                const convertedBlob = await heic2any({
+                    blob: file,
+                    toType: 'image/jpeg',
+                    quality: 0.9, // ✅ Ajustei para 0.9 (melhor performance)
+                });
+
+                // ✅ CORREÇÃO 2: Trata retorno como array ou blob único
+                const blobToConvert = Array.isArray(convertedBlob) 
+                    ? convertedBlob[0] 
+                    : convertedBlob;
+
+                // Cria um novo arquivo com nome correto
+                const novoNome = file.name.replace(/\.heic$/i, '.jpeg').replace(/\.heif$/i, '.jpeg');
+                const convertedFile = new File([blobToConvert], novoNome, {
+                    type: 'image/jpeg',
+                    lastModified: new Date().getTime()
+                });
+
+                dataTransfer.items.add(convertedFile);
+
+                console.log(`✅ Convertido: ${file.name} → ${novoNome}`);
+
+            } catch (error) {
+                console.error('❌ Erro ao converter HEIC:', error);
+                console.error('Arquivo problema:', file.name);
+                alert(`Não foi possível converter o arquivo: ${file.name}\nErro: ${error.message}`);
+                
+                // ✅ Opcional: adiciona o arquivo original mesmo com erro
+                // dataTransfer.items.add(file);
+            }
+
+        } else {
+            // Arquivos não-HEIC são adicionados diretamente
+            dataTransfer.items.add(file);
+        }
+    }
+
+    // Atualiza o input com os arquivos processados
+    jpegInput.files = dataTransfer.files;
+    
+    // ✅ IMPORTANTE: Só chama preview se houver arquivos
+    if (dataTransfer.files.length > 0) {
+        preview(jpegInput);
+    } else {
+        $('#images').html('<p style="color: red;">Nenhum arquivo válido foi carregado.</p>');
+    }
+});
+
+	function previewUnico(input, i){
+	
+		name = $(input).val();
+	
+		var reader = new FileReader();
+
+		reader.onload = function (e){
+
+			$("#td_input_"+i).attr("colspan","1");
+			$("#coluna_foto_"+i).remove();
+			$("#coluna_radio_"+i).remove();
+			$("#td_input_"+i).before("<td id='coluna_foto_"+i+"' style='width:86px; height:60px;'><img id='fot_"+i+"' style='width:86px; height:60px;' src='"+e.target.result+"' /></td><td id='coluna_radio_"+i+"' ><input type='radio' id='capa' name='capa' value='"+name+"' onclick='mudaFoto("+i+");'></td>");
+		
+		};
+        
+		reader.readAsDataURL(input.files[0]);
+		
+		if(input.files[0].size > 200000){
+	
+			msgFoto = true;
+			
+		}
+
+	}
+	
+	
+	width = $(window).width();
+	height = $(window).height();
+	porcento = 8;
+
+	function preview(input){
+	
+		msgFoto = false;
+	
+		$('#images').html(" ");
+	
+		for (i = 0; i < input.files.length; i++){
+		
+			var reader = new FileReader();
+
+			reader.onload = function (e){
+				
+				$('#images').html($('#images').html() + "<td style='padding:2px; vertical-align:middle;'><div id='div_borda' style='border:solid 2px; width:"+(width*porcento)/100+"px; height:"+(height*porcento)/100+"px;'><img src='"+e.target.result+"' style='width:"+(width*porcento)/100+"px; height:"+(height*porcento)/100+"px;' /></div><center><input type=radio name='capa_multiplo' id='capa_0' value='foto_0' onclick='borda(this);' /></center></td>");
+				
+			};
+        
+			reader.readAsDataURL(input.files[i]);
+			
+			if(input.files[i].size > 200000){
+				
+				msgFoto = true;
+			
+			}
+			
+			if(i == 8){
+				
+				break;
+			
+			}
+    
+		}
+		
+		setTimeout('nomeiaFotos()',3000);
+	
+	}
+	
+	
+	function nomeiaFotos(){
+		
+		var cont = 1;
+		
+		$("#images > td > center > input ").each(function(){
+
+			$(this).attr("id", "capa_"+cont);
+			$(this).attr("value", cont);
+			
+			cont++;
+			
+		});
+	
+		$("#capa_1").click();
+		
+		$("#texto_capa").css("display","block");
+		
+	}
+	
+	function borda(este){
+	
+		$("#images > td > div ").each(function(){
+
+			$(this).css("border-color", "#666666");
+			
+			
+		});
+		
+		$(este).parent().parent().children().css("border-color", "red");
+	
+	}
+
+</script>
+
+<div id="anexos" style="width:98.1%;  display:none;">
+
+	<table class="table">
+	<thead>
+			<tr>
+				<th>Anexo Descri&ccedil;&atilde;o</th>
+				<th style="width:15%;">A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody>
+			
+	<?php
+			
+		foreach($this->anexos as $anexo){
+?>	
+			<tr id="anexo_<?php echo $anexo['id'];?>">
+				<td><a href="/<?php echo $anexo['path'];?>"><?php echo $anexo['descricao'];?></a></td>
+				<td><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDeleteAnexo(<?php echo $anexo['id'];?>)"/></td>
+			</tr>
+<?php
+			
+		}
+	?>		
+	
+		</tbody>
+	</table>
+
+
+	<table class="table">
+	<thead>
+			<tr>
+				<th>Upload</th>
+				<th>Descri&ccedil;&atilde;o</th>
+				<th>Deletar / Adicionar</th>
+			</tr>
+		</thead>
+		<tbody id="table_anexo">
+			<tr id='anexo_line_0'><td></td><td></td><td><input type='button' id='btn_0' name='btn_0' class="btn-mini btn-include" value='Add' onclick='adicionarAnexo()'></td></tr>
+		</tbody>
+	</table>
+</div>
+
+
+<?php 
+	
+	if($_SESSION['sessionUser']['id_perfil'] == 10){
+		echo "<div class='inline' style='font-weight:bold; color:#FFFFFF; background-color:#DD4444; width:100%; height:20px; border:solid 1px #CCC; margin-top:50px; margin-bottom:20px;'>
+				<div style='margin-top:4px; margin-left:15px;' >Opcionais</div>
+			  </div>";
+	} 
+	
+?>
+
+<div id="opcionais" style="width:98.1%; <?php if($_SESSION['sessionUser']['id_perfil'] != 10){ echo "display:none;"; } ?>">
+	
+	<?php
+	
+	$strOpcionais ="<input type='checkbox' id='seleciona_tudo' value='1'style='margin-left:21px;' onclick='selecionaTudo(this.value);'/><span style='font-size:18px;'>Selecionar todos</span>
+						<table class='table'><tr>";
+	
+	$cont=1;
+	
+	foreach($this->opcionais as $opcionais){
+	
+		$achou = true;
+	
+		foreach($this->opcionaisVeiculo as $opcional){
+		
+			if($opcionais['id'] == $opcional['id_opcional']){
+		
+				if($opcionais['id'] == 1 || $opcionais['id'] == 2 || $opcionais['id'] == 42 || $opcionais['id'] == 4 || $opcionais['id'] == 50 || $opcionais['id'] == 34 || $opcionais['id'] == 20 || $opcionais['id'] == 9 || $opcionais['id'] == 52){
+		
+					$strOpcionais .= "<td width='32%'><input type='checkbox' checked='checked' id='opcional_".$opcionais['id']."'name='opcional_".$opcionais['id']."' title='".$opcionais['opcional']."'/><b style='color:#333333;'>".$opcionais['opcional']."</b></td>";
+					$achou = false;
+				
+				}else{
+				
+					$strOpcionais .= "<td width='32%'><input type='checkbox' checked='checked' id='opcional_".$opcionais['id']."'name='opcional_".$opcionais['id']."' title='".$opcionais['opcional']."'/>".$opcionais['opcional']."</td>";
+					$achou = false;
+				
+				}
+			}
+			
+		}
+		
+		if($achou){
+		
+			if($opcionais['id'] == 1 || $opcionais['id'] == 2 || $opcionais['id'] == 42 || $opcionais['id'] == 4 || $opcionais['id'] == 50 || $opcionais['id'] == 34 || $opcionais['id'] == 20 || $opcionais['id'] == 9 || $opcionais['id'] == 52){
+				
+				$strOpcionais .= "<td width='32%'><input type='checkbox' id='opcional_".$opcionais['id']."'name='opcional_".$opcionais['id']."' title='".$opcionais['opcional']."'/><b style='color:#333333;'>".$opcionais['opcional']."</b></td>";
+			
+			}else{
+				
+				$strOpcionais .= "<td width='32%'><input type='checkbox' id='opcional_".$opcionais['id']."'name='opcional_".$opcionais['id']."' title='".$opcionais['opcional']."'/>".$opcionais['opcional']."</td>";
+			
+			}
+		
+			
+		
+		}
+		
+		if($cont == 3){
+		
+			$strOpcionais .= "</tr>";
+			$strOpcionais .= "<tr>";
+			$cont = 0;
+			
+		}
+
+		$cont++;
+		
+	}
+
+	echo $strOpcionais.="</tr></table>";
+
+	?>
+	
+</div>
+
+<div id="despesa" style="width:98.1%;display:none">
+
+	<div class="inline">
+	<label class="label">Data Retorno Da Revis&atilde;o</label>
+	<input type="text" id="data_termino_revisao" name="data_termino_revisao" class="text" value="<?php echo $this->veiculo['data_termino_revisao']?>" />
+	</div>
+
+	<table class="table" style="clear:both;">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Despesa</th>
+				<th>Fornecedor</th>
+				<th>NF</th>
+				<th>Dias Garantia</th>
+				<th>Valor</th>
+				<th style="width:18%">A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody id="despesas_negociacao">
+		<?php
+			if(!$this->despesas){
+		?>
+				<tr id="despesas_negociacao_line_0">
+					<td></td><td></td><td></td><td></td><td></td><td></td><td><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adicionarRevioes();"></td>
+				</tr>
+		
+		<?php
+		}
+		
+		foreach($this->despesas as $despesa){
+		
+		$despesa['valor'] = str_replace(".",",",$despesa['valor']);	
+		
+		?>	
+
+			<tr id="despesas_negociacao_line_0">
+				<td><input type="text" id="Ddata_<?php echo $despesa['id'];?>" name="Ddata_<?php echo $despesa['id'];?>" class="text" value="<?php echo implode("/",array_reverse(explode("-",$despesa['data'])));?>" /></td>
+				<td><input type="text" id="Ddescricao_<?php echo $despesa['id'];?>" name="Ddescricao_<?php echo $despesa['id'];?>" class="text" value="<?php echo $despesa['despesa'];?>" /></td>
+				<td style="width:30%;"><select id="Dfornecedor_<?php echo $despesa['id'];?>" name="Dfornecedor_<?php echo $despesa['id'];?>" class="text" style="width:70%;" value="" onFocus="buscaFornecedores(<?php echo $_SESSION['sessionUser']['id_empresa'];?>,this.id)">
+						<option value="">Selecione</option>
+					<?php
+					foreach($this->fornecedores as $fornecedor){
+					
+						if($fornecedor['id'] == $despesa['id_fornecedor']){
+						
+							$sel = "selected='selected'";
+						
+						}else{
+						
+							$sel = "";
+						
+						}
+					
+					?>
+						<option value="<?php echo $fornecedor['id']?>" <?php echo $sel?>><?php echo $fornecedor['razao_social']?></option>
+					<?php
+					}
+					?>
+						
+				</select>
+					<!----<img src="/images/plus.png" style="margin-left:10px;" onclick="javascript:window.open('<?php echo URL ?>fornecedores/add')" />---->
+					<input type="button" id="btnn" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>fornecedores/add')"/>
+				</td>
+				<td><input type="text" id="Dnf_<?php echo $despesa['id'];?>" name="Dnf_<?php echo $despesa['id'];?>" class="text" value="<?php echo $despesa['nf'];?>" /></td>
+				<td><input type="text" id="Dgarantia_<?php echo $despesa['id'];?>" name="Dgarantia_<?php echo $despesa['id'];?>" class="text" value="<?php echo $despesa['dias_garantia'];?>" /></td>
+				<td><input type="text" id="Dvalor_<?php echo $despesa['id'];?>" name="Dvalor_<?php echo $despesa['id'];?>" class="text" value="<?php echo $despesa['valor'];?>" onKeyup="calculaValordespesas(this.value, this.id); validaMoedaBR(this.id);" /></td>
+				<td style="width:20%;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeleteDespesa(<?php echo $despesa['id'];?>);"/><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adddespesa();calculaValordespesas();"></td>
+			</tr>
+
+	<?php	
+		}
+	?>		
+		
+		</tbody>
+	</table>
+		
+<div id="total_despesas" class="inline" style="width:18.1%;" valign="bottom">
+	<label style="font-size:20px;">Total: R$ <span id="total" style="font-size:20px;"> </span></label>
+</div>
+
+</div>
+<br>
+
+
+
+<div id="pendencias" style="width:98.1%;<?php echo (!$this->ativaPendencia) ? "display:none;" : "" ; ?>">
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Descri&ccedil;&atilde;o</th>
+				<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		<tbody id="pendencia">
+			<?php
+			if(!$this->pendencias){
+			?>
+				<tr id="pendencia_line_0">
+					<td></td><td></td><td><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adicionarPendencia()"></td>
+				</tr>
+			<?php
+			}
+			foreach($this->pendencias as $pendencia){
+			?>
+				<tr id="pendencia_line_0">
+					<td style="width:10%;"><input type="text" id="Pdata_<?php echo $pendencia['id'];?>" name="Pdata_<?php echo $pendencia['id'];?>" class="text" value="<?php echo implode("/",array_reverse(explode("-",$pendencia['data'])));?>" onload="mascaraData();"/></td>
+					<td><input type="text" id="Pdescricao_<?php echo $pendencia['id'];?>" name="Pdescricao_<?php echo $pendencia['id'];?>" class="text" value="<?php echo $pendencia['descricao'];?>" /></td>
+					<td style="width:20%;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeletePendencia(<?php echo $pendencia['id'];?>);"/><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="addPendencia()"></td>
+				</tr>
+			<?php	
+			}
+			?>
+		</tbody>
+	</table>
+
+</div>
+
+<div id="check_list" style="width:98.1%;display:none">
+
+	<table class="table">
+		<tbody id="pessoa">
+			<tr>
+				<th><input type="radio" name="pf_pj" id="pf" value="0" onClick="mostraPessoa(this.value,'fisica');">Pessoa F&iacute;sica<br>
+				<input type="radio" id="pj" name="pf_pj" value="1" onClick="mostraPessoa(this.value,'juridica');">Pessoa Jur&iacute;dica</th>
+			</tr>
+		</tbody>
+	</table>
+	
+	<?php
+	//if($_SESSION['sessionUser']['id_perfil'] == 2){
+	?>
+	
+	<input type='checkbox' id='seleciona_tudoCL' value='1'style='margin-left:20px;' onclick='selecionaTudoCheckList(this.value);'/><span style='font-size:18px;'>Selecionar todos</span>
+	
+	<?php
+	//}
+	?>
+	
+	<div id="pessoas" style="display:none">
+		
+		<table class="table" id="fisica" style="display:none">
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pf1" value="1">Ve&iacute;culo quitado ou quita&ccedil;&atilde;o verificada</td>
+				<td><input type="checkbox" checked="checked" id="pf2" value="1">Pesquisa de a&ccedil;&otilde;es judiciais do propriet&aacute;rio</td>
+				<td><input type="checkbox" checked="checked" id="pf3" value="1">Certificado de propriedade original(DUT)</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pf4" value="1">Laudo de vistoria</td>
+				<td><input type="checkbox" checked="checked" id="pf5" value="1">Comprovante de pagamento IPVA</td>
+				<td><input type="checkbox" checked="checked" id="pf6" value="1">Seguro obrigat&oacute;rio (DPVAT) pago</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pf7" value="1">Guias de multas pagas</td>
+				<td><input type="checkbox" checked="checked" id="pf8" value="1">Porte obrigat&oacute;rio (V&aacute;lido e original)</td>
+				<td><input type="checkbox" checked="checked" id="pf9" value="1">Chave reserva,  Manual do propriet&aacute;rio e info card</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pf10" value="1">Xeros da CNH e Comprovante de endere&ccedil;o atual em nome</td>
+			</tr>
+		</table>
+		
+		<table class="table" id="juridica" style="display:none">
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pj0" value="1">Ve&iacute;culo quitado ou quita&ccedil;&atilde;o verificada</td>
+				<td><input type="checkbox" checked="checked" id="pj1" value="1">Pesquisa de a&ccedil;&otilde;es judiciais do propriet&aacute;rio</td>
+				<td><input type="checkbox" checked="checked" id="pj2" value="1">Certificado de propriedade original(DUT)</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pj3" value="1">Laudo de vistoria</td>
+				<td><input type="checkbox" checked="checked" id="pj4" value="1">Comprovante de pagamento IPVA</td>
+				<td><input type="checkbox" checked="checked" id="pj5" value="1">Seguro obrigat&oacute;rio (DPVAT) pago</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pj6" value="1">Guias de multas pagas</td>
+				<td><input type="checkbox" checked="checked" id="pj7" value="1">Porte obrigat&oacute;rio (V&aacute;lido e original)</td>
+				<td><input type="checkbox" checked="checked" id="pj8" value="1">Chave reserva,  Manual do propriet&aacute;rio e info card</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pj9" value="1">Xeros da CNH e Comprovante de endere&ccedil;o atual em nome</td>
+				<td><input type="checkbox" checked="checked" id="pj10" value="1">Contrato social da &uacute;ltima altera&ccedil;&atilde;o</td>
+				<td><input type="checkbox" checked="checked" id="pj11" value="1">CNPJ</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" checked="checked" id="pj12" value="1">Nota fiscal de venda (caso n&atilde;o emita N.F. uma declara&ccedil;&atilde;o, assinada e reconhecida firma)</td>
+			</tr>
+		</table>
+		
+		<table class="table" >
+			<tr>
+				<th>
+				Ve&iacute;culo com GNV?<br>
+				Sim<input type="radio" name="gnv" id="gnv_sim" value="1" onClick="mostraPessoa(this.value,'gnv_sim');"> 
+				N&atilde;o<input type="radio" name="gnv" id="gnv_nao" value="0" onClick="mostraPessoa(this.value,'gnv_nao');">
+				<th>
+			</tr>
+		</table>
+
+		<div style="display:none" id="doc">
+			<table class="table">
+				<tr>
+					<td><input type="radio" name="doc_gnv" id="doc_gnv_0" value="0">NOTA FISCAL DE COMPRA E INSTALA&Ccedil;&Atilde;O DO GNV + CERTIFICADO DO CILINDRO + LAUDO DE VISTORIA</td>
+					<td><input type="radio" name="doc_gnv" id="doc_gnv_1" value="1">NOTA FISCAL E LAUDO DE RETIRADA DO GNV</td>
+				</tr>
+			</table>
+		</div>
+		
+		<table class="table" >
+			<tr>
+				<th>
+				Ve&iacute;culo financiado em Leasing?<br>
+				Sim<input type="radio" id="leasing_sim" name="quitado_leasing" value="1" onClick="mostraPessoa(this.value,'leasing_list_sim');"> 
+				N&atilde;o<input type="radio" id="leasing_nao" name="quitado_leasing" value="0" onClick="mostraPessoa(this.value,'leasing_list_nao');">
+				<th>
+			</tr>
+		</table>
+		
+		<div style="display:none" id="leasing_list">
+			<table class="table">
+				<tr>
+					<td><input type="checkbox" checked="checked" id="doc_0" value="0">Carta op&ccedil;&atilde;o de compra</td>
+					<td>Obs: O DUT n&atilde;o pode estar preenchido!</td>
+				</tr>
+			</table>
+		</div>
+		
+	</div>
+
+</div>
+
+<div id="valores" style="width:98.1%;display:none">
+	
+	<div class="inline" style="padding-bottom:10px;">
+		<label class="label">Valor Aquisi&ccedil;&atilde;o</label>
+		<input type="text" id="valor_aquis" readonly="readonly" class="text" value="" style="font-size:20px; color:#DD0000; border-color:#CC0000;" />
+	</div>
+	
+	<div class="inline" style="padding-bottom:10px;">
+		<label class="label">Total Despesas</label>
+		<input type="text" id="total_despesa" readonly="readonly" class="text" value="" style="font-size:20px; color:#DD0000; border-color:#CC0000;" />
+	</div>
+	
+	<div class="inline" style="padding-bottom:10px;">
+		<label class="label">Custo Total</label>
+		<input type="text" id="custo_total" readonly="readonly" class="text" value="" style="font-size:20px; color:#DD0000; border-color:#CC0000; background-color:#FFDDDD;" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Pre&ccedil;o de Venda</label>
+		<input type="text" id="valor_vend"  readonly="readonly" class="text" value="" style="font-size:20px; color:#00AA00; border-color:#009900;" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Lucro Esperado</label>
+		<input type="text" id="lucro_esperado" readonly="readonly" class="text" value="" style="font-size:20px; color:#00AA00; border-color:#009900; background-color:#DDFFDD;" />
+	</div>
+
+</div>
+
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<div class="inline" style="clear:both; width:50%;">
+	<input type="hidden" id="temp_troca" name="temp_troca" value="<?php echo $this->troca;?>" />
+	<input type="hidden" id="id" name="id" value="<?php echo $this->veiculo['id']?>" />
+	<input type="button" class="btn-small btn-add" value="Salvar" onclick="validaCampos()" />
+	<?php
+	if($_SESSION['sessionUser']['id_perfil'] != 10){
+	?>
+		<input type="button" class="btn-small-imp" value="Envelope" onclick="javascript:window.open('/veiculos/envelope/id/<?php echo $this->veiculo['id']?>')" />
+		<input type="button" class="btn-small-imp" value="Informativo" onclick="javascript:window.open('/veiculos/imprime-informativo/id/<?php echo $this->veiculo['id']?>')"/>
+	<?php
+	}
+	?>
+	<input type="button" class="btn-mini" value="Nova Negocia&ccedil;&atilde;o" onclick="javascript:window.location.href='<?php echo URL ?>negociacoes/add'" />
+	
+	<?php
+	
+		if($_SESSION['sessionUser']['id_perfil'] != 3 && $_SESSION['sessionUser']['id_perfil'] != 10  && $_SESSION['sessionUser']['id_perfil'] != 5){
+	
+	?>
+			<input type="button" class="btn-mini" value="Imprimir Revisões" onclick="impressaoRevisoes();" />
+	<?php
+	
+		}
+		
+	?>
+</div>
+
+</form>
+
+<script type="text/javascript">
+
+function impressaoRevisoes(){
+	
+	window.open("/veiculos/impressao-revisao/id_veiculo/"+$('#id').val()+"/veiculo/"+$('#id_marca').val()+"-"+$('#descricao_site').val()+"/placa/"+$('#placa').val());
+
+}
+
+
+function selecionaTudo(valor){
+	
+	if($("#seleciona_tudo").is(":checked") == true){
+		
+		$("#opcionais").find("input[type=checkbox]").attr("checked", true);
+	
+	}else{
+
+		$("#opcionais").find("input[type=checkbox]").attr("checked", false);
+	
+	}
+
+}
+
+function selecionaTudoCheckList(valor){
+	
+	if($("#seleciona_tudoCL").is(":checked") == true){
+		
+		$("#check_list").find("input[type=checkbox]").attr("checked", true);
+	
+	}else{
+
+		$("#check_list").find("input[type=checkbox]").attr("checked", false);
+	
+	}
+
+}
+
+
+function calculaValores(){
+
+	valorAquisicao = moeda2float($("#valor_aquisicao").val());
+	$("#valor_aquis").val(float2moeda(valorAquisicao));
+	
+	valorDespesas = calculaValordespesas();
+	$("#total_despesa").val(float2moeda(valorDespesas));
+	
+	custoTotal = valorAquisicao+valorDespesas;
+	$("#custo_total").val(float2moeda(custoTotal));
+	
+	valorVenda = moeda2float($("#valor_venda").val());
+	$("#valor_vend").val(float2moeda(valorVenda));
+	
+	$("#lucro_esperado").val(float2moeda(valorVenda-custoTotal));
+
+}
+
+if(<?php echo $this->termino;?> == 1){
+
+	$("#aba_foto").click();
+	$("#msg").html("Selecione a foto de capa e clique em salvar");
+
+}
+
+function abreOpcoes(){
+
+	if(<?php echo $this->veiculo['pf_pj']?> == 0){
+
+		$("#pf").click();
+
+	}else{
+	
+		$("#pj").click();
+	
+	}
+	
+	if(<?php echo $this->veiculo['gnv']?> == 0){
+	
+		$("#gnv_nao").click();
+	
+	}else{
+	
+		$("#gnv_sim").click();
+		
+		if(<?php echo $this->veiculo['doc_gnv']?> == 0){
+		
+			$("#doc_gnv_0").click();
+		
+		}else{
+		
+			$("#doc_gnv_1").click();
+		
+		}
+	
+	}
+	
+	if(<?php echo $this->veiculo['quitado_leasing']?> == 0){
+		
+		$("#leasing_nao").click();
+		
+	}else{
+		
+		$("#leasing_sim").click();
+		
+	}
+
+}
+
+function confirmaDeleteDespesa(id){
+
+decisao = confirm("Deseja realmente deletar?");
+	
+	if (decisao){
+	
+	var temElemento = true;
+	
+		$.ajax({
+			type: "POST",
+			url:"/veiculos/ajax/fn/deleta_despesa/id_despesa/"+id,
+			dataType:"html",                       
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#Ddata_"+id).parent().parent().remove();
+					calculaValordespesas();
+					
+					$("#despesas_negociacao tr td input").each(function(){
+	
+						if($(this).attr('id').substring(0,5) == "Ddata"){
+							
+							temElemento = false;
+						
+						}
+					
+					})
+					
+					if(temElemento){
+					
+						$("#despesas_negociacao").html("<tr id='despesas_negociacao_line_0'><td></td><td></td><td></td><td></td><td></td><td></td><td><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='adicionarRevioes();'></td></tr>");
+					
+					}
+					
+				}else{
+				
+					alert(retorno);
+				
+				}
+		
+			}
+		})
+		
+	}
+	
+}
+
+
+function confirmaDeletePendencia(id){
+
+decisao = confirm("Deseja realmente deletar?");
+
+var temElemento = true;
+	
+	if (decisao){
+	
+		$.ajax({
+			type: "POST",
+			url:"/veiculos/ajax/fn/deleta_pendencia/id_pendencia/"+id,
+			dataType:"html",                       
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#Pdata_"+id).parent().parent().remove();
+					
+					$("#pendencia tr td input").each(function(){
+	
+						if($(this).attr('id').substring(0,5) == "Pdata"){
+							
+							temElemento = false;
+						
+						}
+					
+					})
+					
+					if(temElemento){
+					
+						$("#pendencia").html("<tr id='pendencia_line_0'><td><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='adicionarPendencia()'></td></tr>");
+					
+					}
+					
+				
+				}else{
+				
+					alert(retorno);
+				
+				}
+		
+			}
+		})
+		
+	}
+	
+}
+
+function confirmaDeleteAnexoVazio(id){
+
+	var temElemento = true;
+
+	$("#anexo_"+id).parent().parent().remove();
+	
+	$("#table_anexo tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,5) == "anexo"){
+
+			temElemento = false;
+
+		}
+
+	})
+	
+	if(temElemento){
+
+		$("#table_anexo").html("<tr id='anexo_line_0'><td></td><td></td><td><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='adicionarAnexo()'></td></tr>");
+
+	}
+
+}
+
+function confirmaDeleteAnexo(id){
+
+decisao = confirm("Deseja realmente deletar?");
+	
+	if (decisao){
+	
+		$.ajax({
+			type: "POST",
+			url:"/veiculos/ajax/fn/deleta_anexo/id_anexo/"+id,
+			dataType:"html",                       
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#anexo_"+id).remove();
+				
+				}else{
+				
+					alert(retorno);
+				
+				}
+		
+			}
+		})
+		
+	}
+	
+}
+
+var input = 10;
+
+function confirmaDelete(id){
+
+	decisao = confirm("Deseja realmente deletar?");
+	
+	if (decisao){
+	
+		$.ajax({
+			type: "POST",
+			url:"/veiculos/ajax/fn/deleta_foto/id_foto/"+id,
+			dataType:"html",                       
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#coluna_foto_"+id).remove();
+					$("#coluna_radio_"+id).remove();
+					
+					if($("#coluna_button_"+id).parent().children().children().attr('id') == "foto_capa"){
+					
+						$("#foto_capa").parent().parent().append("<td id='td_input_"+input+"' colspan='3' ><input type='file' id='foto' name='foto[]' title='Fotos' onchange='converte(this, "+input+")' /></td>");
+					
+					}else{
+					
+						$("#coluna_button_"+id).parent().html("<td id='td_input_"+input+"' colspan='3' ><input type='file' id='foto' name='foto[]' title='Fotos' onchange='converte(this, "+input+")' /></td>");
+					
+					}
+					
+					input++;
+					
+					$("#coluna_button_"+id).remove();
+				
+				}else{
+				
+					alert(retorno);
+				
+				}
+		
+			}
+		})
+		
+	}
+	
+}
+
+function mudaFoto(id){
+
+	path = $("#fot_"+id).attr("src");
+	
+	$("#foto_capa").attr("src", path);
+	
+	
+
+}
+
+function origemOutros(valor){
+
+	if(valor == 0){
+		
+		$("#outros_origem").html("<label class='label'>Origem Descri&ccedil;&atilde;o</label><input type='text' id='origem_descricao' name='origem_descricao' class='text req' value='' />");
+
+	}else{
+	
+		$("#outros_origem").children().remove();
+	
+	}
+
+}
+
+mostraPessoa(0,"fisica");
+
+function mostraPessoa(valor, exibe){
+
+	if(exibe == "fisica"){
+
+		$("#pessoas").css("display","block");
+		$("#juridica").css("display","none");
+		$("#fisica").css("display","block");
+	
+	}
+	
+	if(exibe == "juridica"){
+
+		$("#pessoas").css("display","block");
+		$("#fisica").css("display","none");
+		$("#juridica").css("display","block");
+	
+	}
+	
+	if(exibe == "gnv_sim"){
+		
+		$("#doc").css("display","block");
+
+	}
+	
+	if(exibe == "gnv_nao"){
+		
+		$("#doc").css("display","none");
+	
+	}
+	
+	if(exibe == "leasing_list_sim"){
+		
+		$("#leasing_list").css("display","block");
+	
+	}
+	
+	if(exibe == "leasing_list_nao"){
+		
+		$("#leasing_list").css("display","none");
+	
+	}
+	
+}
+
+var arrTotal = new Array();
+
+function calculaValordespesas(){
+
+	var total = 0;
+	
+	$("#despesas_negociacao tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,6) == 'Dvalor'){
+		
+			total += moeda2float($(this).val())
+		
+		}
+	
+	});
+	
+	$("#total").html(float2moeda(total));
+	
+	return total;
+
+}
+ 
+function validaCampos(){
+
+	var msg = "";
+	var msg2 = "";
+	var erro = false;
+	var erro2 = false;
+	var temPreenchido = false;
+	
+	if(msgFoto){
+
+		alert("Exitem imagens acima de 200KB, caso haja demora ao cadastrar, por favor aguarde.");
+		
+	}
+	
+	$("#table_anexo tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,5) == "anexo"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Anexos o campo Upload deve conter arquivo.";
+			
+			}
+		
+		}
+		
+		if($(this).attr('id').substring(0,14) == "descricaoanexo"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Anexos o campo descri&ccedil;&atilde;o deve ser preenchido.";
+			
+			}
+		
+		}
+		
+	})
+	
+	
+
+	
+	$("#despesas_negociacao tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,5) == "Ddata"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo data deve ser preenchido.";
+			
+			}
+		
+		}
+		
+		if($(this).attr('id').substring(0,10) == "Ddescricao"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo despesa deve ser preenchido.";
+			
+			}
+		
+		}
+		
+		/*if($(this).attr('id').substring(0,3) == "Dnf"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo NF deve ser preenchido.";
+			
+			}
+		
+		}
+		
+		if($(this).attr('id').substring(0,9) == "Dgarantia"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo dias garantia deve ser preenchido.";
+			
+			}
+		
+		}*/
+		
+		if($(this).attr('id').substring(0,6) == "Dvalor"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo valor deve ser preenchido.";
+			
+			}
+		
+		}
+	
+	});
+	
+	$("#despesas_negociacao tr td select").each(function(){
+	
+		if($(this).attr('id').substring(0,11) == "Dfornecedor"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Revis&otilde;es o campo fornecedor deve ser selecionado.";
+			
+			}
+		
+		}
+		
+	});
+	
+	
+	
+	$("#pendencia tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,5) == "Pdata"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Pend&ecirc;ncias o campo data deve ser preenchido.";
+			
+			}
+		
+		}
+		
+		if($(this).attr('id').substring(0,10) == "Pdescricao"){
+			
+			if($(this).val() == ""){
+			
+				erro = true;
+		
+				msg += "<br>Na aba Pend&ecirc;ncias o campo descri&ccedil;&atilde;o deve ser preenchido.";
+			
+			}
+		
+		}
+	
+	});
+	
+	if($("#leasing_sim").attr("checked")){
+
+		if(!$("#doc_0").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Carta op&ccedil;&atilde;o de compra verificada' deve ser verificada e selecionada.";
+		
+		}
+		
+		/*if(!$("#doc_1").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Xerox CIC, RG e comprovante de endere&ccedil;o atual em nome' deve ser verificada e selecionada.";
+		
+		}*/
+	
+	}
+	
+	if($("#pf").attr("checked")){
+
+		if(!$("#pf1").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Ve&iacute;culo quitado ou quita&ccedil;&atilde;o verificada' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf2").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Pesquisa de a&ccedil;&otilde;es judiciais do propriet&aacute;rio' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf3").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Certificado de propriedade original(DUT)' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf4").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Laudo de vistoria' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf5").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Comprovante de pagamento IPVA' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf6").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Seguro obrigat&oacute;rio (DPVAT) pago' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf7").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Guias de multas pagas' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf8").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Porte obrigat&oacute;rio (V&aacute;lido e original)' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf9").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Chave reserva, Manual do propriet&aacute;rio e info card' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pf10").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Xeros da CNH e Comprovante de endere&ccedil;o atual em nome' deve ser verificada e selecionada.";
+		
+		}
+
+	}
+	
+	
+	if($("#pj").attr("checked")){
+
+		if(!$("#pj0").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Ve&iacute;culo quitado ou quita&ccedil;&atilde;o verificada' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj1").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Pesquisa de a&ccedil;&otilde;es judiciais do propriet&aacute;rio' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj2").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Certificado de propriedade original(DUT)' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj3").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Laudo de vistoria' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj4").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Comprovante de pagamento IPVA' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj5").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Seguro obrigat&oacute;rio (DPVAT) pago' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj6").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Guias de multas pagas' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj7").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Porte obrigat&oacute;rio (V&aacute;lido e original)' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj8").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Chave reserva, Manual do propriet&aacute;rio e info card' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj9").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Xeros da CNH e Comprovante de endere&ccedil;o atual em nome' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj10").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Contrato social da &uacute;ltima altera&ccedil;&atilde;o' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj11").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'CNPJ' deve ser verificada e selecionada.";
+		
+		}
+		
+		if(!$("#pj12").attr("checked")){
+			
+			erro = true;
+				
+			msg += "<br>Na aba Check-List a op&ccedil;&atilde;o 'Nota fiscal de venda (caso n&atilde;o emita N.F. uma declara&ccedil;&atilde;o, assinada e reconhecida firma)' deve ser verificada e selecionada.";
+		
+		}
+
+	}
+	
+	if($("#foto_0").val() == "" || $("#foto_2").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Fotos &eacute; necess&aacute;rio o cadastro minimo de duas fotos.";
+	
+	}
+	
+	if($("#id_modelo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo modelo deve ser selecionado.";
+	
+	}
+	
+	if($("#placa").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo placa deve ser preenchido.";
+	
+	}
+	if($("#obs_site").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo Observações Site deve ser preenchido.";
+	
+	}
+	if($("#novo_usado").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo novo usado deve ser preenchido.";
+	
+	}
+	
+	if($("#ano_fabricacao").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo ano de fabrica&ccedil;&atilde;o deve ser preenchido.";
+	
+	}
+	
+	if($("#ano_modelo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo ano do modelo deve ser preenchido.";
+	
+	}
+	
+	if($("#cor").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo cor deve ser preenchido.";
+	
+	}
+	/*
+	if($("#km").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo km deve ser preenchido.";
+	
+	}
+	*/
+	if($("#combustivel").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo combustivel deve ser selecionado.";
+	
+	}
+	/*
+	if($("#chassi").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo chassi deve ser preenchido.";
+	
+	}
+	
+	if($("#motor").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo motor deve ser preenchido.";
+	
+	}
+	*/
+	if($("#valor_aquisicao").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo valor compra deve ser preenchido.";
+	
+	}
+	
+	if($("#valor_venda").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo valor venda deve ser preenchido.";
+	
+	}
+	
+	if($("#origem").val() == "Selecione"){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Dados Gerais o campo origem deve ser selecionado.";
+	
+	}
+	
+	if($("#origem").val() == "0"){
+	
+		if($("#origem_descricao").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Dados Gerais o campo origem descri&ccedil;&atilde;o deve ser preenchido.";
+	
+		}
+		
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+
+$(function(){
+
+	valorAquisicao = $("#valor_aquisicao").val();
+	$("#valor_aquisicao").val(float2moeda(valorAquisicao));
+	
+	valorAquisicao = $("#valor_venda").val();
+	$("#valor_venda").val(float2moeda(valorAquisicao));
+
+})
+
+$("#Pdata_0").mask("99/99/9999");
+$("#Ddata_0").mask("99/99/9999");
+$("#placa").mask("aaa-9*99");
+$("#placa").mask("aaa-9*99");
+$("#ano_fabricacao").mask("9999");
+$("#ano_modelo").mask("9999");
+
+$('#data_termino_revisao').focus(function(){
+		$(this).calendario({
+			target:'#data_termino_revisao'
+		});
+	})
+	
+
+
+
+
+function ativaSubAba(destino, c){
+
+	$("#subAbas td").each(function(){
+		
+		$(this).removeClass('selecionado');
+		
+	});
+	
+	$(c).parent().addClass('selecionado');
+	
+	var divAbas = new Array('dados_gerais', 'fotos', 'anexos', 'opcionais', 'despesa', 'pendencias', 'check_list','valores','vistoria');
+
+	for(x in divAbas){
+		
+		$("#"+divAbas[x]).css('display','none');
+	
+	}
+	
+	calculaValordespesas();
+	
+	$("#"+destino).css('display','inline');
+	
+	if(destino == "check_list"){
+	
+		abreOpcoes();
+	
+	}
+	
+	if(destino == "valores"){
+	
+		calculaValores();
+	
+	}
+
+}
+
+var anexoAdd = 1;
+
+function addAnexos(){
+
+	anexoAdd++;
+
+	var line = $("#anexo_line_0").clone();
+	
+	$("#table_anexo").append(line);
+	
+	$("#table_anexo tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+anexoAdd);
+		$(this).children().attr('name', idLine[0]+"_"+anexoAdd);
+		
+		if($(this).children().attr('id') == "deleta_"+anexoAdd){
+		
+			$("#deleta_"+anexoAdd).attr('onClick',"confirmaDeleteAnexoVazio("+anexoAdd+");");
+			
+		}
+
+	});
+	
+	$("#descricaoanexo_"+anexoAdd).val("");
+
+}
+
+var despesasAdd = 0;
+
+function adddespesa(){
+
+	despesasAdd--;
+
+	var line = $("#despesas_negociacao_line_0").clone();
+	
+	$("#despesas_negociacao").append(line);
+	
+	$("#despesas_negociacao tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+despesasAdd);
+		$(this).children().attr('name', idLine[0]+"_"+despesasAdd);
+		
+		if($(this).children().attr("type") != "button" && $(this).children().next().val() != "Add"){
+		
+			$(this).children().val("");
+			
+		}
+		
+		if($(this).children().attr('id') == "deleta_"+despesasAdd){
+	
+			$("#deleta_"+despesasAdd).attr('onclick', "confirmaDeleteDespesa("+despesasAdd+");");
+		
+		}
+		
+	});
+	
+	$("#Ddata_"+despesasAdd).mask("99/99/9999");
+	$("#Ddata_"+despesasAdd).focus(function(){
+		$(this).calendario({
+			target:"#Ddata_"+despesasAdd
+		});
+	});
+
+}
+
+var pendenciasAdd = 0;
+
+function addPendencia(){
+
+	pendenciasAdd--;
+
+	var line = $("#pendencia_line_0").clone();
+	
+	$("#pendencia").append(line);
+	
+	$("#pendencia tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+pendenciasAdd);
+		$(this).children().attr('name', idLine[0]+"_"+pendenciasAdd);
+	
+		if($(this).children().attr('id') == "deleta_"+pendenciasAdd){
+	
+			$("#deleta_"+pendenciasAdd).attr('onclick', "confirmaDeletePendencia("+pendenciasAdd+");");
+		
+		}
+
+	});
+	
+	$("#Pdata_"+pendenciasAdd).val("");
+	$("#Pdescricao_"+pendenciasAdd).val("");
+
+	
+	$("#Pdata_"+pendenciasAdd).mask("99/99/9999");
+	$("#Pdata_"+pendenciasAdd).focus(function(){
+		$(this).calendario({
+			target:"#Pdata_"+pendenciasAdd
+		});
+	});
+
+}
+
+
+var fotoAdd = 1;
+
+function addFotos(){
+
+	fotoAdd++;
+
+	var line = $("#fotos_line_0").clone();
+	
+	$("#table_fotos").append(line);
+	
+	$("#table_fotos tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+fotoAdd);
+		$(this).children().attr('name', idLine[0]+"_"+fotoAdd);
+
+	});
+
+}
+
+
+function buscaAno(string){
+
+	$("#id_ano_modelo").prop("disabled", true);
+
+	segmento = $("#tipo").val();
+	id_marca = $("#id_marca").val();
+
+	$.ajax({
+		type: "POST",
+		async: true,
+        url:"/modelos/ajax",
+        dataType:"html",
+        data:{modelo_id:string, marca_id:id_marca, tipo:segmento, fn:"fipe_anos"},
+        success:function(retorno){
+			$("#id_ano_modelo").html(retorno);
+			$("#id_ano_modelo").prop("disabled", false);
+		}
+	})
+
+}
+
+
+function buscaModelo(string){
+
+	$("#id_modelos").prop("disabled", true);
+	$("#id_ano_modelo").prop("disabled", true).html('<option disabled="disabled" selected="selected" value="">Selecione</option>');
+
+	segmento = $("#tipo").val();
+
+	$.ajax({
+		type: "POST",
+		async: true,
+        url:"/modelos/ajax",
+        dataType:"html",
+        data:{marca_id:string, tipo:segmento, fn:"fipe_modelos"},
+        success:function(retorno){
+			$("#id_modelos").html(retorno);
+			$("#id_modelos").prop("disabled", false);
+		}
+	})
+
+}
+
+function buscaMarcas(string){
+
+	$("#id_marca").prop("disabled", true);
+	$("#id_modelos").prop("disabled", true).html('<option disabled="disabled" selected="selected" value="">Selecione</option>');
+	$("#id_ano_modelo").prop("disabled", true).html('<option disabled="disabled" selected="selected" value="">Selecione</option>');
+
+	$.ajax({
+		type: "POST",
+		async: true,
+        url:"/modelos/ajax",
+        dataType:"html",
+        data:{tipo:string, fn:"fipe_marcas"},
+        success:function(retorno){
+			$("#id_marca").html(retorno);
+			$("#id_marca").prop("disabled", false);
+
+			$('#id_marca option').filter(function() {
+				return $(this).text() == '<?=$this->fipe['marca'] ?>';
+			}).prop('selected', true);
+
+			buscaValor();
+
+		}
+	})
+
+}
+
+
+function buscaFipe(string){
+	debugger;
+	segmento = $("#tipo").val();
+	id_marca = $("#id_marca").val();
+	id_modelos = $("#id_modelos").val();		id_ano_modelo = $("#id_ano_modelo").val();
+	$.ajax({
+		type: "POST",
+        url:"/modelos/ajax",
+        dataType:"json",
+        data:{codigo_ano :string, marca_id:id_marca, modelo_id:id_modelos,tipo:segmento, fn:"fipe_precos"},
+        success:function(retorno){
+			$("#fipe").val(retorno.valor);
+
+			getIdModelo(retorno);
+
+        }
+	});
+
+}
+
+function getIdModelo(retorno) {
+
+	let tipo = $('#tipo option:selected').text().toLocaleLowerCase();
+	let marca = $('#id_marca option:selected').text();
+	let modelo = $('#id_modelos option:selected').text();
+	let id_ano_modelo = $('#id_ano_modelo').val();
+
+	$.ajax({
+		type: "POST",
+        url:"/modelos/ajax",
+        dataType:"json",
+        data:{
+			ano_modelo_fipe: retorno.ano_modelo,
+			codigo_fipe: retorno.codigo_fipe,
+			combustivel: retorno.combustivel,
+			valor: retorno.valor,
+			tipo: tipo,
+			marca_fipe: marca,
+			modelo_fipe: modelo,
+			id_ano_modelo: id_ano_modelo,
+			fn:"get_modelo"
+		},
+        success:function(id){
+			$("#id_modelo").val(id);
+        }
+	});
+}
+
+
+function buscaValor(){
+
+
+
+	segmento = '<?=$this->fipe['segmento'] ?>';
+
+	cod_fipe = '<?=$this->fipe['cod_fipe'] ?>';
+
+	codigo_ano = '<?=$this->fipe['codigo'] ?>';
+
+	let marca = $('#id_marca option:selected').text();
+
+	let modelo = $('#id_modelos option:selected').text();
+
+	let id_ano_modelo = $('#id_ano_modelo').val();
+
+
+
+	$.ajax({
+
+		type: "POST",
+
+        url:"/modelos/ajax",
+
+        dataType:"json",
+
+        data:{
+
+			codigo_ano :codigo_ano,
+
+			cod_fipe:cod_fipe,
+
+			tipo:segmento,
+
+			marca_fipe: marca,
+
+			modelo_fipe: modelo,
+
+			id_ano_modelo: id_ano_modelo,
+
+			fn:"get_valor_fipe"
+
+		},
+
+        success:function(retorno){
+
+			$("#fipe").val(retorno.valor ?? "Sem referência...");
+
+        }
+
+	});
+
+
+
+}
+
+function adicionarAnexo(){
+
+	anexo = "<tr id='anexo_line_0'>"+
+				"<td style='width:30%'><input type='file' id='anexo_0' name='anexo_0' class='text' title='Anexo'/></td>"+
+				"<td><input type='teste' id='descricaoanexo_0' name='descricaoanexo_0' class='text' title='descri&ccedil;&atilde;o'/></td>"+
+				"<td style='width:20%'><input type='button' class='btn-small btn-del' id='deleta' value='Deletar' onclick='confirmaDeleteAnexoVazio(0);'/><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='addAnexos()'></td>"+
+			"</tr>";
+			
+	$("#table_anexo").html(anexo);
+
+}
+
+
+function adicionarPendencia(){
+
+	pendencia = "<tr id='pendencia_line_0'>"+
+					"<td style='width:10%;'><input type='text' id='Pdata_0' name='Pdata_0' class='text' value=\"\"/></td>"+
+					"<td><input type='text' id='Pdescricao_0' name='Pdescricao_0' class='text' value=\"\" /></td>"+
+					"<td style='width:20%;'><input type='button' class='btn-small btn-del' id='deleta' value='Deletar' onclick='confirmaDeletePendencia(0);'/><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='addPendencia()'></td>"+
+				"</tr>";
+				
+	$("#pendencia").html(pendencia);
+	
+	$("#Pdata_0").mask("99/99/9999");
+	$("#Pdata_0").focus(function(){
+		$(this).calendario({
+			target:"#Pdata_0"
+		});
+	});
+}
+
+
+function adicionarRevioes(){
+
+	
+
+	revisao = "<td><input type='text' id=\"Ddata_0\" name='Ddata_0' class='text' value='' /></td>"+
+				"<td><input type=text' id='Ddescricao_0' name='Ddescricao_0' class='text' value='' /></td>"+
+				"<td style='width:30%;'><select id='Dfornecedor_0' name='Dfornecedor_0' class='text' style='width:70%;' value='' onFocus='buscaFornecedores(<?php echo $_SESSION['sessionUser']['id_empresa'];?>,this.id)'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					foreach($this->fornecedores as $fornecedor){
+					
+						/*if($fornecedor['id'] == $despesa['id_fornecedor']){
+						
+							$sel = "selected='selected'";
+						
+						}else{
+						
+							$sel = "";
+						
+						}*/
+					
+					?>
+						"<option value='<?php echo $fornecedor['id']?>' <?php echo $sel?>><?php echo $fornecedor['razao_social']?></option>"+
+					<?php
+					}
+					?>
+						
+				"</select>"+
+					"<input type='button' class='btn-mini btn-include' id='btt' value='Add' onclick=\"javascript:window.open('<?php echo URL ?>fornecedores/add')\">"+
+				"</td>"+
+				"<td><input type='text' id='Dnf_0' name='Dnf_0' class='text' value='' /></td>"+
+				"<td><input type='text' id='Dgarantia_0' name='Dgarantia_0' class='text' value='' /></td>"+
+				"<td><input type='text' id='Dvalor_0' name='Dvalor_0' class='text' value='' onKeyup='calculaValordespesas(this.value, this.id); validaMoedaBR(this.id);' /></td>"+
+				"<td style='width:20%;'><input type='button' class='btn-small btn-del' id='deleta' value='Deletar' onclick='confirmaDeleteDespesa(0);'/><input type='button' id='btn_0' name='btn_0' class='btn-mini btn-include' value='Add' onclick='adddespesa();calculaValordespesas();'></td>";
+			
+			$("#despesas_negociacao_line_0").html(revisao);
+			
+			$("#Ddata_0").mask("99/99/9999");
+			$("#Ddata_0").focus(function(){
+				$(this).calendario({
+					target:"#Ddata_0"
+				});
+			});
+
+}
+
+function buscaFornecedores(id, idSelect, valor){
+
+	$.ajax({                   
+
+		type: "POST",
+
+        url:"/fornecedores/ajax",
+
+        dataType:"html",
+
+        data:{idempresa:id},                       
+
+        success:function(retorno){
+
+			$("#"+idSelect).html(retorno);
+			
+			//alert(idSelect);
+		
+		}
+
+	})
+
+}
+
+// function buscaFipe(string){
+//     //alert(string);
+// 	$.ajax({                   
+// 		type: "POST",
+//         url:"/modelos/ajax/fn/busca_fipe",
+//         dataType:"html",
+//         data:{fipe:string},                       
+//         success:function(retorno){
+//            //alert(retorno);
+			
+// 			$("#fipe").val(retorno);
+//          }
+// 	})
+
+// }
+
+
+function apagaCheckbox(obj){
+
+	$("input:checkbox").attr("checked", false);
+	$(obj).attr("checked", true);
+
+}
+
+abreOpcoes();
+calculaValordespesas();
+
+$("#data_aquisicao").mask("99/99/9999");
+	$('#data_aquisicao').focus(function(){
+		$(this).calendario({
+			target:'#data_aquisicao'
+		});
+	});
+
+
+$("#data_inicio_preparacao").mask("99/99/9999");
+$('#data_inicio_preparacao').focus(function(){
+	$(this).calendario({
+		target:'#data_inicio_preparacao'
+	});
+});
+
+
+<?php
+	foreach($this->despesas as $despesa){
+
+		echo "$('#Ddata_".$despesa['id']."').mask('99/99/9999');
+			  $('#Ddata_".$despesa['id']."').focus(function(){
+				  $(this).calendario({
+						target:'Ddata_".$despesa['id']."'
+				  });
+		      });";
+
+	}
+?>
+
+$(document).ready(function() {
+
+	buscaMarcas($("#tipo").val());
+
+	$("#id_modelos").html("<option><?=$this->fipe['modelo'] ?></option>");
+	$("#id_ano_modelo").html("<option><?=$this->fipe['ano_modelo'] ?></option>");
+
+    $('#id_marca, #id_modelos, #id_ano_modelo').select2();
+
+});
+</script>

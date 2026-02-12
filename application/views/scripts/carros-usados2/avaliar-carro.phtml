@@ -1,0 +1,480 @@
+<script>
+	$("#menu_busca").remove();
+</script>
+<style>
+
+	#table_busca{
+		#float:top;
+		margin-left:11px;
+		width:97.8%;
+		background-color:#E8E8E8;
+		margin-bottom:10px;
+		margin-top:0px;
+		height:60px;
+		border-bottom: solid 2px #CFCFCF;
+		border-top: solid 2px #CFCFCF;
+		border-right: solid 2px #CFCFCF;
+		border-left: solid 2px #CFCFCF;
+		color:#666666;
+	}
+	
+	#table_busca tr td {
+		margin-left:10px;
+		background-color:#E8E8E8;
+		vertical-align:middle;
+	}
+	
+	#table_busca tr td select{
+		margin-left:5px;
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:150px;
+		height:30px;
+		vertical-align:middle;
+	}
+	
+	.texto{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:70px;
+		height:25px;
+		#vertical-align:middle;
+	}
+	
+	.texto2{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:140px;
+		height:25px;
+		#vertical-align:middle;
+	}
+
+</style>
+
+<table id="table_busca">
+	<tr>
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Fabricante</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b> De <input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit" style="width:60px;" id="buttom_busca"  value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+
+<?php
+	if($this->resposta == 1){
+?>
+
+<style>
+
+#div_resultado{
+	border: solid 1px #CCCCCC;
+	width:704px;
+	height:627px;
+	background-color:#EEEEEE;
+	text-align:left;
+	#float:right;
+	#margin-right:9px;
+	margin-top:2px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+}
+
+#resultado_fipe{
+	border: solid 1px #222222;
+	background-color:#444444;
+	width:634px;
+	height:100px;
+	text-align:left;
+	margin-top:40px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	color:#FFFFFF;
+}
+
+#resultado_modelo{
+	#border: solid 1px #222222;
+	width:634px;
+	margin-top:40px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	color:#222222;
+}
+
+#resultado_meucar{
+	border: solid 1px #222222;
+	background-color:#EEEEEE;
+	width:634px;
+	text-align:left;
+	margin-top:40px;
+	border-radius:3px;
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	color:#000000;
+}
+
+#table_meucar{
+	width:634px;
+}
+
+#table_meucar td{
+	border: solid 1px #222222;
+	width:33%;
+	height:40px;
+	vertical-align:middle;
+	font-size:20px;
+}
+
+
+
+</style>
+<center>
+<div id="div_resultado">
+	<center>
+		<div id="resultado_modelo">
+			<div style="font-size:17px; margin-top:10px;"><?php echo "H&aacute; ".$this->qtdVeiculos ." an&uacute;ncios de <b>".$this->descricaoMarca ." - ".$this->descricaoModelo ." - ".$this->descricaoAnoModelo."</b>" ?></div>
+		</div>
+		<div id="resultado_fipe">
+			<div style="float:left; font-size:50px; margin-top:40px; margin-left:40px;">FIPE</div>
+			<div style="float:right; font-size:30px; margin-top:40px; margin-right:40px;">R$ <?php echo money_format("%i",$this->precoFipe); ?></div>
+		</div>
+		
+		<div id="resultado_meucar">
+			<table id="table_meucar">
+				<tr>
+					<td style="height:50px;"><center><b><img style="width:130px;" src="/arquivos_site/images/Logo_Car.png"></b></center></td><td style="height:50px;"><center><b>VALOR</b></center></td>
+				</tr>
+				<tr>
+					<td><center><b>M&Iacute;NIMO</b></center></td><td><center><?php echo $this->valorMenor; ?></center></td>
+				</tr>
+				<tr>
+					<td><center><b>M&Eacute;DIO</b></center></td><td><center><?php echo $this->valorMedio; ?></center></td>
+				</tr>
+				<tr>
+					<td><center><b>M&Aacute;XIMO</b></center></td><td><center><?php echo $this->valorMaior; ?></center></td>
+				</tr>
+			</table>
+		</div>
+	</center>
+</div>
+</center>
+<?php
+	}else{
+?>
+
+<style>
+
+#avaliador{
+	border: solid 1px #DDDDDD;
+	width:400px;
+
+	background-color:#EEEEEE;
+	text-align:left;
+}
+
+#select{
+	margin-top:20px;
+}
+	
+table{
+	margin-left:20px;
+}
+	
+table td{
+
+	#border: solid 1px #DDDDDD;
+
+}
+</style>
+</header>
+
+<section id="content">
+
+<center>
+<div id="avaliador">
+<form method="post" id="avalia" action="/carros-usados/avaliar-carro">
+
+<table style="margin-top:30px;">
+
+	<tr>
+		<td>
+			
+		</td>
+		<td>
+			*Campos obrigatórios
+		<br>
+		<br>
+		</td>
+	</tr>
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Tipo de Ve&iacute;culo* </b> </div>
+		</td>
+	
+		<td>
+			<select id="tipo_veiculo" name="tipo_veiculo" style="width:200px; height:27px;">
+				<option value="">Selecione</option>
+				<option value="">Meu ve&iacute;culo</option>
+				<option value="">Ve&iacute;culo desejado</option>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>
+	<!--<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Cidade* </b> </div>
+		</td>
+	
+		<td>
+			<select id="estado" name="estado" style="width:200px; height:27px;">
+				<option value="">Selecione</option>
+				<?php
+				foreach($this->arrCidades as $cidade){
+				
+					echo "<option value='".$cidade['cidade']."'>". $cidade['cidade']."</option>";
+				
+				}
+				?>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>-->
+	
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Marca* </b> </div>
+		</td>
+	
+		<td>
+			<select id="marca" name="marca" style="width:200px; height:27px;" onchange="buscaModeloTodos(this.value);">
+				<option value="">Selecione</option>
+				<?php
+				foreach($this->arrMarcas as $marca){
+				
+					echo "<option value='".$marca['nome']."'>". $marca['nome']."</option>";
+				
+				}
+				?>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Modelo* </b> </div>
+		</td>
+	
+		<td>
+			<select id="id_modelo" name="id_modelo" style="width:200px; height:27px;" onchange="buscaAnoModeloTodos(this.value);">
+				<option value="">Selecione</option>
+			</select>
+			<br>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Ano Modelo* </b> </div>
+		</td>
+	
+		<td>
+			<select id="ano_modelo" name="ano_modelo" style="width:200px; height:27px;">
+				<option value="">Selecione</option>
+			</select>
+			<br>
+			<br>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>Nome</b> </div>
+		</td>
+	
+		<td>
+			<input type="text" id="nome" name="nome" style="width:200px; height:22px;"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>	
+			<div style="font-size:15px; text-align:right; margin-right:5px; margin-top:3px;"><b>E-mail</b> </div>
+		</td>
+	
+		<td>
+			<input type="text" id="email" name="email" style="width:200px; height:22px;"/>
+			<br>
+			<br>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>	
+		
+		</td>
+		<td>
+			<input type="checkbox" checked="checked" id="receber_email" name="receber_email"/>Desejo receber promoções e ofertas<br> do MeuCar e de seus parceiros.
+			<br>
+			<br>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		</td>
+		<td>
+			<input type="hidden" name="descricao_marca" id="descricao_marca" value=""/>
+			<input type="hidden" name="descricao_modelo" id="descricao_modelo" value=""/>
+			<input type="hidden" name="descricao_ano_modelo" id="descricao_ano_modelo" value=""/>
+			<a style="font-size:20px; padding:8px 50px 8px 50px;float:left;" class="button-6 fright" id="avaliar_veiculo" href="javascript:validaCampo();">Avaliar</a>
+			<br>
+			
+			<br>
+			<br>
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</center>
+
+<script type="text/javascript">
+
+	function validaCampo(){
+	
+		var msg = "";
+		var erro = false;
+		
+		if($("#estado").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#marca").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#id_modelo").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if($("#ano_modelo").val() == ""){
+			
+			erro = true;
+		
+		}
+		
+		if(erro){
+		
+			alert("Os campos marcados com '*' devem ser selecionados");
+		
+		}else{
+		
+			$('#descricao_marca').val($('#marca :selected').text());
+			$('#descricao_modelo').val($('#id_modelo :selected').text());
+			$('#descricao_ano_modelo').val($('#ano_modelo :selected').text());
+		
+			$("#avalia").submit();
+		
+		}
+		
+	}
+
+	function buscaModeloTodos(string){
+		//alert("test");
+		$.ajax({
+			type: "POST",
+			url:"/modelos/ajax/fn/busca_modelos_todos",
+			dataType:"html",
+			data:{marcaa:string},
+			success:function(retorno){
+			  // alert(retorno);
+				
+				$("#id_modelo").html(retorno);
+			 }
+		})
+
+	}
+	
+	function buscaAnoModeloTodos(string){
+		
+		$.ajax({
+			type: "POST",
+			url:"/modelos/ajax/fn/ano_modelo",
+			dataType:"html",
+			data:{id_modelo:string},
+			success:function(retorno){
+			   //alert(retorno);
+				
+				$("#ano_modelo").html(retorno);
+				
+			 }
+		})
+
+	}
+</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	 
+	ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+	ga('send', 'pageview');
+ 
+</script>
+
+<?php
+	}
+?>
+</section>

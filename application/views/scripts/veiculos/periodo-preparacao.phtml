@@ -1,0 +1,109 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="periodo-preparacao" class="form" method="post">
+
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td >
+					<label class="label" id="rg_label">Mecânico</label>
+					<input type="number" id="mecanico" name="mecanico" class="text" value="<?php echo $this->arrDados['mecanico']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Funilaria</label>
+					<input type="number" id="funilaria" name="funilaria" class="text" value="<?php echo $this->arrDados['funilaria']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Martelinho</label>
+					<input type="number" id="martelinho" name="martelinho" class="text" value="<?php echo $this->arrDados['martelinho']; ?>" style="width:60px;"/>
+				</td>
+
+				<td >
+					<label class="label" id="rg_label">Elétrica</label>
+					<input type="number" id="eletrica" name="eletrica" class="text" value="<?php echo $this->arrDados['eletrica']; ?>" style="width:60px;"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td>
+					<label class="label" id="rg_label">Tapeçaria</label>
+					<input type="number" id="tapecaria" name="tapecaria" class="text" value="<?php echo $this->arrDados['tapecaria']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Lavacar</label>
+					<input type="number" id="lavacar" name="lavacar" class="text" value="<?php echo $this->arrDados['lavacar']; ?>" style="width:60px;"/>
+				</td>
+				<td >
+					<label class="label" id="rg_label">Volante</label>
+					<input type="number" id="volante" name="volante" class="text" value="<?php echo $this->arrDados['volante']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Calotas</label>
+					<input type="number" id="calotas" name="calotas" class="text" value="<?php echo $this->arrDados['calotas']; ?>" style="width:60px;"/>
+				</td>
+
+			</tr>
+		</table>
+	</div>
+
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td>
+					<label class="label" id="rg_label">Pneus</label>
+					<input type="number" id="pneus" name="pneus" class="text" value="<?php echo $this->arrDados['pneus']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Chaveiro</label>
+					<input type="number" id="chaveiro" name="chaveiro" class="text" value="<?php echo $this->arrDados['chaveiro']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Pincelar</label>
+					<input type="number" id="pincelar" name="pincelar" class="text" value="<?php echo $this->arrDados['pincelar']; ?>" style="width:60px;"/>
+				</td>
+				<td>
+					<label class="label" id="rg_label">Outros</label>
+					<input type="number" id="outros" name="outros" class="text" value="<?php echo $this->arrDados['outros']; ?>" style="width:60px;"/>
+				</td>
+
+			</tr>
+		</table>
+	</div>
+	<div class="msg erro" id="msg" style="display: none;"></div>
+
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="button" id="bnt" class="btn-small btn-add" value="Salvar" onclick="valida()" />
+	</div>
+
+</form>
+
+
+<script type="text/javascript">
+
+	function valida(){
+
+
+		var erro = false;
+
+		$("#msg").css({"display": "none"});
+
+		$("input").each(function(){
+
+			if($(this).val() == ""){
+				erro = true;
+			}
+
+		});
+
+		if(erro){
+			$("#msg").html("Não é permitido salvar com algum campo vazio!");
+			$("#msg").css({"display": "block"});
+		}else{
+			$("form").submit();
+		}
+
+	}
+
+</script>

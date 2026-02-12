@@ -1,0 +1,219 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="<?php echo URL ?>financeiras/edt/id/<?php echo $this->id ?>" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Tipo</label>
+		<select id="tipo" name="tipo" class="select" onchange="alteraTaxa(this.value)">
+			<option value="">Selecione</option>
+			<option value="0" <?php echo ($this->financeira['tipo'] == 0) ? "selected=\"selected\"" : ""; ?>>Financeira</option>
+			<option value="1" <?php echo ($this->financeira['tipo'] == 1) ? "selected=\"selected\"" : ""; ?>>Despachante</option>
+		</select>
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->id_empresa; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" value="<?php echo $this->financeira['nome']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNPJ</label>
+		<input type="text" id="cnpj" name="cnpj" class="text" value="<?php echo $this->financeira['cnpj']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label" id="labelTaxa">Taxa</label>
+		<input type="text" id="imposto" name="imposto" class="text req" value="<?php echo $this->financeira['imposto']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Contato</label>
+		<input type="text" id="contato" name="contato" class="text" value="<?php echo $this->financeira['contato']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 1</label>
+		<input type="text" id="tel" name="tel" class="text" value="<?php echo $this->financeira['tel']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 2</label>
+		<input type="text" id="cel1" name="cel1" class="text" value="<?php echo $this->financeira['cel1']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 3</label>
+		<input type="text" id="cel2" name="cel2" class="text" value="<?php echo $this->financeira['cel2']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nextel</label>
+		<input type="text" id="nextel" name="nextel" class="text" value="<?php echo $this->financeira['nextel']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Email</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="<?php echo $this->financeira['email']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" id="endereco" name="endereco" class="text" value="<?php echo $this->financeira['endereco']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro" name="bairro" class="text" value="<?php echo $this->financeira['bairro']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="<?php echo $this->financeira['cidade']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado" name="estado" class="text" value="<?php echo $this->financeira['estado']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" id="cep" name="cep" class="text" value="<?php echo $this->financeira['cep']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ativa</label>
+		<input type="checkbox" <?php echo ($this->financeira['ativo'] == 1) ? "checked=\"checked\"" : ""; ?> id="ativo" name="ativo" value="1" />
+	</div>
+	
+	<div class="inline" style="width:98%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" class="text" ><?php echo $this->financeira['obs']; ?></textarea>
+	</div>
+	
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function alteraTaxa(v){
+
+	if(v == ''){
+	
+		$("#labelTaxa").html('Taxa / Comiss&atilde;o');
+	
+	}
+	
+	if(v == '0'){
+	
+		$("#labelTaxa").html('Imposto (%)(-)');
+	
+	}
+	
+	if(v == '1'){
+	
+		$("#labelTaxa").html('Comiss&atilde;o (R$)(+)');
+	
+	}
+
+}
+
+alteraTaxa($("#tipo").val());
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#nome").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome deve ser preenchido.";
+	
+	}
+	
+	if($("#imposto").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo taxa deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+
+	$("#cnpj").mask("99.999.999/9999-99");
+	$("#cep").mask("99999-999");
+	
+	$('#tel').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#cel1').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#cel2').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

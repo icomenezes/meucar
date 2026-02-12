@@ -1,0 +1,12 @@
+
+AddHandler php72-script .php 
+suPHP_ConfigPath /home/sistemameucarpro1/
+
+RewriteEngine on
+RewriteRule !\.(js|gif|jpg|jpeg|png|css|txt|JPG|JPEG|xml)$ public/index.php [L]
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]
+
+#php_value error_reporting 6135
+#php_value post_max_size 128M
+#php_value upload_max_filesize 128M

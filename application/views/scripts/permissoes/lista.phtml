@@ -1,0 +1,41 @@
+<!--<div class="inline" style="margin-left:5px; margin-bottom:5px">
+	<input type="button" style="height:42px;" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>permissoes/add'" />
+</div>-->
+<table class = 'table'>
+
+<thead><tr><th>Perfil</th><th>Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->permissoes as $e){
+	
+?>
+		<tr>
+		<td><?php echo $e['perfil']?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Permissao: <?php echo $e['perfil']?>', <?php echo $e['id']?>)" /></td>
+		</tr>
+
+<?php		
+	
+	}
+
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

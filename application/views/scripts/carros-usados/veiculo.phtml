@@ -1,0 +1,807 @@
+
+<?php 
+
+	if($this->veiculo['id'] == ""){
+		
+		$id = end(explode("/",$_SERVER ['REQUEST_URI']));
+		
+		header("location: http://www.sistemameucar.com.br/carros-usados/vendido/".$id);
+
+	}
+
+	if($this->veiculo['descricao_site']){
+	
+		$this->veiculo['modelo'] = $this->veiculo['descricao_site'];
+	
+	}
+	
+	$this->veiculo['modelo'] = implode("-",explode(" ",$this->veiculo['modelo']));
+	
+?>
+
+<script type="text/javascript">
+   
+	$(document).ready(function(){
+		$("a[rel=modal]").click( function(ev){
+			ev.preventDefault();
+
+			var id = "#"+$(this).parent().attr("id")+"_promocao";
+			
+			var alturaTela = $(document).height();
+			var larguraTela = $(window).width();
+	
+			//colocando o fundo preto
+			$('#mascara').css({'width':larguraTela,'height':alturaTela});
+			$('#mascara').fadeIn(1000);	
+			$('#mascara').fadeTo("slow",0.8);
+
+			var left = ($(window).width() /2) - ( $(id).width() / 2 );
+			var top = ($(window).height() / 2) - ( $(id).height() / 2 );
+					
+			$(id).css({'top':top,'left':left});
+			$(id).show();
+
+			
+			if(id == "#telefone_empresa_promocao"){
+
+				mostraTelefone();
+			
+			}
+			
+			if(id == "#endereco_empresa_promocao"){
+			
+				mostraEndereco();
+			
+			}
+			
+ 		});
+
+ 		$("#mascara").click( function(){
+ 			$(this).hide();
+ 			$(".window").hide();
+ 		});
+
+ 		$('.fechar').click(function(ev){
+ 			ev.preventDefault();
+ 			$("#mascara").hide();
+ 			$(".window").hide();
+ 		});
+	});
+		
+
+</script>
+
+<style>
+	
+	img{
+		
+		text-decoration:none;
+	
+	}
+
+	.window{
+		display:none;
+		width:370px;
+		#height:300px;
+		position:absolute;
+		left:0;
+		top:0;
+		background:#FFF;
+		z-index:9900;
+		padding:10px;
+		border-radius:10px;
+		border: solid 2px #8B0000;
+	}
+
+	#mascara{
+		position:absolute;
+  		left:0;
+  		top:0;
+  		z-index:9000;
+  		background-color:#000;
+  		display:none;
+	}
+
+	.fechar{display:block; text-align:right;}
+
+	#dados_cabecalho{
+		width:97.5%;
+		height:50px;
+		margin-left:11px;
+		background:url(/arquivos_site/images/header-but.jpg) repeat-x #9e0202;
+		color:white;
+		border-right: solid 2px #8B0000;
+		text-align:left;
+	}
+	
+	#div_preco{
+		
+	}
+	
+	#table_left{
+		float:left;
+		#border: solid 1px;
+		margin-left:11px;
+		width:65%;
+		background-color:#FFFFFF;
+	}
+	
+	#table_parecidos{
+		float:left;
+		#border: solid 1px;
+		margin-left:11px;
+		width:645px;
+		background-color:#FFFFFF;
+	}
+	
+	#table_right{
+		align:right;
+		margin-right:0px;
+		width:31.8%;
+		background-color:#E8E8E8;
+		margin-bottom:10px;
+		text-align:left;
+	}
+	
+	#table_busca{
+		#float:top;
+		margin-left:11px;
+		width:97.8%;
+		background-color:#E8E8E8;
+		margin-bottom:10px;
+		margin-top:-17px;
+		height:60px;
+		border-bottom: solid 2px #CFCFCF;
+		#border-top: solid 2px #CFCFCF;
+		border-right: solid 2px #CFCFCF;
+		border-left: solid 2px #CFCFCF;
+		color:#666666;
+	}
+	
+	#table_busca tr td {
+		margin-left:10px;
+		background-color:#E8E8E8;
+		vertical-align:middle;
+	}
+	
+	#table_busca tr td select{
+		margin-left:5px;
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:150px;
+		height:30px;
+		vertical-align:middle;
+	}
+	
+	.texto{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:70px;
+		height:25px;
+		#vertical-align:middle;
+	}
+	
+	.texto2{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:140px;
+		height:25px;
+		#vertical-align:middle;
+	}
+	
+	#foto_capa{
+		width:645px;
+		#height:460px;
+	}
+	
+	#dados_right_1{
+		border-bottom: outset 2px #FFFFFF;
+		border-right: solid 2px #CFCFCF;
+		border-left: solid 2px #CFCFCF;
+	}
+	
+	#fotos_rodape td{
+		border-bottom: solid 4px #CFCFCF;
+		border-right: solid 2px #CFCFCF;
+		border-left: solid 2px #CFCFCF;
+		border-top: solid 4px #CFCFCF;
+		width:110px;
+		height:90px;
+	}
+	
+	#foto_carrocel{
+		width:100%;
+		height:100%;
+		border-left:outset 1px #666666;
+	}
+	
+	#play{
+		margin-top:-40px;
+		margin-left:10px;
+		color:#CD0000;
+		font-size:15px;
+	}
+	
+	#botoes{
+		height:90px;
+		width:58.2%;
+		background-color:#E8E8E8;
+		border-left: solid 2px #CFCFCF;
+		border-bottom: outset 2px #CFCFCF;
+	}
+	
+	#contato_interesse{
+		height:250px;
+		width:58.2%;
+		background-color:#CD0000;
+		#border:outset 1px #666666;
+	}
+	
+	.semelhante a{
+		text-decoration:none;
+		font-size:11px;
+	}
+
+	.semelhante{
+		border:outset 2px #CD0000;
+	}
+	
+	.semelhante :hover{
+		
+	}
+	
+	.img_semelhantes{
+		width:120px;
+		height:90px;
+	}
+	
+	#buttom_busca{
+		background-color:#CD0000;
+		color:#FFFFFF;
+		font:bold 13px Arial, Helvetica, sans-serif;
+		width:80px;
+		height:32px;
+	}
+	
+</style>
+
+</header>
+
+<section id="content">
+
+<table id="table_busca">
+	<tr>
+		
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			<table>
+				<tr>
+					<td>
+						<img id="button_carro" alt="Carro" src="/arquivos_site/images/button_carro.gif" onclick="buscaMarca();" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img id="button_moto" alt="Moto" src="/arquivos_site/images/button_moto.gif" onclick="buscaMarca(1);" />
+					</td>
+				</tr>
+				<input type="hidden" id="segmento" name="segmento" value="carro" />
+			</table>
+		</td>
+		<td>
+			
+			&nbsp;&nbsp;<b>Marca</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b> De <input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit" style="width:60px;" id="buttom_busca"  value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+
+
+
+<?php
+
+	if($this->veiculo['descricao_site']){
+	
+		$this->veiculo['modelo'] = $this->veiculo['descricao_site'];
+	
+	}
+	
+?>
+
+<div id="dados_cabecalho">
+	<table width="100%">
+		<tr>
+			<td align="left">
+				<div id="div_modelo"  style="margin-top:10px; margin-left:15px; font-size:11px;">
+					<h1><?php echo mb_convert_encoding($this->veiculo['marca'], 'UTF-8', 'ISO-8859-1')." - ".$this->veiculo['modelo']." - ".$this->veiculo['ano_modelo']."/".$this->veiculo['ano_fabricacao']." - Placa final: ".substr($this->veiculo['placa'],-1,1);?><?php if($this->veiculo['exibir_km'] != 0){echo " - Km ".$this->veiculo['km']; }else{echo "";} ?></h1>
+				</div>
+			</td>
+			<td align="right">
+				<div id="div_preco" style="margin-top:0px; margin-right:15px; font-size:17px;"><b><?php if($this->veiculo['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->veiculo['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></b></div>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<table id="table_left">
+	<tr><td colspan="5" align="left"><img id="foto_capa" src="/<?php echo $this->veiculo['capa']; ?>" /><b><a href="javascript:" style="text-decoration:none;"><div id="play"><img id="button_stop" style="width:30px; height:30px;" src="/arquivos_site/images/stop.png" /></div></a></b></td></tr>
+	<tr id="fotos_rodape"><td><a href="javascript:mudaFoto('foto_carrocel_0')" id="foto_carrocel_0" ><img id="foto_carrocel" src="/<?php echo $this->veiculo['capa']; ?>" /></a></td><td><a href="javascript:mudaFoto('foto_carrocel_1')" id="foto_carrocel_1" ><img id="foto_carrocel" src="/<?php echo $this->veiculo['path_1']; ?>" /></a></td><td><a href="javascript:mudaFoto('foto_carrocel_2')" id="foto_carrocel_2" ><img id="foto_carrocel" src="/<?php echo $this->veiculo['path_2']; ?>" /></a></td><td><a href="javascript:mudaFoto('foto_carrocel_3')" id="foto_carrocel_3" ><img id="foto_carrocel" src="/<?php echo $this->veiculo['path_3']; ?>" /></a></td><td><a href="javascript:mudaFoto('foto_carrocel_4')" id="foto_carrocel_4" ><img id="foto_carrocel" src="/<?php echo $this->veiculo['path_4']; ?>" /></a></td></tr>
+	<tr>
+		<td id="botoes" colspan="5" valign="middle">
+			<center>
+				<div>
+					<a href="javascript:abrirPopup('<?php echo URL ?>carros-usados/anuncio-irregular?id_carro=<?php echo $this->veiculo['id']; ?>',540,405);" class="button-6" style="width:220px;">Irregularidade no anúncio? Avise-nos</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:abrirPopup('<?php echo URL ?>carros-usados/enviar-amigo?id_carro=<?php echo $this->veiculo['id']; ?>',540,350);" class="button-6" style="width:220px;">Enviar para um amigo</a>
+				</div>
+			</center>
+		</td>
+	</tr>
+</table>
+
+<table id="table_parecidos">
+	<tr>
+		<td colspan="5" valign="middle" style="height:50px; background-color:#CD0000; color:#FFFFFF; border-left: solid 2px #CD0000; border-right: solid 2px #CD0000; font-size:15px;"><center><b>VE&Iacute;CULOS COM VALORES SEMELHANTES</b></center></td></tr>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[0]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[0]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[0]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[0]['id']?>"><img class="img_semelhantes" id="img_semelhantes_1" src="/<?php echo $this->arrVeiculosParecidos[0]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[0]['descricao_site'])?$this->arrVeiculosParecidos[0]['descricao_site']." ".$this->arrVeiculosParecidos[0]['ano_modelo']." ".$this->arrVeiculosParecidos[0]['combustivel']:$this->arrVeiculosParecidos[0]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[0]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[0]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[1]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[1]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[1]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[1]['id']?>"><img class="img_semelhantes" id="img_semelhantes_2" src="/<?php echo $this->arrVeiculosParecidos[1]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[1]['descricao_site'])?$this->arrVeiculosParecidos[1]['descricao_site']." ".$this->arrVeiculosParecidos[1]['ano_modelo']." ".$this->arrVeiculosParecidos[1]['combustivel']:$this->arrVeiculosParecidos[1]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[1]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[1]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[2]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[2]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[2]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[2]['id']?>"><img class="img_semelhantes" id="img_semelhantes_3"src="/<?php echo $this->arrVeiculosParecidos[2]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[2]['descricao_site'])?$this->arrVeiculosParecidos[2]['descricao_site']." ".$this->arrVeiculosParecidos[2]['ano_modelo']." ".$this->arrVeiculosParecidos[2]['combustivel']:$this->arrVeiculosParecidos[2]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[2]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[2]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[3]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[3]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[3]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[3]['id']?>"><img class="img_semelhantes" id="img_semelhantes_4" src="/<?php echo $this->arrVeiculosParecidos[3]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[3]['descricao_site'])?$this->arrVeiculosParecidos[3]['descricao_site']." ".$this->arrVeiculosParecidos[3]['ano_modelo']." ".$this->arrVeiculosParecidos[3]['combustivel']:$this->arrVeiculosParecidos[3]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[3]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[3]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[4]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[4]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[4]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[4]['id']?>"><img class="img_semelhantes" id="img_semelhantes_5" src="/<?php echo $this->arrVeiculosParecidos[4]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[4]['descricao_site'])?$this->arrVeiculosParecidos[4]['descricao_site']." ".$this->arrVeiculosParecidos[4]['ano_modelo']." ".$this->arrVeiculosParecidos[4]['combustivel']:$this->arrVeiculosParecidos[4]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[4]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[4]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+	</tr>
+	<tr>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[5]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[5]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[5]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[5]['id']?>"><img class="img_semelhantes" id="img_semelhantes_6" src="/<?php echo $this->arrVeiculosParecidos[5]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[5]['descricao_site'])?$this->arrVeiculosParecidos[5]['descricao_site']." ".$this->arrVeiculosParecidos[5]['ano_modelo']." ".$this->arrVeiculosParecidos[5]['combustivel']:$this->arrVeiculosParecidos[5]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[5]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[5]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[6]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[6]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[6]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[6]['id']?>"><img class="img_semelhantes" id="img_semelhantes_7" src="/<?php echo $this->arrVeiculosParecidos[6]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[6]['descricao_site'])?$this->arrVeiculosParecidos[6]['descricao_site']." ".$this->arrVeiculosParecidos[6]['ano_modelo']." ".$this->arrVeiculosParecidos[6]['combustivel']:$this->arrVeiculosParecidos[6]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[6]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[6]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[7]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[7]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[7]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[7]['id']?>"><img class="img_semelhantes" id="img_semelhantes_8" src="/<?php echo $this->arrVeiculosParecidos[7]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[7]['descricao_site'])?$this->arrVeiculosParecidos[7]['descricao_site']." ".$this->arrVeiculosParecidos[7]['ano_modelo']." ".$this->arrVeiculosParecidos[7]['combustivel']:$this->arrVeiculosParecidos[7]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[7]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[7]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[8]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[8]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[8]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[8]['id']?>"><img class="img_semelhantes" id="img_semelhantes_9" src="/<?php echo $this->arrVeiculosParecidos[8]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[8]['descricao_site'])?$this->arrVeiculosParecidos[8]['descricao_site']." ".$this->arrVeiculosParecidos[8]['ano_modelo']." ".$this->arrVeiculosParecidos[8]['combustivel']:$this->arrVeiculosParecidos[8]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[8]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[8]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+		<td class="semelhante" id="semelhantes_<?php echo $this->arrVeiculosParecidos[9]['id']?>"><a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[9]['cidade'])?>/<?php echo str_replace(" ","-",$this->arrVeiculosParecidos[9]['descricao_site'])?>/id/<?php echo $this->arrVeiculosParecidos[9]['id']?>"><img class="img_semelhantes" id="img_semelhantes_10" src="/<?php echo $this->arrVeiculosParecidos[9]['path']?>"/><br><?php echo ($this->arrVeiculosParecidos[9]['descricao_site'])?$this->arrVeiculosParecidos[9]['descricao_site']." ".$this->arrVeiculosParecidos[9]['ano_modelo']." ".$this->arrVeiculosParecidos[9]['combustivel']:$this->arrVeiculosParecidos[9]['modelo'] ?><br><?php if($this->arrVeiculosParecidos[9]['exibir_valor_site'] == 1){echo "Valor: R$ ".money_format("%i",$this->arrVeiculosParecidos[9]['valor_venda']);}else{echo "Valor: Consulte-nos";} ?></a></td>
+	</tr>
+</table>
+
+<table id="table_right">
+	<tr>
+		<td id="dados_right_1">
+			<div style="color:#666666; margin-left:15px; margin-top:15px; <?php if($this->veiculo['obs_site'] == ""){ echo "margin-bottom:80px;"; }else{echo "margin-bottom:15px;"; }?> width:90%;">
+				<span style="font-size:16px;"><b>Opcionais</b></span>
+				<br>
+				<span style="font-size:13px;">
+		
+		  <?php 
+		  	if(count($this->arrOpcionais) != 0){
+			  	foreach($this->arrOpcionais as $key=>$opcionais){
+			  
+						$opcional = explode(")",$opcionais['opcional']);
+						
+						if($this->arrOpcionais[$key+1]['opcional'] == ""){
+						
+							echo $opcional[1].".";
+							
+						}else{
+						
+							echo $opcional[1].", ";
+						
+						}
+					
+				}
+			}
+			?>
+				</span>
+			</div>
+		</td>
+	</tr>
+<?php if($this->veiculo['obs_site'] != ""){ ?>
+	<tr>
+		<td id="dados_right_1">
+			<div style="color:#666666; margin-left:15px; margin-top:15px;  margin-bottom:15px; width:90%;">
+				<span style="font-size:16px;"><b>Observa&ccedil;&otilde;es</b></span>
+				<br>
+				<span style="font-size:13px;">
+				<?php echo $this->veiculo['obs_site']; ?>
+				</span>
+			</div>
+		</td>
+	</tr>
+<?php } ?>
+	<tr>
+		<td id="dados_right_1" valign="middle">
+			<div style="color:#666666; margin-left:15px; margin-top:15px;  margin-bottom:15px; width:90%;">
+			<center>
+				<a href="javascript: void(0);" onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo URL ?>carros-usados/veiculo/id/<?php echo $this->veiculo['id']; ?>','ventanacompartir', 'toolbar=0, status=0, width=650, height=450')"><img src="/arquivos_site/images/botao_facebook.png" border="0" width="42" height="42"/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript: void(0);" onclick="window.open('https://plus.google.com/share?url=<?php echo URL ?>carros-usados/veiculo/id/<?php echo $this->veiculo['id']; ?>','ventanacompartir', 'toolbar=0, status=0, width=650, height=450')"><img src="/arquivos_site/images/g_plus.png" border="0" width="42" height="42"/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a target="_blank" href="http://twitter.com/home?status=.:MeuCar:. <?php echo $this->veiculo['marca']; ?> - <?php echo $this->veiculo['modelo']; ?>, está em: <?php echo URL ?>carros-usados/veiculo/id/<?php echo $this->veiculo['id']; ?>.'" class="btwitter" title="Compartilhar em Twitter"><img width="44" height="44" src="/arquivos_site/images/botao-twitter60x60.png"</a>
+			</center>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td id="dados_right_1" style="background-color:#00ff00;">
+			<div style="color:#666666; margin-left:15px; margin-top:15px;  margin-bottom:15px; width:90%;">
+				<span style="font-size:16px;"><b>Propriet&aacute;rio</b></span>
+				<br>
+				<span style="font-size:13px;">
+				<b><?php echo $this->veiculo['nome_fantasia']; ?></b><br>
+				
+				<b><div id="telefone_empresa"><a rel="modal" href="#" >Ver telefone</a><br></div></b>
+				
+				<div id="endereco_empresa"><a rel="modal" href="#"><b>Ver endere&ccedil;o</b></a><br></div>	
+				
+				<b><a href="javascript:mostraEstoque();"><?php if($this->veiculo['id_perfil'] == 10){ echo "Ver mais ve&iacute;culos deste propriet&aacute;rio"; }else{ echo "Ver estoque da loja"; } ?></a></b>
+				</span>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td id="dados_right_1">
+		<div style=" margin-top:5px; height:40px; font:16px Arial, Helvetica, sans-serif; background-color:#00ff00;"><center><b><div style="position:absolute; margin-top:10px; margin-left:45px; color:#666666;">Enviar Contato de Interesse</div></b></center></div>
+		<div style="color:#666666; margin-left:15px; margin-top:15px;  margin-bottom:15px; width:90%;">
+			<div>Nome<br><input id="nome_interesse" type="text" style="width:97%; height:25px; border:solid 2px #CD0000; color:#666666;"/></div>
+			<div><br>E-Mail<br><input id="email_interesse" type="text" style="width:97%; height:25px; border:solid 2px #CD0000; color:#666666;"/></div>
+			<div><br>Telefone<br><input id="telefone_interesse" type="text" style="width:97%; height:25px; border:solid 2px #CD0000; color:#666666;"/></div>
+			<div><br>Mensagem<br><textarea id="mensagem_interesse" style="width:97%; height:100%; border:solid 2px #CD0000; color:#666666;" rows="5"></textarea></div>
+			<input type="checkbox" id="veiculo_troca_interesse" value="1"><label style="color:#666666;">Quero usar ve&iacute;culo na troca.</label><br>
+			<input type="checkbox" id="financiar_interesse" value="1"><label style="color:#666666;">Quero Financiar.</label><br>
+			<input type="checkbox" id="ofertas_email_interesse" value="1"><label style="color:#666666;">Desejo receber ofertas por e-mail.</label>
+			<div id="msg_erro" style="width:99%;background-color: pink; color:red;"></div>
+			<br><a href="javascript:validaCampos();" class="button-6" style="width:85%;"><center>Enviar</center></a><br>
+		</div>
+		</td>
+	</tr>
+	<tr>
+		<td id="dados_right_1">
+			<div style="color:#666666; margin-left:15px; margin-top:15px; margin-bottom:15px; width:90%;">
+				<?php
+					
+					$maximo = rand(0,count($this->arrPropagandasR)-1);
+						
+					echo "<a target='new' href='".$this->arrPropagandasR[$maximo]['link']."'><img style='width:275px;' src='/".$this->arrPropagandasR[$maximo]['path']."'/></a>";
+
+					?>
+				<!--<img style="width:275px;" src="/propagandas_site/anuncie_aqui_retrato.jpg">-->
+			</div>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+
+	function validaCampos(){
+	
+		erro = false;
+		mensagem = "";
+		
+		if($("#nome_interesse").val() == ""){
+		
+			erro = true;
+			mensagem += "&nbsp;O campo nome deve ser preenchido!<br>";
+		
+		}
+		
+		if($("#email_interesse").val() == ""){
+			
+			if($("#telefone_interesse").val() == ""){
+		
+				erro = true;
+				mensagem += "&nbsp;O campo email ou telefone deve ser preenchido!<br>";
+		
+			}
+		
+		}
+
+		if(erro){
+		
+			$("#msg_erro").html(mensagem);
+			$("#msg_erro").css("border","solid 1px red");
+			$("#msg_erro").css("margin-top","10px");
+			$("#msg_erro").css("color","red");
+			$("#msg_erro").css("background-color","pink");
+			
+		
+		}else{
+			
+			enviaInteresse();
+		
+		}
+	
+	}
+
+	function enviaInteresse(){
+		
+		var nome = $("#nome_interesse").val();
+		var email = $("#email_interesse").val();
+		var telefone = $("#telefone_interesse").val();
+		var mensagem = $("#mensagem_interesse").val();
+		
+		if($("#veiculo_troca_interesse").attr('checked')){
+			var veiculoTroca = $("#veiculo_troca_interesse").val();
+		}else{
+			var veiculoTroca = 0;
+		}
+		
+		if($("#financiar_interesse").attr('checked')){
+			var financiar = $("#financiar_interesse").val();
+		}else{
+			var financiar = 0;
+		}
+		
+		if($("#ofertas_email_interesse").attr('checked')){
+			var ofertasEmail = $("#ofertas_email_interesse").val();
+		}else{
+			var ofertasEmail = 0;
+		}
+		
+		var idVeiculo = "<?php echo $this->veiculo['id'];?>";
+		var idEmpresa = "<?php echo $this->veiculo['id_empresa'];?>";
+	
+		var resp = $.ajax({
+				url:"/carros-usados/ajax/fn/envia_interesse/nome/"+nome+"/email/"+email+"/telefone/"+telefone+"/mensagem/"+mensagem+"/veiculo_troca/"+veiculoTroca+"/financiar/"+financiar+"/id_empresa/"+idEmpresa+"/id_veiculo/"+idVeiculo+"/oferta_email/"+ofertasEmail,
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+		
+		
+		//$("#msg_erro").html(resp);
+		
+		
+		if(resp == "Sucesso"){
+			$("#msg_erro").html("<div style='margin-left:2px;'>O proprietário do veículo entrará em contato com<br>você em breve, aguarde.<br>Obrigado.</div>");
+			$("#msg_erro").css("border","solid 1px #008000");
+			$("#msg_erro").css("color","#008000");
+			$("#msg_erro").css("margin-top","10px");
+			$("#msg_erro").css("background-color","#9AFF9A");
+		
+		}else{
+		
+			$("#msg_erro").html("<div style='margin-left:2px;'>Erro ao enviar contato, tente novamente.</div>");
+			$("#msg_erro").css("border","solid 1px red");
+			$("#msg_erro").css("color","red");
+			$("#msg_erro").css("margin-top","10px");
+			$("#msg_erro").css("background-color","pink");
+		
+		}
+		
+	}
+	
+	function abrirPopup(pagina,largura,altura) {
+
+		w = screen.width;
+		h = screen.height;
+		meio_w = w/2;
+		meio_h = h/2;
+		altura2 = altura/2;
+		largura2 = largura/2;
+		meio1 = meio_h-altura2;
+		meio2 = meio_w-largura2;
+		window.open(pagina,'','scrollbars=no,toolbar=no,location=no,directories=no,status=no, menubar=no,resizable=no,copyhistory=no,height=' + altura + ',width=' + largura + ',top='+meio1+',left='+meio2+''); 
+
+	}
+
+	function mostraEndereco(){
+	
+		if("<?php echo $this->veiculo['id_perfil'];?>" == 10){
+		
+			$('.fechar').click();
+		
+			$("#endereco_empresa").html("<?php echo $this->veiculo['bairro_usuario'];?> - <?php echo $this->veiculo['cidade_usuario'];?> - <?php echo $this->veiculo['estado_usuario'];?>");
+		
+		}
+	
+		var resp = $.ajax({
+				url:"/carros-usados/ajax/fn/visualizacao_endereco/id_empresa/"+<?php echo $this->veiculo['id_empresa'];?>+"/id_veiculo/<?php echo $this->veiculo['id'];?>",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+	
+	}
+	
+	function mostraEstoque(){
+	
+		window.location.href="/carros-usados/busca-veiculos/<?php echo str_replace(" ","-",$this->veiculo['cidade']);?>/<?php echo str_replace(" ","-",$this->veiculo['nome_fantasia']);?>/id-empresa/<?php echo $this->veiculo['id_empresa'];?>";
+	
+		var resp = $.ajax({
+				url:"/carros-usados/ajax/fn/visualizacao_estoque/id_empresa/"+<?php echo $this->veiculo['id_empresa'];?>+"/id_veiculo/<?php echo $this->veiculo['id'];?>",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+	
+	}
+
+	function mostraTelefone(){
+	
+	
+	
+	if("<?php echo $this->veiculo['id_perfil'];?>" == 10){
+
+		$('.fechar').click();
+	
+		$("#telefone_empresa").html("<?php echo $this->veiculo['telefone'];?> - <?php echo $this->veiculo['celular'];?>");
+	
+	}
+	
+		var resp = $.ajax({
+				url:"/carros-usados/ajax/fn/visualizacao_telefone/id_empresa/"+<?php echo $this->veiculo['id_empresa'];?>+"/id_veiculo/<?php echo $this->veiculo['id'];?>",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+
+	}
+
+	var path = new Array();
+		
+	var cont = 0;
+		
+	path[0] = "/<?php echo $this->veiculo['capa'];?>";
+	path[1] = "/<?php echo $this->veiculo['path_1'];?>";
+	path[2] = "/<?php echo $this->veiculo['path_2'];?>";
+	path[3] = "/<?php echo $this->veiculo['path_3'];?>";
+	path[4] = "/<?php echo $this->veiculo['path_4'];?>";
+	path[5] = "/";
+		
+	function trocaImagem(){
+	
+		$("#foto_capa").attr("src",path[cont]);
+		
+		if(path[cont+1] == "/"){
+			
+			cont = 0;
+
+		}else{
+		
+			cont++;
+			
+		}
+		
+		setTimeout('verificaPlay()',4000);
+
+	}
+	
+	function verificaPlay(){
+	
+		if($("#play").children().attr('id') == "button_stop"){
+			trocaImagem();
+		}
+	
+	}
+	
+	$("#play").click(function(){
+		if($("#play").children().attr('id') == "button_stop"){
+			$("#play").html("<img id='button_play' style='width:30px; height:30px;' src='/arquivos_site/images/play.png' />");
+		}else{
+			$("#play").html("<img id='button_stop' style='width:30px; height:30px;' src='/arquivos_site/images/stop.png' />");
+			trocaImagem();
+		}
+	});
+
+	function mudaFoto(id){
+			
+		$("#play").html("<img id='button_play' style='width:30px; height:30px;' src='/arquivos_site/images/play.png' />");
+			
+		if($("#"+id).children().attr("src") != "/"){
+	
+			if($("#"+id).children().attr("id") == "foto_carrocel"){
+			
+				$("#foto_capa").attr("src",$("#"+id).children().attr("src"));
+				
+			}
+				
+		}
+		
+	}
+		
+	trocaImagem();
+	
+	$(function(){
+	
+		var resp = $.ajax({
+				url:"/carros-usados/ajax/fn/visualizacao/id_empresa/"+<?php echo $this->veiculo['id_empresa'];?>+"/id_veiculo/<?php echo $this->veiculo['id'];?>",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+
+	});
+
+	$("#ofertas_email_interesse").click();
+	
+	$("#box_cadastra").remove();
+
+    for(i=1;i<=10;i++){
+	
+		if($("#img_semelhantes_"+i).attr("src") == "" || $("#img_semelhantes_"+i).attr("src") == "/"){
+		
+			$("#img_semelhantes_"+i).parent().remove();
+		
+		}
+	
+	}
+	
+	buscaMarca();
+	
+</script>
+<div class="window" id="telefone_empresa_promocao" style="display:none;">
+		<a href="#" style="text-decoration:none;" class="fechar"><img src="/arquivos_site/images/close_red.png"/></a>
+		<table style="width:100%; height:100%; margin-top:10px;">
+			<tr>
+				<td style="height:30px; font-size:25px; border:solid 0px; color:red; vertical-align:middle;">Telefones:</td>
+				<td style="border:solid 0px;">
+	
+					<?php echo $this->veiculo['tel1'];?><br>
+					<?php echo $this->veiculo['tel2'];?>
+					
+				<td>
+			</tr>
+			<tr>
+				<td style="font-size:12px; border:solid 0px;" colspan="2"><center><div style="border-radius:5px; background-color:#CCCCCC; color:red; width:350px; margin-bottom:15px; margin-top:25px; padding:5px;"><span><b>Ao entrar em contato com a loja, informe ter visto o an&uacute;ncio no Meu Car!</b></span></div></center></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2"><center><img style="width:150px;" src="/arquivos_site/images/Logo_Car.png"/></center></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="window" id="endereco_empresa_promocao" style="display:none;">
+		<a href="#" style="text-decoration:none;" class="fechar"><img src="/arquivos_site/images/close_red.png"/></a>
+		<table style="width:100%; height:100%; margin-top:10px;">
+			<tr>
+				<td style="height:30px; font-size:25px; border:solid 0px; color:red; vertical-align:middle;">Endere&ccedil;o:</td>
+			</tr>
+			<tr>
+				<td style="border:solid 0px;">
+					<?php echo $this->veiculo['endereco'];?> - <?php echo $this->veiculo['cidade'];?> - <?php echo $this->veiculo['estado'];?>
+				<td>
+			</tr>
+			<tr>
+				<td style="font-size:12px; border:solid 0px;" colspan="2"><center><div style="border-radius:5px; background-color:#CCCCCC; color:red; width:350px; margin-bottom:15px; margin-top:25px; padding:5px;"><span><b>Ao entrar em contato com a loja, informe ter visto o an&uacute;ncio no Meu Car!</b></span></div></center></td>
+			</tr>
+			<tr>
+				<td colspan="2"><center><img style="width:150px;" src="/arquivos_site/images/Logo_Car.png"/></center></td>
+			</tr>
+		</table>
+	</div>
+	
+   <div id="mascara"></div>
+</section>

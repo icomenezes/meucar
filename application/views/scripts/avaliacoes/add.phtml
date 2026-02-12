@@ -1,0 +1,1164 @@
+<style type="text/css">
+	
+	.group-text-checkbox .text{
+		border-color: #ced4da;
+		float: left;
+		width: 20%;
+	}
+
+	.bloco{
+		float: left; 
+		border: solid 1px #ced4da;
+		height: 24px; 
+		background-color: #e9ecef;
+	}
+
+	.bloco input{
+		margin-top: 6px; 
+		float: left; 
+		margin-right:2px;
+	}
+
+	.bloco label{
+		margin-top: 7px;
+		float: left;
+	}
+
+	.bloco_cor{
+		float: left; 
+		border: solid 1px #ced4da; 
+		height: 24px;
+		width: 100%; 
+		background-color: #e9ecef;
+	}
+
+	.bloco_cor input{
+		margin-top: 6px; 
+		float: left; 
+		margin-right:2px;
+	}
+
+	.bloco_cor label{
+		margin-top: 7px;
+		float: left;
+	}
+
+	.bloco_opcionais{
+		float: left; 
+		border: solid 1px #ced4da; 
+		height: 24px;
+		width: 100%; 
+		background-color: #e9ecef;
+	}
+
+	.bloco_opcionais input{
+		margin-top: 6px; 
+		float: left; 
+		margin-right:2px;
+	}
+
+	.bloco_opcionais label{
+		margin-top: 7px;
+		float: left;
+	}
+
+	.group-text-checkbox .tempo{
+		width: 7%;
+	}
+
+</style>
+
+<span style="font-size: 20px; margin: 10px;">Parâmetros de avaliação</span>
+<br>
+<br>
+<br>
+
+<form id="form" enctype="multipart/form-data" action="add" class="form" method="post">
+	<fieldset>
+
+
+		<legend style="font-size: 17px; margin: 10px; font-weight: bold;">GERENTE</legend>
+		<div class="inline">
+			<select class="text" id="telefone_gerente" name="telefone_gerente">
+				<option value="">Selecione</option>
+				<?php
+				foreach ($this->arrUsuarios as $value) {
+
+					if($this->arrParametros['telefone_gerente'] != "" && $value['celular'] != "" && $this->arrParametros['telefone_gerente'] == $value['celular']){
+						echo '<option selected="selected" value="'.$value['celular'].'">'.$value['nome'].' - '.$value['perfil'].'</option>';
+					}else{
+						echo '<option value="'.$value['celular'].'">'.$value['nome'].' - '.$value['perfil'].'</option>';
+					}
+
+				}
+				?>
+
+			</select>
+		</div>
+		<br>
+
+	    <legend style="font-size: 17px; margin: 10px; font-weight: bold;">Geral</legend>
+		<div class="inline">
+			<label>Valor de tabela limite até:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="valor_tabela_limite" name="valor_tabela_limite" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['valor_tabela_limite'])); ?>" />
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_valor_tabela_limite" name="checkbox_valor_tabela_limite" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Margem de compra:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="margem_compra" name="margem_compra" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['margem_compra'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_margem_compra" name="checkbox_margem_compra" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Margem de troca:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="margem_troca_estoque" name="margem_troca_estoque" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['margem_troca_estoque'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_margem_troca_estoque" name="checkbox_margem_troca_estoque" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Margem de compra acima do valor limite:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="margem_compra_acima_limite" name="margem_compra_acima_limite" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['margem_compra_acima_limite'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_margem_compra_acima_limite" name="checkbox_margem_compra_acima_limite" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Margem de troca acima do valor limite:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="margem_troca_estoque_acima_limite" name="margem_troca_estoque_acima_limite" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['margem_troca_estoque_acima_limite'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_margem_troca_estoque_acima_limite" name="checkbox_margem_troca_estoque_acima_limite" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+		
+		<div class="inline">
+			<label>Repasse, veículos com FIPE abaixo de:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="valor_fipe_veiculo_repasse" name="valor_fipe_veiculo_repasse" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['valor_fipe_veiculo_repasse'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_valor_fipe_veiculo_repasse" name="checkbox_valor_fipe_veiculo_repasse" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Margem repasse:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="margem_repasse" name="margem_repasse" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['margem_repasse'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_margem_repasse" name="checkbox_margem_repasse" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Máxima kilometragem:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text" id="limite_kilometragem" name="limite_kilometragem" value="<?php echo $this->arrParametros['limite_kilometragem']; ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_limite_kilometragem" name="checkbox_limite_kilometragem" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Máxima kilometragem por ano:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text" id="kilometragem_ano" name="kilometragem_ano" value="<?php echo $this->arrParametros['kilometragem_ano']; ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_kilometragem_ano" name="checkbox_kilometragem_ano" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline" style="clear: both;">
+			<label>Cores estranhas:</label>
+			<table width="90%">
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="amarelo" />
+							<label>Amarelo&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="azul" />
+							<label>Azul&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="bege" />
+							<label>Bege&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="branco" />
+							<label>Branco&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="bronze" />
+							<label>Bronze&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="cinza" />
+							<label>Cinza&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="chumbo" />
+							<label>Chumbo&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="dourado" />
+							<label>Dourado&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="laranja" />
+							<label>Laranja&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="marrom" />
+							<label>Marrom&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="preto" />
+							<label>Preto&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="prata" />
+							<label>Prata&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="rosa" />
+							<label>Rosa&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="roxo" />
+							<label>Roxo&nbsp;</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="verde" />
+							<label>Verde&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_cor">
+							<input type="checkbox" class="checkbox" id="vermelho" />
+							<label>Vermelho&nbsp;</label>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<input type="hidden" name="cores_estranhas" id="cores_estranhas" value="<?php echo $this->arrParametros['cores_estranhas']; ?>">
+		</div>
+		<div class="inline">
+			<label>Opcionais para solicitar liberação:</label>
+			<table style="width: 200%;">
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="41">
+							<label>Tração 4x4</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="47">
+							<label>Air bag duplo</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="49">
+							<label>Air bag laterais</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="48">
+							<label>Air bag do motorista</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="16">
+							<label>Freio ABS</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="1">
+							<label>Ar-condicionado</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="51">
+							<label>Ar condicionado digital</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="50">
+							<label>Alarme</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="52">
+							<label>Ar quente</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="55">
+							<label>Bancos em couro</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="5">
+							<label>Câmbio automático</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="6">
+							<label>Computador de bordo</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="3">
+							<label>CD Player</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="2">
+							<label>Direção hidráulica</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="9">
+							<label>Desembaçador traseiro</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="15">
+							<label>Freio a disco</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="13">
+							<label>Farol de neblina</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="20">
+							<label>Limpador traseiro</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="22">
+							<label>Piloto Automático</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="25">
+							<label>Porta-malas elétrico</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="32">
+							<label>Retrovisores elétricos</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="33">
+							<label>Retrovisor fotocrômico</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="34">
+							<label>Rodas de liga leve</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="35">
+							<label>Sensor de chuva</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="36">
+							<label>Sensor de estacionamento</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="4">
+							<label>Travas elétricas</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="38">
+							<label>Teto solar</label>
+						</div>
+					</td>
+					<td>
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="42">
+							<label>Vidros elétricos</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="1">
+						<div class="bloco_opcionais">
+							<input type="checkbox" class="checkbox" id="44">
+							<label>Volante com regulagem de altura</label>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<input type="hidden" name="opcionais" id="opcionais"  value="<?php echo $this->arrParametros['opcionais']; ?>" >
+	</fieldset>
+
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+	<fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Externo</legend>
+
+    	<div class="inline">
+			<label>1-Martelinho:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="martelinho" name="martelinho" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['martelinho'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_martelinho" name="checkbox_martelinho" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="martelinho_tempo" name="martelinho_tempo" value="<?php echo $this->arrParametros['martelinho_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>2-Pincelar:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="pincelar" name="pincelar" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['pincelar'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_pincelar" name="checkbox_pincelar" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="pincelar_tempo" name="pincelar_tempo" value="<?php echo $this->arrParametros['pincelar_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>3-Pintar:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="pintar" name="pintar" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['pintar'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_pintar" name="checkbox_pintar" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="pintar_tempo" name="pintar_tempo" value="<?php echo $this->arrParametros['pintar_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>4-Funilaria:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="funilaria" name="funilaria" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['funilaria'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_funilaria" name="checkbox_funilaria" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="funilaria_tempo" name="funilaria_tempo" value="<?php echo $this->arrParametros['funilaria_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>5-Trocar peças:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="trocar_pecas" name="trocar_pecas" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['trocar_pecas'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_trocar_pecas" name="checkbox_trocar_pecas" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="trocar_pecas_tempo" name="trocar_pecas_tempo" value="<?php echo $this->arrParametros['trocar_pecas_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Farol:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="farol" name="farol" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['farol'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_farol" name="checkbox_farol" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="farol_tempo" name="farol_tempo" value="<?php echo $this->arrParametros['farol_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Lanterna:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="lanterna" name="lanterna" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['lanterna'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_lanterna" name="checkbox_lanterna" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="lanterna_tempo" name="lanterna_tempo" value="<?php echo $this->arrParametros['lanterna_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Vidro:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="vidro" name="vidro" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['vidro'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_vidro" name="checkbox_vidro" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="vidro_tempo" name="vidro_tempo" value="<?php echo $this->arrParametros['vidro_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Retrovisor:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="retrovisor" name="retrovisor" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['retrovisor'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_retrovisor" name="checkbox_retrovisor" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="retrovisor_tempo" name="retrovisor_tempo" value="<?php echo $this->arrParametros['retrovisor_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Roda:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="roda" name="roda" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['roda'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_roda" name="checkbox_roda" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="roda_tempo" name="vidro_tempo" value="<?php echo $this->arrParametros['roda_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Vestigio de acidente:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="vestigio_acidente" name="vestigio_acidente" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['vestigio_acidente'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_vestigio_acidente" name="checkbox_vestigio_acidente" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="vestigio_acidente_tempo" name="vestigio_acidente_tempo" value="<?php echo $this->arrParametros['vestigio_acidente_tempo']; ?>"/>
+			</div>
+		</div>
+
+	</fieldset>
+	<br>
+	<br>
+	<fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Mecânico</legend>
+
+    	<div class="inline">
+			<label>Motor:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="motor" name="motor" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['motor'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_motor" name="checkbox_motor" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="motor_tempo" name="motor_tempo" value="<?php echo $this->arrParametros['motor_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Caixa de direção:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="caixa_direcao" name="caixa_direcao" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['caixa_direcao'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_caixa_direcao" name="checkbox_caixa_direcao" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="caixa_direcao_tempo" name="caixa_direcao_tempo" value="<?php echo $this->arrParametros['caixa_direcao_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Câmbio manual:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="cambio_manual" name="cambio_manual" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['cambio_manual'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_cambio_manual" name="checkbox_cambio_manual" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="cambio_manual_tempo" name="cambio_manual_tempo" value="<?php echo $this->arrParametros['cambio_manual_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Câmbio automático:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="cambio_automatico" name="cambio_automatico" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['cambio_automatico'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_cambio_automatico" name="checkbox_cambio_automatico" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="cambio_automatico_tempo" name="cambio_automatico_tempo" value="<?php echo $this->arrParametros['cambio_automatico_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Suspensão:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="suspensao" name="suspensao" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['suspensao'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_suspensao" name="checkbox_suspensao" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="suspensao_tempo" name="suspensao_tempo" value="<?php echo $this->arrParametros['suspensao_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Embreagem:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="embreagem" name="embreagem" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['embreagem'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_embreagem" name="checkbox_embreagem" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="embreagem_tempo" name="embreagem_tempo" value="<?php echo $this->arrParametros['embreagem_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Freios:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="freios" name="freios" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['freios'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_freios" name="checkbox_freios" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="freios_tempo" name="freios_tempo" value="<?php echo $this->arrParametros['freios_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Escapamento:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="escapamento" name="escapamento" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['escapamento'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_escapamento" name="checkbox_escapamento" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="escapamento_tempo" name="escapamento_tempo" value="<?php echo $this->arrParametros['escapamento_tempo']; ?>"/>
+			</div>
+		</div>
+
+    </fieldset>
+    <br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Elétrica</legend>
+
+    	<div class="inline">
+			<label>Elétrica:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="eletrica" name="eletrica" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['eletrica'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_eletrica" name="checkbox_eletrica" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="eletrica_tempo" name="eletrica_tempo" value="<?php echo $this->arrParametros['eletrica_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Ar condicionado:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="ar_condicionado" name="ar_condicionado" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['ar_condicionado'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_ar_condicionado" name="checkbox_ar_condicionado" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="ar_condicionado_tempo" name="ar_condicionado_tempo" value="<?php echo $this->arrParametros['ar_condicionado_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Luz do painel:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="luz_painel" name="luz_painel" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['luz_painel'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_luz_painel" name="checkbox_luz_painel" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="luz_painel_tempo" name="luz_painel_tempo" value="<?php echo $this->arrParametros['luz_painel_tempo']; ?>"/>
+			</div>
+		</div>
+	</fieldset>
+	<br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Pneus</legend>
+
+    	<div class="inline">
+			<label>Aro 13:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_13" name="aro_13" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_13'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_13" name="checkbox_aro_13" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_13_tempo" name="aro_13_tempo" value="<?php echo $this->arrParametros['aro_13_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Aro 14:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_14" name="aro_14" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_14'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_14" name="checkbox_aro_14" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_14_tempo" name="aro_14_tempo" value="<?php echo $this->arrParametros['aro_14_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Aro 15:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_15" name="aro_15" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_15'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_15" name="checkbox_aro_15" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_15_tempo" name="aro_15_tempo" value="<?php echo $this->arrParametros['aro_15_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Aro 16:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_16" name="aro_16" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_16'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_16" name="checkbox_aro_16" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_16_tempo" name="aro_16_tempo" value="<?php echo $this->arrParametros['aro_16_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Aro 17:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_17" name="aro_17" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_17'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_17" name="checkbox_aro_17" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_17_tempo" name="aro_17_tempo" value="<?php echo $this->arrParametros['aro_17_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Aro 18:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="aro_18" name="aro_18" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['aro_18'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_aro_18" name="checkbox_aro_18" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="aro_18_tempo" name="aro_18_tempo" value="<?php echo $this->arrParametros['aro_18_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Off Road:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="off_road" name="off_road" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['off_road'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_off_road" name="checkbox_off_road" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="off_road_tempo" name="off_road_tempo" value="<?php echo $this->arrParametros['off_road_tempo']; ?>"/>
+			</div>
+		</div>
+
+	</fieldset>
+	<br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Tapeçaria</legend>
+
+    	<div class="inline">
+			<label>Faixa couro:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="faixa_couro" name="faixa_couro" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['faixa_couro'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_faixa_couro" name="checkbox_faixa_couro" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="faixa_couro_tempo" name="faixa_couro_tempo" value="<?php echo $this->arrParametros['faixa_couro_tempo']; ?>"/>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Faixa tecido:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="faixa_tecido" name="faixa_tecido" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['faixa_tecido'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_faixa_tecido" name="checkbox_faixa_tecido" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+				<input type="text" original-title="Tempo em dias" class="text tempo" id="faixa_tecido_tempo" name="faixa_tecido_tempo" value="<?php echo $this->arrParametros['faixa_tecido_tempo']; ?>"/>
+			</div>
+		</div>
+	</fieldset>
+	<br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Manutenção</legend>
+		<div class="inline">
+			<label>Manutenção cara:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="manutencao" name="manutencao" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['manutencao'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_manutencao" name="checkbox_manutencao" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Granizo</legend>
+		<div class="inline">
+			<label>Há avarias causadas por chuva de granizo:</label>
+			<div class="group-text-checkbox">
+				<input type="text" original-title="Valor" class="text moeda" id="granizo" name="granizo" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['granizo'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_granizo" name="checkbox_granizo" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+	<br>
+	<br>
+    <fieldset>
+    	<legend style="font-size: 17px; margin: 10px; font-weight: bold;">Mercado</legend>
+
+    	<div class="inline">
+			<label>Normal:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="mercado_normal" name="mercado_normal" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['mercado_normal'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_mercado_normal" name="checkbox_mercado_normal" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Ruim:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="mercado_ruim" name="mercado_ruim" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['mercado_ruim'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_mercado_ruim" name="checkbox_mercado_ruim" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Péssimo:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="mercado_pessimo" name="mercado_pessimo" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['mercado_pessimo'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_mercado_pessimo" name="checkbox_mercado_pessimo" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="inline">
+			<label>Não sei:</label>
+			<div class="group-text-checkbox">
+				<input type="text" class="text moeda" id="mercado_nao_sei" name="mercado_nao_sei" value="<?php echo str_replace(".",",", money_format("%i",$this->arrParametros['mercado_nao_sei'])); ?>"/>
+				<div class="bloco">
+					<input type="checkbox" class="checkbox" id="checkbox_mercado_nao_sei" name="checkbox_mercado_nao_sei" />
+					<label>Solicitar liberação&nbsp;</label>
+				</div>
+			</div>
+		</div>
+	</fieldset>
+
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="submit" id="bnt" class="btn-small btn-add" value="Salvar"/>
+	</div>
+</form>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+	<?php
+
+		foreach ($this->arrParametros as $key => $value) {
+
+			if($value == 1 && current(explode("_", $key)) == "checkbox"){
+				echo '$("#'.$key.'").click();';
+				echo 'clickCheckBox("'.$key.'");';
+			}
+
+		}
+
+	?>
+
+
+		var arrCor = $("#cores_estranhas").val().split("_");
+		for(x in arrCor){
+			$("#"+arrCor[x]).attr("checked","checked");
+		}
+
+		var arrOp = $("#opcionais").val().split("_");
+		for(x in arrOp){
+			$("#"+arrOp[x]).attr("checked","checked");
+		}
+
+
+	});
+
+	$(".bloco_opcionais input[type=checkbox]").click(function(){
+
+		var opcionais = $("#opcionais").val();
+		var idOpcionais = $(this).attr("id");
+
+		if($(this).is(':checked')){
+			opcionais = opcionais+"_"+idOpcionais;
+		}else{
+			opcionais = opcionais.replace("_"+idOpcionais, "");
+		}
+
+		$("#opcionais").val(opcionais);
+
+	});
+
+	$(".bloco_cor input[type=checkbox]").click(function(){
+
+		var coresEstranhas = $("#cores_estranhas").val();
+		var idCor = $(this).attr("id");
+
+		if($(this).is(':checked')){
+			coresEstranhas = coresEstranhas+"_"+idCor;
+		}else{
+			coresEstranhas = coresEstranhas.replace("_"+idCor, "");
+		}
+
+		$("#cores_estranhas").val(coresEstranhas);
+
+	});
+
+	
+	$(".bloco input[type=checkbox]").click(function(){
+		clickCheckBox($(this).attr("id"));
+	});
+
+
+	$(".moeda").keyup(function(){
+
+		$(this).attr("maxlength","18");
+
+		var valor = $(this).val();
+
+		valor = valor.replace(",","").replace(",","").replace(",","").replace(",","").replace(".","").replace(".","").replace(".","").replace(".","");
+
+		if(isNaN(valor)){
+			$(this).val($(this).val().substring(0,$(this).val().length-1));
+			return false;
+		}
+
+		$(this).val("");
+
+		var cents = valor.substring(valor.length-2, valor.length);
+		var centena = valor.substring(valor.length-2, valor.length-5);
+		var milhar = valor.substring(valor.length-5, valor.length-8);
+		var milhoes = valor.substring(valor.length-8, valor.length-11);
+		var bilhoes = valor.substring(valor.length-11, valor.length-14);
+
+		if(bilhoes != ""){
+			$(this).val(bilhoes+"."+milhoes+"."+milhar+"."+centena+","+cents);
+		}else{
+			if(milhoes != ""){
+				$(this).val(milhoes+"."+milhar+"."+centena+","+cents);
+			}else{
+				if(milhar != ""){
+					$(this).val(milhar+"."+centena+","+cents);
+				}else{
+					if(centena != ""){
+						$(this).val(centena+","+cents);
+					}else{
+						if(cents != ""){
+							$(this).val(cents);
+						}
+					}
+				}
+			}
+		}
+
+	});
+
+	$(".moeda").focus(function(){
+
+		$(this).attr("maxlength","18");
+
+		var valor = $(this).val();
+
+		valor = valor.replace(",","").replace(",","").replace(",","").replace(",","").replace(".","").replace(".","").replace(".","").replace(".","");
+
+		if(isNaN(valor)){
+			$(this).val($(this).val().substring(0,$(this).val().length-1));
+			return false;
+		}
+
+		$(this).val("");
+
+		var cents = valor.substring(valor.length-2, valor.length);
+		var centena = valor.substring(valor.length-2, valor.length-5);
+		var milhar = valor.substring(valor.length-5, valor.length-8);
+		var milhoes = valor.substring(valor.length-8, valor.length-11);
+		var bilhoes = valor.substring(valor.length-11, valor.length-14);
+
+		if(bilhoes != ""){
+			$(this).val(bilhoes+"."+milhoes+"."+milhar+"."+centena+","+cents);
+		}else{
+			if(milhoes != ""){
+				$(this).val(milhoes+"."+milhar+"."+centena+","+cents);
+			}else{
+				if(milhar != ""){
+					$(this).val(milhar+"."+centena+","+cents);
+				}else{
+					if(centena != ""){
+						$(this).val(centena+","+cents);
+					}else{
+						if(cents != ""){
+							$(this).val(cents);
+						}
+					}
+				}
+			}
+		}
+
+	});
+
+	function clickCheckBox(id){
+
+		var id2 = id.replace("checkbox_","");
+
+		if($("#"+id).is(':checked')){
+			$("#"+id2).css("color","#ddd");
+		}else{
+			$("#"+id2).css("color","#777");
+		}
+	}
+
+
+	$('input').tipsy({gravity: 's'});
+
+</script>

@@ -1,0 +1,693 @@
+<style>
+	.table tr:hover{
+		background-color:#EEE;
+		
+	}
+
+	.table tr td:hover{
+		background-color:#DDD;
+		
+	}
+	
+	.table tr td{
+		font-size:11px;
+	}
+</style>
+
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="" class="form" method="post">
+	
+	<div class="inline" style="height:auto;margin-bottom:10px;">
+		<label class="label">DADOS PESSOAIS</label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" value="<?php echo $this->dados['nome']; ?>" />
+		<input type="hidden" id="id_cliente_fluxo" name="id_cliente_fluxo" value="<?php echo $this->dados['id']; ?>" />
+		<input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $this->id_usuario; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data</label>
+		<input type="text" id="data" name="data" class="text req" value="<?php echo $this->dados['data']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Origem</label>
+		<select id="origem" name="origem" class="text req">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="telefone" name="telefone" class="text req" value="<?php echo $this->dados['telefone']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 2</label>
+		<input type="text" id="telefone2" name="telefone2" class="text" value="<?php echo $this->dados['telefone2']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular</label>
+		<input type="text" id="celular" name="celular" class="text" value="<?php echo $this->dados['celular']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">E-mail</label>
+		<input type="text" id="email" name="email" class="text" value="<?php echo $this->dados['email']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Resultado</label>
+		<select title="Selecione a situação." id="resultado" name="resultado" class="text req" onChange="mudaResultado(this.value);">
+			<option title="Selecione a situação." style="background-color:white; color:#333;" value="">Selecione</option>
+			<option title="Desistiu de comprar." style="background-color:pink; color:#333;" value="Desistiu">Desistiu</option>
+			<option title="Fechou a venda conosco." style="background-color:green; color:white;" value="Fechou">Fechou</option>
+			<option title="Comprou do concorrente." style="background-color:red; color:white;" value="Concorrente">Concorrente</option>
+			<option title="Está em negociação." style="background-color:yellow; color:#333;" value="Negociação">Negociação</option>
+			<option title="Vai fechar." style="background-color:orange; color:#FFF;" value="Vai fechar">Vai fechar</option>
+			<option title="Só venda." style="background-color:blue; color:#FFF;" value="Só venda">Só venda</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">FORMA DE PAGAMENTO</label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Valor pretendido</label>
+		<input type="text" id="valor" name="valor" class="text" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['valor'])):""; ?>"  />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Entrada pretendida</label>
+		<input type="text" id="entrada" name="entrada" class="text" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['entrada'])):""; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Parcela pretendida</label>
+		<input type="text" id="parcela" name="parcela" class="text" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['parcela'])):""; ?>" />
+	</div>
+	
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">VE&Iacute;CULO NA TROCA</label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Marca ve&iacute;culo na troca</label>
+		<select id="marca_troca" name="marca_troca" class="text" onChange="buscaModeloTroca(this.value)">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Modelo ve&iacute;culo na troca</label>
+		<select id="veiculo_troca" name="veiculo_troca" class="text">
+			<option value="">Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano ve&iacute;culo na troca</label>
+		<select id="ano_modelo_troca" name="ano_modelo_troca" class="text">
+			<option value="">Selecione</option>
+			<?php
+			for($i = 1; $i > -90; $i--){
+
+				echo "<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>";
+
+			}
+			?>
+		</select>
+	</div>
+	
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">VE&Iacute;CULO DESEJADO <input type="button" class="btn-mini btn-include" value="Add" style="margin-left:10px;" title="Mais um veículo" onClick="adicionaVeiculo();" /></label>
+	</div>
+	
+	<div id="dados_veiculo_1"></div>
+	
+	
+	<div class="inline" style="width:98%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" class="text"><?php echo $this->dados['obs']; ?></textarea>
+	</div>
+	
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="button" id="bnt" class="btn-small btn-add" value="Salvar" onclick="validaCampo();"/>
+		<input type="button" id="bnt" class="btn-small" value="Voltar Lista" onclick="javascript:window.location.href='/clientes/lista-cliente-fluxo'"/>
+	</div>
+	
+	<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+	
+	
+	<div class="inline" style="height:auto; margin-bottom:10px;clear:both;">
+		<label class="label">ESTOQUE </label>
+	</div>
+	
+	<div id="estoque" style="width:98%;  overflow: auto; border: solid 1px #CC0000;">
+		
+	</div>
+
+	
+	
+</form>
+
+	
+
+
+<script>
+	
+	var qtdVeiculos = 1;
+	var strVeiculo = "";
+	
+	
+	function mudaResultado(){
+		
+		var arrStyle = $("#resultado option:selected").attr("style").split(";");
+		var title = $("#resultado option:selected").attr("title");
+		
+		var arrStyleTemp = arrStyle[0].split(":");
+		var arrStyleTemp2 = arrStyle[1].split(":");
+
+		$("#resultado").css("background-color", arrStyleTemp[1]);
+		$("#resultado").css("color", arrStyleTemp2[1]);
+		$("#resultado").attr("title", title);
+
+	
+	}
+
+	function validaCampo(){
+	
+		var msg = "";
+		var erros = false;
+		
+		
+		if($("#nome").val() == ""){
+			
+			erros = true;
+			msg += "O campo Nome deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#data").val() == ""){
+			
+			erros = true;
+			msg += "O campo Data deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#origem").val() == ""){
+			
+			erros = true;
+			msg += "O campo Origem deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#telefone").val() == ""){
+			
+			erros = true;
+			msg += "O campo Telefone deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#resultado").val() == ""){
+			
+			erros = true;
+			msg += "O campo Resultado deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#dados_veiculo_1").html() != ""){
+		
+			for(i = 1;i <= 50; i++){
+
+				if($("#dados_veiculo_"+i).html() != null){
+
+					if($("#veiculo_"+i).val() == ""){
+						
+						erros = true;
+						msg += "Os campos do Veículo Desejado devem ser selecionados.<br/>";
+						break;
+						
+					}else{
+							
+						if($("#ano_modelo_"+i).val() == ""){
+							
+							erros = true;
+							msg += "Os campos do Veículo Desejado devem ser selecionados.<br/>";
+							break;
+							
+						}
+						
+					}
+					
+				}
+
+			}
+		
+		}else{
+			
+			erros = true;
+			msg += "É necessário adicionar pelo menos um Veículo Desejado.<br/>";
+		
+		}
+		
+		if(erros){
+		
+			$("#msg").removeClass('sucess');
+			$("#msg").addClass('erro');
+			$("#msg").html(msg);
+		
+		}else{
+		
+			$("body").prepend('<div id="bgmsg" style="position:fixed; width:100%; height:150%; opacity:0.9; z-index:5; background-color:#000000; text-align:center;"><div id="div_msg" style="margin-top:30%; background-color:#FFFFFF; padding:40px; font-size:20px;">Salvando, aguarde....</div></div>');
+			
+			strVeiculosIteressados = "";
+			
+			if($("#id_cliente_fluxo").val() == ""){
+				
+				for(i = 2;i <= qtdVeiculos; i++){
+			
+					if($("#dados_veiculo_"+i).html() != null){
+					
+						strVeiculosIteressados += "veiculo_"+i+":"+$("#veiculo_"+i).val()+"|"+"ano_modelo_"+i+":"+$("#ano_modelo_"+i).val()+"|"+"estoque_"+i+":"+$("#estoque_"+i).val()+"||";
+		
+					}
+		
+				}
+
+				$.ajax({
+					type: "POST",
+					url: '/clientes/ajax/fn/salva_cadastro',
+					async: true,
+					dataType:"text",
+					data: ({'nome':$("#nome").val(), 'email':$("#email").val(), 'data':$("#data").val(), 'origem':$("#origem").val(), 'telefone':$("#telefone").val(), 'telefone2':$("#telefone2").val(), 'celular':$("#celular").val(), 'valor':$("#valor").val(), 'resultado':$("#resultado").val(), 'entrada':$("#entrada").val(), 'parcela':$("#parcela").val(), 'veiculo_troca':$("#veiculo_troca").val(), 'ano_modelo_troca':$("#ano_modelo_troca").val(), 'obs':$("#obs").val(), 'veiculos_interesse':strVeiculosIteressados}),
+					success:function(resp){
+
+						if(resp == "erro"){
+							
+							$("#div_msg").html("Erro ao cadastrar dados, por favor tente novamente!");
+							
+							setTimeout('$("#bgmsg").fadeOut(1000);', 2000);
+						
+						}else{
+						
+							$("#id_cliente_fluxo").val(resp);
+							
+							$("#div_msg").html("Dados cadastrados com sucesso!");
+							
+							setTimeout('$("#bgmsg").fadeOut(1000);', 2000);
+						
+						}
+						
+					}
+
+				});
+	
+			}else{
+			
+				for(i = 2;i <= qtdVeiculos; i++){
+			
+					if($("#dados_veiculo_"+i).html() != null){
+						
+						//alert($("#dados_veiculo_"+i).html());
+						
+						strVeiculosIteressados += "veiculo_"+i+":"+$("#veiculo_"+i).val()+"|"+"ano_modelo_"+i+":"+$("#ano_modelo_"+i).val()+"|"+"estoque_"+i+":"+$("#estoque_"+i).val()+"||";
+	
+					}
+		
+				}
+
+				$.ajax({
+					type: "POST",
+					url: '/clientes/ajax/fn/edita_cadastro',
+					async: true,
+					dataType:"text",
+					data: ({'id_cliente_fluxo':$("#id_cliente_fluxo").val(), 'nome':$("#nome").val(), 'email':$("#email").val(), 'resultado':$("#resultado").val(), 'data':$("#data").val(), 'origem':$("#origem").val(), 'telefone':$("#telefone").val(), 'telefone2':$("#telefone2").val(), 'celular':$("#celular").val(), 'valor':$("#valor").val(), 'entrada':$("#entrada").val(), 'parcela':$("#parcela").val(), 'veiculo_troca':$("#veiculo_troca").val(), 'ano_modelo_troca':$("#ano_modelo_troca").val(), 'obs':$("#obs").val(), 'veiculos_interesse':strVeiculosIteressados}),
+					success:function(resp){
+
+						if(resp == "erro"){
+							
+							$("#div_msg").html("Erro ao editar dados, por favor tente novamente!");
+							
+							setTimeout('$("#bgmsg").fadeOut(1000);', 2000);
+						
+						}else{
+						
+							$("#id_cliente_fluxo").val(resp);
+							
+							$("#div_msg").html("Dados editados com sucesso!");
+							
+							setTimeout('$("#bgmsg").fadeOut(1000);', 2000);
+							
+							
+						
+						}
+
+					}
+
+				});
+			
+			}
+
+		}
+
+	}
+	
+	
+	function deletaVeiculo(numId){
+
+		$("#dados_veiculo_"+numId).remove();
+
+	}
+	
+	function adicionaVeiculo(){
+	
+		qtdVeiculos++;
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input class='btn-small btn-del' style='margin-left:10px;' title='Deletar veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				"<span style='margin-left:10px; background-color:silver; color:#555; font-weight:bold; padding:7px;' title='Encontrar veículo para o cliente'>Prospecção</span>"+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='0' />"+
+			"</div>"+
+			
+		"</div>";
+		
+		$("#dados_veiculo_1").append(strVeiculo);
+		
+		buscaMarcas(qtdVeiculos);
+
+	}
+	
+	
+	function adicionaVeiculoCheio(marca, modelo, ano_modelo){
+	
+		qtdVeiculos++;
+		
+		arr = modelo.split(" ");
+		modelo = arr[0];
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>"+marca+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value='"+modelo+"'>"+modelo+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input id='btn_deletar_"+qtdVeiculos+"' class='btn-small btn-del' style='margin-left:10px;' title='Deletar veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				"<span style='margin-left:10px; background-color:green; color:white; font-weight:bold; padding:7px;' title='Veículo que está em estoque'>Estoque</span>"+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='1' />"+
+			"</div>"+
+	
+		"</div>";
+
+		if($("#veiculo_1").val() == ""){
+			/*
+			$("#marca_1 option[value='"+marca+"']").attr("selected", true);
+
+			buscaModelo(marca, 1);
+			
+			$("#veiculo_1 option[value='"+modelo+"']").attr("selected", true);
+			$("#ano_modelo_1 option[value='"+ano_modelo+"']").attr("selected", true);
+			$("#str_estoque_1").html("Estoque");
+			*/
+		}else{
+			
+			$("#dados_veiculo_1").append(strVeiculo);
+			
+		}
+
+		buscaMarcas(qtdVeiculos);
+		
+		$("#marca_"+qtdVeiculos+" option[value='"+marca+"']").attr("selected", true);
+		$("#ano_modelo_"+qtdVeiculos+" option[value='"+ano_modelo+"']").attr("selected", true);
+
+	}
+	
+	
+	function buscaModelo(strMmarca, numId){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: false,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#veiculo_"+numId).html(data);
+				
+			}
+		});
+	
+	}
+	
+	
+	function buscaModeloTroca(strMmarca){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#veiculo_troca").html(data);
+				
+			}
+		});
+	
+	}
+	
+	function buscaMarcas(numId){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_marca',
+			async: false,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#marca_"+numId).html(data);
+				$("#marca_troca").html(data);
+				
+			}
+		});
+	
+	}
+	
+	$.ajax({
+		url : '/clientes/ajax/fn/busca_origem',
+		async: true,
+		type : 'POST',
+		dataType: 'text',
+		success: function(data){
+			
+			$("#origem").html(data);
+			
+			$("#origem option[value='<?php echo $this->dados['origem']; ?>']").attr("selected", true);
+			
+		}
+	});
+	
+	
+	
+	$.ajax({
+		url : '/veiculos/ajax/fn/busca_estoque',
+		async: true,
+		type : 'POST',
+		dataType: 'text',
+		success: function(data){
+			
+			$("#estoque").html(data);
+
+		}
+	});
+	
+	
+	
+	
+	$("#data").mask("99/99/9999");
+	$("#data").val("<?php if(!$this->dados['id']){ echo @date("d/m/Y"); }else{ echo implode("/",array_reverse(explode("-",$this->dados['data']))); }?>");
+	$('#data').focus(function(){
+		$(this).calendario({
+			target:'#data'
+		});
+	});
+	
+	
+	$('#telefone').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#telefone2').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#celular').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	
+	buscaMarcas(1);
+	
+	$("#valor").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#entrada").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#parcela").attr("onkeyup","validaMoedaBR(this.id)");
+	
+	$("#veiculo_troca").html("<option><?php echo $this->dados['veiculo_troca']; ?></option>");
+	$("#ano_modelo_troca option[value='<?php echo $this->dados['ano_modelo_troca']; ?>']").attr("selected", true);
+	
+	$("#veiculo_1").html("<option><?php echo $this->dadosVeiculos[0]['veiculo']; ?></option>");
+	$("#ano_modelo_1 option[value='<?php echo $this->dadosVeiculos[0]['ano_modelo']; ?>']").attr("selected", true);
+	
+	
+	function adicionaVeiculoEdt(veiculo, ano, estoque){
+	
+		qtdVeiculos++;
+		propesccao = "<span style='margin-left:10px; background-color:silver; color:#555; font-weight:bold; padding:7px;' title='Encontrar veículo para o cliente'>Prospecção</span>";
+		
+		if(estoque == "1"){
+			
+			propesccao = "<span style='margin-left:10px; background-color:green; color:white; font-weight:bold; padding:7px;' title='Veículo que está em estoque'>Estoque</span>";
+		
+		}
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value='"+veiculo+"'>"+veiculo+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input class='btn-small btn-del' style='margin-left:10px;' title='Excluir veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				propesccao+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='"+estoque+"' />"+
+			"</div>"+
+	
+		"</div>";
+		
+		$("#dados_veiculo_1").append(strVeiculo);
+		
+		buscaMarcas(qtdVeiculos);
+		
+		$("#ano_modelo_"+qtdVeiculos+" option[value='"+ano+"']").attr("selected", true);
+
+	}
+	
+
+	<?php
+
+		if($this->dados['id']){
+	
+			foreach($this->dadosVeiculos as $key=> $dadosVeiculos){
+
+				//if($key != 0){
+					
+					echo "adicionaVeiculoEdt('".$dadosVeiculos['veiculo']."', '".$dadosVeiculos['ano_modelo']."', '".$dadosVeiculos['estoque']."');\n";
+					
+				//}
+			
+			}
+		
+		}
+		
+	?>
+
+	$("#resultado option[value='<?php echo $this->dados['resultado']; ?>']").attr("selected", true);
+	
+	mudaResultado();
+
+</script>

@@ -1,0 +1,939 @@
+ <script src="../js/jquery.modal.min.js" type="text/javascript" charset="utf-8"></script>
+ <link rel="stylesheet" href="../css/jquery.modal.css" type="text/css" media="screen" />
+<form class="form" action="lista2" method="post">
+	
+	<div class="inline">
+		<label class="label">Ve&iacute;culo</label>
+		<input type="text" id="modelo" name="modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Placa</label>
+		<input type="text" id="placa" name="placa" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano Modelo</label>
+		<input type="text" id="ano_modelo" name="ano_modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline">	
+		<label class="label">Ve&iacute;culo Sem Foto</label>
+		<input name="tipo" id="tipo" type="checkbox" value="1">		
+	</div>
+	
+	<!--<div class="inline">	
+		<label class="label">Ve&iacute;culo Vendido</label>
+		<input name="venda" id="venda" type="checkbox" value="1">		
+	</div>!-->
+	
+	<div class="inline">
+	<label class="label">Vendidos/Estoque</label>
+	<select name = "venda" id="venda" class="select" >
+		<option value = "0">selecione</option>
+		<option value = "1">Somente Ve&iacute;culo Vendido</option>
+		<option value = "2">Somente Ve&iacute;culo Em Estoque</option>
+		</select>		
+	</div>	
+	
+	<div class="inline" style="clear:both; width:70%;">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>veiculos/add'" />
+		<!--<input type="button" id="button_imp" class="btn-small-imp" value="Imprimir" onclick="printDiv('print', 'Estoque')"/>-->
+		<input type="button" class="btn-small" value="Estoque Vendedores" onclick="javascript:window.open('/novos-relatorios/lista-estoque-vendedores');"/>
+		<input type="button" class="btn-mini" value="Nova Negocia&ccedil;&atilde;o" onclick="javascript:window.location.href='<?php echo URL ?>negociacoes/add'" />
+	</div>
+
+
+	<div class="inline" style="clear:both; margin-top:20px; height:auto;">
+		<label class="label">N&uacute;mero de Ve&iacute;culos: <span id="num_veiculos"></span></label>
+	</div>
+
+</form>
+<style>
+
+.table tr td{
+	padding:2px;
+}
+
+.table tr:hover{
+	background-color:#EEE;
+}
+
+.table tr td:hover{
+	background-color:#DDD;
+}
+
+.table tr th{
+	padding:2px;
+}
+
+</style>
+
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<table class = 'table'>
+<style>
+	td{
+	
+		font-size:10px;
+		padding:1px;
+		
+	}
+	
+	th{
+		font-size:12px;
+		padding:1px;
+		border-left:solid 1px;
+	}
+</style>
+<thead><tr>
+		<th title="Ve&iacute;culo" colspan="2">Ve&iacute;culo</th>
+		<th title="Placa">Placa</th>
+		<th title="Cor">Cor</th>
+		<th title="Ano Fabrica&ccedil;&atilde;o / Ano Modelo">Modelo</th>
+		<th title="kil&ocirc;metros">KM</th>
+		<th title="Opcionais">Opcionais</th>
+		<?php 
+		if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) {
+		?>
+			<th title="Valor Compra">Valor<br/>Compra</th>
+		<?php 
+		} 
+		?>
+		<th title="Valor Venda">Valor<br/>Venda</th>
+		<th title="Ativo">Ativo</th>
+		<th title="Consignado">Cons</th>
+		<th title="Quantidade de fotos">Fotos</th>
+		<?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) { ?><th title="Dias em estoque">D.E.</th><?php } ?>
+
+		<th title="&Uacute;ltima Altera&ccedil;&atilde;o">&Uacute;ltima<br/>Altera&ccedil;&atilde;o</th>
+		<th title="A&ccedil;&otilde;es">A&ccedil;&otilde;es</th>
+	   </tr>
+</thead>
+
+<tbody>
+
+<form class="form" id="lista" action="lista2" method="post">
+
+<div id="bnt_salvar_alto" class="inline" style="clear:both; margin-bottom:10px; margin-left:5px; display:none;">
+	<input type="button" class="btn-small btn-add" value="Salvar" onclick="validaCampos()" />
+</div>
+<a href ="#ex1"rel="modal:open" id="abrir_modal"></a>
+<a href ="#versoes"rel="modal:open" id="abrir_modal_versoes"></a>
+<a href ="#aguarde"rel="modal:open" id="abrir_modal_aguarde"></a>
+<?php
+	$count = 0;
+	$mT = "";
+	$mA = "";
+
+	if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO){
+	
+		$colspan = 15;
+	
+	}else{
+	
+		$colspan = 14;
+	
+	}
+			
+	
+	//echo $this->tipo_anuncios;
+	//var_export($this->veiculos);
+if($this->veiculos){
+
+	foreach($this->veiculos as $veiculos){
+	
+	//var_export($veiculos['marca']."->".$veiculos['vendido']);
+	//exit;
+
+	
+		$edtValorVend = true;
+		if(($_SESSION['sessionUser']['vend_nao_edit_valor'] == 1) &&  
+			($_SESSION['sessionUser']['id_perfil'] != CONCESSIONARIO && 
+			$_SESSION['sessionUser']['id_perfil'] != GERENTE && 
+			$_SESSION['sessionUser']['id_perfil'] != SUPERVISOR )
+		){
+			$edtValorVend = false;
+		}
+
+	
+		if($veiculos['descricao_site'] != ""){
+		
+			$veiculos['modelo'] = $veiculos['descricao_site'];
+		
+		}
+		
+		
+		if($veiculos['app'] == 1){
+		
+			$imgCompleto = "/images/icons/vetorvermelho.png";
+			$titleCompleto = "Cadastro do veículo incompleto";
+		
+		}else{
+			
+			$imgCompleto = "/images/icons/vetorverde.png";
+			$titleCompleto = "Cadastro do veículo completo";
+		
+		}
+		
+	
+		$dataTmp = explode(" ",$veiculos['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$veiculos['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$veiculos['hora_alteracao'] = $veiculos['hora_alteracao'] . " " . $dataTmp[1];
+		
+		if(isset($_POST['tipo']) && $_POST['tipo'] == 1){
+			
+			if($veiculos['fotos']==0){
+			
+				$mA = mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1');
+				
+			}
+				
+		}else if(isset($_POST['venda']) && $_POST['venda'] == 1){
+			
+			if($veiculos['vendido']==1){
+				
+				$mA = mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1');
+				
+			}
+				
+		}elseif(isset($_POST['venda']) && $_POST['venda'] == 2){
+			
+			if($veiculos['vendido']==0){
+				
+				$mA = mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1');
+				
+			}
+			
+		}else{
+				
+			$mA = mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1');
+			
+		}			
+		
+		if(strtoupper($mT) != strtoupper($mA)){
+			
+			if(isset($_POST['tipo']) && $_POST['tipo'] == 1){
+			
+				if($veiculos['fotos']==0){
+				
+					echo "<tr style=\"height:20px; background-color:#EEEEEE;\"><td style=\"font-size:13px;\" colspan=\"".$colspan."\"><b>".mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1')."</b></td></tr>";
+					
+				}
+			}else if(isset($_POST['venda']) && $_POST['venda'] == 1){
+			
+				if($veiculos['vendido']==1){
+
+					echo "<tr style=\"height:20px; background-color:#EEEEEE;\"><td style=\"font-size:13px;\" colspan=\"".$colspan."\"><b>".mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1')."</b></td></tr>";
+			
+				}
+				
+			}else if(isset($_POST['venda']) && $_POST['venda'] == 2){
+
+				if($veiculos['vendido']==0){
+				
+					echo "<tr style=\"height:20px; background-color:#EEEEEE;\"><td style=\"font-size:13px;\" colspan=\"".$colspan."\"><b>".mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1')."</b></td></tr>";
+			
+				}
+			}else{
+			
+				echo "<tr style=\"height:20px; background-color:#EEEEEE;\"><td style=\"font-size:13px;\" colspan=\"".$colspan."\"><b>".mb_convert_encoding($veiculos['marca'], 'UTF-8', 'ISO-8859-1')."</b></td></tr>";
+
+			}
+		}
+		
+	
+		$mT = $mA;
+	
+		if($veiculos['consignado'] == 0){
+			
+			$consignado = "E";
+			
+		}elseif($veiculos['consignado'] == 1){
+			
+			$consignado = "C";
+			
+		}elseif($veiculos['consignado'] == 3){
+			
+			$consignado = "CV";
+			
+		}elseif($veiculos['consignado'] == 2){
+			
+			$consignado = "R";
+		
+		}else{
+		
+			$consignado = "Erro!";
+			
+		}
+		
+		
+		if(isset($_POST['tipo']) && $_POST['tipo'] == 1){
+			
+			if($veiculos['fotos']==0){
+			$count++;
+	?>	
+		<tr>
+				<td title="Ve&iacute;culo" ><img src="<?php echo $imgCompleto; ?>" title="<?php echo $titleCompleto; ?>" /><?php echo substr($veiculos['modelo'],0,22) ?></td>
+				<td title="Segmento" ><?php echo $veiculos['segmento'] ?></td>
+				<td title="Placa" ><?php echo $veiculos['placa'] ?></td>
+				<td title="Cor"><?php echo substr($veiculos['cor'],0,9) ?></td>
+				<td title="Ano Fabrica&ccedil;&atilde;o / Ano Modelo"><?php echo substr($veiculos['ano_fabricacao'],-2)."/".substr($veiculos['ano_modelo'],-2) ?></td>
+				<td title="kil&ocirc;metros"><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+				<td style="text-align:center;"><img width="15px" src="/images/info.png" title="<?php echo "OPCIONAIS:\n".$veiculos['opcionais'] ?>" /></td>
+				<?php 
+				if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) {
+				?>
+				<td title="Valor Compra"><div id="aquisicao_<?php echo $veiculos['id'] ?>" onclick="mostraInput(this.id);"><?php echo "R$ ".number_format($veiculos['valor_aquisicao'],2,',','.') ."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<?php 
+				}
+				?>
+				<td title="Valor Venda"><div id="venda_<?php echo $veiculos['id'] ?>" <?php echo ($edtValorVend) ? 'onclick="mostraInput(this.id);"' : '' ; ?>><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.')."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<td title="Ativo"><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+				<td title="Consignado"><?php echo $consignado; ?></td>
+				<td title="Quantidade de fotos"><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+				<?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) { ?><td title="Dias em estoque"><?php echo $veiculos['de']; ?></td><?php } ?>
+				
+				
+				<td><center><img width="15px;" src="/images/info.png" title="<?php echo "&Uacute;LTIMA ALTERA&Ccedil;&Atilde;O:\nNome: ".$veiculos['nome']."\nData: ".$veiculos['hora_alteracao'] ; ?>"  /></center></td>
+
+				</td>
+				<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+			</tr>
+<?php
+		
+		}	
+		}elseif(isset($_POST['venda']) && $_POST['venda'] == 1){
+			
+			if($veiculos['vendido']==1){
+			$count++;
+	?>	
+		<tr>
+				<td title="Ve&iacute;culo" ><img src="<?php echo $imgCompleto; ?>" title="<?php echo $titleCompleto; ?>" /><?php echo substr($veiculos['modelo'],0,22) ?></td>
+				<td title="Segmento" ><?php echo $veiculos['segmento'] ?></td>
+				<td title="Placa" ><?php echo $veiculos['placa'] ?></td>
+				<td title="Cor"><?php echo substr($veiculos['cor'],0,9) ?></td>
+				<td title="Ano Fabrica&ccedil;&atilde;o / Ano Modelo"><?php echo substr($veiculos['ano_fabricacao'],-2)."/".substr($veiculos['ano_modelo'],-2) ?></td>
+				<td title="kil&ocirc;metros"><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+				<td style="text-align:center;"><img width="15px;" src="/images/info.png" title="<?php echo "OPCIONAIS:\n".$veiculos['opcionais'] ?>" /></td>
+				<?php 
+				if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) {
+				?>
+				<td title="Valor Compra"><div id="aquisicao_<?php echo $veiculos['id'] ?>" onclick="mostraInput(this.id);"><?php echo "R$ ".number_format($veiculos['valor_aquisicao'],2,',','.') ."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<?php 
+				}
+				?>
+				<td title="Valor Venda"><div id="venda_<?php echo $veiculos['id'] ?>" <?php echo ($edtValorVend) ? 'onclick="mostraInput(this.id);"' : '' ; ?> ><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.')."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<td title="Ativo"><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+				<td title="Consignado"><?php echo $consignado; ?></td>
+				<td title="Quantidade de fotos"><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+				<?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) { ?><td title="Dias em estoque"><?php echo $veiculos['de']; ?></td><?php } ?>
+		
+				
+				<td><center><img width="15px;" src="/images/info.png" title="<?php echo "&Uacute;LTIMA ALTERA&Ccedil;&Atilde;O:\nNome: ".$veiculos['nome']."\nData: ".$veiculos['hora_alteracao'] ; ?>"  /></center></td>
+
+				</td>
+				<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+			</tr>
+<?php
+		
+			}
+		
+		}elseif(isset($_POST['venda']) && $_POST['venda'] == 2){
+			
+			if($veiculos['vendido']==0){
+			$count++;
+	?>	
+		<tr>
+				<td title="Ve&iacute;culo" ><img src="<?php echo $imgCompleto; ?>" title="<?php echo $titleCompleto; ?>" /><?php echo substr($veiculos['modelo'],0,22) ?></td>
+				<td title="Segmento" ><?php echo $veiculos['segmento'] ?></td>
+				<td title="Placa" ><?php echo $veiculos['placa'] ?></td>
+				<td title="Cor"><?php echo substr($veiculos['cor'],0,9) ?></td>
+				<td title="Ano Fabrica&ccedil;&atilde;o / Ano Modelo"><?php echo substr($veiculos['ano_fabricacao'],-2)."/".substr($veiculos['ano_modelo'],-2) ?></td>
+				<td title="kil&ocirc;metros"><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+				<td style="text-align:center;"><img width="15px;" src="/images/info.png" title="<?php echo "OPCIONAIS:\n".$veiculos['opcionais'] ?>" /></td>
+				<?php 
+				if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) {
+				?>
+				<td title="Valor Compra"><div id="aquisicao_<?php echo $veiculos['id'] ?>" onclick="mostraInput(this.id);"><?php echo "R$ ".number_format($veiculos['valor_aquisicao'],2,',','.') ."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<?php 
+				}
+				?>
+				<td title="Valor Venda"><div id="venda_<?php echo $veiculos['id'] ?>" <?php echo ($edtValorVend) ? 'onclick="mostraInput(this.id);"' : '' ; ?>><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.')."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<td title="Ativo"><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+				<td title="Consignado"><?php echo $consignado; ?></td>
+				<td title="Quantidade de fotos"><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+				<?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) { ?><td title="Dias em estoque"><?php echo $veiculos['de']; ?></td><?php } ?>
+				
+				
+				<td><center><img width="15px;" src="/images/info.png" title="<?php echo "&Uacute;LTIMA ALTERA&Ccedil;&Atilde;O:\nNome: ".$veiculos['nome']."\nData: ".$veiculos['hora_alteracao'] ; ?>"  /></center></td>
+
+				</td>
+				<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+			</tr>
+<?php
+		
+			}
+		
+		}else{
+		$count++;
+		?>	
+			<tr>
+				<td title="Ve&iacute;culo" ><img src="<?php echo $imgCompleto; ?>" title="<?php echo $titleCompleto; ?>" /><?php echo substr($veiculos['modelo'],0,22) ?></td>
+				<td title="Segmento" ><?php echo $veiculos['segmento'] ?></td>
+				<td title="Placa" ><?php echo $veiculos['placa'] ?></td>
+				<td title="Cor"><?php echo substr($veiculos['cor'],0,9) ?></td>
+				<td title="Ano Fabrica&ccedil;&atilde;o / Ano Modelo"><?php echo substr($veiculos['ano_fabricacao'],-2)."/".substr($veiculos['ano_modelo'],-2) ?></td>
+				<td title="kil&ocirc;metros"><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+				<td style="text-align:center;"><img width="15px;" src="/images/info.png" title="<?php echo "OPCIONAIS:\n".$veiculos['opcionais'] ?>" /></td>
+				<?php 
+				if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) {
+				?>
+				<td title="Valor Compra"><div id="aquisicao_<?php echo $veiculos['id'] ?>" onclick="mostraInput(this.id);"><?php echo "R$ ".number_format($veiculos['valor_aquisicao'],2,',','.') ."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<?php 
+				}
+				?>
+				<td title="Valor Venda"><div id="venda_<?php echo $veiculos['id'] ?>" <?php echo ($edtValorVend) ? 'onclick="mostraInput(this.id);"' : '' ; ?>><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.')."  <img width='10px;' src='../images/edt-icon.png'/>" ?></div></td>
+				<td title="Ativo"><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+				<td title="Consignado"><?php echo $consignado; ?></td>
+				<td title="Quantidade de fotos"><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+				<?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO) { ?><td title="Dias em estoque"><?php echo $veiculos['de']; ?></td><?php } ?>
+
+				<td><center><img width="15px;" src="/images/info.png" title="<?php echo "&Uacute;LTIMA ALTERA&Ccedil;&Atilde;O:\nNome: ".$veiculos['nome']."\nData: ".$veiculos['hora_alteracao'] ; ?>"  /></center></td>
+				
+				<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+			</tr>
+		
+		<?php
+		}
+	}
+}	
+	?>
+
+</tbody>
+</table>
+<div id="bnt_salvar_baixo" class="inline" style="clear:both; margin-left:5px; display:none;">
+	<input type="button" class="btn-small btn-add" value="Salvar" onclick="validaCampos()" />
+</div>
+</form>
+
+<div id="ex1" style="display:none;" >
+	<center>
+		<a id="fechar_modal" href="#" rel="modal:close"></a>
+		<img src="../images/disket.gif"/><br/>
+		<span style="font-size:17px;">Salvando altera&ccedil;&otilde;es! Aguarde...</span>
+	</center>
+</div>
+
+<div id="versoes" style="display:none;" >
+	<center>
+		<a id="fechar_modal_versoes" href="#" rel="modal:close" ></a>
+		<span style="font-size:17px;">O modelo deste veÃ­culo nÃ£o consta no site Icarros.<br/>Por favor, selecione o modelo do veÃ­culo e clique em pronto</span><br><br>
+		<div>
+			<label>Modelos</label>
+				<select id="modelos_veiculos">
+					<option>Selecione</option>
+				</select>
+		</div>
+		<br/><br/>
+			<input type="button" id="buttomPronto" class="btn-small btn-add" value="Pronto"/>
+	</center>
+</div>
+
+<div id="aguarde" style="display:none;" >
+	<a id="fechar_modal_aguarde" href="#" rel="modal:close"></a>
+	<center>
+		<span style="font-size:17px;">Por favor aguarde.....</span><br><br>
+	</center>
+</div>
+
+ <div id="teste">
+ </div>
+<script type="text/javascript">
+
+var arrTipoAnuncio = new Array();
+var arrQtdAtivos = new Array();
+var arrIdAnuncios = new Array();
+var arrNomeAnuncios = new Array();
+var arrTotalAnuncios = new Array();
+var arrTotalAnunciosTemp = new Array();
+var idTipoAntigo = 0;
+var idNovo = "";
+var total = 0;
+var totalUsados = 0;
+/*
+function buscaQtdPlanos(){
+ 
+	$.ajax({                   
+		type: "POST",
+        //url:"/icarros/ajax/fn/get_qtd_anuncios_icarros",
+        dataType:"html",
+        //data:{fipe:string},                       
+        success:function(retorno){
+	
+			retorno  = "erro";
+	
+			//alert(retorno);
+			
+			arrTipoAnuncio = retorno.split(",");
+
+			var i = 0;
+
+			while(i < 12){
+			
+				total += parseInt(arrTipoAnuncio[i+3]);
+				totalUsados += parseInt(arrTipoAnuncio[i+2]);
+				arrQtdAtivos[arrTipoAnuncio[i]] = parseInt(arrTipoAnuncio[i+3] - arrTipoAnuncio[i+2]);
+				arrIdAnuncios[arrTipoAnuncio[i]] = arrTipoAnuncio[i];
+				arrNomeAnuncios[arrTipoAnuncio[i]] = arrTipoAnuncio[i+1];
+				arrTotalAnuncios[arrTipoAnuncio[i]] = parseInt(arrTipoAnuncio[i+3]);
+				
+				//alert(arrQtdAtivos[13]);
+	
+				i=i+4;
+	
+			}
+			
+			if(retorno == "erro"){
+			
+				totalUsados = 0;
+				total = 0;
+			
+			}
+
+			
+			$("#total_anuncios").html(totalUsados+"/"+total);
+			
+			$("select").each(function(){
+		
+				$ide = $(this).attr('id').split("_");
+		
+				if($ide[0] == "tipoanuncio"){
+				
+					$("#sincro_image").remove();
+				
+					
+				}
+				
+			});
+
+       }
+		
+	})
+
+}
+*/
+function addIcarros(id){
+	
+	var ide = id.split("_");
+	
+	if($("#"+id).is(":checked")){
+	
+		if(total-totalUsados >= total){
+		
+			$("#tipoanuncio_"+ide[1]).attr("disabled", true);
+			$("#"+id).attr("checked", false);
+			alert("NÃ£o hÃ¡ mais espaÃ§o para o plano contratado no Icarros");
+		
+		}else{
+
+			$("#abrir_modal_aguarde").click();
+		
+			$.ajax({                   
+				type: "POST",
+				url:"/icarros/ajax/fn/get_modelos_fipe",
+				//async: false,
+				dataType:"html",
+				data:{id_veiculo:ide[1]},                       
+				success:function(retorno){
+		
+					if(retorno != ""){
+						
+						$("#"+id).attr('checked', false);
+						$("#modelos_veiculos").html(retorno);
+						$("#buttomPronto").attr("onClick","mudaModelo('"+id+"', true)");
+						$("#abrir_modal_versoes").click();
+					
+					}
+			
+				}
+			});
+			
+		}
+	
+	}else{
+
+		$("#tipoanuncio_"+ide[1]).attr("disabled", true);
+		$("#tipoanuncio_"+ide[1]).html("<option value=''>Selecione</option>");
+		
+		mudaModelo(id,false);
+
+	}
+
+}
+
+	function mudaModelo(id, status){
+	
+		var optionLivre = "";
+		var option = "";
+		var primeiro = true;
+		var ide = id.split("_");
+	
+		totalUsados = total;
+	
+		for(x in arrTotalAnuncios){
+	
+			arrTotalAnunciosTemp[x] = arrTotalAnuncios[x];
+	
+		}
+	
+		if(status){
+	
+			$("#"+id).attr('checked', true);
+			
+		}
+	
+		arrId = id.split("_");
+	
+		valor = $("#modelos_veiculos").val();
+	
+		$("#"+id).val(valor);
+		
+		$("#fechar_modal_versoes").click();
+		
+		
+		$("select").each(function(){
+		
+			$ide = $(this).attr('id').split("_");
+		
+			if($ide[0] == "tipoanuncio"){
+		
+				if($(this).val() != ""){
+		
+					arrTotalAnunciosTemp[$(this).val()] -= 1;
+			
+				}
+		
+			}
+	
+		});
+	
+		for(x in arrTotalAnunciosTemp){
+	
+			if(arrTotalAnunciosTemp[x] > 0){
+			
+				if(primeiro){
+				
+					option = "<option selected='selected' value='"+arrIdAnuncios[x]+"'>"+arrNomeAnuncios[x]+"</option>";
+					
+					if($("#"+id).is(":checked")){
+					
+						$("#tipoanuncio_"+ide[1]).attr("disabled", false);
+						$("#tipoanuncio_"+ide[1]).html(option);
+					
+					}else{
+						
+						optionLivre = "<option value='"+arrIdAnuncios[x]+"'>"+arrNomeAnuncios[x]+"</option>";
+						
+					}
+					
+					primeiro = false;
+				
+				}else{
+		
+					optionLivre += "<option value='"+arrIdAnuncios[x]+"'>"+arrNomeAnuncios[x]+"</option>";
+			
+				}
+			
+			}
+	
+		}
+
+	if(optionLivre == "" && option == ""){
+		
+		$("#tipoanuncio_"+ide[1]).attr("disabled", true);
+		$("#"+id).attr("checked", false);
+		alert("NÃ£o hÃ¡ mais espaÃ§o para o plano contratado no Icarros");
+		
+	
+	}else{
+	
+		$("select").each(function(){
+		
+			$ide = $(this).attr('id').split("_");
+		
+			if($ide[0] == "tipoanuncio"){
+		
+				if($(this).val() != ""){
+		
+					optionSelected = "<option selected='selected' value='"+arrIdAnuncios[$(this).val()]+"'>"+arrNomeAnuncios[$(this).val()]+"</option>";
+					
+					$(this).html(optionLivre + optionSelected);
+					
+					totalUsados -= 1;
+					
+				}
+		
+			}
+	
+		});
+		
+		$("#total_anuncios").html((total-totalUsados)+"/"+total);
+	
+	}
+	
+	mostraBotao();
+
+	
+	}
+	
+	
+//buscaQtdPlanos();
+
+function tipoAnuncioAntigo(value){
+
+	idTipoAntigo = parseInt(value);
+
+}
+
+function retornaTipoAnuncio(id, value){
+
+	mostraBotao();
+
+	novo = arrQtdAtivos[value];
+	velho = arrQtdAtivos[idTipoAntigo];
+
+	arrQtdAtivos[value] = novo-1;
+	arrQtdAtivos[idTipoAntigo] = velho+1;
+	
+	//alert(arrIdAnuncios[value]+"=>"+arrQtdAtivos[value]+" ||||||||||||||| "+arrIdAnuncios[idTipoAntigo]+"=>"+arrQtdAtivos[idTipoAntigo]);
+
+	$("select").each(function(){
+		
+		$ide = $(this).attr('id').split("_");
+		
+		if($ide[0] == "tipoanuncio"  && $(this).val() != ""){
+		
+			strOption = "<option selected='selected' value='"+arrIdAnuncios[$(this).val()]+"'>"+arrNomeAnuncios[$(this).val()]+"</option>";
+			
+			for(x in arrIdAnuncios){
+				
+				if(arrQtdAtivos[x] > 0){
+				
+					if($(this).val() != x){
+				
+						strOption += "<option value='"+arrIdAnuncios[x]+"'>"+arrNomeAnuncios[x]+"</option>";
+				
+					}
+				
+				}
+			
+			}
+			
+			$(this).html(strOption);
+			
+		}
+		
+	});
+	
+}
+
+function printDiv(id, pg) {
+	
+	//$("#button").css("display","none");
+	//$("#button_imp").css("display","none");
+	
+	var oPrint, oJan;
+	oPrint = window.document.getElementById(id).innerHTML;
+	oJan = window.open(pg);
+	oJan.document.write(oPrint);
+	oJan.window.print();
+       oJan.document.close();
+       oJan.focus();
+	   
+	//$("#button").css("display","inline");
+	//$("#button_imp").css("display","inline");
+}
+
+function mostraBotao(){
+	
+	$("#bnt_salvar_baixo").css("display","block");
+	$("#bnt_salvar_alto").css("display","block");
+	
+}
+
+function mostraInput(id){
+
+	$("#"+id).attr("onclick","");
+	
+	idTemp = id.split("_");
+	
+	valor = $("#"+id).html();
+	arrTemp = valor.split("  ");
+	valor = arrTemp[0];
+	valor = valor.substring(3);
+	valor = valor.replace(".","");
+
+	$("#"+id).html("<input name='valor_"+idTemp[0]+"-"+idTemp[1]+"' id='valor_"+idTemp[0]+"-"+idTemp[1]+"' style='width:65px;' type='text' value='"+valor+"' onkeyup='validaMoedaBR(this.id); mostraBotao();'/>");
+	
+}
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href='del/id/'+id;
+		
+		}
+		
+	}
+	
+	$("#num_veiculos").html(<?php echo $count;?>);
+	
+	//$("#placa").mask("aaa-9*99");
+	
+	function validaCampos(){
+	
+		var retorno = "";
+		var strJson = "";
+		var strJsonSelect = "";
+		var strJsonCheckbox = "";
+		var erro = false;
+		var cont = 0;
+		
+		
+	
+		$(":text").each(function(){
+		
+			id = $(this).attr("id");
+			arrValor = id.split("_");
+		
+			if(arrValor[0] == "valor"){
+				
+				if($(this).val() == ""){
+				
+					erro = true;
+					cont++;
+				
+				}
+			
+			}
+		
+		});
+		
+		if(erro){
+		
+			if(cont == 1){
+				
+				alert("Há um campo com valor não preenchido!");
+			
+			}else{
+		
+				alert("Há campos com os valores não preenchidos!");
+				
+			}
+		
+		}else{
+		
+			$("#abrir_modal").click();
+	
+			$(":text").each(function(){
+		
+				id = $(this).attr("id");
+				arrValor = id.split("_");
+			
+				if(arrValor[0] == "valor"){
+					
+					strJson += '"'+$(this).attr("id")+'":'+$(this).val().replace(',','.')+', ';
+
+				}
+		
+			});
+			
+			
+			strJson = strJson.substring(0,strJson.length-2);
+			strJson = "{"+strJson+"}";
+			
+			$(":checkbox").each(function(){
+		
+				if($(this).is(":checked")){
+		
+					id = $(this).attr("id");
+					arrValor = id.split("_");
+				
+					if(arrValor[0] == "icarros"){
+						
+						strJsonCheckbox += '"'+$(this).attr("id")+'":'+$(this).val().replace(',','.')+', ';
+
+					}
+				
+				}
+		
+			});
+			
+			
+			
+			strJsonCheckbox = strJsonCheckbox.substring(0,strJsonCheckbox.length-2);
+			strJsonCheckbox = "{"+strJsonCheckbox+"}";
+			
+			if(total != 0){
+			
+				$("select").each(function(){
+			
+					//alert($(this).val());
+			
+					if($(this).val() != ""){
+			
+						id = $(this).attr("id");
+						arrValor = id.split("_");
+					
+						if(arrValor[0] == "tipoanuncio"){
+							
+							strJsonSelect += '"'+$(this).attr("id")+'":'+$(this).val().replace(',','.')+', ';
+
+						}
+					
+					}
+			
+				});
+				
+				strJsonSelect = strJsonSelect.substring(0,strJsonSelect.length-2);
+				strJsonSelect = "{"+strJsonSelect+"}";
+		
+			}
+			
+			$.ajax({                   
+				type: "POST",
+				url:"/veiculos/ajax/fn/edita_valores",
+				dataType:"html",
+				data:{json_valores:strJson, json_checkbox:strJsonCheckbox, json_select:strJsonSelect},                       
+				success:function(retorno){
+				
+					//alert(retorno);
+
+					if(retorno == "sucesso"){
+					
+						$("#ex1").html('<center><a id="fechar_modal" href="#" rel="modal:close"></a><span style="font-size:17px;">Altera&ccedil;&otilde;es efetuadas com sucesso!</span></center>');
+					
+						setInterval(function() {
+							$("#fechar_modal").click();
+							$("#ex1").html('<center><a id="fechar_modal" href="#" rel="modal:close"></a><img src="../images/disket.gif"/><br/><span style="font-size:17px;">Salvando altera&ccedil;&otilde;es! Aguarde...</span></center>');
+						}, 3000);
+						window.location.href="/veiculos/lista2";
+					}else{
+					
+						$("#ex1").html('<center><a id="fechar_modal" href="#" rel="modal:close"></a><span style="font-size:17px; color:red;">Houve um erro inesperado!<br/>Por favor verifique suas altera&ccedil;&otilde;es e tente novamente!</span></center>');
+					
+					}
+				
+				}
+				
+			});
+
+		}
+		
+	}
+
+</script>

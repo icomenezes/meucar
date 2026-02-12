@@ -1,0 +1,115 @@
+<div id="print">
+<style>
+	table tr td{
+		border: solid 0px;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	img{
+		width:200px;
+	}
+</style>
+
+<table style="width:100%;">
+	<tr>
+		<td style="width:250px; horizontal-align:right;"><img style="margin-left:40px;" src="/<?php echo $this->empresa[0]['path']; ?>"></td><td style="font-size:40px; vertical-align:middle;"><?php echo $this->empresa[0]['nome_fantasia']; ?></td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" style="height:100px; vertical-align:bottom;">
+		
+		<?php if($this->veiculo[0]['descricao_site']){ ?>
+			
+				<center><label style="font-size:40px;"><?php echo $this->veiculo[0]['descricao_site']; ?></label></center>
+		
+		<?php }else{ ?>
+				
+				<center><label style="font-size:40px;"><?php echo $this->veiculo[0]['marca']." ".$this->veiculo[0]['modelo']; ?></label></center>
+		
+		<?php } ?>
+		</td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" style="height:50px; vertical-align:middle;"><center><label style="font-size:25px;"><?php echo $this->veiculo[0]['combustivel']." - ".$this->veiculo[0]['ano_fabricacao']."/".$this->veiculo[0]['ano_modelo'];?></label></center></td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" style="height:80px; vertical-align:bottom;">
+			<label style="margin-left:40px; font-size:30px;">Opcionais:</label>
+		</td>
+	</tr>
+	 <?php if(count($this->opcionais) < 10){ ?>
+		<tr>
+			<td colspan="2">
+		  <?php foreach($this->opcionais as $opcional){
+					
+					echo "<label style='margin-left:40px; font-size:16px;'>".$opcional['opcional'].".</label><br>";
+
+				}
+			?>
+			</td>
+		</tr>
+	 <?php 	}else{
+				$colun = 0;
+				foreach($this->opcionais as $opcional){
+					
+					if($colun == 0){
+					
+						echo "<tr>";
+					
+					}
+					
+					echo "<td style='width:50%;'><label style='margin-left:40px; font-size:16px;'>".$opcional['opcional'].".</label></td>";
+					
+					$colun ++;
+					
+					if($colun == 2){
+					
+						echo "</tr>";
+						$colun = 0;
+					
+					}
+				
+				}
+			} ?>
+	<tr>
+		<td colspan="2" style="height:100px; vertical-align:bottom;"><center><label id="valor" style="font-size:60px;">R$ <?php echo money_format("%i",$this->veiculo[0]['valor_venda']); ?></label><div id="check"><input type="checkbox" id="check_valor" checked="checked" value="1" />Imprimir Valor?</div></center></td>
+	</tr>
+	
+	<tr>
+		<td colspan="2" style="height:100px; vertical-align:bottom;"><label style="margin-left:40px; font-size:20px;"><?php echo $this->veiculo[0]['placa']; ?></label></td>
+	</tr>
+</table>
+
+</div>
+<div class="inline" style="clear:both; margin-top:20px; margin-left:10px;">
+	<input type="button" class="btn-small-imp" value="Imprimir" onclick="javascript:imprimir('print', 'Informativo');"/>
+</div>
+
+<script>
+
+	function imprimir(id, pg){
+	
+		if(!$("#check_valor").is(':checked')){
+		
+			$("#valor").css("display","none");
+		
+		}
+	
+		$("#check").css("display","none");
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+		
+		$("#check").css("display","inline");
+		$("#valor").css("display","block");
+
+	}
+	
+</script>

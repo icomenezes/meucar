@@ -1,0 +1,559 @@
+<div id="simulador">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="simuladorResultados" class="form" method="post" style="font-family: Arial, Helvetica, sans-serif;">
+
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+	<label id="label_custo_fixo" style="font-size:14px; margin-left:10px; margin-bottom:10px;">Custo Fixo</label>
+<div id="div_custo_fixo">
+	<div class="inline">
+		<label class="label">Fone</label>
+		<input type="text" id="fone" name="fone" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Aluguel</label>
+		<input type="text" id="aluguel" name="aluguel" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">&Aacute;gua/Luz</label>
+		<input type="text" id="agua" name="agua" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Escrit&oacute;rio</label>
+		<input type="text" id="escritorio" name="escritorio" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Sal&aacute;rio Administra&ccedil;&atilde;o</label>
+		<input type="text" id="adm" name="adm" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Sal&aacute;rio Prepara&ccedil;&atilde;o </label>
+		<input type="text" id="prep" name="prep" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Sal&aacute;rio Vendedor</label>
+		<input type="text" id="vendedor" name="vendedor" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Sal&aacute;rio Gerente</label>
+		<input type="text" id="vendedor2" name="vendedor2" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Limpador</label>
+		<input type="text" id="limpador" name="limpador" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Motorista</label>
+		<input type="text" id="motorista" name="motorista" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Refei&ccedil;&otilde;es</label>
+		<input type="text" id="refeicoes" name="refeicoes" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Transporte</label>
+		<input type="text" id="transporte" name="transporte" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">An&uacute;ncios</label>
+		<input type="text" id="anuncio" name="anuncio" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Garantia</label>
+		<input type="text" id="garantia" name="garantia" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Diversos</label>
+		<input type="text" id="diversos" name="diversos" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px; clear:both;">
+		<label class="label">Total Custo Fixo</label>
+		<input type="text" id="total" name="total" readonly="readonly" class="text req" value="" style="background-color:#FFC0CB; border-color:#CD0000; color:#CD0000;"/>		
+	</div>
+</div>
+
+	
+	
+	
+	<label  id="label_custo_variavel" style="clear:both; font-size:14px; margin-left:10px; margin-bottom:10px;">Custo Vari&aacute;vel</label>
+
+<div id="div_custo_variavel">	
+	<div class="inline"  style="clear:both;">
+		<label class="label">Prepara&ccedil;&atilde;o</label>
+		<input type="text" id="preparacao" name="preparacao" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Comiss&atilde;o</label>
+		<input type="text" id="comissao" name="comissao" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">An&uacute;ncios</label>
+		<input type="text" id="anuncios" name="anuncios" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Garantia</label>
+		<input type="text" id="garantia_variavel" name="garantia_variavel" class="text " value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Imposto</label>
+		<input type="text" id="imposto" name="imposto" class="text" value="" style="background-color:#FFFFE0; border-color:#FF0000; color:#CD0000;"/>		
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px; clear:both;">
+		<label class="label">Total Custo Vari&aacute;vel</label>
+		<input type="text" id="total_custo_variavel" name="total_custo_variavel" readonly="readonly" class="text req" value="" style="background-color:#FFC0CB; border-color:#CD0000; color:#CD0000;"/>		
+	</div>
+</div>	
+	
+	
+
+	<label  id="label_lucro_liquido" style="clear:both; font-size:14px; margin-left:10px; margin-bottom:10px;">Lucro L&iacute;quido</label>
+	
+<div id="div_lucro_liquido">
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Quantidade de Vendas</label>
+		<input type="text" id="qtd_venda" name="qtd_venda" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Pre&ccedil;o M&eacute;dio de Venda</label>
+		<input type="text" id="venda_medio" name="venda_medio" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;" />		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Lucro Bruto M&eacute;dio %</label>
+		<input type="text" id="bruto_medio_porcento" name="bruto_medio_porcento" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Lucro Bruto M&eacute;dio</label>
+		<input type="text" id="bruto_medio_real" name="bruto_medio_real" readonly="readonly" class="text" value="" style="border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Receita Financeira</label>
+		<input type="text" id="receita_financeira" name="receita_financeira" readonly="readonly" class="text" value="" style="border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Lucro Bruto M&eacute;dio Com Financeira</label>
+		<input type="text" id="lucro_mfinanceira" name="lucro_mfinanceira" readonly="readonly" class="text" value="" style="border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Lucro Bruto Total </label>
+		<input type="text" id="bruto_total" name="bruto_total" readonly="readonly" class="text" value="" style="border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Custo Vari&aacute;vel</label>
+		<input type="text" id="custo_variavel" name="custo_variavel" readonly="readonly" class="text req" value="" style="border-color:#CD0000; color:#CD0000;" />		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Custo Fixo</label>
+		<input type="text" id="custo_fixo" name="custo_fixo" readonly="readonly" class="text req" value="" style="border-color:#CD0000; color:#CD0000;" />		
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px; clear:both;">
+		<label class="label">Total Lucro Liquido</label>
+		<input type="text" id="total_lucro_liquido" name="total_lucro_liquido" readonly="readonly" class="text" value="" style="background-color:#9AFF9A; border-color:#228B22; color:#228B22;" />		
+	</div>
+</div>
+	
+	
+	<label  id="label_financiamento" style="clear:both; font-size:14px; margin-left:10px; margin-bottom:10px;">Financiamento</label>
+
+<div id="financiamento">
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Quantidade Financiado %</label>
+		<input type="text" id="qtd_financiado" name="qtd_financiado" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Financiamento M&eacute;dio Contrato %</label>
+		<input type="text" id="fmedio_contrato" name="fmedio_contrato" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Retorno por Contrato %</label>
+		<input type="text" id="retorno_contrato" name="retorno_contrato" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">TCC por Contrato </label>
+		<input type="text" id="tcc_contrato" name="tcc_contrato" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor M&eacute;dio por Contrato</label>
+		<input type="text" id="vmedio_contrato" name="vmedio_contrato" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor de Retorno M&eacute;dio por Contrato</label>
+		<input type="text" id="vretorno_contrato" name="vretorno_contrato" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Total Receita Financiamento Unidade</label>
+		<input type="text" id="receita_finan" name="receita_finan" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">M&eacute;dia Receita Financiamento Unidade</label>
+		<input type="text" id="receita_finan_por_unidade" name="receita_finan_por_unidade" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Total Receita Financiamento Retorno</label>
+		<input type="text" id="total_receita_retor" name="total_receita_retor" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Total Receita Financiamento TCC</label>
+		<input type="text" id="total_receita_tcc" name="total_receita_tcc" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px; clear:both;">
+		<label class="label">Total Receita Financiamento Geral</label>
+		<input type="text" id="total_receita_geral" name="total_receita_geral" readonly="readonly" class="text req" value="" style="background-color:#9AFF9A; border-color:#228B22; color:#228B22;"/>		
+	</div>
+</div>	
+	
+	
+
+	<label  id="label_capital" style="clear:both; font-size:14px; margin-left:10px; margin-bottom:10px;">Capital</label>
+
+	<div class="inline" style="clear:both";>
+		<label class="label">Capital De Giro</label>
+		<input type="text" id="capital_giro" name="capital_giro" readonly="readonly" class="text" value="" style="background-color:#FFFFFF; border-color:#228B22; color:#228B22;"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Seguran&ccedil;a</label>
+		<input type="text" id="seguranca" name="seguranca" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;" onKeyUp="validaMoedaBR(this.id); calculaAll(); ; valcamp(this)"/>		
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px; clear:both;">
+		<label class="label">Total de Capital</label>
+		<input type="text" id="total_capital" name="total_capital" readonly="readonly" class="text req" value="" style="background-color:#9AFF9A; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	
+	
+	<label  id="label_lucro_final" style="clear:both; font-size:14px; margin-left:10px; margin-bottom:10px;">Lucro Final</label>
+
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Ponto De Equilibrio</label>
+		<input type="text" id="equilibrio" name="equilibrio" readonly="readonly" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ganho Capital Investido </label>
+		<input type="text" id="capital_investido" name="capital_investido" readonly="readonly" class="text" value="" style="background-color:#FFFFE0; border-color:#228B22; color:#228B22;"/>		
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Lucro Liquido Final</label>
+		<input type="text" id="liq_final" name="liq_final" class="text" readonly="readonly" value="" style="background-color:#9AFF9A; border-color:#228B22; color:#228B22;"/>		
+	</div>
+
+	<div class="inline" style="clear:both" id="div_botoes">
+		<input type="button" class="btn-small-imp" id="impri" value="Imprimir" onclick="imprimir('content','Simulador');"/>
+	</div>
+	
+</form>	
+</div>
+	
+<script type="text/javascript">
+
+   function valcamp(v){
+   
+      $(v).attr('value',$(v).val());
+   
+   }
+
+	function imprimir(id, pg){
+      
+		$("#impri").css("display","none");
+		$("label").css("font-size","10px");
+	
+		var oPrint, oJan;
+		
+		oPrint = $("#"+id).html();
+      
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.focus();
+		oJan.window.print();
+		oJan.document.close();
+
+		$("#impri").css("display","inline");
+		$("label").css("font-size","12px");
+		$("#label_custo_fixo").css("font-size","14px");
+		$("#label_custo_variavel").css("font-size","14px");
+		$("#label_lucro_liquido").css("font-size","14px");
+		$("#label_lucro_final").css("font-size","14px");
+		$("#label_capital").css("font-size","14px");
+		$("#label_financiamento").css("font-size","14px");
+
+	}
+	
+	
+	$("#div_custo_fixo").children().children().next().each(function(){
+		
+		if($(this).attr("id") != "total"){
+		
+			$(this).attr("onkeyup","calculaAll(); validaMoedaBR(this.id); valcamp(this)");
+			
+		}
+		
+	});
+	
+	$("#div_custo_variavel").children().children().next().each(function(){
+		
+		if($(this).attr("id") != "total_custo_variavel"){
+		
+			$(this).attr("onkeyup","calculaAll(); validaMoedaBR(this.id); valcamp(this)");
+			
+		}
+		
+	});
+	
+	$("#div_lucro_liquido").children().children().next().each(function(){
+		
+		if($(this).attr("id") != "total_lucro_liquido"){
+		
+			$(this).attr("onkeyup","calculaAll(); validaMoedaBR(this.id); valcamp(this)");
+			
+		}
+		
+	});
+	
+	$("#financiamento").children().children().next().each(function(){
+		
+		if($(this).attr("id") != "total_receita_geral"){
+		
+			$(this).attr("onkeyup","calculaAll(); validaMoedaBR(this.id); valcamp(this)");
+			
+		}
+		
+	});
+	
+
+	function calculaCustoFixo(){
+	
+		var totalCustoFixo = 0;
+	
+		$("#div_custo_fixo").children().children().next().each(function(){
+		
+			if($(this).attr("id") != "total"){
+			
+				if($(this).val() != ""){
+			
+					valor = $(this).val().replace(",",".");
+					
+					totalCustoFixo += parseFloat(valor);
+					
+				}
+
+			}
+		
+		});
+		
+		$("#total").attr('value',float2moeda(totalCustoFixo));
+		$("#custo_fixo").attr('value',float2moeda(totalCustoFixo));
+	
+	}
+	
+	function calculaCustoVariavel(){
+	
+		var totalCustoVariavel = 0;
+	
+		$("#div_custo_variavel").children().children().next().each(function(){
+		
+			if($(this).attr("id") != "total_custo_variavel"){
+			
+				if($(this).val() != ""){
+			
+					valor = $(this).val().replace(",",".");
+					
+					totalCustoVariavel += parseFloat(valor);
+					
+				}
+
+			}
+		
+		});
+		
+		$("#total_custo_variavel").attr('value',float2moeda(totalCustoVariavel));
+		$("#custo_variavel").attr('value',float2moeda(totalCustoVariavel *  parseFloat($("#qtd_venda").val().replace(",","."))));
+	
+	}
+	
+	function calculaLucroLiquido(){
+	
+		var totalLucroLiquido = 0;
+	
+		totalLucroLiquido = parseFloat($("#venda_medio").val().replace(",",".")) * parseFloat($("#bruto_medio_porcento").val().replace(",","."))/100;
+		
+		$("#bruto_medio_real").attr('value',float2moeda(totalLucroLiquido));
+
+		receitaFinanceira = parseFloat($("#receita_finan_por_unidade").val().replace(",",".")) + parseFloat($("#tcc_contrato").val().replace(",","."));
+		
+		$("#receita_financeira").attr('value',float2moeda(receitaFinanceira));
+		
+		totalLucroLiquido += receitaFinanceira;
+		
+		$("#lucro_mfinanceira").attr('value',float2moeda(totalLucroLiquido));
+		
+		if($("#qtd_venda").val() != ""){
+		
+			totalLucroLiquido *= parseFloat($("#qtd_venda").val().replace(",","."));
+			
+		}
+		
+		$("#bruto_total").attr('value',float2moeda(totalLucroLiquido));
+		
+		if(!totalLucroLiquido){
+		
+			totalLucroLiquido = 0;
+		
+		}
+		
+		if($("#custo_fixo").val() != ""){
+			
+			custoFixo = $("#custo_fixo").val();
+			custoFixo = custoFixo.replace(".","");
+			custoFixo = custoFixo.replace(",",".");
+		
+			totalLucroLiquido = totalLucroLiquido-parseFloat(custoFixo);
+		
+		}
+		
+		if($("#custo_variavel").val() != ""){
+		
+			custoVariavel = $("#custo_variavel").val();
+			custoVariavel = custoVariavel.replace(".","");
+			custoVariavel = custoVariavel.replace(",",".");
+			
+			totalLucroLiquido = totalLucroLiquido-parseFloat(custoVariavel);
+		
+		}
+		
+		$("#total_lucro_liquido").attr('value',float2moeda(totalLucroLiquido));
+		
+		if(totalLucroLiquido < 0){
+		
+			$("#total_lucro_liquido").css("background","#FFC0CB");
+			$("#total_lucro_liquido").css("color","#CD0000");
+			$("#total_lucro_liquido").css("border-color","#CD0000");
+		
+		}else{
+		
+			$("#total_lucro_liquido").css("background","#9AFF9A");
+			$("#total_lucro_liquido").css("color","#228B22");
+			$("#total_lucro_liquido").css("border-color","#228B22");
+		
+		}
+
+	}
+	
+	function calculaFinanciamento(){
+	
+		var totalReceitaFinanceira = 0;
+	
+		qtdFinanciamento = (parseFloat($("#qtd_financiado").val().replace(",",".")) * parseFloat($("#qtd_venda").val().replace(",",".")))/100; 
+	
+		totalReceitaFinanceira = parseFloat($("#fmedio_contrato").val().replace(",",".")) * parseFloat($("#venda_medio").val().replace(",","."))/100;
+		
+		$("#vmedio_contrato").attr('value',float2moeda(totalReceitaFinanceira));
+		
+		totalReceitaFinanceira = (parseFloat($("#retorno_contrato").val().replace(",",".")) * totalReceitaFinanceira)/100;
+	
+		$("#vretorno_contrato").attr('value',float2moeda(totalReceitaFinanceira));
+		
+		totalReceitaRetor = qtdFinanciamento * totalReceitaFinanceira;
+		
+		$("#total_receita_retor").attr('value',float2moeda(totalReceitaRetor));
+		
+		totalReceitaTcc = qtdFinanciamento * parseFloat($("#tcc_contrato").val().replace(",","."));
+		
+		$("#total_receita_tcc").attr('value',float2moeda(totalReceitaTcc));
+	
+		totalReceitaFinanceira = parseFloat($("#tcc_contrato").val().replace(",",".")) + totalReceitaFinanceira;
+	
+		$("#receita_finan").attr('value',float2moeda(totalReceitaFinanceira));
+		
+		totalReceitaFinanceira = (totalReceitaFinanceira * parseFloat($("#qtd_financiado").val().replace(",",".")))/100;
+		
+		$("#receita_finan_por_unidade").attr('value',float2moeda(totalReceitaFinanceira));
+		
+		$("#total_receita_geral").attr('value',float2moeda(totalReceitaTcc + totalReceitaRetor));
+
+	}
+	
+	function capital(){
+
+		capitalGiro =(parseFloat($("#qtd_venda").val().replace(",",".")) * (parseFloat($("#venda_medio").val().replace(",",".")) - (parseFloat($("#venda_medio").val().replace(",",".")) * parseFloat($("#bruto_medio_porcento").val().replace(",","."))/100)))*2;
+
+		$("#capital_giro").attr('value',float2moeda(capitalGiro));
+		
+		if($("#seguranca").val() != ""){
+		
+			$("#total_capital").attr('value',float2moeda(capitalGiro + parseFloat($("#seguranca").val().replace(",","."))));
+		
+		}else{
+		
+			$("#total_capital").attr('value',float2moeda(capitalGiro));
+		
+		}
+		
+	}
+	
+	function lucroFinal(){
+		
+		$("#equilibrio").attr('value',Math.round(parseFloat($("#total").val().replace(".","").replace(",","."))/(parseFloat($("#lucro_mfinanceira").val().replace(".","").replace(",",".")) - parseFloat($("#total_custo_variavel").val().replace(",",".")))));
+		
+		$("#capital_investido").attr('value',float2moeda(((parseFloat($("#total_lucro_liquido").val().replace(".","").replace(",",".")) / parseFloat($("#total_capital").val().replace(".","").replace(",","."))) * 100).toFixed(2))+"%");
+	
+		$("#liq_final").attr('value',$("#total_lucro_liquido").val());
+		
+	}
+	
+	function calculaAll(){
+	
+		calculaCustoFixo();
+		calculaCustoVariavel();
+		//calculaLucroLiquido();
+		calculaFinanciamento();
+		capital();
+		calculaLucroLiquido();
+		lucroFinal();
+	
+	}
+	
+</script>		
+	

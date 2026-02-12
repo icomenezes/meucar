@@ -1,0 +1,100 @@
+<?php
+if(!$this->mensagem){
+?>
+
+<style type="text/css">
+	.show{
+		margin-top: 100px;
+	}
+
+	.bg-primary{
+		color: #FFF;
+	}
+	.disabled{
+		cursor:not-allowed;
+	}
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+		<div class="col-lg-4 col-sm-0 col-0 show">
+			<div class="card border-secondary mb-3">
+				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
+				<div class="card-body">
+				<form method="post" action="/index/esqueci-senha" id="esqueci_senha">
+					<div class="form-group">
+					  	<div class="form-floating mb-3">
+					    	<input type="text" class="form-control" id="user"  name="user" placeholder="Login">
+					   	 	<label for="user">Login</label>
+					  	</div>
+					</div>
+				    <div class="form-group">
+					  	<div class="form-floating mb-3">
+					    	<input type="email" class="form-control" id="email"  name="email" placeholder="E-mail">
+					   	 	<label for="email">E-mail</label>
+					  	</div>
+					</div>
+					<div class="invalid-feedback msg">O login e e-mail deve ser informado.</div>
+					<br>
+					<center>
+						<div class="g-recaptcha" data-callback="enableBtn" data-sitekey="6LdfehsbAAAAAFxJ4uaYetFPi5btiTCztXQK6mAj"></div>
+					</center>
+					<br>
+					<div class="d-grid gap-2 disabled">
+					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+
+	function enableBtn(){
+		$("#entrarButton").removeAttr("disabled");
+		$("#disabled").removeClass("disabled");
+	}
+
+	$("#entrarButton").click(function(){
+
+		$("#user").removeClass("is-invalid");
+		$("#email").removeClass("is-invalid");
+		$(".msg").css("display","none");
+
+		let erro = false;
+
+		if($("#user").val() == ""){
+			erro = true;
+			$("#user").addClass("is-invalid");
+		}else{
+			$("#user").addClass("is-valid");
+		}
+		
+		if($("#email").val() == ""){
+			erro = true;
+			$("#email").addClass("is-invalid");
+		}else{
+			$("#email").addClass("is-valid");
+		}
+
+		if(erro){
+			$(".msg").css("display","block");
+		}else{
+			$("#entrarButton").html("Aguarde...");
+			$("#esqueci_senha").submit();
+		}
+	
+	});
+
+</script>
+
+<?php
+}else{
+	echo $this->mensagem;
+}
+?>

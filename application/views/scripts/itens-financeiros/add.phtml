@@ -1,0 +1,114 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add" class="form" method="post">
+	
+	<div class="inline">
+		<label>Grupos Financeiros</label>
+		<select name="id_financeiro_grupo" id="id_financeiro_grupo" class="text req" title="Perfis cadastrados">
+		    <option value="0">SELECIONE</option>			
+			<?php
+				
+				foreach($this->grupos as $grupos){
+					
+					echo "<option value=\"" . $grupos['id'] . "\" label = \"" . $grupos['descricao'] ."\">  ". $grupos['descricao'] ." </option>";
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Item</label>
+		<input type="text" id="item" name="item" class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data In&iacute;cio</label>
+		<input type="text" id="data_inicio" name="data_inicio" class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" id="valor_padrao" name="valor_padrao" class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Recorrente?</label>
+			<input checked="checked" type="radio" id="recorrente" name="recorrente" value="0">N&atilde;o
+			<input type="radio" id="recorrente" name="recorrente" value="1">Sim
+	</div>
+	
+	<div style="display:table;clear:both; margin-left: 10px">
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#descricao").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo descricao deve ser preenchido.";
+	
+	}
+	
+	if($("#credito_debito").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo credito / débito deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+	
+	$(function(){
+	
+		$("#data_inicio").mask("99/99/9999");
+		$("#valor_padrao").attr("onkeyup","validaMoedaBR(this.id)");
+		
+		if($("#msg").html().length > 0){
+				
+			if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+			
+				$("#msg").addClass('sucess');
+			
+			}else{
+			
+				$("#msg").addClass('erro');
+			
+			}
+		
+		}
+		
+		$('#data_inicio').focus(function(){
+			$(this).calendario({
+				target:'#data_inicio'
+			});
+		});
+
+	})
+
+</script>

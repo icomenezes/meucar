@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <!--
+        /**
+        * o------------------------------------------------------------------------------o
+        * | This file is part of the RGraph package - you can learn more at:             |
+        * |                                                                              |
+        * |                          http://www.rgraph.net                               |
+        * |                                                                              |
+        * | This package is licensed under the RGraph license. For all kinds of business |
+        * | purposes there is a small one-time licensing fee to pay and for non          |
+        * | commercial  purposes it is free to use. You can read the full license here:  |
+        * |                                                                              |
+        * |                      http://www.rgraph.net/LICENSE.txt                       |
+        * o------------------------------------------------------------------------------o
+        */
+    -->
+    <title>Documentation about the Meter chart</title>
+    
+    <meta name="keywords" content="rgraph html5 canvas docs meter chart" />
+    <meta name="description" content="Documentation about the Meter chart including information on all the options available to you" />
+    <meta name="googlebot" content="NOODP">
+    
+    <meta property="og:title" content="RGraph: HTML5 Javascript charts library" />
+    <meta property="og:description" content="A charts library based on the HTML5 canvas tag" />
+    <meta property="og:image" content="http://www.rgraph.net/images/logo.jpg"/>
+
+    <link rel="stylesheet" href="../css/website.css" type="text/css" media="screen" />
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    
+    <!-- Place this tag in your head or just before your close body tag -->
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+    <?php PrintAnalyticsCode() ?>
+
+</head>
+<body>
+
+    <!-- Social networking buttons -->
+        <?php
+            $prefix = substr($_SERVER['SERVER_NAME'], 0, 3);
+            require("/rgraph.{$prefix}/social.html");
+        ?>
+    <!-- Social networking buttons -->
+
+    <div id="breadcrumb">
+        <a href="../index.html">RGraph: HTML5 Javascript charts library</a>
+        >
+        <a href="./index.html">Documentation</a>
+        >
+        Meter charts
+    </div>
+
+    <h1>Meter <span>charts documentation</span></h1>
+
+    <script>
+        if (RGraph.isOld()) {
+            document.write('<div style="background-color: #fee; border: 2px dashed red; padding: 5px"><b>Important</b><br /><br /> Internet Explorer does not natively support the HTML5 canvas tag, so if you want to see the charts, you can either:<ul><li>Install <a href="http://code.google.com/chrome/chromeframe/">Google Chrome Frame</a></li><li>Use ExCanvas. This is provided in the RGraph Archive.</li><li>Use another browser entirely. Your choices are Firefox 3.5+, Chrome 2+, Safari 4+ or Opera 10.5+. </li></ul> <b>Note:</b> Internet Explorer 9 fully supports the canvas tag.</div>');
+        }
+    </script>
+    
+    <ul>
+        <li><a href="#example">Example</a></li>
+        <li><a href="#properties">Properties</a></li>
+    </ul>
+    
+    <a name="example"></a>
+    <p>&nbsp;</p>
+    <h2>Example</h2>
+    <pre class="code">
+&lt;script&gt;
+    window.onload = function ()
+    {
+        <span class="javascript-comment">// Create the Meter chart. The arguments are the canvas ID, the minimum, the maximum and the value.</span>
+        var meter = new RGraph.Meter('myCanvas', 50, 100, 60);
+        
+        <span class="javascript-comment">// Configure the Meter chart to appear as you want.</span>
+        meter.Set('chart.contextmenu', [
+                                        ['Show palette', RGraph.Showpalette],
+                                        ['Clear annotations', function () {RGraph.Clear(meter.canvas); meter.Draw();}],
+                                        null,
+                                        ['Cancel', function () {}]
+                                       ]);
+        meter.Set('chart.annotatable', true);
+        meter.Set('chart.label.position', 'inside');
+        meter.Set('chart.title', 'A sample measurement');
+        meter.Set('chart.title.vpos', 0.5);
+        meter.Set('chart.units.post', 'k');
+        meter.Set('chart.red.start', 0);
+        meter.Set('chart.red.end', 3);
+        meter.Set('chart.yellow.start', 3);
+        meter.Set('chart.yellow.end', 6);
+        meter.Set('chart.green.start', 6);
+        meter.Set('chart.green.end', 10);
+        
+        <span class="javascript-comment">// Now call the .Draw() method to draw the chart.</span>
+        meter.Draw();
+    }
+&lt;/script&gt;
+</pre>
+    
+    <p>
+        The example file is <a href="../examples/meter.html">here</a>.
+    </p>
+
+    <a name="properties"></a>
+    <p>&nbsp;</p>
+    <h2>Properties</h2>
+    
+    <p>
+        You can use these properties to control how the Meter apears. You can set them by using the Set() method. Eg:
+    </p>
+    
+    <p>
+        <b>myMeter.Set('name', 'value');</b>
+    </p>
+
+    <ul>
+        <li><a href="#margins">Margins</a></li>
+        <li><a href="#colors">Colors</a></li>
+        <li><a href="#labels and text">Labels and text</a></li>
+        <li><a href="#titles">Titles</a></li>
+        <li><a href="#scale">Scale</a></li>
+        <li><a href="#interactive features">Interactive features</a></li>
+        <li><a href="#shadow">Shadow</a></li>
+        <li><a href="#zoom">Zoom</a></li>
+        <li><a href="#miscellaneous">Miscellaneous</a></li>
+    </ul>
+
+<a name="margins"></a>
+<h3 style="border: 1px solid #aaa; background-color: #eee; font-style: italic; padding: 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px">Margins</h3>
+
+
+
+            <a name="chart.gutter.left"></a>
+            <b>chart.gutter.left</b><br />
+            The left gutter of the chart, (the gutter is where the labels and title are)).<br />
+            <i>Default: 25</i><br /><br />
+
+            <a name="chart.gutter.right"></a>
+            <b>chart.gutter.right</b><br />
+            The right gutter of the chart, (the gutter is where the labels and title are).<br />
+            <i>Default: 25</i><br /><br />
+
+            <a name="chart.gutter.top"></a>
+            <b>chart.gutter.top</b><br />
+            The top gutter of the chart, (the gutter is where the labels and title are).<br />
+            <i>Default: 25</i><br /><br />
+
+            <a name="chart.gutter.bottom"></a>
+            <b>chart.gutter.bottom</b><br />
+            The bottom gutter of the chart, (the gutter is where the labels and title are).<br />
+            <i>Default: 25</i><br /><br />
+
+<a name="colors"></a>
+<h3 style="border: 1px solid #aaa; background-color: #eee; font-style: italic; padding: 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px">Colors</h3>
+
+            <a name="chart.strokestyle"></a>
+            <b>chart.strokestyle</b><br />
+            The color of the bits separating the segements. By setting this to white you can get a separation effect.<br />
+            <i>Default: null</i><br /><br />
+
+            <a name="chart.border.color"></a>
+            <b>chart.border.color</b><br />
+            The color of the outline (including tickmarks).<br />
+            <i>Default: black</i><br /><br />
+
+            <a name="chart.green.start"></a>
+<b>chart.green.start</b><br />
+            The value that the green area should begin at. <br /><i>Default: 35% of the maximum value</i><br /><br />
+            <a name="chart.green.end"></a>
+<b>chart.green.end</b><br />
+            The value that the green area should end at. <br /><i>Default: The maximum value</i><br /><br />
+            <a name="chart.green.color"></a>
+<b>chart.green.color</b><br />
+            The color of the green area, (can be any color).. <br /><i>Default: #207A20</i><br /><br />
+            <a name="chart.yellow.start"></a>
+<b>chart.yellow.start</b><br />
+            The value that the yellow area should begin at. <br /><i>Default: 10% of the maximum value</i><br /><br />
+            <a name="chart.yellow.end"></a>
+<b>chart.yellow.end</b><br />
+            The value that the yellow area should end at. <br /><i>Default: 35% of the maximum value</i><br /><br />
+            <a name="chart.green.color"></a>
+<b>chart.green.color</b><br />
+            The color of the yellow area, (can be any color).. <br /><i>Default: #D0AC41</i><br /><br />
+            <a name="chart.red.start"></a>
+<b>chart.red.start</b><br />
+            The value that the red area should begin at. <br /><i>Default: The minimum value</i><br /><br />
+            <a name="chart.red.end"></a>
+<b>chart.red.end</b><br />
+            The value that the red area should end at. <br /><i>Default: 10% of the maximum value</i><br /><br />
+            <a name="chart.red.color"></a>
+<b>chart.red.color</b><br />
+            The color of the red area, (can be any color).. <br /><i>Default: #9E1E1E</i><br /><br />
+
+<a name="labels and text"></a>
+<h3 style="border: 1px solid #aaa; background-color: #eee; font-style: italic; padding: 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px">Labels and text</h3>            <a name="chart.text.color"></a>
+
+            <b>chart.text.color</b><br />
+            The color of the labels. <br />
+            <i>Default: black</i><br /><br />
+            
+            <a name="chart.text.size"></a>
+<b>chart.text.size</b><br />
+            The size (in points) of the labels. <br /><i>Default: 10</i><br /><br />
+            
+            <a name="chart.text.font"></a>
+            <b>chart.text.font</b><br />
+            The font used to render the text.<br />
+            <i>Default: Verdana</i><br /><br />
+            
+            <a name="chart.value.text"></a>
+            <b>chart.value.text</b><br />
+            This option controls whether the value of the Meter is shown in text.<br />
+            <i>Default: false</i><br /><br />
+            
+            <a name="chart.value.text.decimals"></a>
+            <b>chart.value.text.decimals</b><br />
+            The amount of decimals shown in the text label.<br />
+            <i>Default: 0</i><br /><br />
+            
+            <a name="chart.value.text.units.pre"></a>
+            <b>chart.value.text.units.pre</b><br />
+            The units (before the value) shown in the text label.<br />
+            <i>Default: None (an empty string)</i><br /><br />
+            
+            <a name="chart.value.text.units.post"></a>
+            <b>chart.value.text.units.post</b><br />
+            The units (after the value) shown in the text label.<br />
+            <i>Default: None (an empty string)</i><br /><br />
+            
+            <a name="chart.labels"></a>
+            <b>chart.labels</b><br />
+            Whether the labels are shown or not.<br />
+            <i>Default: true</i><br /><br />
+
+<a name="titles"></a>
+<h3 style="border: 1px solid #aaa; background-color: #eee; font-style: italic; padding: 5px; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius: 10px">Titles</h3>
+
+<a name="chart.title"></a>
+<b>chart.title</b><br />
+            The title of the chart, if any. <br /><i>Default: null</i><br /><br />
+
+
+
+<a name="chart.title.font"></a>
+<b>chart.title.font</b><br />
+The font that the title is rendered in. If not specified the chart.text.font setting is used (usually Verdana)<br />
+<i>Default: null</i><br /><br />
+
+<a name="chart.title.size"></a>
+<b>chart.title.size</b><br />
+The size of the title. If not specified the size is usually 2pt bigger than the chart.text.size setting.<br />
+<i>Default: null</i><br /><br />
+
+<a name="chart.title.bold"></a>
+<b>chart.title.bold</b><br />
+Whather the title is bold or not.<br />
+<i>Default: true</i><br /><br />
+
+<a name="chart.title.background"></a>
+<b>chart.title.background</b><br />
+The background color (if any) for the title.<br />
+<i>Default: null</i><br /><br />
+
+            <a name="chart.title.color"></a>
+<b>chart.title.color</b><br />
+            The color of the title.<br /> <i>Default: black</i><br /><br />
+            <a name="chart.title.hpos"></a>
+<b>chart.title.hpos</b><br />
+            This allows you to completely override the horizontal positioning of the title. It should be a number between 0 and 1, and is multiplied with the whole width of the canvas and then used as the horizontal position. <br /><i>Default: null</i><br /><br />
+            <a name="chart.title.vpos"></a>
+<b>chart.title.vpos</b><br />
+            This allows you to completely override the vertical p

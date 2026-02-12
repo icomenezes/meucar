@@ -1,0 +1,283 @@
+<script>
+
+	$("#menu_busca").remove();
+
+</script>
+
+<style>
+	#table_caracteristicas{
+		#border: solid 1px;
+		margin-left:11px;
+		width:97%
+	}
+	
+	#table_ano_valor{
+		#border: solid 1px;
+		margin-left:11px;
+		width:97%
+	}
+	
+	#table_acessorios{
+		#border: solid 1px;
+		margin-left:11px;
+		margin-top:11px;
+		width:97%
+	}
+	
+	#table_opcionais{
+		#border: solid 1px;
+		margin-left:11px;
+		margin-top:11px;
+		width:97%
+	}
+	
+	label{
+		font-size:15px;
+	}
+	
+	td{
+		border: solid 1px;
+		width:33%;
+	}
+	
+	.select_caracteristicas{
+		width:90%;
+		height:28px;
+	}
+	
+	.select_ano_valor{
+		width:30%;
+		height:28px;
+	}
+</style>
+
+</header>
+
+<section id="content">
+
+	<form action="busca-veiculos" method="post">
+		
+		<table id="table_caracteristicas">
+			<tr><td colspan="3" style="border-bottom: solid 1px;"><label style="font-size:20px;"><b>Busca Avan&ccedil;ada</b></label></td></tr>
+			<tr>
+				<td>
+					<br>
+					<label>Marca<label><br>
+					<select id="marca" name="marca" class="select_caracteristicas" onchange="buscaModeloAvancado(this.value)">
+						<option value="">Selecione</option>
+					</select>
+				</td>
+				
+				<td>
+					<br>
+					<label>Modelo<label><br>
+					<select id="modelo" name="modelo" class="select_caracteristicas">
+						<option value="">Selecione</option>
+					</select>
+				</td>
+				
+				<td>
+					<br>
+					<label>Cor<label><br>
+					<input type="text" id="cor" name="cor" style="width:89%; height:23px;" value="">
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<br>
+					<label>Combust&iacute;vel<label><br>
+					<select id="combustivel" name="combustivel" class="select_caracteristicas">
+						<option value="">Todos</option>
+						<option value="Diesel">Diesel</option>
+						<option value="Etanol">Etanol</option>
+						<option value="Eletricidade">Eletricidade</option>
+						<option value="Flex">Flex</option>
+						<option value="Gasolina">Gasolina</option>
+						<option value="G&aacute;s-Natural">G&aacute;s-Natural</option>
+					</select>
+				</td>
+				
+				<td>
+					<br>
+					<label>Portas<label><br>
+					<select id="portas" name="portas" class="select_caracteristicas">
+						<option value="">Todas</option>
+						<option value="2p">2 portas</option>
+						<option value="3p">3 portas</option>
+						<option value="4p">4 portas</option>
+						<option value="5p">5 portas</option>
+					</select>
+				</td>
+				
+				<td>
+					<br>
+					<label>Cidade<label><br>
+					<select id="cidade" name="cidade" class="select_caracteristicas">
+						<option value="">Selecione</option>
+					</select>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>
+					<br>
+					<label>Anunciante<label><br>
+					<select id="anunciante" name="anunciante" class="select_caracteristicas">
+						<option value="">Todos</option>
+						<option value="1">Logistas</option>
+						<option value="10">Particulares</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		
+		<table id="table_ano_valor">
+		<tr>
+			<td>
+				<br>
+				<label>Ano<label><br>
+				De
+				<select id="minimo_ano" name="minimo_ano" class="select_ano_valor">
+					<option value="">Qualquer</option>
+				<?php
+					for($i = 1; $i > -90; $i--){
+					
+						echo "<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>";
+					
+					}
+				?>
+				</select>
+				até
+				<select id="maximo_ano" name="maximo_ano" class="select_ano_valor">
+					<option value="">Qualquer</option>
+				<?php
+					for($i = 1; $i > -90; $i--){
+					
+						echo "<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>";
+					
+					}
+				?>
+				</select>
+			</td>
+			<td>
+				<br>
+				<label>Valor<label><br>
+				De
+				<select id="minimo_preco" name="minimo_preco" class="select_ano_valor">
+					<option value="">Qualquer</option>
+					<option value="5000">R$ 5.000,00</option>
+					<option value="10000">R$ 10.000,00</option>
+					<option value="15000">R$ 15.000,00</option>
+					<option value="20000">R$ 20.000,00</option>
+					<option value="25000">R$ 25.000,00</option>
+					<option value="30000">R$ 30.000,00</option>
+					<option value="35000">R$ 35.000,00</option>
+					<option value="40000">R$ 40.000,00</option>
+					<option value="50000">R$ 50.000,00</option>
+					<option value="60000">R$ 60.000,00</option>
+					<option value="80000">R$ 80.000,00</option>
+					<option value="100000">R$ 100.000,00</option>
+					<option value="150000">R$ 150.000,00</option>
+				</select>
+				até
+				<select id="maximo_preco" name="maximo_preco" class="select_ano_valor">
+					<option value="">Qualquer</option>
+					<option value="5000">R$ 5.000,00</option>
+					<option value="10000">R$ 10.000,00</option>
+					<option value="15000">R$ 15.000,00</option>
+					<option value="20000">R$ 20.000,00</option>
+					<option value="25000">R$ 25.000,00</option>
+					<option value="30000">R$ 30.000,00</option>
+					<option value="35000">R$ 35.000,00</option>
+					<option value="40000">R$ 40.000,00</option>
+					<option value="50000">R$ 50.000,00</option>
+					<option value="60000">R$ 60.000,00</option>
+					<option value="80000">R$ 80.000,00</option>
+					<option value="100000">R$ 100.000,00</option>
+					<option value="150000">R$ 150.000,00</option>
+				</select>
+			</td>
+		</tr>
+		</table>
+		
+		<table id="table_acessorios">
+			<tr><td colspan="3" style="border-bottom: solid 1px;"><label style="font-size:15px;"><b>Acess&oacute;rios</b></label></td></tr>
+		</table>
+		
+		<table id="table_opcionais">
+		</table>
+		
+		<table id="table_acessorios">
+			<tr><td colspan="3" style="border-bottom: solid 1px;"><label style="font-size:15px;"><b></b></label></td></tr>
+		</table>
+		<center>
+			<div class="box-form-button">
+				<input type="hidden" name="tipo_busca" value="1">
+				<a class="button-form" style="width:100px; border: solid 1px #999999;" href="#"  onClick="javascript:submit()">Buscar</a>
+			</div> 
+		</center>
+	</form>
+	
+<script>
+		
+	function buscaOpcionais(){
+
+		$.ajax({                   
+			type: "POST",
+			url:"/opcionais/ajax",
+			dataType:"html",
+			//data:{idempresa:id},                       
+			success:function(retorno){
+				//alert(retorno);
+				
+				$("#table_opcionais").html(retorno);
+			 }
+		})
+
+	}
+	
+	function buscaModeloAvancado(strMarca){
+	
+		var resp = $.ajax({
+				url:"/modelos/ajax/fn/busca_modelo/marca/"+strMarca,
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+		
+		$("#modelo").html(resp);
+
+	}
+	
+	$(document).ready(function() {
+	
+		buscaOpcionais();
+	
+		var resp = $.ajax({
+				url:"/modelos/ajax/fn/busca_marca",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+
+		$("#marca").html(resp);
+		
+		var resp = $.ajax({
+				url:"/empresas/ajax/fn/busca_cidade/id_modelo/nada",
+				async: false,
+				type: 'POST',
+				//data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+
+		$("#cidade").html(resp);
+
+	});
+	
+	
+		
+</script>
+</section>

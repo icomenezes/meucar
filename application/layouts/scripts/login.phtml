@@ -1,0 +1,66 @@
+﻿<?php
+
+header("Content-Type: text/html; charset=UTF-8",true);
+
+session_destroy();
+
+Zend_Session::start();
+$ts = @date('ymdhis');
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Meu Car</title>
+      	<link rel="icon" type="image/png" href="https://www.selectveiculos.com.br/images/icon_64.png" />
+	  	<link rel="shortcut icon" href="https://www.selectveiculos.com.br/images/icon_64.png"/>
+		<link rel="stylesheet" href="/css/default.css?ts=<?php echo $ts; ?>" type="text/css" media="screen" />
+		<link rel="stylesheet" href="/css/style.css?ts=<?php echo $ts; ?>" type="text/css" media="screen" />
+		<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<!--[if lte IE 7]>
+<link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" />
+<![endif]-->
+
+</head>
+<body id="login">
+
+	
+
+<div id="container">
+
+	<div id="header">
+	</div>
+	
+	<div id="content-wrap">
+		
+		<h2 id="main-title">Meu Car</h2>
+		<div class="imagem_login" onclick="javascript:window.location.href='/'">
+			<br/>
+			<br/>
+			<img src="/arquivos_site/images/Logo_Car.png" height="240"/>
+		</div>
+		
+		<div id="login-wrap">
+		<img src="/arquivos_site/images/meucar.png" style="visibility:hidden;" height="50px"/>
+		
+		<?php echo $this->layout()->content; ?>
+		
+		</div><!-- login -->
+	</div><!-- content-wrap -->
+
+</div>
+<script>
+$(function() {
+
+	$("dl:zend").attr("style","background-color:#AA0000");
+	
+	if($(document).width() > 1200){
+		
+		$(".imagem_login").css("left","10%");
+	
+	}
+
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<form class="form" action="lista" method="post">
+	
+	<div class="inline">
+		<label>Grupos Financeiros</label>
+		<select name="id_financeiro_grupo" id="id_financeiro_grupo" class="text" title="Perfis cadastrados">
+		    <option value="0">SELECIONE</option>			
+			<?php
+				
+				foreach($this->grupos as $grupos){
+					
+					echo "<option value=\"" . $grupos['id'] . "\" label = \"" . $grupos['descricao'] ."\">  ". $grupos['descricao'] ." </option>";
+					
+				}
+			
+			?>
+			
+		</select>
+		
+		<br/>
+		<br/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>itens-financeiros/add'" />
+	</div>
+	
+	<div class="inline" style="width:65%; height:initial;">
+		<div>
+			<span style="font-size:14px;">Itens financeiros são os nomes das despesas que serão lançadas no sistema, como por exemplo aluguel, telefone, material de limpeza. Esses itens podem ser classificados como:</span>
+			<br/>
+			<br/>
+			<span style="font-size:14px;"><b>Recorrentes:</b> São aqueles que são lançados todos os meses. Exemplo: Aluguel ou  telefone.</span>
+			<br/>
+			<br/>
+			<span style="font-size:14px;"><b>Não recorrentes:</b> São aqueles que acontecem sem data específica ou raramente. Exemplo: Material de limpeza ou papelaria.</span>
+			<br/>
+			<br/>
+			<span style="font-size:14px;">Clique em Adicionar para incluir um novo item, quando você inclui um novo item você deve definir se ele é recorrente ou não, assim caso você defina este item como recorrente ele irá aparecer todos os meses em sua agenda para lembrar você da data de vencimento e do valor de pagamento. Se por exemplo você cadastrou sua conta de telefone como recorrente, mas o valor dela varia de um mês para o outro, basta você editar esse valor quando for baixar essa despesa. Isso pode ser feito na tela inicial do sistema em sua agenda de pagamentos.</span>
+		</div>
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Grupo Financeiro</th><th>Item</th><th>Data In&iacute;cio</th><th>Recorrente</th><th>Valor Padr&atilde;o</th><th>&Uacute;lltima Atualiza&ccedil;&atilde;o</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+	
+	foreach($this->itensFinanceiros as $e){
+	
+		$dataTmp = explode(" ",$e['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+	
+?>		
+		<tr>
+		<td><?php echo $e['descricao']; ?></td>
+		<td><?php echo $e['item']; ?></td>
+		<td><?php 
+				
+				$dataTmp = explode("-",$e['data_inicio']);
+				$e['data_inicio'] = implode("/",array_reverse($dataTmp));
+				
+				echo $e['data_inicio'];
+			
+		?></td>
+		<td><?php if($e['recorrente'] == 0){
+		
+			echo "Não";
+		
+		}else{
+
+			echo "Sim";?></td>
+		
+		<?php
+		}
+		?>
+		
+		<td><?php echo $e['valor_padrao']; ?></td>
+		<td><?php echo $e['ultimoUsuario'] ?> - <?php echo $e['hora_alteracao'] ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Item: <?php echo $e['item']?>', <?php echo $e['id']?>)" /></td>		
+		</tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+	
+	$(function(){
+	
+		$("#data_inicial").mask("99/99/9999");
+		$("#data_final").mask("99/99/9999");
+		
+		if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+ 
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+	})
+
+</script>

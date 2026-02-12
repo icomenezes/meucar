@@ -1,0 +1,107 @@
+<style>
+	#retraro{
+		width:70px;
+		height:60px;
+		border: solid 2px;
+	}
+	
+	#paisagem{
+		width:100px;
+		height:40px;
+		border: solid 2px;
+	}
+</style>
+
+<form id="propaganda_site" name="propaganda_site" enctype="multipart/form-data" action="upload" class="form" method="post">
+	
+	<div class="inline">
+		<input type="file" id="imagem" name="imagem" class="text" title="Upload" value="" />
+	</div>
+	
+	<div class="inline">
+		<input type="radio" id="tipo_imagem" name="tipo_imagem" value="1"/>Retrato
+		<br>
+		<input type="radio" id="tipo_imagem2" name="tipo_imagem" value="2"/>Paisagem
+	</div>
+	
+	<div class="inline" style="clear:both; width:97%;">
+		<label class="label">Link</label>
+		<input type="text" id="link" name="link" class="text" title="Link" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<input type="button" id="button" name="button"  class="btn-small btn-add" value="Salvar" onClick="validaCampo();"/>
+	</div>
+<form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#imagem").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Escolha uma imagem para realizar o upload.";
+	
+	}
+	
+	if(!$("#tipo_imagem").is(":checked")){
+	
+		if(!$("#tipo_imagem2").is(":checked")){
+		
+			erro = true;
+			
+			msg += "<br>Selecione o tipo de imagem retraro ou paisagem.";
+		
+		}
+	
+	}
+	
+	if($("#link").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo link deve ser preenchido.";
+	
+	}
+	
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

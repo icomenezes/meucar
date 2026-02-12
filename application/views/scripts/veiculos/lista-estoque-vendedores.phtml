@@ -1,0 +1,89 @@
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+</style>
+
+<form class="form" action="/relatorios-mes/gerar-xls" method="post">
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->arrEstoque; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Estoque Vendedores"/>
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Vendedores');"/>
+	</div>
+
+</form>
+
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+	*{
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:13px;
+	}
+	
+</style>
+	<?php
+	
+		echo $this->arrEstoque;
+	
+	?>
+
+</div>
+
+
+<script type="text/javascript">
+
+	function imprimir(id, pg) {
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+
+}
+
+	function geraXls(){
+	
+		$("form").submit();
+	
+	}
+	
+</script>

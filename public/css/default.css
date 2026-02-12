@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+/*---------------------------------------------
+>> ESTILOS GLOBAIS
+---------------------------------------------*/
+
+/* CSS RESET */
+
+html, body, span, applet, object, iframe, table, caption, tbody, tfoot, thead, tr, th, td, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, button, hr { 
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+	color:#777;
+
+	vertical-align:baseline;font-weight: inherit;font-style: inherit; outline: 0; padding: 0; margin: 0; border: 0;
+}
+:focus {outline:0;} body {background:white; line-height:1;} ol, ul {list-style:none;} table {border-collapse: separate; border-spacing:0;} caption, th, td {font-weight:normal; text-align:left;} blockquote:before, blockquote:after, q:before, q:after {content: "";} blockquote, q {quotes: "" "";}
+
+strong {font-weight:bold;}
+cite,em,dfn {font-style:italic;}
+pre, code, kbd, samp, tt, var {font-family:"Courier New", Courier, monospace;}
+pre, dl {margin-bottom:20px;}
+dl {line-height:17px; background-color:#FFF;}
+abbr, acronym {text-transform:uppercase; cursor:help; border-bottom:1px dotted #000;font-size:85%;}
+acronym {cursor:auto; border-bottom:none;}
+big { font-size:125%; line-height:80%;}
+dfn, ins {text-decoration:underline;}
+small {font-size:85%;}
+sub, sup {font-size:85%;}
+sub {vertical-align:bottom;}
+sup {vertical-align:top;}
+th {font-weight:bold;}
+input, textarea, select, option, button {font-family: inherit; color:inherit; font-size:inherit;}
+textarea{height:60px;}
+
+/* LINKS */
+
+a {color: #006699; text-decoration:none;}
+a:hover {text-decoration:underline;}
+
+/* TEXT REPLACEMENT */
+
+.replace {overflow:hidden;display:block;text-indent:-5000px;width:0px;height:0px;font-size:1px;}
+
+/* ESTILOS GLOBAIS */
+
+.clear {clear:both;}

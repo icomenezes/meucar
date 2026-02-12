@@ -1,0 +1,386 @@
+<form class="form" action="lista" method="post">
+
+<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+
+<div class="inline">
+	<label class="label">Data inicial</label>
+	<input type="text" id="data_inicial" name="data_inicial" class="text" value="" />
+</div>
+
+<div class="inline">
+	<label class="label">Data Final</label>
+	<input type="text" id="data_final" name="data_final" class="text" value="" />
+</div>
+
+<div id="venda" style="width:98.1%;display:inline">
+
+	<div class="inline">
+		<label class="label">Buscar pelo Modelo ou Placa</label>
+		<input type="text" id="find_placa" name="find_placa" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value)" autocomplete="off" value="" />
+		<div id="resVeiculos" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa" name="placa" class="text" value="<?php echo $this->veiculo['placa'];?>" />
+		<input type="hidden" id="id_veiculo" name="id_veiculo" value="<?php echo $this->veiculo['id'];?>">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca" name="marca" class="text" value="<?php echo $this->veiculo['marca'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo" name="modelo" class="text" value="<?php echo $this->veiculo['modelo'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo" name="ano_modelo" class="text" value="<?php echo $this->veiculo['ano_modelo'];?>"/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" readonly="readonly" id="cor" name="cor" class="text" value="<?php echo $this->veiculo['cor'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" id="valor_venda" name="valor_venda" class="text" value="<?php echo $this->veiculo['valor_venda'];?>" />
+		<input type="hidden" id="valor_aquisicao" name="valor_aquisicao" value="<?php echo $this->veiculo['valor_aquisicao'];?>" />
+	</div>
+<!----
+	<div class="inline">
+		<label class="label">Custos Transfer&ecirc;ncia</label>
+		<input type="text" id="custos_transferencia" name="custos_transferencia" class="text" value="<?php echo $this->veiculo['custos_transferencia'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Dias Garantia</label>
+		<input type="text" id="dias_garantia" name="dias_garantia" class="text" value="<?php echo $this->veiculo['dias_garantia'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Garantia</label>
+		<input type="text" id="km_garantia" name="km_garantia" class="text" value="<?php echo $this->veiculo['km_garantia'];?>" />
+	</div>
+</div>
+	---->
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>garantias/add'" />
+	</div>
+
+</form>
+<style>
+.table tr th, .table tr td {
+	padding:2px;
+}
+</style>
+<table class = 'table'>
+
+<thead><tr><th>Ve&iacute;culo</th><th>Descri&ccedil;&atilde;o</th><th>Negocia&ccedil;&atilde;o</th><th>Data Abertura</th><th>Data Conclus&atilde;o</th><th>Status</th><th>&Uacute;lltima Atualiza&ccedil;&atilde;o</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+	
+	//var_export($this->garantias);
+	//exit;
+	
+	if($this->garantias){
+	
+		foreach($this->garantias as $e){
+		
+			if($e['descricao_site']){
+			
+				$e['modelo'] = $e['descricao_site'];
+			
+			}
+		
+			$dataTmp = explode(" ",$e['hora_alteracao']);
+			$dataTmp2 = explode("-",$dataTmp[0]);
+			$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+			if(isset($dataTmp[1])){
+				$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+			}
+			
+			$dataTmp = explode(" ",$e['data_entrada']);
+			$dataTmp2 = explode("-",$dataTmp[0]);
+			$e['data_entrada'] = implode("/",array_reverse($dataTmp2));
+			if(isset($dataTmp[1])){
+				$e['data_entrada'] = $e['data_entrada'] . " " . $dataTmp[1];
+			}
+			if($e['data_saida'] != '0000-00-00'){
+				
+				$e['status'] = "Concluída";
+				$cor = "#AAFFAA";
+				
+			}else{
+				
+				$e['status'] = "Pendente";
+				$cor = "#FFFFAA";
+				
+			}
+			
+			$dataTmp = explode(" ",$e['data_saida']);
+			$dataTmp2 = explode("-",$dataTmp[0]);
+			$e['data_saida'] = implode("/",array_reverse($dataTmp2));
+			if(isset($dataTmp[1])){
+				$e['data_saida'] = $e['data_saida'] . " " . $dataTmp[1];
+			}
+		
+	?>		
+
+			<tr style="background-color:<?php echo $cor; ?>">
+			<td><?php echo $e['modelo']; ?></td>
+			<td><?php echo $e['descricao_defeito']; ?></td>
+			<td><?php echo "<a target='_blank' href='/negociacoes/edt/id/".$e['idNegociacao']."'>".$e['idNegociacao']."</a>"; ?></td>
+			<td><?php echo $e['data_entrada']; ?></td>
+			<td><?php echo $e['data_saida']; ?></td>
+			<td><?php echo $e['status']; ?></td>
+			<td><?php echo $e['ultimoUsuario'] ?> - <?php echo $e['hora_alteracao'] ?></td>
+			<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Grupo: <?php echo $e['descricao']?>', <?php echo $e['id']?>)" /></td>		
+			</tr>
+			
+	<?php	
+		}
+		
+	}else{
+	
+		echo "<div style='margin-left:10px;'>N&atilde;o h&aacute; garantias para o ve&iacute;culo pesquisado</div>";
+	
+	}
+	?>
+
+</tbody>
+</table>
+
+	<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+	
+	function findVeiculo(f){
+
+	$("#resVeiculos").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/vendido/1',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculos ul").html(resp);
+
+}
+
+function populaCamposVeiculo(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#venda div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+				
+				if(arrPartes[0] == 'valor_venda'){
+				
+					arrPartes[1] = arrPartes[1].replace(".",",");
+					
+					$(this).val(arrPartes[1]);
+					$("#valor_base_calculo").val(arrPartes[1]);
+				
+				}
+			
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_veiculo"){
+					
+					$(this).val(arrPartes[1]);
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+
+}
+
+function esconde(f){
+	
+	$(f).css("display","none");
+	
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	$("#data_inicial").mask("99/99/9999");
+	$("#data_final").mask("99/99/9999");
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+ 
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+})
+
+
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

@@ -1,0 +1,87 @@
+<form class="form" action="/relatorios-mes/gerar-xls" method="post">
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->arrEstoque; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Estoque Vendedores"/>
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Vendedores');"/>
+	</div>
+
+</form>
+
+<div id="print">
+
+<style>
+	
+	table{
+		width:100%;
+		border: solid 1px #AAAAAA;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	th{
+		font-size:10px;
+		background-color: #999999;
+		color:#FFFFFF;
+		border: solid 1px #AAAAAA;
+	}
+	
+	td{
+		font-size:12px;
+		height:20px;
+		vertical-align:middle;
+		border-left: solid 1px #DDDDDD;
+	}
+	
+</style>
+	
+	<div style="margin-left:10px; margin-bottom:10px; font-family: Arial, Helvetica, sans-serif;">
+		<span><b>TOTAL DE VE&Iacute;CULOS EM ESTOQUE: <?php echo $this->qtdVeiculos; ?></b></span>
+	</div>
+
+	<?php
+	
+		echo $this->arrEstoque;
+	
+	?>
+
+</div>
+
+
+<script type="text/javascript">
+
+	function imprimir(id, pg) {
+	
+		$("td").css("font-size","9px");
+		$("td").css("height","13px");
+		$("td").css("border-left","0px");
+		$("#th_placa").css("width","50px");
+		$("#th_veiculo").css("width","120px");
+		$("#th_preco").css("width","60px");
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+		
+		$("td").css("font-size","12px");
+		$("th").css("font-size","12px");
+		$("td").css("height","20px");
+		$("td").css("vertical-align","middle");
+		$("td").css("border-left","1px");
+		$("#th_placa").css("width","100px");
+		$("#th_veiculo").css("width","240px");
+		$("#th_preco").css("width","120px");
+
+}
+
+	function geraXls(){
+	
+		$("form").submit();
+	
+	}
+	
+</script>

@@ -1,0 +1,199 @@
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+</style>
+
+<form class="form" action="lista-estoque-gerencial" method="post">
+	
+	<div class="inline">
+		<label class="label">Origem</label>
+		<select class="text" id="origem" name="origem">
+			<option value="">Selecione</option>
+			<option value="Compra">Compra</option>
+			<option value="Concession&aacute;ria">Concession&aacute;ria</option>
+			<option value="Indica&ccedil;&atilde;o">Indica&ccedil;&atilde;o</option>
+			<option value="Leil&atilde;o">Leil&atilde;o</option>
+			<option value="Troca">Troca</option>
+			<option value="Outros">Outros</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->arrEstoque; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Estoque Gerencial"/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Gerencial');"/>
+	</div>
+
+</form>
+
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+	*{
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:12px;
+	}
+	
+	#table_dados tr td{
+		
+		border: solid 1px #CCCCCC;
+		height:25px;
+		vertical-align:middle;
+		horizontal-align:center;
+		padding: 3px;
+		margin-top:200px;
+	}
+	
+	#table_dados{
+		margin-top:185px;
+	}
+	
+</style>
+	<div id="div_cabeca" style="height:1px;">
+		<table style="background-color:#999999;" id="table_cabeca">
+			<tr>
+				<th colspan="20" style="color:#FFFFFF; height:25px;">
+					<div style="margin-top:6px; margin-left:6px;">
+						Para visualizar o fim do relat&oacute;rio passe o mouse sobre o cabe&ccedil;alho da tabela na horizontal.
+					</div>
+				</th>
+			</tr>
+			<tr>
+				<th style="color:#FFFFFF; width:29px; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Nº</center></th>
+				<th style="color:#FFFFFF; width:104px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Modelo</center></th>
+				<th style="color:#FFFFFF; width:74px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Opcionais</center></th>
+				<th style="color:#FFFFFF; width:78px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Combustivel</center></th>
+				<th style="color:#FFFFFF; width:83px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Cor</center></th>
+				<th style="color:#FFFFFF; width:66px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Ano</center></th>
+				<th style="color:#FFFFFF; width:65px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Placa</center></th>
+				<th style="color:#FFFFFF; width:96px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Origem</center></th>
+				<th style="color:#FFFFFF; width:55px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>KM</center></th>
+				<th style="color:#FFFFFF; width:83px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Venda</center></th>
+				<th style="color:#FFFFFF; width:60px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Em Estoque</center></th>
+				<th style="color:#FFFFFF; width:83px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Custo</center></th>
+				<th style="color:#FFFFFF; width:83px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Compra</center></th>
+				<th style="color:#FFFFFF; width:82px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Revisao</center></th>
+				<th style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca' colspan='2'><center>Lucro</center></th>
+				<th style="color:#FFFFFF; width:84px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Compra</center></th>
+				<th style="color:#FFFFFF; width:82px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Termino Revisao</center></th>
+				<th style="color:#FFFFFF; width:80px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Em Revisao</center></th>
+				<th style="color:#FFFFFF; width:82px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>FIPE</center></th>
+				<th style="color:#FFFFFF; width:20px;  border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Fotos</center></th>
+			</tr>
+		</table>
+	</div>
+	<?php
+		echo $this->arrEstoque;
+	?>
+	
+<script type="text/javascript">
+
+	function imprimir(id, pg) {
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+
+}
+
+	function geraXls(){
+	
+		$("form").attr("action","/relatorios-mes/gerar-xls");
+		$("form").submit();
+		$("form").attr("action","lista-estoque-gerencial");
+	
+	}
+	
+	var posicaoLeft;
+	var posicaoTop;
+	
+	$("#content").scroll(function(){
+
+		posicaoLeft = $(this).scrollLeft();
+		$('#div_cabeca').css({position:'relative', left:0});
+
+	});
+	
+	$(document).scroll(function(){
+
+		posicaoTop = $(this).scrollTop();
+		
+		if(posicaoTop >= 205){
+
+			$('#div_cabeca').css({position:'relative', top:(posicaoTop-205)});
+		
+		}else{
+		
+			$('#div_cabeca').css({position:'relative', top:'0px'});
+		
+		}
+
+	});
+	
+	$("#table_cabeca").css("width",$("#table_dados").width());
+	
+	$("#div_cabeca").mousemove(function(e){
+		
+		if($(document).width() < 900){
+		
+			$("#content").scrollLeft((e.pageX*2.5)-$(document).width());
+		
+		}else{
+		
+			if($(document).width() < 1050){
+			
+				$("#content").scrollLeft((e.pageX*2)-$(document).width());
+			
+			}
+			
+		}
+		
+		if($(document).width() >= 1050){
+		
+			$("#content").scrollLeft(e.pageX-600);
+		
+		}
+	
+	});
+
+</script>

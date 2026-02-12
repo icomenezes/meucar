@@ -1,0 +1,245 @@
+<form class="form" action="despesas" method="post" id="form">
+	
+<div class="inline" id="div_select">
+	<label class="label">Grupo</label>
+	<select name = "grupo" id="grupo" class="select">
+		<option value = "0">Todos</option>
+		<?php
+		foreach($this->gruposFinanceiros as $grupos){
+		
+			if($grupos['id'] == $this->idGrupo){
+			
+				echo "<option selected='selected' value = '".$grupos['id']."'>".$grupos['descricao']."</option>";
+			
+			}else{
+		
+				echo "<option value = '".$grupos['id']."'>".$grupos['descricao']."</option>";
+			
+			}
+		
+		}
+		?>
+		</select>
+</div>
+
+<div class="inline" id="div_select">
+	<label class="label">Item</label>
+	<select name="item" id="item" class="select">
+		<option value = "0">Todos</option>
+		<?php
+		foreach($this->itens as $itens){
+		
+			if($itens['item'] == $this->item){
+			
+				echo "<option selected='selected' value = '".$itens['item']."'>".$itens['item']."</option>";
+			
+			}else{
+		
+				echo "<option value = '".$itens['item']."'>".$itens['item']."</option>";
+			
+			}
+		
+		}
+		?>
+		</select>
+</div>
+
+<div class="inline" id="div_select">
+	<label class="label">Baixado</label>
+	<select name="baixado" id="baixado" class="select">
+		<option value ="0" <?php echo($this->idBaixado == 0)?"selected='selected'":""; ?>>Todos</option>
+		<option value ="1" <?php echo($this->idBaixado == 1)?"selected='selected'":""; ?>>Sim</option>
+		<option value ="2" <?php echo($this->idBaixado == 2)?"selected='selected'":""; ?>>N&atilde;o</option>
+		</select>
+</div>
+
+<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+
+
+	<div class="inline" id="div_datas" style="margin-top:-8px;">
+		<table style="margin-top:0px; border:0px;">
+			<tr>
+				<td style="border:0px;">
+					<label class="label">Data Inicial</label>
+				</td>
+				<td style="border:0px;">
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td style="border:0px;">
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->dataInicial; ?>"/>
+				</td>
+				<td style="border:0px;">
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->dataFinal; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%; margin-top: 20px;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->relatorio; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Despesas"/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Despesas');"/>
+	</div>
+
+</form>
+
+<div id="print">
+
+<style>
+	
+	table{
+		width:100%;
+		border: solid 1px #AAAAAA;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	th{
+		font-size:10px;
+		background-color: #999999;
+		color:#FFFFFF;
+		border: solid 1px #AAAAAA;
+	}
+	
+	td{
+		font-size:12px;
+		height:20px;
+		vertical-align:middle;
+		border-left: solid 1px #DDDDDD;
+	}
+	
+</style>
+
+	<?php
+	echo $this->relatorio;
+	?>
+
+</div>
+
+<script type="text/javascript">
+
+	function imprimir(id, pg) {
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+
+}
+
+	function geraXls(){
+	
+		$("form").attr("action","gerar-xls");
+		$("form").submit();
+		$("form").attr("action","despesas");
+	
+	}
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

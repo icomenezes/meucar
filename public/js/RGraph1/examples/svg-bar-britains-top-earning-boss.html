@@ -1,0 +1,110 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.bar.js" ></script>
+    
+
+    <title>RGraph demo: An SVG Bar chart showing the earnings of britains highest paid boss</title>
+    
+    <meta name="description" content="An SVG Bar chart showing the earnings of britains highest paid boss" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta charset="ISO-8859-1">
+
+</head>
+<body>
+
+
+
+    <h1>An SVG Bar chart showing the earnings of britains highest paid boss</h1>
+    <p>
+        She founded Bet365 -  an online gambling firm. Who would have guessed
+        that gambling could be so profitable...?
+    </p>
+    
+
+    <div style="width: 900px; height: 350px" id="chart-container"></div>
+
+
+
+    <script>
+        new RGraph.SVG.Bar({
+            id: 'chart-container',
+            data: [6,5,13,30,54,199,220],
+            options: {
+                labelsAbove: true,
+                labelsAboveSize: 16,
+                labelsAboveUnitsPre: '£',
+                labelsAboveUnitsPost: 'm',
+                labelsAboveColor: '#1280A1',
+                labelsAboveBold: true,
+                colors: ['#1280A1'],
+                backgroundGridBorder: false,
+                backgroundGridVlines: false,
+                xaxis: false,
+                yaxis: false,
+                xaxisLabels: ['2012','2013','2014','2015','2016','2017','2018'],
+                textSize: 18,
+                marginLeft: 85,
+                yaxisScaleUnitsPost: 'm',
+                yaxisScaleUnitsPre: '£'
+            }
+        }).draw();
+    </script>
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.svg.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.svg.bar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="padding: 15px"&gt;
+    &lt;div style="width: 900px; height: 350px" id="chart-container"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    new RGraph.SVG.Bar({
+        id: 'chart-container',
+        data: [6,5,13,30,54,199,220],
+        options: {
+            labelsAbove: true,
+            labelsAboveSize: 16,
+            labelsAboveUnitsPre: '£',
+            labelsAboveUnitsPost: 'm',
+            labelsAboveColor: '#1280A1',
+            labelsAboveBold: true,
+            colors: ['#1280A1'],
+            backgroundGridBorder: false,
+            backgroundGridVlines: false,
+            xaxis: false,
+            yaxis: false,
+            xaxisLabels: ['2012','2013','2014','2015','2016','2017','2018'],
+            textSize: 18,
+            marginLeft: 85,
+            yaxisScaleUnitsPost: 'm',
+            yaxisScaleUnitsPre: '£'
+        }
+    }).draw();
+&lt;/script&gt;
+</pre>
+
+
+
+    
+    
+
+
+
+</body>
+</html>

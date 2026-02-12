@@ -1,0 +1,103 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="/modelos/edt" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" id="marca" name="marca" class="text" value="<?php echo $this->modelo['marca'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" id="modelo" name="modelo" class="text" value="<?php echo $this->modelo['modelo'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" id="ano_modelo" name="ano_modelo" class="text" value="<?php echo $this->modelo['ano_modelo'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Pre&ccedil;o</label>
+		<input type="text" id="preco" name="preco" class="text" value="<?php echo $this->modelo['preco'];?>" />
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<input type="hidden" id="id" name="id" value="<?php echo $this->modelo['id'];?>" />
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#marca").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo marca deve ser preenchido.";
+	
+	}
+	
+	if($("#modelo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo modelo deve ser preenchido.";
+	
+	}
+	
+	if($("#ano_modelo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo ano deve ser preenchido.";
+	
+	}
+	
+	if($("#preco").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo pre&ccedil;o deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

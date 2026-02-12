@@ -1,0 +1,851 @@
+<link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap.css">
+
+<style type="text/css">
+
+	.form-check {
+	    display: block;
+	    min-height: 1.5rem;
+	    padding-left: 1.5em;
+	    margin-bottom: 0.125rem;
+	}
+
+	.error {
+		opacity: 0.7;
+		font-size: 14px;
+		color: red;
+		background-repeat: no-repeat;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='20' height='20' fill='none' stroke='%23f04124'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23f04124' stroke='none'/%3e%3c/svg%3e");
+	}
+
+	.sucesso {
+		opacity: 0.7;
+		font-size: 14px;
+		color: green;
+		background-repeat: no-repeat;
+		background-size: 17px;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2343ac6a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+	}
+
+	.espace{
+		margin-bottom: 50px; 
+		margin-top: 50px;
+	}
+
+</style>
+
+<div class="modal fade" id="ModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="TituloModalCentralizado">Metas(Objetivos)/mês</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+		  	<div class="form-row">
+		    <div class="col">
+		      	<div class="input-group">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text">Meta de vendas:</span>
+				  	</div>
+				  	<input type="number" id="meta_vendas" class="form-control" value="<?php echo $this->usuario['meta_vendas'];?>"/>
+				</div>
+		    </div>
+		    <div class="col">
+		      	<div class="input-group">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text">Meta de repasses:</span>
+				  	</div>
+				  	<input type="number" id="meta_repasses" class="form-control" value="<?php echo $this->usuario['meta_repasses'];?>"/>
+				</div>
+		    </div>
+		  </div>
+		  <br>
+		  <div class="form-row">
+		    <div class="col">
+		      	<div class="input-group">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text">Meta de atendimentos:</span>
+				  	</div>
+				  	<input type="number" id="meta_atendimentos" class="form-control" value="<?php echo $this->usuario['meta_atendimentos'];?>"/>
+				</div>
+		    </div>
+		    <div class="col">
+		      	<div class="input-group">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text">Meta de retornos:</span>
+				  	</div>
+				  	<input type="number" id="meta_retornos" class="form-control" value="<?php echo $this->usuario['meta_retornos'];?>"/>
+				</div>
+		    </div>
+		  </div>
+		  <br>
+		  <div class="form-row">
+		    <div class="col">
+		      	<div class="input-group">
+				  	<div class="input-group-prepend">
+				    	<span class="input-group-text">Meta de cursos:</span>
+				  	</div>
+				  	<input type="number" id="meta_cursos" class="form-control" value="<?php echo $this->usuario['meta_cursos'];?>"/>
+				</div>
+		    </div>
+		    <div class="col">
+		    </div>
+		  </div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveMetas()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/js/avaliacoes/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+
+<form id="usuarios" name="usuarios" enctype="multipart/form-data" action="" class="form" method="post">
+	
+	<div class="inline">
+		<label>Perfil</label>
+		<select name="id_perfil" id="id_perfil" class="text req" onchange="ativaDivFunc('funcionario', this.value); ativaDivVend('vendedor', this.value);">
+			<?php
+				
+				if($_SESSION['sessionUser']['id_perfil'] == 1){
+				
+					foreach($this->perfis as $perfis){
+		
+						$sel = "";
+					
+						if($perfis['id'] == $this->usuario['id_perfil']){
+							
+							$sel = 'selected="selected"';
+						
+						}
+						
+						?>		
+						<option value="<?php echo $perfis['id'] ?>" label = "<?php echo $perfis['perfil'] ?>" <?php echo $sel?>><?php echo $perfis['perfil'] ?></option>
+						<?php
+				
+					}
+				
+				}else{
+					
+					foreach($this->perfis as $perfis){
+		
+						$sel = "";
+					
+						if($perfis['id'] == $this->usuario['id_perfil']){
+							
+							$sel = 'selected="selected"';
+						
+						}
+						
+						if($perfis['id'] != 1){
+						
+							?>		
+							<option value="<?php echo $perfis['id'] ?>" label = "<?php echo $perfis['perfil'] ?>" <?php echo $sel?>><?php echo $perfis['perfil'] ?></option>
+							<?php
+							
+						}
+				
+					}
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" <?php if($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO){ ?>style="display:none;" <?php } ?>>
+		<label>Concession&aacute;ria</label>
+		<select name="id_empresa" id="id_empresa" class="text">
+		    <option value="0">N&atilde;o se Aplica</option>
+
+			<?php
+				
+				foreach($this->empresas as $empresa){
+				
+					if($empresa['id'] == $_SESSION['sessionUser']['id_empresa']){
+					
+						$sel = "selected=\"selected\"";
+					
+					}else{
+					
+						$sel = "";
+					
+					}
+					
+					echo "<option value=\"" . $empresa['id'] . "\" $sel>  ". $empresa['id'] ." - ". $empresa['razao_social'] ." </option>";
+					
+				}
+			
+			?>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" title="Nome do Usuario" value="<?php echo $this->usuario['nome'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF</label>
+		<input type="text" id="cpf" name="cpf" class="text" title="CPF do Usuario" value="<?php echo $this->usuario['cpf'];?>" />
+	</div>
+	
+	
+	
+	<div class="inline" style="height:10%;" id="upload_foto_usuario">
+		<div id="up_foto_usuario"><label class="label">Foto</label>
+	<?php if($this->usuario['path_foto'] !=  ""){?>
+		<table class="table">
+			<tr>
+				<td>
+					<img style="width:110px;" src="/<?php echo $this->usuario['path_foto']; ?>"/>
+				</td>
+				<td>
+					<input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeleteFoto(<?php echo $this->usuario['id'];?>);"/>
+				</td>
+			</tr>
+		</table>
+	<?php }else{ ?>
+		<table class="table">
+			<tr>
+				<td>
+					<img id="preview_img" style="width:110px;" src=""/>
+				</td>
+				<td>
+					<input type="file" id="foto" name="foto" class="text" onchange="preview(this)"/>
+				</td>
+			</tr>
+		</table>
+	<?php } ?>
+		</div>
+	</div>
+	
+	
+	
+	<div class="inline">
+		<label class="label">RG</label>
+		<input type="text" id="rg" name="rg" class="text" title="RG do Usuario" value="<?php echo $this->usuario['rg'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Nascimento</label>
+		<input type="text" id="data_nascimento" name="data_nascimento" class="text" value="<?php echo $this->usuario['data_nascimento'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" id="endereco" name="endereco" class="text" title="Endere&ccedil;o do Usuario" value="<?php echo $this->usuario['endereco'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro" name="bairro" class="text" title="Bairro do Usuario" value="<?php echo $this->usuario['bairro'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" title="Cidade do Usuario" value="<?php echo $this->usuario['cidade'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado" name="estado" class="text" title="Estado do Usuario" value="<?php echo $this->usuario['estado'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="telefone" name="telefone" class="text req" title="Telefone do Usuario" value="<?php echo $this->usuario['telefone'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular</label>
+		<input type="text" id="celular" name="celular" class="text" title="Celular do Usuario" value="<?php echo $this->usuario['celular'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data de Contrata&ccedil;&atilde;o</label>
+		<input type="text" id="data_contratacao" name="data_contratacao" class="text" value="<?php echo $this->usuario['data_contratacao'];?>" />
+	</div>
+	
+	
+	<?php
+
+		if($this->usuario['data_demissao'] == "3000-01-13"){
+		
+			$this->usuario['data_demissao'] = "";
+		
+		}else{
+			
+			$this->usuario['data_demissao'] = implode("/",array_reverse(explode("-",$this->usuario['data_demissao'])));
+		
+		}
+
+	?>
+	
+	
+	<div class="inline">
+		<label class="label">Data de Demiss&atilde;o</label>
+		<input type="text" id="data_demissao" name="data_demissao" class="text" value="<?php echo $this->usuario['data_demissao'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">E-mail</label>
+		<input type="text" id="email" name="email" class="text" title="E-mail do Usuario" value="<?php echo $this->usuario['email'];?>" />
+	</div>
+	
+	
+	<?php
+		if($this->usuario['id_perfil'] == FUNCIONARIO){
+			$display = "none";
+		}else{
+			$display = "inline";
+		}
+	?>
+
+	<div id="divLogin" name="divLogin" class="inline espace" style="display: <?php echo $display; ?>; clear:both;">
+		<label class="label">Login</label>
+		<input type="text" id="login" name="login" class="text req" title="Login do Usuario" value="<?php echo $this->usuario['login'];?>" />
+	</div>
+	
+	<div id="divSenha" name="divSenha" class="inline espace" style="display: <?php echo $display; ?>;">
+		<table width="99%">
+			<tr>
+				<td width="44%">
+					<label class="label">Senha</label>
+					<input type="text" id="senha1" name="senha" class="text req is-invalid" title="Senha do usuário" value="*****" onkeyup="verificaSenha();"/>
+				</td>
+				<td width="50%" style="padding-left: 20px;">
+					<label class="label">Confirmar Senha</label>
+					<input type="text" id="senha2" name="senha" class="text req is-invalid" title="Confirma senha do usuário" value="*****" onkeyup="verificaSenha();"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline espace" style="display: <?php echo $display; ?>;">
+		<table width="99%">
+			<tr>
+				<td><div id="maiuscula" class="form-check sucesso">Letra maiúscula</div></td>
+				<td><div id="minuscula" class="form-check sucesso">Letra minúscula</div></td>
+			</tr>
+			<tr>
+				<td><div id="iguais" class="form-check sucesso">Confirmar senha</div></td>
+				<td><div id="caracteres" class="form-check sucesso">Caracter especial</div></td>
+
+			</tr>
+			<tr>
+				<td><div id="minimo_caracteres" class="form-check sucesso">Mínimo 8 caracteres</div></td>
+				<td><div id="numero" class="form-check sucesso">Número</div></td>
+			</tr>
+		</table>
+	</div>
+
+
+<!-- 	
+	<div id="divLogin" class="inline" style="display: <?php echo $display; ?>; clear:both;">
+		<label class="label">Login</label>
+		<input type="text" id="login" name="login" class="text req" title="Login do Usuario" value="<?php echo $this->usuario['login'];?>" />
+	</div>
+	
+	<div id="divSenha" class="inline" style="display: <?php echo $display; ?>;">
+		<label class="label">Senha</label>
+		<input type="password" id="senha" name="senha" class="text req" title="Senha do Usuário" value="*****" />
+	</div>
+	 -->
+	<div class="inline">
+			<label class="label">Valor Fixo Mensal</label>
+			<input type="text" id="valor_fixo_mensal" name="valor_fixo_mensal" class="text" title="Valor Fixo Mensal" value="<?php echo $this->usuario['valor_fixo_mensal'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Cargo</label>
+		<input type="text" id="cargo" name="cargo" class="text" title="Cargo" value="<?php echo $this->usuario['cargo'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ativo</label>
+		
+		<?php
+		
+			if($this->usuario['ativo'] == 1){
+		
+		?>
+				<input type="checkbox" id="ativo" name="ativo"checked="checked" title="Usu&aacute;rio Ativo?"/>
+			
+		<?php
+			
+			}else{
+			
+		?>
+	
+				<input type="checkbox" id="ativo" name="ativo" title="Usu&aacute;rio Ativo?"/>
+
+		<?php
+		
+			}
+		
+		?>
+		
+		
+	</div>
+	
+	<div class="inline">
+		<label class="label">Receber E-mails</label>
+		
+		<?php
+		
+			if($this->usuario['receber_emails'] == 1){
+		
+		?>
+				<input type="checkbox" id="receber_emails" name="receber_emails"checked="checked" title="Usu&aacute;rio receber&aacute; e-mails de contatos?"/>
+			
+		<?php
+			
+			}else{
+			
+		?>
+	
+				<input type="checkbox" id="receber_emails" name="receber_emails" title="Usu&aacute;rio receber&aacute; e-mails de contatos?"/>
+
+		<?php
+		
+			}
+		
+		?>
+		
+		
+	</div>
+	
+	
+	<div class="inline">
+		<label class="label">Ativo na pesquisa de satisfação</label>
+		
+		<?php
+
+			if($this->usuario['ativo_pesquisa'] == 1){
+		?>
+				<input type="checkbox" id="ativo_pesquisa" checked="checked" name="ativo_pesquisa" title="Usu&aacute;rio ativo na pesquisa?"/>
+		<?php
+			}else{
+		?>
+				<input type="checkbox" id="ativo_pesquisa" name="ativo_pesquisa" title="Usu&aacute;rio ativo na pesquisa?"/>
+		<?php
+			}
+		?>
+	</div>
+
+	<div class="inline">
+		<label class="label">Ativo nos relátórios de projeção(Reloginhos)</label>
+		
+		<?php
+
+			if($this->usuario['relatorio_projetado'] == 1){
+		?>
+				<input type="checkbox" id="relatorio_projetado" checked="checked" name="relatorio_projetado" onclick="openModalBootstrap4(this, 'ModalCentralizado')" title="Usu&aacute;rio ativo nos relatórios de projeção(Reloginhos)?"/>
+		<?php
+			}else{
+		?>
+				<input type="checkbox" id="relatorio_projetado" name="relatorio_projetado" title="Usu&aacute;rio ativo nos relatórios de projeção(Reloginhos)?"/>
+		<?php
+			}
+		?>
+	</div>
+
+	<?php
+	
+		if($this->usuario['id_perfil'] == VENDEDOR || $this->usuario['id_perfil'] == GERENTE || $this->usuario['id_perfil'] == SUPERVISOR){
+		
+			echo ("<div style=\"width:98.1%;display:inline\">");
+		
+		}else{
+		
+			echo ("<div style=\"width:98.1%;display:inline\">");
+		
+		}
+	
+	?>
+	
+	</div>
+	
+	<div class="inline" style="display:none">
+		<label class="label">Fun&ccedil;&atilde;o</label>
+		<input type="text" id="funcao" name="funcao" class="text" value="<?php echo $this->usuario['funcao'];?>" />
+	</div>
+	
+	<?php
+	
+		if($this->usuario['id_perfil'] == VENDEDOR || $this->usuario['id_perfil'] == GERENTE || $this->usuario['id_perfil'] == SUPERVISOR){
+		
+			echo ("<div id=\"vendedor\" style=\"width:98.1%;display:inline\">");
+		
+		}else{
+		
+			echo ("<div id=\"vendedor\" style=\"width:98.1%;display:none\">");
+		
+		}
+	
+	
+	?>
+
+		<div class="inline">
+			<label class="label">Valor Fixo</label>
+			<input type="text" id="valor_fixo" name="valor_fixo" class="text" title="Valor Fixo" value="<?php echo $this->vendedor['valor_fixo'];?>" />
+		</div>
+		
+		<div class="inline" style="display:none">
+			<label class="label">Manual</label>
+			<input type="text" id="manual" name="manual" class="text" title="Manual" value="<?php echo $this->vendedor['manual'];?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Percentual Venda</label>
+			<input type="text" id="percentual_venda" name="percentual_venda" class="text" title="Percentual Venda" value="<?php echo $this->vendedor['percentual_venda'];?>" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Percentual Retorno Financeiro</label>
+			<input type="text" id="percentual_retorno_financeiro" name="percentual_retorno_financeiro" class="text" title="Percentual Retorno Financeiro" value="<?php echo $this->vendedor['percentual_retorno_financeiro'];?>" />
+		</div>
+	
+	</div>
+
+	<div class="inline" style="width:98%; height:30%;">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" class="text" value="" ><?php echo $this->usuario['obs'];?></textarea>
+	</div>
+	
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="hidden" id="id" name="id" value="<?php echo $this->usuario['id'];?>"/>
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo('')"/>
+		
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function saveMetas(){
+
+    $.ajax({
+
+        url: "http://sistemameucar.com.br/estatisticas/ajax/fn/save_metas",
+        type: "POST",
+        async: true,
+        data: {'id':$("#id").val(), 'meta_vendas':$("#meta_vendas").val(), 'meta_repasses':$("#meta_repasses").val(), 'meta_atendimentos':$("#meta_atendimentos").val(), 'meta_retornos':$("#meta_retornos").val(), 'meta_cursos':$("#meta_cursos").val()},
+        dataType: "TEXT",
+        success: function(resp){
+
+            if(parseInt(resp) > 0){
+                alert("As metas foram salvas com sucesso!");
+                location.reload();
+            }else{
+                alert("Houve um erro ao salvar as metas!");
+            }
+
+        }
+
+    });
+
+}
+
+
+function verificaSenha(){
+
+	let senha = $("#senha1").val();
+	let erro = false;
+
+	if(senha.match(/[A-Z]/g) != null){
+		alteraClasse('maiuscula', true);
+	}else{
+		alteraClasse('maiuscula', false);
+		erro = true;
+	}
+
+	if(senha.match(/[a-z]/g) != null){
+		alteraClasse('minuscula', true);
+	}else{
+		alteraClasse('minuscula', false);
+		erro = true;
+	}
+
+	if(senha.match(/[0-9]/g) != null){
+		alteraClasse('numero', true);
+	}else{
+		alteraClasse('numero', false);
+		erro = true;
+	}
+
+	if(senha.match(/[@ _.,;:#$%^><+=&/]/g) != null){
+		alteraClasse('caracteres', true);
+	}else{
+		alteraClasse('caracteres', false);
+		erro = true;
+	}
+
+	if(senha.length >= 8){
+		alteraClasse('minimo_caracteres', true);
+	}else{
+		alteraClasse('minimo_caracteres', false);
+		erro = true;
+	}
+
+	if($("#senha1").val() == $("#senha2").val()){
+		alteraClasse('iguais', true);
+	}else{
+		alteraClasse('iguais', false);
+		erro = true;
+	}
+
+	return erro;
+
+}
+
+function alteraClasse(id, valid){
+	if(valid){
+		$("#"+id).removeClass("error");
+		$("#"+id).addClass("sucesso");
+	}else{
+		$("#"+id).removeClass("sucesso");
+		$("#"+id).addClass("error");
+	}
+}
+
+
+   
+function openModalBootstrap4(este, id){
+        if($(este).is(':checked')) {
+           
+            $("#"+id).modal("show");
+           
+        }
+    }
+
+function preview(input){
+
+	var reader = new FileReader();
+
+	reader.onload = function(e){
+
+		$("#preview_img").attr("src",e.target.result);
+	
+	};
+
+	reader.readAsDataURL(input.files[0]);
+
+}
+
+
+function confirmaDeleteFoto(id){
+
+	decisao = confirm("Deseja realmente deletar a foto?");
+	
+	if (decisao){
+	
+		$.ajax({
+			type: "POST",
+			url:"/usuarios/ajax/fn/deleta_foto_usuario/id/"+id,
+			dataType:"html",
+			success:function(retorno){
+				
+				if(retorno == "Sucesso"){
+				
+					$("#upload_foto_usuario").html("<table class='table'><tr><td><img id='preview_img' style='width:110px;' src=''/></td><td><input type='file' id='foto' name='foto' class='text' onchange='preview(this)'/></td></tr></table>");
+					$("#up_foto_usuario").remove();
+					
+				}else{
+				
+					alert(retorno);
+				
+				}
+		
+			}
+		})
+		
+	}
+
+}
+
+
+
+
+function validaCampo(){
+	
+	var msg = "";
+	var erro = false;
+	
+	if($("#id_perfil").val() == 0){
+		
+		erro = true;
+		
+		msg += "<br>O campo perfil deve ser selecionado.";
+	
+	}
+	
+	
+	if($("#nome").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome deve ser preenchido.";
+	
+	}
+	
+	if($("#telefone").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo telefone deve ser preenchido.";
+	
+	}
+	
+	if($("#id_perfil").val() != <?php echo FUNCIONARIO; ?>){
+		
+		if($("#login").val() == ''){
+			
+			alert($("#login").val());
+		
+			erro = true;
+			
+			msg += "<br>O campo login deve ser preenchido.";
+		
+		}
+
+		if(verificaSenha() == true && $("#senha1").val() != "*****"){
+
+			erro = true;		
+			msg += "<br>Os campos de senhas devem ser preenchidos seguindo as regras mínimas de segurança.";
+		
+		}
+		
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		$("form").submit();
+	}
+
+}
+
+$(function(){
+
+	valor = float2moeda($("#valor_fixo_mensal").val());
+	$("#valor_fixo_mensal").val(valor);
+	
+	valor = float2moeda($("#valor_fixo").val());
+	$("#valor_fixo").val(valor);
+
+	$("#cpf").mask("999.999.999-99");
+	$("#rg").mask("99.999.999-9");
+	$("#valor_fixo_mensal").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_fixo").attr("onkeyup","validaMoedaBR(this.id)");
+	
+	$('#telefone').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-9999");
+    } else {
+        element.mask("(99) 9999-99999");
+    }
+	}).trigger('focusout');
+	
+	$('#celular').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-9999");
+    } else {
+        element.mask("(99) 9999-99999");
+    }
+	}).trigger('focusout');
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#data_nascimento').focus(function(){
+		$(this).calendario({
+			target:'#data_nascimento'
+		});
+	});
+	
+	$('#data_contratacao').focus(function(){
+		$(this).calendario({
+			target:'#data_contratacao'
+		});
+	});
+	
+	$('#data_demissao').focus(function(){
+		$(this).calendario({
+			target:'#data_demissao'
+		});
+	});
+
+})
+
+function ativaDivVend(destino, c){
+	
+	if(c == <?php echo VENDEDOR; ?> || c == <?php echo GERENTE;?> || c == <?php echo SUPERVISOR;  ?> || c == <?php echo CONCESSIONARIO; ?>){
+		
+		$("#funcionario").css('display','none');
+		$("#"+destino).css('display','inline');
+	
+	}else{
+	
+		$("#"+destino).css('display','none');
+	
+	}
+	
+}
+
+function ativaDivFunc(destino, c){
+	
+	if(c == <?php echo FUNCIONARIO; ?>){
+		
+		$("#"+destino).css('display','inline');
+		$("#divLogin").css('display','none');
+		$("#divSenha").css('display','none');
+	
+	}else{
+	
+		$("#"+destino).css('display','inline');
+		$("#divLogin").css('display','inline');
+		$("#divSenha").css('display','inline');
+		
+	}
+	
+}
+
+</script>

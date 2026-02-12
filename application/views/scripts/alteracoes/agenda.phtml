@@ -1,0 +1,694 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" class="form" method="post">
+
+	<?php $display=$this->display;?>
+	
+	<div class="inline" id="negociacoes" name="negociacoes" style="width:97%; height:350px; overflow:auto"> 
+		<label class="label">Negocia&ccedil;&otilde;es</label>
+	</div> 
+	
+	<div class="inline" id="pendencias" name="pendencias" style="width:48%; height:300px; overflow:auto"> 
+		<label class="label">Pend&ecirc;ncias</label>
+	</div> 
+
+	<div class="inline" id="agenda" name="agenda" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">Agenda</label>
+	</div>
+	
+	<div class="inline" id="recebimentos_pendentes" name="recebimentos_pendentes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;<?php echo $this->display?>"> 
+		<label class="label">Recebimentos Pendentes</label>
+	</div>
+
+	<div class="inline" id="pagamentos_pendentes" name="pagamentos_pendentes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;<?php echo $this->dsplay?>"> 
+		<label class="label">Pagamentos Pendentes</label>
+	</div>	
+	
+	<div class="inline" id="veiculos" name="veiculos" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">&Uacute;ltimos Ve&iacute;culos</label>
+	</div> 
+
+	<div class="inline" id="fluxo_loja" name="fluxo_loja" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+		<label class="label">Fluxo de Loja</label>
+	</div> 
+
+	<div class="inline" id="aniversariantes" name="aniversariantes" style="width:48%; height:300px; overflow:auto; margin-top:15px!important;"> 
+
+		<?php echo "<div class=\"inline\" style=\"width:98%;height:auto\"><label style=\"font-size:20px;padding:5px;padding-left:0px;\">Aniversariantes</label></div>
+
+			<table class = 'table'>
+
+			<thead><tr><th>Nome</th><th>Telefone</th><th>Data Nascimento</th></tr></thead>
+			<tbody>";		
+
+			foreach($this->aniversariantes as $a){		
+
+				echo "<tr><td>".$a['nome']."</td><td>".$a['tel1']."</td><td>".$a['nascimento']."</td><tr>";	
+
+			}
+			echo "</tbody></table>";	
+
+		?>
+	</div> 
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function aprova(id, idCheckbox, idVeiculo){
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>negociacoes/ajax/fn/aprova_negociacao',
+		async: false,
+		type: 'POST',
+		data: ({'id_negociacao': id, 'id_veiculo':idVeiculo}),
+		dataType: 'text'
+	}).responseText;
+
+	if(resp == "sucesso"){
+		
+		$("#"+idCheckbox).parent().parent().css("background-color","#AAFFAA");
+		$("#"+idCheckbox).attr("onclick","reprova("+id+",this.id, "+idVeiculo+")");
+	
+	}else{
+		
+		$("#"+idCheckbox).attr("checked",false);
+		alert("Houve um erro inesperado, por favor tente novamente.");
+	
+	}
+	
+}
+
+function reprova(id, idCheckbox, idVeiculo){
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>negociacoes/ajax/fn/reprova_negociacao',
+		async: false,
+		type: 'POST',
+		data: ({'id_negociacao': id, 'id_veiculo':idVeiculo}),
+		dataType: 'text'
+	}).responseText;
+
+	if(resp == "sucesso"){
+		
+		$("#"+idCheckbox).parent().parent().css("background-color","#FFAAAA");
+		$("#"+idCheckbox).attr("onclick","aprova("+id+", this.id, "+idVeiculo+")");
+	
+	}else{
+		
+		$("#"+idCheckbox).attr("checked",true);
+		alert("Houve um erro inesperado, por favor tente novamente.");
+		
+		alert(resp);
+	
+	}
+	
+}
+
+function baixaAgenda(id, c){
+
+	if(!confirm('Deseja realmente baixar este compromisso.')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaAgenda/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	getAgenda();
+	
+}
+
+function baixaPendencia(id, c){
+
+	if(!confirm('Deseja realmente baixar esta pendencia.')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPendencia/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	getPendencias();
+}
+
+function baixaPagamento(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+	$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPagamento/id/' + id,
+	async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+
+	$("#linha_pgto_p_"+id).remove();
+}
+
+function baixaLancamentoRecorrente(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+	$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaPagamentoRecorrente/id/' + id,
+	async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	$("#linha_p_r"+id).remove();
+
+}
+
+function baixaLancamento(id, c){
+
+	if(!confirm('Deseja realmente baixar este pagamento?')){
+		$(c).removeAttr("checked")
+		return true;
+	}
+	
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/baixaLancamento/id/' + id,
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+	
+	$("#linha_p_"+id).remove();
+}
+
+function getNegociacoes(){
+
+	var dataInicial = $("#data_inicial_negociacoes").val();
+	var dataFinal = $("#data_final_negociacoes").val();
+
+	if(dataInicial && dataFinal){
+	
+		var resp = $.ajax({
+		url: '<?php echo URL ?>alteracoes/ajax/fn/getNegociacoes/agenda/1',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#negociacoes").html(resp);
+
+	}else{
+	
+		var resp = $.ajax({
+		url: '<?php echo URL ?>alteracoes/ajax/fn/getNegociacoes/agenda/1',
+			async: false,
+			type: 'POST',
+			data: ({}),
+			dataType: 'text'
+		}).responseText;	
+
+		$("#negociacoes").html(resp);
+	}
+}
+
+getNegociacoes();
+
+function getAgenda(){
+
+	var dataInicial = $("#data_inicial_agenda").val();
+	var dataFinal = $("#data_final_agenda").val();
+	if($("#baixado_agenda").attr('checked') == true || $("#baixado_agenda").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;	
+
+		$("#agenda").html(resp);
+
+	}else{
+		
+		if(dataInicial && dataFinal){	
+
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#agenda").html(resp);
+
+		}else{
+			
+			if(baixado){	
+
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#agenda").html(resp);
+
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getAgenda',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#agenda").html(resp);
+			
+			}
+			
+		}
+
+	}
+
+}
+
+getAgenda();
+
+function getRecebimentosPendentes(){
+
+	var dataInicial = $("#data_inicial_recebimentos_pendentes").val();
+	var dataFinal = $("#data_final_recebimentos_pendentes").val();
+	if($("#baixado_recebimentos_pendentes").attr('checked') == true || $("#baixado_recebimentos_pendentes").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){		
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#recebimentos_pendentes").html(resp);
+		
+	}else{
+	
+		if(dataInicial && dataFinal){
+		
+			var resp = $.ajax({
+			url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+				async: false,
+				type: 'POST',
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				dataType: 'text'
+			}).responseText;
+
+			$("#recebimentos_pendentes").html(resp);
+		
+		}else{
+		
+			if(baixado){
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#recebimentos_pendentes").html(resp);
+			
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getRecebimentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#recebimentos_pendentes").html(resp);
+			
+			}
+		
+		}
+		
+	}
+	
+}
+
+getRecebimentosPendentes();
+
+function getPagamentosPendentes(){
+
+	var dataInicial = $("#data_inicial_pagamentos_pendentes").val();
+	var dataFinal = $("#data_final_pagamentos_pendentes").val();
+	if($("#baixado_pagamentos_pendentes").attr('checked') == true || $("#baixado_pagamentos_pendentes").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+
+	if(dataInicial && dataFinal && baixado){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#pagamentos_pendentes").html(resp);
+		
+		
+
+	}else{
+		
+		if(dataInicial && dataFinal){
+		
+			var resp = $.ajax({
+			url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+				async: false,
+				type: 'POST',
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				dataType: 'text'
+			}).responseText;
+
+			$("#pagamentos_pendentes").html(resp);	
+		
+		}else{
+		
+			if(baixado){
+			
+				 var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#pagamentos_pendentes").html(resp);
+			
+			}else{
+			
+				//alert("Teste");
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPagamentosPendentes',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#pagamentos_pendentes").html(resp);	
+				
+			}
+		
+		}
+		
+		
+	}
+
+}
+	
+
+getPagamentosPendentes();
+
+function getVeiculos(){
+
+	var resp = $.ajax({
+	url: '<?php echo URL ?>agenda/ajax/fn/getVeiculos',
+		async: false,
+		type: 'POST',
+		data: ({}),
+		dataType: 'text'
+	}).responseText;
+
+	$("#veiculos").html(resp);
+}
+
+getVeiculos();
+
+function getPendencias(){
+
+	var dataInicial = $("#data_inicial_pendencias").val();
+	var dataFinal = $("#data_final_pendencias").val();	
+	if($("#baixado_pendencias").attr('checked') == true || $("#baixado_pendencias").attr('checked') == 'checked'){
+	
+		var baixado = 1;
+	
+	}else{
+	
+		var baixado = 0;
+	
+	}
+	
+	if(dataInicial && dataFinal && baixado){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+			async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'baixado':baixado}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#pendencias").html(resp);
+		
+	}else{	
+		
+		if(dataInicial && dataFinal){
+		
+			var resp = $.ajax({
+			url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+				async: false,
+				type: 'POST',
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+				dataType: 'text'
+			}).responseText;
+
+			$("#pendencias").html(resp);
+		
+		}else{
+			
+			if(baixado){
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+					async: false,
+					type: 'POST',
+					data: ({'baixado':baixado}),
+					dataType: 'text'
+				}).responseText;
+
+				$("#pendencias").html(resp);
+			
+			}else{
+			
+				var resp = $.ajax({
+				url: '<?php echo URL ?>agenda/ajax/fn/getPendencias',
+					async: false,
+					type: 'POST',
+					data: ({}),
+					dataType: 'text'
+				}).responseText;	
+
+				$("#pendencias").html(resp);
+			
+			}
+		
+		}
+		
+	}
+	
+}
+
+getPendencias();
+
+function getFluxoLoja(){
+
+	var dataInicial = $("#data_inicial_fluxoLoja").val();
+	var dataFinal = $("#data_final_fluxoLoja").val();
+
+	if(dataInicial && dataFinal){	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getFluxoLoja',
+		async: false,
+			type: 'POST',
+			data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal}),
+			dataType: 'text'
+		}).responseText;
+
+		$("#fluxo_loja").html(resp);
+
+	}else{	
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>agenda/ajax/fn/getFluxoLoja',
+			async: false,
+			type: 'POST',
+			data: ({}),
+			dataType: 'text'
+		}).responseText;	
+
+		$("#fluxo_loja").html(resp);
+	}
+	
+}
+
+getFluxoLoja();
+
+$(function(){
+
+	$("#data_inicial_negociacoes").mask("99/99/9999");
+	$("#data_final_negociacoes").mask("99/99/9999");	
+
+	$("#data_inicial_agenda").mask("99/99/9999");
+	$("#data_final_agenda").mask("99/99/9999");	
+
+	$("#data_inicial_pendencias").mask("99/99/9999");
+	$("#data_final_pendencias").mask("99/99/9999");	
+
+	$("#data_inicial_fluxoLoja").mask("99/99/9999");
+	$("#data_final_fluxoLoja").mask("99/99/9999");
+
+	if($("#msg").html().length > 0){		
+
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+
+		$("#msg").addClass('sucess');		
+
+		}else{		
+
+			$("#msg").addClass('erro');
+
+		}
+	}
+
+	$('#data_inicial_negociacoes').focus(function(){
+	
+		$(this).calendario({
+			target:'#data_inicial_negociacoes'
+		});
+	});
+
+	$('#data_final_negociacoes').focus(function(){
+		$(this).calendario({
+			target:'#data_final_negociacoes'
+		});
+	});
+
+	$('#data_inicial_agenda').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_agenda'
+		});
+	});
+
+	$('#data_final_agenda').focus(function(){
+		$(this).calendario({
+			target:'#data_final_agenda'
+		});
+	});
+
+		$('#data_inicial_pendencias').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_pendencias'
+		});
+	});	
+
+		$('#data_final_pendencias').focus(function(){
+		$(this).calendario({
+			target:'#data_final_pendencias'
+		});
+	});
+
+	$('#data_final_fluxoLoja').focus(function(){
+		$(this).calendario({
+			target:'#data_final_fluxoLoja'
+		});
+	});
+
+	$('#data_inicial_fluxoLoja').focus(function(){		
+	$(this).calendario({
+			target:'#data_inicial_fluxoLoja'
+		});
+	});
+
+	$('#data_inicial_recebimentos_pendentes').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_recebimentos_pendentes'
+		});
+	});
+
+	$('#data_final_recebimentos_pendentes').focus(function(){		
+	$(this).calendario({
+			target:'#data_final_recebimentos_pendentes'
+		});
+	});
+	
+	$('#data_inicial_pagamentos_pendentes').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial_pagamentos_pendentes'
+		});
+	});
+
+	$('#data_final_pagamentos_pendentes').focus(function(){		
+	$(this).calendario({
+			target:'#data_final_pagamentos_pendentes'
+		});
+	});
+})
+
+</script>
+ 

@@ -1,0 +1,16 @@
+Sitemap: http://www.meucar.com.br/sitemap.xml
+
+User-Agent: *
+
+Disallow: /carros-usados/ajax/fn/envia_interesse/nome/
+Disallow: /arquivos_site/img/browser-icons.png
+Disallow: /arquivos_site/img/d02.png
+Disallow: /empresas/ajax/fn/busca_cidade/id_modelo/
+Disallow: /id_empresa/
+Disallow: /segmento/
+Disallow: /financiar/
+Disallow: /oferta_email/
+Disallow: /telefone/
+Disallow: /mensagem/
+Disallow: /veiculo_troca/
+Disallow: /email/

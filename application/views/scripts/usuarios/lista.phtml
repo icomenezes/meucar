@@ -1,0 +1,81 @@
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Login</label>
+		<input type="text" id="login" name="login" class="text" value="" />
+	</div>
+	
+	<?php
+	if($_SESSION['sessionUser']['id_perfil'] == 1){
+	?>
+		<div class="inline">
+			<label class="label">Concession&aacute;ria</label>
+			<input type="text" id="concessionaria" name="concessionaria" class="text" value="" />
+		</div>
+	<?php
+	}
+	?>
+	
+	<div class="inline">
+		<label class="label">Perfil</label>
+		<input type="text" id="perfil" name="perfil" class="text" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar"/>
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>usuarios/add'" />
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Usuário</th><th>Login</th><th>Concession&aacute;ria</th><th>Perfil</th><th>&Uacute;ltima Atualiza&ccedil;&atilde;o</th><th>Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+	
+	foreach($this->usuarios as $usuarios){
+	
+		// $dataTmp = explode(" ",$usuarios['hora_alteracao']);
+		// $dataTmp2 = explode("-",$dataTmp[0]);
+		// $usuarios['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		// $usuarios['hora_alteracao'] = $usuarios['hora_alteracao'] . " " . $dataTmp[1];
+
+		$dia = implode("/",array_reverse(explode("-",explode(" ",$usuarios['hora_alteracao'])[0])));
+		if(count(explode(" ", $usuarios['hora_alteracao'])) == 2){
+			$usuarios['hora_alteracao'] = $dia." ".explode(" ",$usuarios['hora_alteracao'])[1];
+		}
+
+	
+	?>	
+		
+		<tr><td><?php echo $usuarios['nome'] ?></td>
+			<td><?php echo $usuarios['login'] ?></td>
+			<td><?php echo $usuarios['razao_social'] ?></td>
+			<td><?php echo $usuarios['perfil'] ?></td>
+			<td><?php echo $usuarios['ultimoUsuario'] ?> - <?php echo $usuarios['hora_alteracao'] ?></td>
+			<td width="145px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $usuarios['id']; ?>'" />
+			<input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Usuario <?php echo $usuarios['nome'] ?>',<?php echo $usuarios['id'] ?>)"/></td> 
+		</tr>	
+	<?php	
+		}
+	?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href='del/id/'+id;
+		
+		}
+		
+	}
+
+</script>

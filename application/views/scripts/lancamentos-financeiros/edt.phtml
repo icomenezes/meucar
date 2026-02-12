@@ -1,0 +1,212 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="<?php echo URL ?>lancamentos-financeiros/edt/id/<?php echo $this->id ?>" class="form" method="post">
+		
+		<?php //var_export($this->lancamentoFinanceiro); //exit;?>
+	<!-------	
+		<div class="inline">
+		<label>Grupos Financeiros</label>
+		<select name="id_financeiro_grupo" id="id_financeiro_grupo" class="text req" title="Perfis cadastrados" onchange="getItens(this.value)">
+		    <option value="0">SELECIONE</option>			
+			<?php
+				
+				foreach($this->grupos as $grupos){
+					
+					if($grupos['id'] == $this->lancamentoFinanceiro['idGrupo']){
+					
+						echo "<option selected=\"selected\" value=\"" . $grupos['id'] . "\">". $grupos['descricao'] ."</option>";
+					
+					}else{
+					
+						echo "<option value=\"" . $grupos['id'] . "\">". $grupos['descricao'] ."</option>";
+					
+					}
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	------->
+	
+			<div class="inline">
+		<label>Itens Financeiros</label>
+		<select name="id_financeiro_item" id="id_financeiro_item" class="text req" title="Itens cadastrados">
+		    <option value="0">SELECIONE</option>			
+			<?php
+				
+				foreach($this->itens as $itens){
+					
+					if($itens['id'] == $this->lancamentoFinanceiro['id_financeiro_item']){
+					
+						echo "<option selected=\"selected\" value=\"" . strtoupper($itens['id']) . "\">". strtoupper($itens['item']) ."</option>";
+					
+					}else{
+					
+						echo "<option value=\"" . strtoupper($itens['id']) . "\">". strtoupper($itens['item']) ."</option>";
+					
+					}
+					
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Lan&ccedil;amento</label>
+		<input type="text" id="data_lancamento" name="data_lancamento" class="text req" value="<?php echo $this->lancamentoFinanceiro['data_lancamento'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" id="valor" name="valor" class="text req" value="<?php echo $this->lancamentoFinanceiro['valor'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Baixado</label>
+			<?php
+			
+				if($this->lancamentoFinanceiro['baixado'] == 0){
+			
+			?>
+	
+				<input type="radio" id="baixado" name="baixado" checked="" value="0">N&atilde;o
+				<input type="radio" id="baixado" name="baixado" value="1">Sim
+				
+			<?php
+				
+				}else{
+				
+			?>
+		
+				<input type="radio" id="baixado" name="baixado" value="0">N&atilde;o
+				<input type="radio" id="baixado" name="baixado" checked="checked" value="1">Sim
+			
+			<?php
+			
+				}
+			
+			?>
+				
+			<!--<input type="radio" id="credito_debito" name="credito_debito" value="0">Credito
+			<input type="radio" id="credito_debito" name="credito_debito" value="1">Debito-->
+	</div>
+	
+	<div class="inline" style="width:63%; height:auto; margin-bottom:10px">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="observacoes" name="observacoes" class="text" ><?php echo $this->lancamentoFinanceiro['observacoes'];?></textarea>
+	</div>
+	
+	<div style="display:table;clear:both; margin-left: 10px">
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+/*function findCliente(f){
+	
+	$("#resClientes").css("display","block");
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resClientes ul").html(resp);
+
+}*/
+
+
+function getItens(idGrupo){
+	
+	//$("#resClientes").css("display","block");
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>lancamentos-financeiros/ajax/fn/getItens',
+      		async: false,
+      		type: 'POST',
+      		data: ({'id':idGrupo}),
+      		dataType: 'text'
+   	}).responseText;
+	
+	alert(resp);
+
+	$("#id_financeiro_item").html(resp);
+
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#descricao").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo descricao deve ser preenchido.";
+	
+	}
+	
+	if($("#credito_debito").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo credito / débito deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+	
+	$(function(){
+	
+		$("#data_lancamento").mask("99/99/9999");
+		$("#data_lancamento").val("<?php echo $this->lancamentoFinanceiro['data_lancamento'];?>");
+		$("#valor").attr("onkeyup","validaMoedaBR(this.id)");
+		
+		if($("#msg").html().length > 0){
+				
+			if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+			
+				$("#msg").addClass('sucess');
+			
+			}else{
+			
+				$("#msg").addClass('erro');
+			
+			}
+		
+		}
+		
+			$('#data_lancamento').focus(function(){
+				$(this).calendario({
+					target:'#data_lancamento'
+				});
+			});
+
+	})
+
+</script>

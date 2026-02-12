@@ -1,0 +1,76 @@
+<form id="propaganda_site" name="propaganda_site" enctype="multipart/form-data" action="upload-slide" class="form" method="post">
+	<div class="inline">
+		<label class="label">Título<span style="font-size: 11px;"> (Esse título aparecerá, se caso a foto falhar)</span></label>
+		<input type="text" id="titulo" name="titulo" class="text" title="Link" value="" />
+	</div>
+	<div class="inline" style="clear:both;">
+		<label class="label">Link</label>
+		<input type="text" id="link" name="link" class="text" title="Link" value="" />
+	</div>
+	<div class="inline">
+		<label class="label">Imagem <span style="font-size: 11px;"> (Importante! 1120 x 280 píxels)</span></label>
+		<input type="file" id="imagem" name="imagem" class="text" title="Upload" value="" />
+	</div>
+	<div class="inline">
+		<label class="label">Tipo</label>
+		<input type="radio" id="tipo_imagem" name="tipo_imagem" value="1" disabled="" />Retrato
+
+		<input type="radio" id="tipo_imagem2" name="tipo_imagem" value="2" checked="" disabled="" />Paisagem
+	</div>
+	<div class="inline" style="clear:both;">
+		<input type="button" id="button" name="button"  class="btn-small btn-add" value="Salvar" onClick="validaCampo();"/>
+	</div>
+<form>
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#titulo").val() == ""){
+		erro = true;
+		msg += "<br>Digite um titulo.";
+	}
+
+	if(!$("#tipo_imagem").is(":checked")){
+		if(!$("#tipo_imagem2").is(":checked")){
+			erro = true;
+			msg += "<br>Selecione o tipo de imagem retraro ou paisagem.";
+		}
+	}
+	
+	if($("#imagem").val() == ""){
+		erro = true;
+		msg += "<br>Escolha uma imagem para realizar o upload.";
+	}
+	
+	if($("#link").val() == ""){
+		erro = true;
+		msg += "<br>O campo link deve ser preenchido.";
+	}
+
+	if(erro){
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		$("form").submit();
+	}
+
+}
+
+$(function(){
+	if($("#msg").html().length > 0){
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+			$("#msg").addClass('sucess');
+		}else{
+			$("#msg").addClass('erro');
+		}
+	}
+});
+</script>

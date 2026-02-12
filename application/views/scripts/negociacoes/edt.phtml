@@ -1,0 +1,2731 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="/negociacoes/edt" class="form" method="post">
+	
+<table class="table">
+	<tr id="subAbas">
+		<td class="selecionado"><a href="#" onclick="ativaSubAba('cliente', this)" />Cliente</a></td>
+		<td><a href="#" onclick="ativaSubAba('venda', this)" />Ve&iacute;culo</a></td>
+		<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><td><a href="#" onclick="ativaSubAba('despesa', this)" />Despesas</a></td><?php } ?>
+		<td><a href="#" onclick="ativaSubAba('troca', this)" />Troca</a></td>
+		<td style="display:none"><a href="#" onclick="ativaSubAba('transf', this)" />Transf. Troca</a></td>
+		<td><a href="#" onclick="ativaSubAba('recebimento', this);calcDiferenca(1);" />Recebimento</a></td>
+		<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR && $_SESSION['sessionUser']['id_perfil'] != VENDEDOR && $_SESSION['sessionUser']['id_perfil'] != GERENTE) { ?><td><a href="#" onclick="ativaSubAba('comissoes', this)" />Comiss&otilde;es</a></td><?php } ?>
+		<td><a href="#" onclick="ativaSubAba('datas', this)" />Datas / Obs</a></td>
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 3 && $_SESSION['sessionUser']['id_perfil'] != SUPERVISOR && $_SESSION['sessionUser']['id_perfil'] != 8){
+	?>
+			<td><a href="#" onclick="ativaSubAba('resumo', this)" />Resumo</a></td>
+	<?php
+		}
+	?>	
+	
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] == 2){
+	?>
+			<td><a href="#" onclick="ativaSubAba('aprovacao', this)" />Aprova&ccedil;&atilde;o</a></td>
+	<?php
+		}
+	?>
+
+	<?php
+		if(($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239  || $_SESSION['sessionUser']['id_empresa'] == 255) && ($_SESSION['sessionUser']['id_perfil'] == CONCESSIONARIO || $_SESSION['sessionUser']['id_perfil'] == SUPERVISOR) &&  $this->negociacao['aprovada'] == 0){
+	?>
+			<td><a href="#" onclick="ativaSubAba('libera_contrato', this)" />Contrato</a></td>
+	<?php
+		}
+	?>
+
+	</tr>
+</table>
+
+<div id="cliente" style="width:98.1%;">
+
+	<div class="inline">
+		<label class="label">Buscar pelo Nome ou CPF</label>
+		<input type="text" id="find_cpf" name="find_cpf" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" value=""/>
+		<div id="resClientes" class="autocomplete"><ul></ul></div>
+		<a id="link_dados_cliente" target="_blanck"  style="display:none;" href="#">Acessar dados do cliente</a>
+	</div>
+	
+	<div class="inline" style="padding-top:5px">
+		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>clientes/add')" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Origem</label>
+		<select id="origem" name="origem" class="select">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Nome</label>
+		<input type="text" readonly="readonly" id="nome" name="nome" class="text" value=""/>
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->negociacao['id_empresa']; ?>" />
+		<input type="hidden" id="id_cliente" name="id_cliente" value="" >
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF</label>
+		<input type="text" readonly="readonly" id="cpf" name="cpf" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">RG</label>
+		<input type="text" readonly="readonly" id="rg" name="rg" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nacionalidade</label>
+		<input type="text" readonly="readonly" id="nacionalidade" name="nacionalidade" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" readonly="readonly" id="endereco" name="endereco" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">N&uacute;mero</label>
+		<input type="text" readonly="readonly" id="numero_endereco" name="numero_endereco" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" readonly="readonly" id="bairro" name="bairro" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Complemento</label>
+		<input type="text" readonly="readonly" id="complemento" name="complemento" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" readonly="readonly" id="cidade" name="cidade" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" readonly="readonly" id="estado" name="estado" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" readonly="readonly" id="cep" name="cep" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 1</label>
+		<input type="text" readonly="readonly" id="tel1" name="tel1" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 2</label>
+		<input type="text" readonly="readonly" id="tel2" name="tel2" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 3</label>
+		<input type="text" readonly="readonly" id="cel" name="cel" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Email</label>
+		<input type="text" readonly="readonly" id="email" name="email" class="text" value="" />
+	</div>
+
+</div>
+
+
+
+
+
+<div id="venda" style="width:98.1%;display:none">
+
+	<div class="inline" style="margin-bottom:20px;">
+		<label class="label">Buscar pelo Modelo ou Placa</label>
+		<input type="text" id="find_placa" name="find_placa" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value)" autocomplete="off" value="" />
+		<div id="resVeiculos" class="autocomplete"><ul></ul></div>
+		<a id="link_dados_veiculo" target="_blanck"  style="display:none;" href="#">Acessar dados do veículo</a>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa" name="placa" class="text" value="" />
+		<input type="hidden" id="id_veiculo" name="id_veiculo" value="">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca" name="marca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo" name="modelo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo" name="ano_modelo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" readonly="readonly" id="cor" name="cor" class="text" value="" />
+	</div>
+
+	<?php
+		$readonly = '';
+		if(($_SESSION['sessionUser']['vend_nao_edit_valor'] == 1) &&  
+			($_SESSION['sessionUser']['id_perfil'] != CONCESSIONARIO && 
+			$_SESSION['sessionUser']['id_perfil'] != GERENTE && 
+			$_SESSION['sessionUser']['id_perfil'] != SUPERVISOR )
+		){
+			$readonly = 'readonly';
+		}
+	?>
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" id="valor_venda" name="valor_venda" <?php echo $readonly; ?> class="text" value="" onKeyup="atualizaCamposVenda()" />
+		<input type="hidden" id="valor_aquisicao" name="valor_aquisicao" value="" />
+		<input type="hidden" id="data_aquisicao" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">KM</label>
+		<input type="text" id="km" name="km" class="text" value="" />
+	</div>
+	
+	
+<!--------
+	<div class="inline">
+		<label class="label">Custos Transfer&ecirc;ncia</label>
+		<input type="text" id="custos_transferencia" name="custos_transferencia" class="text" value=""/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Dias Garantia</label>
+		<input type="text" id="dias_garantia" name="dias_garantia" class="text" value="<?php echo $this->negociacao['dias_garantia']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Garantia</label>
+		<input type="text" id="km_garantia" name="km_garantia" class="text" value="<?php echo $this->negociacao['km_garantia']; ?>" />
+		
+	</div>
+	---------->
+	
+	<input type="hidden" id="data_termino_revisao" name="data_termino_revisao" value=""/>
+</div>
+
+
+
+
+
+
+
+
+
+<div id="despesa" style="width:98.1%;display:none">
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Despesa</th>
+				<th>Fornecedor</th>
+				<th>NF</th>
+				<th>Dias Garantia</th>
+				<th>Valor</th>
+			</tr>
+		</thead>
+		
+		<tbody id="despesas_negociacao">
+			
+		</tbody>
+	</table>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="transf" style="width:98.1%;display:none">
+	Transferencia
+</div>
+
+
+
+
+
+
+
+
+<div id="troca" style="width:98.1%;display:none">
+
+	<div class="inline">
+	
+		<label class="label">Buscar Veiculo Para Troca</label>
+		<input type="text" id="find_modelo_troca" name="find_modelo_troca" class="text" onkeyup="findModeloTroca(this.value)" style="background-color:#FFFFCC;" autocomplete="off" value="" />
+		<div id="resVeiculosTroca" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="padding-top:5px">
+		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>veiculos/add/troca/1')" />
+		<input type="button" class="btn-mini" value="Deletar Troca" onclick="deletaTroca();" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa_troca" name="placa_troca" class="text" value="" />
+		<input type="hidden" id="id_veiculo_troca" name="id_veiculo_troca">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca_troca" name="marca_troca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo_troca" name="modelo_troca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo_troca" name="ano_modelo_troca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" id="cor_troca" readonly="readonly" name="cor_troca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Renavam</label>
+		<input type="text" id="renavam" readonly="readonly" name="renavam" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Kilometragem</label>
+		<input type="text" id="km_troca" name="km_troca" readonly="readonly" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" readonly="readonly" id="preco_troca" name="preco_troca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs_troca" readonly="readonly" name="obs_troca" class="text"></textarea>
+	</div>
+	
+	
+	
+	<div id="div_troca_2" style="/*margin-top:300px;*/ display:block;">
+	
+		<div class="inline">
+			<label class="label">Buscar Veiculo Para Troca 2</label>
+			<input type="text" id="find_modelo_troca2" class="text" onkeyup="findModeloTroca2(this.value)" style="background-color:#FFFFCC;" autocomplete="off" value="" />
+			<div id="resVeiculosTroca2" class="autocomplete"><ul></ul></div>
+		</div>
+	
+		<div class="inline" style="padding-top:5px;">
+			<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>veiculos/add/troca/1')" />
+			<input type="button" class="btn-mini" value="Deletar Troca" onclick="deletaTroca2();" />
+		</div>
+		
+		<div class="inline" style="clear:both;">
+			<label class="label">Placa</label>
+			<input type="text" readonly="readonly" id="placa_troca2" name="placa_troca2" class="text" value="" />
+			<input type="hidden" id="id_veiculo_troca2" name="id_veiculo_troca2">
+		</div>
+
+		<div class="inline">
+			<label class="label">Marca</label>
+			<input type="text" readonly="readonly" id="marca_troca2" name="marca_troca2" class="text" value="" />
+		</div>
+
+		<div class="inline">
+			<label class="label">Modelo</label>
+			<input type="text" readonly="readonly" id="modelo_troca2" name="modelo_troca2" class="text" value="" />
+		</div>
+
+		<div class="inline">
+			<label class="label">Ano</label>
+			<input type="text" readonly="readonly" id="ano_modelo_troca2" name="ano_modelo_troca2" class="text" value="" />
+		</div>
+
+		<div class="inline">
+			<label class="label">Cor</label>
+			<input type="text" id="cor_troca2" readonly="readonly" name="cor_troca2" class="text" value="" />
+		</div>
+
+		<div class="inline">
+			<label class="label">Renavam</label>
+			<input type="text" id="renavam2" readonly="readonly" name="renavam2" class="text" value="" />
+		</div>
+		
+		<div class="inline">
+			<label class="label">Kilometragem</label>
+			<input type="text" id="km_troca2" name="km_troca2" readonly="readonly" class="text" value="" />
+		</div>
+
+		<div class="inline">
+			<label class="label">Valor</label>
+			<input type="text" id="preco_troca2" name="preco_troca2" readonly="readonly" class="text" value=""/>
+		</div>
+
+		<div class="inline">
+			<label class="label">Observa&ccedil;&otilde;es</label>
+			<textarea id="obs_troca" readonly="readonly" name="obs_troca2" class="text"></textarea>
+		</div>
+		
+	</div>
+
+</div>
+
+
+
+
+
+
+
+
+<div id="recebimento" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<label class="label">Financeira</label>
+		<select class="select" id="id_financeira" name="id_financeira" onChange="buscaDadosFinanceira(this.value);">
+			<option value="">Selecione</option>
+			<?php foreach($this->financeiras as $f){
+			
+				if($this->negociacao['id_financeira'] == $f['id']){
+			?>
+					<option value="<?php echo $f['id']; ?>"  selected="selected" ><?php echo $f['nome'];?></option>
+				
+			<?php }else{ ?>
+				
+				
+					<option value="<?php echo $f['id']; ?>"><?php echo $f['nome']; ?></option>
+
+			<?php }
+			
+			}
+			
+			?>
+		</select>
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor Financiado</label>
+		<input type="text" id="valor_financiado" name="valor_financiado" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Retorno</label>
+		<select class="select" id="retorno_financeira" name="retorno_financeira" onChange="calculaImposto(0);">
+			<option value="">Selecione</option>
+			<option value="0" <?php echo($this->negociacao['retorno_financeira'] == 0)?"selected='selected'":""; ?> >R0</option>
+			<option value="1" <?php echo($this->negociacao['retorno_financeira'] == 1)?"selected='selected'":""; ?> >R1</option>
+			<option value="2" <?php echo($this->negociacao['retorno_financeira'] == 2)?"selected='selected'":""; ?> >R2</option>
+			<option value="3" <?php echo($this->negociacao['retorno_financeira'] == 3)?"selected='selected'":""; ?> >R3</option>
+			<option value="4" <?php echo($this->negociacao['retorno_financeira'] == 4)?"selected='selected'":""; ?> >R4</option>
+			<option value="5" <?php echo($this->negociacao['retorno_financeira'] == 5)?"selected='selected'":""; ?> >R5</option>
+			<option value="6" <?php echo($this->negociacao['retorno_financeira'] == 6)?"selected='selected'":""; ?> >R6</option>
+			<option value="7" <?php echo($this->negociacao['retorno_financeira'] == 7)?"selected='selected'":""; ?> >R7</option>
+			<option value="8" <?php echo($this->negociacao['retorno_financeira'] == 8)?"selected='selected'":""; ?> >R8</option>
+			<option value="9" <?php echo($this->negociacao['retorno_financeira'] == 9)?"selected='selected'":""; ?> >R9</option>
+			<option value="10" <?php echo($this->negociacao['retorno_financeira'] == 10)?"selected='selected'":""; ?> >R10</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Imposto Financeira</label>
+		<input type="text"  autocomplete="off" id="imposto_financeira" name="imposto_financeira" class="text" value="<?php echo money_format("%i",$this->negociacao['imposto_financeira']); ?>" onKeyup="calculaImposto(1); validaMoedaBR(this.id);"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">TAC</label>
+		<input type="text" id="tac" name="tac" class="text" value="<?php echo $this->negociacao['tac'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Coeficiente Financeira</label>
+		<input type="text" id="coeficiente_financeira" name="coeficiente_financeira" class="text" value="<?php echo $this->negociacao['coeficiente_financeira'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Num. Presta&ccedil;&otilde;es</label>
+		<input type="text" id="numero_prestacoes" name="numero_prestacoes" class="text" value="<?php echo $this->negociacao['numero_prestacoes'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor Presta&ccedil;&otilde;es</label>
+		<input type="text" id="valor_prestacoes" name="valor_prestacoes" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor Venda</label>
+		<input type="text" id="valor_venda_rece" name="valor_venda_rece" class="text" value="" <?php echo $readonly; ?> onkeyUp="atualizaCamposVendaRecebimento(); validaMoedaBR(this.id); calcDiferenca(2); calculaImposto(0);" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Diferen&ccedil;a</label>
+		<input type="text" id="diferenca" name="diferenca" readonly="readyonly" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Valor Ve&iacute;culo de Troca</label>
+		<input type="text" id="valor_veiculo_troca" readonly="readyonly" class="text" value="" onKeyUp="validaMoedaBR(this.id);"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Despachante</label>
+		<select class="select" id="id_despachante" name="id_despachante">
+			<option value="">Selecione</option>
+			<?php foreach($this->despachante as $d){
+			
+				if($d['id'] == $this->negociacao['id_despachante']){
+				
+					echo "<option selected='selected' value=".$d['id'].">".$d['nome']."</option>";
+				
+				}else{
+
+					echo "<option value=".$d['id'].">".$d['nome']."</option>";
+					
+				}
+			
+			} ?>
+		</select>
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor Despachante</label>
+		<input type="text" id="valor_despachante" name="valor_despachante" class="text" value="<?php echo money_format("%i",$this->negociacao['valor_despachante']);?>" onKeyUp="validaMoedaBR(this.id);" />
+	</div>
+	
+	<div class="inline" style="display:table; margin-bottom:30px;">
+		<label class="label">Forma de Pagamento Despachante</label>
+		<textarea id="forma_pagamento_despachante" name="forma_pagamento_despachante" class="text" ><?php echo $this->negociacao['forma_pagamento_despachante'];?></textarea>
+	</div>
+	
+	<div class="inline" style="clear:both;width:90%;">
+		<label class="label" style="margin-left:7px; font-size:15px;">Descri&ccedil;&atilde;o de Pagamentos e D&eacute;bitos</label>
+		<label style="color:red; margin-left:7px; margin-top:5px;"><b>Aten&ccedil;&atilde;o:</b> As formas de pagamento: 'Devolu&ccedil;&atilde;o ao Cliente', 'D&eacute;bitos do  Ve&iacute;culo de Troca' e 'Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca', devem ser preenchidos com o valor negativo.</label>
+	</div>
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Forma</th>
+				<th>Data</th>
+				<th>N&uacute;mero</th>
+				<th>Banco</th>
+				<th>Ag&ecirc;ncia</th>
+				<th>CC</th>
+				<th>Valor</th>
+				<th>Baixar</th>
+				<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		
+		<tbody id="pgtos_programados">
+		
+		<?php
+			if(!$this->recebimentos){
+		?>
+				<tr id="recedimenros_0">
+					<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adicionarPgto();"></td>
+				</tr>
+		
+		<?php
+		}
+			
+			foreach($this->recebimentos as $recebi){ ?>
+		
+			<tr id="pgto_line_0">
+				<td><select class="select" style="width:150px;" name="Rforma_<?php echo $recebi['id'];?>" id="Rforma_<?php echo $recebi['id'];?>" onchange="promissoria(this.value, this)">
+						<option value="">Selecione</option>
+						<option value="1" <?php echo($recebi['forma'] == 1)?"selected='selected'":""; ?>>Cart&atilde;o de Cr&eacute;dito</option>
+						<option value="2" <?php echo($recebi['forma'] == 2)?"selected='selected'":""; ?>>Cheque</option>
+						<option value="3" <?php echo($recebi['forma'] == 3)?"selected='selected'":""; ?>>Dinheiro</option>
+						<option value="4" <?php echo($recebi['forma'] == 4)?"selected='selected'":""; ?>>Promiss&oacute;rias</option>
+						<option value="5" <?php echo($recebi['forma'] == 5)?"selected='selected'":""; ?>>TED</option>
+						<option value="6" <?php echo($recebi['forma'] == 6)?"selected='selected'":""; ?>>Devolu&ccedil;&atilde;o ao Cliente</option>
+						<option value="7" <?php echo($recebi['forma'] == 7)?"selected='selected'":""; ?>>D&eacute;bitos do  Ve&iacute;culo de Troca</option>
+						<option value="8" <?php echo($recebi['forma'] == 8)?"selected='selected'":""; ?>>Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>
+						<option value="9" <?php echo($recebi['forma'] == 9)?"selected='selected'":""; ?>>Cart&atilde;o de D&eacute;bito</option>
+						<option value="10" <?php echo($recebi['forma'] == 10)?"selected='selected'":""; ?>>Boleto Banc&aacute;rio</option>
+						<option value="11" <?php echo($recebi['forma'] == 11)?"selected='selected'":""; ?>>Pix</option>
+						<option value="12" <?php echo($recebi['forma'] == 12)?"selected='selected'":""; ?>>Desconto</option>
+				</select><br><a href="#" onClick="geraPromissoria(this);" <?php echo($recebi['forma'] == 4)?"style='display:block'":"style='display:none'";?>>Imprimir Promiss&oacute;ria</a></td>
+				<td><input type="text" id="Rdata_<?php echo $recebi['id'];?>" name="Rdata_<?php echo $recebi['id'];?>" class="text" value="<?php echo implode("/",array_reverse(explode("-",$recebi['data'])));?>" /></td>
+				<td><input type="text" id="Rnumero_<?php echo $recebi['id'];?>" name="Rnumero_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['numero'];?>" /></td>
+				<td><input type="text" id="Rbanco_<?php echo $recebi['id'];?>" name="Rbanco_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['banco'];?>" /></td>
+				<td><input type="text" id="Ragencia_<?php echo $recebi['id'];?>" name="Ragencia_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['agencia'];?>" /></td>
+				<td><input type="text" id="Rcc_<?php echo $recebi['id'];?>" name="Rcc_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['cc'];?>" /></td>
+				<td><input type="text" id="Rvalor_<?php echo $recebi['id'];?>" name="Rvalor_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['valor'];?>" /></td>
+				<td><input type="checkbox" id="Rbaixado_<?php echo $recebi['id'];?>" name="Rbaixado_<?php echo $recebi['id'];?>" value="1" <?php echo ($recebi['baixado'] == 1)?"checked='checked'":"";?> /></td>
+				<td style="width:20%;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeletePagamento(<?php echo $recebi['id'];?>);"/> <input type="button" id="btn_0" class="btn-mini btn-include" value="Add" onclick="addPgto()"></td>
+			</tr>
+			
+		<?php 
+		}
+		?>
+		</tbody>
+	</table>
+			
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="comissoes" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<label class="label">Valor Base para C&aacute;lculo de Comiss&atilde;o</label>
+		<input type="text" id="valor_base_calculo" name="valor_base_calculo" readonly="readonly" class="text" value="<?php echo $this->negociacao['valor_venda']; ?>" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Vendedor</label>
+		<select class="select" id="id_vendedor" name="id_vendedor" onchange="getComissoes(this.value, 'vendedor');">
+			<option value="">Selecione</option>
+			<?php 
+				foreach($this->vendedores as $vendedores){
+			
+					if($this->negociacao['id_vendedor'] == $vendedores['id']){
+						
+						echo "<option selected='selected' value='".$vendedores['id']."'>".$vendedores['nome']."</option>";
+					
+					}else{
+						
+						echo "<option value='".$vendedores['id']."'>".$vendedores['nome']."</option>";
+					
+					}
+			
+				}
+			
+			?>
+		</select>
+	</div>
+	<!--
+	<div class="inline" style="clear:both;">
+		<label class="label">Vendedor</label>
+		<input type="text" class="text" readonly="readonly" id="nome_vendedor" name="nome_vendedor" value="">
+	</div>
+	-->
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Vendedor (%)</label>
+		<input type="text" id="comissao_vendedor" name="comissao_vendedor" readonly="readonly" class="text" value="<?php if($this->negociacao['valor_fixo'] == 0){ echo $this->negociacao['percentual_venda']; } ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Vendedor (R$)</label>
+		<input type="text" id="comissao_vendedor_real" name="comissao_vendedor_real" class="text" value="<?php echo  str_replace(".",",",money_format("%i",$this->negociacao['comissao_vendedor'])); ?>"/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Supervisor</label>
+		<select class="select" id="id_supervisor" name="id_supervisor" onchange="getComissoes(this.value, 'supervisor');">
+			<option value="">Selecione</option>
+		<?php
+			
+			foreach($this->arrSupervisor as $supervisor){
+			
+				if($this->negociacao['id_supervisor'] == $supervisor['id']){
+				
+					$sel = "selected='selected'";
+				
+				}else{
+				
+					$sel = "";
+				
+				}
+
+				echo "<option ".$sel." value='".$supervisor['id']."'>".$supervisor['nome']."</option>";
+
+			}
+			
+		?>
+		</select>
+		<!--<input type="hidden" id="id_supervisor" name="id_supervisor" value=""/>--->
+	</div>
+	
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Supervisor (%)</label>
+		<input type="text" id="comissao_supervisor" name="comissao_supervisor" readonly="readonly" class="text" value=""/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Supervisor (R$)</label>
+		<input type="text" id="comissao_supervisor_real" name="comissao_supervisor_real"  class="text" value="<?php echo  str_replace(".",",",money_format("%i",$this->negociacao['comissao_supervisor'])); ?>"/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Gerente</label>
+		<select class="select" id="id_gerente" name="id_gerente" onchange="getComissoes(this.value, 'gerente');">
+			<option value="">Selecione</option>
+		<?php
+			
+			foreach($this->arrGerentes as $gerente){
+			
+				if($this->negociacao['id_gerente'] == $gerente['id']){
+				
+					$sel = "selected='selected'";
+				
+				}else{
+				
+					$sel = "";
+				
+				}
+
+				echo "<option ".$sel." value='".$gerente['id']."'>".$gerente['nome']."</option>";
+
+			}
+			
+		?>
+		</select>
+		<!--<input type="hidden" id="id_gerente" name="id_gerente" value="">--->
+	</div>
+	
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Gerente (%)</label>
+		<input type="text" id="comissao_gerente" name="comissao_gerente" readonly="readonly" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Comiss&atilde;o Gerente (R$)</label>
+		<input type="text" id="comissao_gerente_real" name="comissao_gerente_real" class="text" value="<?php echo str_replace(".",",",money_format("%i",$this->negociacao['comissao_gerente'])); ?>" />
+	</div>
+	
+</div>
+
+
+
+
+
+
+
+
+
+<div id="datas" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_abertura']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_abertura'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data / Hora Abertura</label>
+		<input type="text" readonly="readonly" id="data_abertura" name="data_abertura" class="text" value="<?php echo $this->negociacao['data_abertura'];?>" />
+	</div>
+	
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_concretizacao']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_concretizacao'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data / Hora de Concretiza&ccedil;&atilde;o</label>
+		<input type="text" id="data_concretizacao" readonly="readonly" name="data_concretizacao" class="text" onclick="verificaAprovacao();" value="<?php echo $this->negociacao['data_concretizacao'];?>" />
+	</div>
+	
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_cancelamento']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_cancelamento'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data / Hora de Cancelamento</label>
+		<input type="text" readonly="readonly" id="data_cancelamento" name="data_cancelamento" class="text" value="<?php echo $this->negociacao['data_cancelamento'];?>" />
+	</div>
+<!--
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_entrega_veiculo']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_entrega_veiculo'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data / Hora de Entrega do Ve&iacute;culo</label>
+		<input type="text" id="data_entrega_veiculo" name="data_entrega_veiculo" class="text" value="<?php echo $this->negociacao['data_entrega_veiculo'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Entrega Ve&iacute;culo</label>
+		<input type="text" id="km_entrega_veiculo" name="km_entrega_veiculo" class="text" value="<?php echo $this->negociacao['km_entrega_veiculo'];?>" />
+	</div>
+	
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_termino_garantia']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_termino_garantia'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data T&eacute;rmino Garantia</label>
+		<input type="text" id="data_termino_garantia" name="data_termino_garantia" class="text" value="<?php echo $this->negociacao['data_termino_garantia'];?>" />
+	</div>
+
+	<div class="inline">
+		<?php 
+		$temp = explode(" ",$this->negociacao['data_recebimento_veiculo']);
+		$data = implode("/",array_reverse(explode("-",$temp[0])));
+		$this->negociacao['data_recebimento_veiculo'] = $data." ".$temp[1];
+		?>
+		<label class="label">Data / Hora de Recebimento do Ve&iacute;culo</label>
+		<input type="text" id="data_recebimento_veiculo" name="data_recebimento_veiculo" class="text" value="<?php echo $this->negociacao['data_recebimento_veiculo'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Km Recebimento Ve&iacute;culo</label>
+		<input type="text" id="km_recebimento_veiculo" name="km_recebimento_veiculo" class="text" value="<?php echo $this->negociacao['km_recebimento_veiculo'];?>" />
+	</div>
+-->	
+	<div class="inline">
+		<label class="label">Data da Compra Ve&iacute;culo</label>
+		<input type="text" readonly="readonly" id="data_compra" class="text" value=""/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" class="text" ><?php echo $this->negociacao['obs'];?></textarea>
+	</div>
+
+	<div class="inline" style="display:table;">
+		<label class="label">Observa&ccedil;&otilde;es Internas</label>
+		<textarea id="obs_interna" name="obs_interna" class="text" ><?php echo $this->negociacao['obs_interna'];?></textarea>
+	</div>
+	
+</div>
+
+<div id="resumo" style="width:98.1%;display:none; margin-bottom:10px;">
+	
+	<div class="inline" style="height:auto;margin-bottom:10px;">
+		<label class="label">RECEITAS</label>
+	</div>
+	
+	<div class="inline" style="clear:both; height:auto!important; padding-bottom:10px;">
+		<label class="label">Valor da Venda</label>
+		<input type="text" id="valor_venda_resumo" name="valor_venda_resumo" readonly="readonly" class="text" style="font-size:20px; color:#00AA00; border-color:#009900;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Retorno</label>
+		<input type="text" id="retorno_resumo" name="retorno_resumo" readonly="readonly" class="text" style="font-size:20px; color:#00AA00; border-color:#009900;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">TOTAL</label>
+		<input type="text" id="total_receita_resumo" name="total_receita_resumo" readonly="readonly" class="text" style="font-size:20px; color:#00AA00; border-color:#009900; background-color:#DDFFDD;" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both; height:auto;margin-bottom:10px;">
+		<label class="label">DESPESAS</label>
+	</div>
+	
+	<div class="inline" style="clear:both; height:auto!important; padding-bottom:10px;">
+		<label class="label">Valor de Aquisi&ccedil;&atilde;o</label>
+		<input type="text" id="valor_aquisicao_resumo" name="valor_aquisicao_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Total de Despesas</label>
+		<input type="text" id="despesas_resumo" name="despesas_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Transfer&ecirc;ncia</label>
+		<input type="text" id="transferencia_resumo" name="transferencia_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Comiss&atilde;o Vendedor</label>
+		<input type="text" id="comissao_vendedor_resumo" name="comissao_vendedor_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Comiss&atilde;o Gerente</label>
+		<input type="text" id="comissao_gerente_resumo" name="comissao_gerente_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">Comiss&atilde;o Supervisor</label>
+		<input type="text" id="comissao_supervisor_resumo" name="comissao_supervisor_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto!important; padding-bottom:10px;">
+		<label class="label">TOTAL</label>
+		<input type="text" id="total_despesa_resumo" name="total_despesa_resumo" readonly="readonly" class="text" style="font-size:20px; color:#DD0000; border-color:#CC0000; background-color:#FFDDDD;" value="" />
+	</div>
+	
+	<div class="inline" style="height:auto;margin-bottom:10px;">
+		<label class="label">RESULTADO</label>
+		<input type="text" id="resultado_resumo" name="resultado_resumo" readonly="readonly" class="text" style="font-size:20px; color:#00AA00; border-color:#009900; background-color:#DDFFDD;" value="" />
+		<input type="hidden" id="aprovada" name="aprovada" value="0"/>
+	</div>
+	
+</div>
+
+<div id="aprovacao" style="width:98.1%;display:none">
+
+	<table style="border: solid 0px; width: 100%; margin-bottom:30px; margin-top:40px;">
+		<tr>
+			<td><center><input type="button" style="width:200px;" id="aprovar" class="btn-small" value="Aprovar" onclick="aprovacoes(this);" /></center></td><td><center><input type="button" style="width:200px;"  id="reprovar" class="btn-small" value="Reprovar" onclick="aprovacoes(this);" /></center></td>	
+		</tr>
+	</table>
+
+</div>
+
+
+<div id="libera_contrato" style="width:98.1%; display:none;">
+
+	<table style="width: 100%; margin-bottom:30px; margin-top:40px;">
+		<tr>
+			<td>
+				<center>
+					<input type="button" style="width:200px;" class="btn-small" value="<?php echo ($this->negociacao['liberado_contrato'] == 0 ? 'Liberar impressão do contrato' : 'Bloquear impressão do contrato'); ?>" onclick="liberaContrato(this);" />
+				</center>
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+<div class="inline" style="clear:both; display:table; width:90%;">
+	<input type="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo()" />
+
+	<?php
+	if($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239  || $_SESSION['sessionUser']['id_empresa'] == 255){
+	?>
+		<input type="button" class="btn-small-imp" id="bnt_impressao" value="Contratos" onclick="exibirContrato();" style="margin-left:5px; display: <?php if($this->negociacao['aprovada'] == 1){ echo 'inline'; }elseif($this->negociacao['liberado_contrato'] == 0){ echo 'none'; }else{ echo 'inline'; } ?>"/>	
+	<?php
+	}else{
+	?>
+		<input type="button" class="btn-small-imp" id="bnt_impressao" value="Contratos" onclick="exibirContrato();" style="margin-left:5px;"/>	
+	<?php
+	}
+	?>
+
+
+	<input type="button" class="btn-small" value="Termo de Res." onclick="javascript:window.open('https://sistemameucar.com.br/contratos/termo')" style="margin-left:5px;"/>
+	<input type="button" class="btn-small" value="XML Nf-e Cliente" onclick="xmlNfeCliente()" style="margin-left:5px;"/>
+	<input type="button" class="btn-small" value="XML Nf-e Produto" onclick="xmlNfeProduto()" style="margin-left:5px;"/>
+	<input type="button" class="btn-small" id="xml_troca_1" value="XML Nf-e Troca 1" onclick="xmlNfeTrocas($('#id_veiculo_troca').val())" style="margin-left:5px; display:none;"/>
+	<input type="button" class="btn-small" id="xml_troca_2" value="XML Nf-e Troca 2" onclick="xmlNfeTrocas($('#id_veiculo_troca2').val())" style="margin-left:5px; display:none;"/>
+	<input type="hidden" id="id" name="id" value="<?php echo $this->idNegociacao;?>" >
+	<input type="hidden" id="liberado_contrato" name="liberado_contrato" value="<?php echo $this->negociacao['liberado_contrato']; ?>" > 
+</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+
+var idFluxo = 0;
+var resultado = "Negociação";
+
+
+
+function liberaContrato(este){
+
+	if($("#liberado_contrato").val() == 0){
+		$("#liberado_contrato").val("<?php echo $_SESSION['sessionUser']['id'] ?>");
+		$(este).val("Bloquear impressão do contrato");
+	}else{
+		$("#liberado_contrato").val("0");
+		$(este).val("Liberar impressão do contrato");
+	}
+}
+
+
+
+function addFluxoCliente(){
+
+	if($("#aprovada").val() == "1"){
+		
+		resultado = "Fechou";
+
+		$.ajax({
+			url : '/clientes/ajax/fn/salva_origem',
+			async: false,
+			type : 'POST',
+			data: ({'id_origem':$("#origem").val(), 'nome':$("#nome").val(), 'tel1':$("#tel1").val(), 'tel2':$("#tel2").val(), 'cel':$("#cel").val(), 'email':$("#email").val(), 'resultado':resultado, 'veiculo_interesse':$("#modelo").val(), 'ano_modelo':$("#ano_modelo").val(), 'id_usuario':$("#id_vendedor").val(), 'data_concretizacao':$("#data_concretizacao").val(), 'id_negociacao':'<?php echo $this->negociacao['id']; ?>'}),
+			dataType: 'text',
+			success: function(data){
+
+				//alert(data);
+
+			}
+		});
+	/*
+		$.ajax({
+			url : '/clientes/ajax/fn/edita_origem',
+			async: false,
+			type : 'POST',
+			data: ({'id_origem':$("#origem").val(), 'nome':$("#nome").val(), 'tel1':$("#tel1").val(), 'tel2':$("#tel2").val(), 'cel':$("#cel").val(), 'email':$("#email").val(), 'resultado':resultado, 'veiculo_interesse':$("#modelo").val(), 'ano_modelo':$("#ano_modelo").val()}),
+			dataType: 'text',
+			success: function(data){
+
+				//alert(data);
+
+			}
+		});
+	*/
+		
+	}
+
+}
+
+
+function buscaOrigemSelecionado(){
+
+	$.ajax({
+		url : '/clientes/ajax/fn/busca_origem_id',
+		async: false,
+		type : 'POST',
+		data: ({'nome':$("#nome").val()}),
+		dataType: 'text',
+		success: function(data){
+
+			var arr = new Array(2);
+	
+			arr = data.split("|");
+
+			$("#origem option[value='"+arr[1]+"']").attr("selected", true);
+			
+			idFluxo = arr[0];
+
+		}
+	});
+
+}
+
+function  buscaOrigem(){
+
+$.ajax({
+	url : '/clientes/ajax/fn/busca_origem',
+	async: true,
+	type : 'POST',
+	dataType: 'text',
+	success: function(data){
+
+		$("#origem").html(data);
+		
+		//buscaOrigemSelecionado();
+		
+		populaCamposCliente(<?php echo $this->negociacao['id_cliente']; ?>);
+		
+	}
+});
+
+}
+
+
+function xmlNfeTrocas(id){
+
+	if(id == ""){
+		
+		alert("Veículo não encontrado.");
+	
+	}else{
+
+		window.location.href="/negociacoes/gera-xml-nfe-troca/id/"+id;
+
+	}
+
+}
+
+function xmlNfeCliente(){
+	
+	var idCliente = $("#id_cliente").val(); 
+
+	if(idCliente == ""){
+		
+		alert("Cliente não encontrado.");
+	
+	}else{
+
+		window.location.href="/negociacoes/gera-xml-nfe-cliente/id_cliente/"+idCliente;
+
+	}
+
+}
+
+
+function xmlNfeProduto(){
+	
+	var idVeiculo = $("#id_veiculo").val(); 
+
+	if(idVeiculo == ""){
+		
+		alert("Veículo não encontrado.");
+	
+	}else{
+
+		window.location.href="/negociacoes/gera-xml-nfe-produto/id_veiculo/"+idVeiculo;
+
+	}
+
+}
+
+function getComissoes(id, perfil){
+	
+	var arr = new Array();
+	var v = $("#valor_base_calculo").val();
+	
+	if(id != ""){
+	
+		$.ajax({
+			type: "POST",
+			url: '/usuarios/ajax/fn/getComissoes',
+			async: true,
+			dataType:"text",
+			data: ({'id':id}),
+			success:function(resp){
+
+				arr = resp.split("_");
+				
+				if(arr[0] != 0){
+
+					comissao = moeda2float(arr[0]);
+					v = moeda2float(v);
+					
+					$("#comissao_"+perfil).val(float2moeda((comissao/v)*100));
+					$("#comissao_"+perfil+"_real").val(float2moeda(arr[0]));
+				
+				}else{
+					
+					comissao = moeda2float(arr[1]);
+					v = moeda2float(v);
+
+					$("#comissao_"+perfil+"_real").val(float2moeda((arr[1]*v)/100));
+					$("#comissao_"+perfil).val(float2moeda(comissao));
+					
+				}
+
+			}
+		});
+	
+	}else{
+		
+		$("#comissao_"+perfil+"_real").val(0);
+		$("#comissao_"+perfil).val(0);
+	
+	}
+
+}
+
+
+function verificaAprovacao(){
+
+	if($("#aprovada").val() == "1"){
+	
+		$("#data_concretizacao").attr("readonly", false);
+	
+	}else{
+	
+		alert("Não é possível alterar a data de concretização se a negociação não foi aprovada.");
+	
+	}
+
+}
+
+
+
+var imposto = 0;
+var impostoReais = 0;
+var retorno = 0;
+var result = 0;
+
+function calculaImposto(click){
+
+	retorno = (moeda2float($("#retorno_financeira").val()) * 1.2) * moeda2float($("#valor_financiado").val()) /100;
+
+	if(imposto != 0 && click == 0){
+	
+		impostoReais = retorno*imposto/100;
+
+		$("#imposto_financeira").val(float2moeda(impostoReais));
+	
+	}else{
+	
+		impostoReais = parseFloat($("#imposto_financeira").val());
+	
+	}
+	
+	//if(retorno > 0){
+
+		result = float2moeda(retorno-impostoReais);
+
+	//}
+	
+	if(retorno == 0){
+	
+		result = 0;
+	
+	}
+
+	$("#retorno_resumo").val(result);
+
+}
+
+function calculaRetorno(){
+/*
+	result = 0;
+
+	retorno = (moeda2float($("#retorno_financeira").val()) * 1.2) * moeda2float($("#valor_financiado").val()) /100;
+	
+	impostoReais = moeda2float($("#imposto_financeira").val());
+	
+	if(retorno > 0){
+	
+		result = float2moeda(retorno-impostoReais);
+	
+	}
+	
+	$("#retorno_resumo").val(result);
+*/
+}
+
+
+function calculaTrocas(){
+
+	$("#valor_veiculo_troca").val(0);
+
+	if($("#preco_troca").val() != ""){
+	
+		$("#valor_veiculo_troca").val(parseFloat($("#preco_troca").val()));
+	
+	}
+	
+	if($("#preco_troca2").val() != ""){
+	
+		$("#valor_veiculo_troca").val(parseFloat($("#preco_troca2").val()));
+	
+	}
+	
+	if($("#preco_troca2").val() != "" && $("#preco_troca").val() != ""){
+	
+		$("#valor_veiculo_troca").val(parseFloat($("#preco_troca").val()) + parseFloat($("#preco_troca2").val()));
+	
+	}
+
+}
+
+
+function buscaDadosFinanceira(idFinanceira){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>financeiras/ajax/',
+      		async: false,
+      		type: 'POST',
+      		data: ({'id_financeira':idFinanceira}),
+      		dataType: 'text'
+   	}).responseText;
+
+	imposto = resp;
+
+	calculaImposto(0);
+
+}
+
+/*
+function mudaComissaoSupervisor(){
+
+	val = $("#nome_supervisor").val();
+
+	var valSupervisor = new Array();
+
+	valSupervisor = val.split("_");
+	
+	if(valSupervisor[2] == 1){
+	
+		$("#comissao_supervisor_real").val(float2moeda(valSupervisor[1]));
+		$("#id_supervisor").val(valSupervisor[0]);
+	
+	}else{
+		
+		$("#comissao_supervisor").val(valSupervisor[1]);
+		$("#id_supervisor").val(valSupervisor[0]);
+	
+	}
+	
+	calculaPercComissao();
+
+}
+
+function mudaComissaoGerente(){
+
+	val = $("#nome_gerente").val();
+
+	var valGerente = new Array();
+
+	valGerente = val.split("_");
+	
+	if(valGerente[2] == 1){
+	
+		$("#comissao_gerente_real").val(float2moeda(valGerente[1]));
+		$("#id_gerente").val(valGerente[0]);
+	
+	}else{
+		
+		$("#comissao_gerente").val(valGerente[1]);
+		$("#id_gerente").val(valGerente[0]);
+	
+	}
+	
+	calculaPercComissao();
+
+}
+*/
+function atualizaValorTroca(valor){
+
+	$("#valor_veiculo_troca").val(valor);
+
+}
+
+function deletaTroca(){
+
+	$("#id_veiculo_troca").val("");
+	$("#placa_troca").val("");
+	$("#marca_troca").val("");
+	$("#modelo_troca").val("");
+	$("#ano_modelo_troca").val("");
+	$("#cor_troca").val("");
+	$("#km_troca").val("");
+	$("#renavam").val("");
+	$("#preco_troca").val("");
+	$("#obs_troca").val("");
+	$("#valor_veiculo_troca").val("0");
+
+}
+
+function deletaTroca2(){
+
+	$("#id_veiculo_troca2").val("");
+	$("#placa_troca2").val("");
+	$("#marca_troca2").val("");
+	$("#modelo_troca2").val("");
+	$("#ano_modelo_troca2").val("");
+	$("#cor_troca2").val("");
+	$("#km_troca2").val("");
+	$("#renavam2").val("");
+	$("#preco_troca2").val("");
+	$("#obs_troca2").val("");
+
+}
+
+function aprovacoes(obj){
+
+	if($(obj).attr('id') == "aprovar"){
+	
+		$(obj).css("background","#CCCCCC");
+		$(obj).attr("value","Aprovado");
+		$("#reprovar").attr("value","Reprovar");
+		$("#reprovar").css("background","#EFEFEF");
+		
+		if("<?php echo $this->negociacao['data_concretizacao'] ?>" == "00/00/0000 00:00:00"){
+		
+			$("#data_concretizacao").val("<?php echo @date('d/m/Y H:i:s');?>");
+		
+		}
+		
+		$("#data_cancelamento").val("<?php echo '00/00/0000 00:00:00';?>");
+		$("#aprovada").val("1");
+	}
+	
+	if($(obj).attr('id') == "reprovar"){
+
+		if (confirm("Ao reprovar uma negociação, se houver veículos de troca, eles serão removidos da negociação.\nCaso seja necessário reutilizar a negociação, será preciso adicionar os veículos de troca novamente.") == true) {
+	
+			$(obj).css("background","#CCCCCC");
+			$(obj).attr("value","Reprovado");
+			$("#aprovar").attr("value","Aprovar");
+			$("#aprovar").css("background","#EFEFEF");
+			
+			if("<?php echo $this->negociacao['data_cancelamento'] ?>" == "00/00/0000 00:00:00"){
+			
+				$("#data_cancelamento").val("<?php echo @date('d/m/Y H:i:s');?>");
+				
+			}
+			
+			$("#data_concretizacao").val("<?php echo '00/00/0000 00:00:00';?>");
+			$("#data_concretizacao").attr("readonly", "readonly");
+			$("#aprovada").val("-1");
+
+		}
+	
+	}
+
+}
+
+function exibirContrato(){
+	
+	if(validaCampo()){
+	
+		var idCliente = $("#id_cliente").val();
+		var idEmpresa = $("#id_empresa").val();
+		var idVeiculo = $("#id_veiculo").val();
+		var idNegociacao = <?php echo $this->idNegociacao;?>;
+		
+		pagina = "/contratos/seleciona-contrato/id_cliente/"+idCliente+"/id_empresa/"+idEmpresa+"/id_veiculo/"+idVeiculo+"/id_negociacao/"+idNegociacao;
+		largura = 580;
+		altura = 340;
+		
+		w = screen.width;
+		h = screen.height;
+		meio_w = w/2;
+		meio_h = h/2;
+		altura2 = altura/2;
+		largura2 = largura/2;
+		meio1 = meio_h-altura2;
+		meio2 = meio_w-largura2;
+		window.open(pagina,'','scrollbars=no,toolbar=no,location=no,directories=no,status=no, menubar=no,resizable=no,copyhistory=no,height=' + altura + ',width=' + largura + ',top='+meio1+',left='+meio2+''); 
+	
+	}
+}
+
+function promissoria(valor,obj){
+
+	if(valor == 4){
+
+		$(obj).next().next().css("display","block");
+	
+	}else{
+	
+		$(obj).next().next().css("display","none");
+	
+	}
+
+}
+
+function geraPromissoria(obj){
+
+	dataPromissoria = $(obj).parent().next().children().val();
+	
+	var datas = new Array();
+	
+	datas = dataPromissoria.split('/');
+	
+	dataPromissoria = datas[0]+"-"+datas[1]+"-"+datas[2];
+	
+	numPromissoria = $(obj).parent().next().next().children().val();
+	valPromissoria = $(obj).parent().next().next().next().next().next().next().children().val();
+	nomeCliente = $("#nome").val();
+	cpfCliente = $("#cpf").val();
+	enderecoCliente = $("#endereco").val()+", "+$("#numero_endereco").val();
+	cidadeCliente = $("#cidade").val();
+	estadoCliente = $("#estado").val();
+	cepCliente = $("#cep").val();
+	
+	var msg = "";
+	var erro = false;
+	
+	if(datas == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo data deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(numPromissoria == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo n&uacute;mero deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(valPromissoria == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo valor deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(nomeCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cpfCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cpf da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(enderecoCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo endere&ccedil;o da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cidadeCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cidade da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(estadoCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo estado da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cepCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cep da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+	
+		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria/data_promissoria/"+dataPromissoria+"/num_promissoria/"+numPromissoria+"/valor_promissoria/"+valPromissoria+"/nome/"+nomeCliente+"/cpf/"+cpfCliente+"/endereco/"+enderecoCliente+"/cidade/"+cidadeCliente+"/estado/"+estadoCliente+"/cep/"+cepCliente);
+
+	}
+	
+}
+
+/*function calcFinanciamento(){
+
+	var valFinanciado = moeda2float($("#valor_financiado").val()) + moeda2float($("#tac").val());
+	var cf = moeda2float($("#coeficiente_financeira").val()); //coeficiente : ex 0.36721
+	$("#valor_prestacoes").val(float2moeda(valFinanciado * cf));
+	validaMoedaBR("valor_prestacoes");
+	
+}*/
+
+function calcDiferenca(num){
+	
+	
+	
+	var pagar = $("#valor_venda").val();
+	
+	if(num == 1){
+	
+		pagar = pagar.replace(".","");
+		pagar = pagar.replace(",",".");
+	
+	}
+	
+	pagar = parseFloat(pagar);
+	
+	var pgtos = 0;
+
+	$("#pgtos_programados input").each(function (){
+		
+		if($(this).attr('id').substr(0,6) == "Rvalor"){
+	
+			//if(moeda2float($(this).val()) > 0){
+	
+				pgtos += moeda2float($(this).val());
+				
+			//}
+			
+		}
+	
+	});
+	
+	if($("#valor_veiculo_troca").val() != ""){
+	
+		veiculoTroca = $("#valor_veiculo_troca").val();
+		
+		veiculoTroca = veiculoTroca.replace(".","");
+		veiculoTroca = veiculoTroca.replace(",",".");
+		
+		veiculoTroca = parseFloat(veiculoTroca);
+	
+	}else{
+	
+		veiculoTroca = 0;
+	
+	}
+	
+	valorFinanciado = $("#valor_financiado").val();
+	
+	valorFinanciado = valorFinanciado.replace(".","");
+	valorFinanciado = valorFinanciado.replace(",",".");
+	
+	valorFinanciado = parseFloat(valorFinanciado);
+
+	//alert;
+	
+	//recebeu = (pagar-(veiculoTroca+pgtos+valorFinanciado));
+
+	$("#diferenca").val(pagar-(valorFinanciado+veiculoTroca+pgtos));
+
+}
+
+function esconde(f){
+	
+	$(f).css("display","none");
+	
+}
+
+function findCliente(f){
+	
+	$("#resClientes").css("display","block");
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resClientes ul").html(resp);
+
+}
+
+function populaCamposCliente(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>clientes/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+
+	var camposClientes = $("#cliente div").children().each(function(){
+
+		
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+
+			}else{
+
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_cliente"){
+					
+					$(this).val(arrPartes[1]);
+					$("#link_dados_cliente").attr("href","/clientes/edt/id/"+arrPartes[1]);
+					
+					if($("#link_dados_cliente").attr("href") != "#"){
+					
+						$("#link_dados_cliente").css("display","block");
+					
+					}
+					
+				}
+		
+			}
+		
+		}
+	
+	});
+	
+	populaCamposVeiculo(<?php echo $this->negociacao['id_veiculo']; ?>);
+
+}
+
+function findVeiculo(f){
+
+	$("#resVeiculos").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/vendido/no',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculos ul").html(resp);
+
+}
+
+function populaCamposVeiculo(f){
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+	
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#venda div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+				
+				if(arrPartes[0] == "valor_venda"){
+				
+					valor = arrPartes[1];
+					
+					$(this).val(valor);
+				
+				}else{
+				
+					$(this).val(arrPartes[1]);
+				
+				}
+			
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_veiculo"){
+					
+					$(this).val(arrPartes[1]);
+					$("#link_dados_veiculo").attr("href","/veiculos/edt/id/"+arrPartes[1]);
+					
+					if($("#link_dados_veiculo").attr("href") != "#"){
+					
+						$("#link_dados_veiculo").css("display","block");
+					
+					}
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+	
+	$("#valor_venda").val(float2moeda($("#valor_venda").val()));
+	$("#valor_aquisicao").val(float2moeda($("#valor_aquisicao").val()));
+
+	dataAquisicao = $("#data_aquisicao").val().split("-");
+	$("#data_compra").val(dataAquisicao[2]+"/"+dataAquisicao[1]+"/"+dataAquisicao[0]);
+	
+	verificaDataTerminoRevisao();
+	calculaPercComissao();
+	findTabelaDespesas(f);
+	atualizaCamposVenda();
+	colocaVirgula();
+	getAvaliacao();
+	
+	//alert(resp);
+
+}
+
+
+function getAvaliacao(){
+
+	var placa = $("#placa").val();
+
+	$.ajax({
+		type: "POST",
+		url: '/veiculos/ajax/fn/get_despesas_avaliacoes',
+		async: true,
+		dataType:"text",
+		data: ({'placa':placa}),
+		success:function(resp){
+
+			var arr = resp.split("_");
+
+			if(arr[1] !== undefined && arr[1] !== null && arr[1] !== ""){
+				$("#despesa_avaliada").html("R$ "+arr[0]);
+				$("#link_avaliacao").attr("href","https://sistemameucar.com.br/avaliacoes/edt/id/"+arr[1]);
+			}else{
+				$("#link_avaliacao").remove();
+			}
+
+		}
+	});
+
+}
+
+function findModeloTroca(f){
+
+	$("#resVeiculosTroca").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/temp_troca/1/fn_troca/true',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculosTroca ul").html(resp);
+
+}
+
+function populaCamposTroca(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#troca div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			var nomeConc = arrPartes[0] + "_troca";
+			
+			if(nomeConc == $(this).attr('id') || arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+			
+			}else{
+		
+				if(arrPartes[0] == "id"){
+					
+					$("#id_veiculo_troca").val(arrPartes[1]);
+					
+				}
+				
+				if(arrPartes[0] == "valor_aquisicao"){
+					
+					valorPtroca = arrPartes[1];
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+	
+	colocaVirgula();
+	
+	$("#preco_troca").val(valorPtroca);
+	//$("#valor_veiculo_troca").val(float2moeda(valorPtroca));
+	
+	
+	if($("#id_veiculo_troca").val() != ""){
+		
+		$("#xml_troca_1").css("display","inline");
+	
+	}else{
+		
+		$("#xml_troca_1").css("display","none");
+	
+	}
+
+}
+
+function findModeloTroca2(f){
+
+	$("#resVeiculosTroca2").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/temp_troca/1/fn_troca/true',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f, 'n':'2'}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculosTroca2 ul").html(resp);
+
+}
+
+function populaCamposTroca2(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#div_troca_2 div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			var nomeConc = arrPartes[0] + "_troca2";
+			
+			if(nomeConc == $(this).attr('id') || arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+			
+			}else{
+		
+				if(arrPartes[0] == "id"){
+					
+					$("#id_veiculo_troca2").val(arrPartes[1]);
+					
+				}
+				
+				if(arrPartes[0] == "valor_aquisicao"){
+					
+					//$("#preco_troca2").val(arrPartes[1]);
+					//$("#valor_veiculo_troca2").val(arrPartes[1]);
+					
+					valorPtroca2 = arrPartes[1];
+					
+				}
+				
+				if(arrPartes[0] == "renavam"){
+					
+					$("#renavam2").val(arrPartes[1]);
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+	
+	colocaVirgula();
+	
+	$("#preco_troca2").val(valorPtroca2);
+	
+	if($("#id_veiculo_troca2").val() != ""){
+		
+		$("#xml_troca_2").css("display","inline");
+	
+	}else{
+		
+		$("#xml_troca_2").css("display","none");
+	
+	}
+
+}
+
+function populaCamposTroca2Inicio(n){
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'n2':n}),
+      		dataType: 'text'
+   	}).responseText;
+	
+	if(resp != ""){
+	
+		var arrDados = resp.split("|");
+		
+		var camposVeiculos = $("#div_troca_2 div").children().each(function(){
+		
+			for(x = 0; x<arrDados.length; x++){
+
+				var arrPartes = arrDados[x].split(":");
+		
+				var nomeConc = arrPartes[0] + "_troca2";
+				
+				if(nomeConc == $(this).attr('id') || arrPartes[0] == $(this).attr('id')){
+				
+					$(this).val(arrPartes[1]);
+				
+				}else{
+			
+					if(arrPartes[0] == "id"){
+						
+						$("#id_veiculo_troca2").val(arrPartes[1]);
+						
+					}
+					
+					if(arrPartes[0] == "valor_aquisicao"){
+						
+						valorPtroca2 = arrPartes[1];
+						
+					}
+					
+					if(arrPartes[0] == "renavam"){
+						
+						$("#renavam2").val(arrPartes[1]);
+						
+					}
+		
+				}
+			
+			
+			}
+		
+		});
+		
+		colocaVirgula();
+		
+		$("#preco_troca2").val(valorPtroca2);
+		
+	}
+	
+	if($("#id_veiculo_troca2").val() != ""){
+		
+		$("#xml_troca_2").css("display","inline");
+	
+	}else{
+		
+		$("#xml_troca_2").css("display","none");
+	
+	}
+
+}
+
+function populaCamposTrocaInicio(n){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'n':n}),
+      		dataType: 'text'
+   	}).responseText;
+
+	if(resp != ""){
+	
+		var arrDados = resp.split("|");
+		
+		var camposVeiculos = $("#troca div").children().each(function(){
+		
+			for(x = 0; x<arrDados.length; x++){
+
+				var arrPartes = arrDados[x].split(":");
+		
+				var nomeConc = arrPartes[0] + "_troca";
+				
+				if(nomeConc == $(this).attr('id') || arrPartes[0] == $(this).attr('id')){
+				
+					$(this).val(arrPartes[1]);
+				
+				}else{
+			
+					if(arrPartes[0] == "id"){
+						
+						$("#id_veiculo_troca").val(arrPartes[1]);
+						
+					}
+					
+					if(arrPartes[0] == "valor_aquisicao"){
+						
+						valorPtroca = arrPartes[1];
+						
+					}
+		
+				}
+			
+			
+			}
+		
+		});
+		
+		colocaVirgula();
+		
+		$("#preco_troca").val(valorPtroca);
+		//$("#valor_veiculo_troca").val(float2moeda(valorPtroca));
+	}
+	
+	if($("#id_veiculo_troca").val() != ""){
+		
+		$("#xml_troca_1").css("display","inline");
+	
+	}else{
+		
+		$("#xml_troca_1").css("display","none");
+	
+	}
+	
+}
+
+function findTabelaDespesas(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getTableDespesasByIdVeiculo',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#despesas_negociacao").html(resp);
+
+}
+
+
+
+function calculaPercComissaos(perfil){
+
+	var v = $("#valor_base_calculo").val();
+	
+	comissao = moeda2float($("#comissao_"+perfil+"_real").val());
+	v = moeda2float(v);
+
+	$("#comissao_"+perfil).val(float2moeda((comissao/v)*100));
+
+}
+
+function calculaPercComissao(){
+
+	calculaPercComissaos('vendedor');
+	calculaPercComissaos('supervisor');
+	calculaPercComissaos('gerente');
+
+}
+
+function adicionarPgto(){
+
+	pagamento = "<tr>"+
+					"<td colspan=\"9\" style=\"color:red;\">"+
+					"</td>"+
+				"</tr>"+
+				"<tr id=\"pgto_line_0\">"+
+				"<td><select class=\"select\" style=\"width:150px;\" name=\"Rforma_0\" id=\"Rforma_0\" onchange=\"promissoria(this.value, this)\">"+
+						"<option value=\"\">Selecione</option>"+
+						"<option value=\"1\">Cart&atilde;o de Cr&eacute;dito</option>"+
+						"<option value=\"2\">Cheque</option>"+
+						"<option value=\"3\">Dinheiro</option>"+
+						"<option value=\"4\">Promiss&oacute;rias</option>"+
+						"<option value=\"5\">TED</option>"+
+						"<option value=\"6\">Devolu&ccedil;&atilde;o ao Cliente</option>"+
+						"<option value=\"7\">D&eacute;bitos do  Ve&iacute;culo de Troca</option>"+
+						"<option value=\"8\">Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>"+
+						"<option value=\"9\">Cart&atilde;o de D&eacute;bito</option>"+
+						"<option value=\"10\">Boleto Banc&aacute;rio</option>"+
+						"<option value=\"11\">Pix</option>"+
+						"<option value=\"12\">Desconto</option>"+
+				"</select><br><a href=\"#\" onClick=\"geraPromissoria(this);\" style=\"display:none\">Imprimir Promiss&oacute;ria</a></td>"+
+				"<td><input type=\"text\" id=\"Rdata_0\" name=\"Rdata_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rnumero_0\" name=\"Rnumero_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rbanco_0\" name=\"Rbanco_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Ragencia_0\" name=\"Ragencia_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rcc_0\" name=\"Rcc_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rvalor_0\" name=\"Rvalor_0\" class=\"text\" value=\"\" onkeyup=\"validaMoedaBR(this.id); calcDiferenca();\"/></td>"+
+				"<td><input type=\"checkbox\" id=\"Rbaixado_0\" name=\"Rbaixado_0\" value=\"1\" /></td>"+
+				"<td style=\"width:20%;\"><input type=\"button\" class=\"btn-small btn-del\" id=\"deleta\" value=\"Deletar\" onclick=\"confirmaDeletePagamento(0);\"/><input type=\"button\" id=\"btn_0\" class=\"btn-mini btn-include\" value=\"Add\" onclick=\"addPgto()\"></td>"+
+			"</tr>";
+			
+	$("#pgtos_programados").html(pagamento);
+	$("#Rdata_0").mask("99/99/9999");
+	$('#Rdata_0').focus(function(){
+		$(this).calendario({
+			target:'#Rdata_0'
+		});
+	});
+
+}
+
+
+function confirmaDeletePagamento(id){
+
+decisao = confirm("Deseja realmente deletar?");
+	
+	if (decisao){
+	
+	var temElemento = true;
+	
+		$.ajax({
+			type: "POST",
+			url:"/negociacoes/ajax/fn/deleta_pagamento/id_pagamento/"+id,
+			dataType:"html",                       
+			success:function(retornoDelete){
+
+			//alert(retornoDelete);
+			
+				if(retornoDelete == "Sucesso"){
+
+					$("#Rdata_"+id).parent().parent().remove();
+					
+					$("#pgtos_programados tr td input").each(function(){
+	
+						if($(this).attr('id').substring(0,5) == "Rdata"){
+							
+							temElemento = false;
+						
+						}
+					
+					})
+					
+					if(temElemento){
+					
+						$("#pgtos_programados").html("<tr id=\"recedimenros_0\"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td><input type=\"button\" id=\"btn_0\" name=\"btn_0\" class=\"btn-mini btn-include\" value=\"Add\" onclick=\"adicionarPgto();\"></td></tr>");
+					
+					}
+					
+					calcDiferenca(1);
+					
+				}else{
+				
+					alert(retornoDelete);
+				
+				}
+		
+			}
+		})
+		
+	}
+	
+}
+
+
+calculaPercComissao();
+
+function ativaSubAba(destino, c){
+
+	$("#subAbas td").each(function(){
+		
+		$(this).removeClass('selecionado');
+		
+	});
+	
+	$(c).parent().addClass('selecionado');
+	
+	var divAbas = new Array('cliente', 'venda', 'despesa', 'troca', 'transf', 'recebimento', 'comissoes', 'datas', 'resumo','aprovacao', 'libera_contrato');
+
+	for(x in divAbas){
+		
+		$("#"+divAbas[x]).css('display','none');
+	
+	}
+	
+	$("#"+destino).css('display','inline');
+	
+	calculaResumo();
+	atualizaCamposVenda();
+	calculaTrocas();
+	
+}
+
+
+var pgtosAdd = 0;
+
+function addPgto(){
+
+	pgtosAdd--;
+
+	var line = $("#pgto_line_0").clone();
+	
+	$("#pgtos_programados").append(line);
+	
+	$("#pgtos_programados tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+pgtosAdd);
+		$(this).children().attr('name', idLine[0]+"_"+pgtosAdd);
+		
+		if($(this).children().attr('id') == "deleta_"+pgtosAdd){
+		
+			$("#deleta_"+pgtosAdd).attr('onClick',"confirmaDeletePagamento("+pgtosAdd+");");
+			
+		}
+
+	});
+	
+	$("#Rforma_"+pgtosAdd).val("");
+	$("#Rdata_"+pgtosAdd).val("");
+	$("#Rnumero_"+pgtosAdd).val("");
+	$("#Rbanco_"+pgtosAdd).val("");
+	$("#Ragencia_"+pgtosAdd).val("");
+	$("#Rcc_"+pgtosAdd).val("");
+	$("#Rvalor_"+pgtosAdd).val("");
+	$("#Rbaixado_"+pgtosAdd).attr("checked",false);
+	
+	$("#Rdata_"+pgtosAdd).mask("99/99/9999");
+	$('#Rdata_'+pgtosAdd).focus(function(){
+		$(this).calendario({
+			target:'#Rdata_'+pgtosAdd
+		});
+	});
+	
+	calcDiferenca(1);
+
+}
+
+<?php
+
+foreach($this->recebimentos as $recebi){
+
+	echo "$('#Rdata_".$recebi['id']."').mask('99/99/9999');
+		$('#Rdata_".$recebi['id']."').focus(function(){
+		 $(this).calendario({
+			target:'#Rdata_".$recebi['id']."'
+		});
+	});";
+
+}
+
+?>
+
+var despesasAdd = 1;
+
+function addDespesa(){
+
+	despesasAdd++;
+
+	var line = $("#despesas_negociacao_line_0").clone();
+	
+	$("#despesas_negociacao").append(line);
+	
+	$("#despesas_negociacao tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+despesasAdd);
+		$(this).children().attr('name', idLine[0]+"_"+despesasAdd);
+
+	});
+
+}
+
+	function atualizaCamposVenda(){
+
+		$("#recebimento input[id='valor_venda_rece']").val($("#valor_venda").val());
+		$("#valor_base_calculo").val($("#valor_venda").val());
+		calculaPercComissao();
+
+		
+	}
+	
+	function atualizaCamposVendaRecebimento(){
+
+		valo = $("#valor_venda_rece").val();
+	
+		//valo = valo.replace(".","");
+		//valo = valo.replace(",",".");
+
+		$("#valor_venda").val(valo);
+
+	}	
+
+	function calculaResumo(){
+	
+		var valVenda = $("#valor_venda").val();	
+		$("#valor_venda_resumo").val(valVenda);
+		valVenda = valVenda.replace(".","");
+		valVenda = valVenda.replace(",",".");
+		valVenda = parseFloat(valVenda);
+		
+		var retor = moeda2float($("#retorno_resumo").val());
+		
+		$("#total_receita_resumo").val(float2moeda(valVenda+retor));
+		receita = float2moeda(valVenda+retor);
+		receita = receita.replace(".","");
+		receita = receita.replace(",",".");
+		receita = parseFloat(receita);
+		
+		var aquisicao = moeda2float($("#valor_aquisicao").val());
+		$("#valor_aquisicao_resumo").val(float2moeda(aquisicao));
+		
+		var despesas = moeda2float($("#total_despesas").html().replace("R$", ""));
+		$("#despesas_resumo").val(float2moeda(despesas));
+		
+		var transf = moeda2float($("#custos_transferencia").val());
+		$("#transferencia_resumo").val(float2moeda(transf));
+		
+		
+		
+		var comissaoVendedor = $("#comissao_vendedor_real").val();
+		if(comissaoVendedor == ""){
+			comissaoVendedor = 0;
+		}
+		$("#comissao_vendedor_resumo").val(comissaoVendedor);
+		comissaoVendedor = comissaoVendedor.replace(".","");
+		comissaoVendedor = comissaoVendedor.replace(",",".");
+		comissaoVendedor = parseFloat(comissaoVendedor);
+
+			
+		var comissaoGerente = $("#comissao_gerente_real").val();
+		if(comissaoGerente == ""){
+			comissaoGerente = 0;
+		}
+		$("#comissao_gerente_resumo").val(comissaoGerente);
+		comissaoGerente = comissaoGerente.replace(".","");
+		comissaoGerente = comissaoGerente.replace(",",".");
+		comissaoGerente = parseFloat(comissaoGerente);
+		
+		
+		
+		var comissaoSupervisor = $("#comissao_supervisor_real").val();
+		if(comissaoSupervisor == ""){
+			comissaoSupervisor = 0;
+		}
+		$("#comissao_supervisor_resumo").val(comissaoSupervisor);
+		comissaoSupervisor = comissaoSupervisor.replace(".","");
+		comissaoSupervisor = comissaoSupervisor.replace(",",".");
+		comissaoSupervisor = parseFloat(comissaoSupervisor);
+		
+		totalDespesa = (aquisicao + despesas + transf + comissaoVendedor + comissaoGerente + comissaoSupervisor);
+		$("#total_despesa_resumo").val(float2moeda(totalDespesa));
+		
+		totalGeral = receita - (aquisicao + despesas + transf + comissaoVendedor + comissaoGerente + comissaoSupervisor);
+		$("#resultado_resumo").val(float2moeda(totalGeral));
+
+	}
+
+function validaCampo(){
+
+	calcDiferenca(1);
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#valor_venda").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Ve&iacute;culo o campo valor deve ser preenchido.";
+	
+	}
+	
+	if($("#origem").val() == ""){
+		
+		erro = true;
+
+		msg += "<br>Na aba Cliente a Origem deve ser selecionado.";
+	
+	}
+	
+	if($("#id_financeira").val() != ""){
+		
+		if($("#valor_financiado").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo valor financiamento deve ser preenchido.";
+	
+		}
+		
+		if($("#retorno_financeira").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo retorno deve ser selecionado.";
+	
+		}
+		/*
+		if($("#tac").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo tac deve ser preenchido.";
+	
+		}
+		
+		if($("#coeficiente_financeira").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo coeficiente financeira deve ser preenchido.";
+	
+		}
+		*/
+		if($("#numero_prestacoes").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo num. presta&ccedil;&otilde;es deve ser preenchido.";
+	
+		}
+		
+		if($("#valor_prestacoes").val() == ""){
+		
+			erro = true;
+			
+			msg += "<br>Na aba Recebimento o campo valor presta&ccedil;&otilde;es deve ser preenchido.";
+	
+		}
+	
+	}
+	
+	$("#pgtos_programados input").each(function (){
+		
+		if($(this).attr('id').substr(0,5) == "Rdata"){
+	
+			if($(this).val() == ""){
+	
+				erro = true;
+			
+				msg += "<br>Na aba Recebimento o campo data deve ser preenchido.";
+				
+			}
+			
+		}
+	
+	});
+	
+	if($("#valor_base_calculo").val() == ""){
+		
+		erro = true;
+			
+		msg += "<br>Na aba Comiss&otilde;es o campo valor base para c&aacute;lculo de comiss&atilde;o deve ser preenchido.";
+	
+	}
+	
+	/*if($("#nome_supervisor").val() == ""){
+		
+		erro = true;
+			
+		msg += "<br>Na aba Comiss&otilde;es o campo supervisor deve ser selecionado.";
+	
+	}
+	
+	if($("#nome_gerente").val() == ""){
+		
+		erro = true;
+			
+		msg += "<br>Na aba Comiss&otilde;es o campo gerente deve ser selecionado.";
+	
+	}*/
+	
+	if($("#diferenca").val() != "0"){
+		
+		erro = true;
+		
+		msg += "<br>Existe uma diferenca entre o valor do ve&iacute;culo e os valores a serem pagos.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+		
+		return false;
+	
+	}else{
+	
+		addFluxoCliente();
+	
+		$("input[readonly='readonly']").each(function(){
+		
+			if($(this).attr('id') != 'data_abertura' && $(this).attr('id') != 'comissao_vendedor' && $(this).attr('id') != 'comissao_gerente' && $(this).attr('id') != 'comissao_supervisor' && $(this).attr('id') != 'data_concretizacao' && $(this).attr('id') != 'data_cancelamento'){
+		
+				$(this).remove();
+			
+			}
+			
+		});
+		
+		$("textarea[readonly='readonly']").each(function(){
+		
+			$(this).remove();
+			
+		});
+		
+		$("form").submit();
+		
+		return true;
+	
+	}
+
+}
+buscaOrigem();
+
+findTabelaDespesas(<?php echo $this->negociacao['id_veiculo']; ?>);
+
+/*if(1 == "<?php echo $this->negociacao['temp_troca'];?>"){
+
+populaCamposTroca(<?php echo $this->negociacao['id_veiculo_troca'];?>);
+	
+}*/
+
+$(function(){
+
+	$("#cnpj").mask("99.999.999/9999-99");
+	$("#tel").mask("(99) 9999-9999");
+	$("#cel1").mask("(99) 9999-9999");
+	$("#cel2").mask("(99) 9999-9999");
+	$("#cep").mask("99999-999");
+	
+	$("#data_concretizacao").mask("99/99/9999 99:99:99");
+	$("#data_cancelamento").mask("99/99/9999 99:99:99");
+	$("#data_entrega_veiculo").mask("99/99/9999 99:99:99");
+	$("#data_termino_garantia").mask("99/99/9999 99:99:99");
+	$("#data_recebimento_veiculo").mask("99/99/9999 99:99:99");
+	$("#Rdata_0").mask("99/99/9999");
+	
+	$("#placa_troca").mask("aaa-9*99");
+	
+	$("#valor_venda").attr("onkeyup","validaMoedaBR(this.id); atualizaCamposVenda()");
+	$("#custos_transferencia").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#preco_troca").attr("onkeyup","validaMoedaBR(this.id); atualizaValorTroca(this.value);");
+	$("#preco_troca2").attr("onkeyup","validaMoedaBR(this.id); atualizaValorTroca(this.value);");
+	$("#divida").attr("onkeyup","validaMoedaBR(this.id)");
+	//$("#valor_financiado").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();calcDiferenca(1);");
+	$("#valor_financiado").attr("onkeyup","validaMoedaBR(this.id);calcDiferenca(1);");
+	$("#tac").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();");
+	$("#coeficiente_financeira").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();");
+	$("#valor_prestacoes").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#Rvalor_0").attr("onkeyup","validaMoedaBR(this.id);calcDiferenca(1);");
+	$("#valor_base_calculo").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#comissao_vendedor_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	$("#comissao_supervisor_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	$("#comissao_gerente_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	
+	$("#pgtos_programados tr td input").each(function(){
+	
+		if($(this).attr('id').substring(0,6) == 'Rvalor'){
+		
+			$(this).attr("onkeyup","validaMoedaBR(this.id);calcDiferenca(1);");
+		
+		}
+	
+	});
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	var apro = "<?php echo $this->negociacao['aprovada'];?>";
+	
+	if(apro == 1){
+	
+		$("#aprovar").click();
+		
+	}
+	
+	if(apro == -1){
+	
+		$("#reprovar").click();
+	
+	}
+	
+	calculaResumo();
+	atualizaCamposVenda();
+	calculaTrocas();
+	
+	calculaImposto(0);
+
+})
+
+function colocaVirgula(){
+
+	custosTransferencia = <?php echo $this->negociacao['custos_transferencia']; ?>;
+	custosTransferencia = float2moeda(custosTransferencia);
+	$("#custos_transferencia").val(custosTransferencia);
+	
+	/*custosTransferencia = $("#valor_venda").val();
+	custosTransferencia = float2moeda(custosTransferencia);
+	$("#valor_venda").val(custosTransferencia);*/
+	
+	custosTransferencia = <?php echo $this->negociacao['valor_prestacoes'];?>;
+	custosTransferencia = float2moeda(custosTransferencia);
+	$("#valor_prestacoes").val(custosTransferencia);
+	
+	custosTransferencia = <?php echo $this->negociacao['valor_financiado']; ?>;
+	//custosTransferencia = float2moeda(custosTransferencia);
+	$("#valor_financiado").val(custosTransferencia);
+	
+	custosTransferencia = $("#coeficiente_financeira").val();
+	custosTransferencia = custosTransferencia.replace(".",",");
+	$("#coeficiente_financeira").val(custosTransferencia);
+
+}
+
+
+	colocaVirgula();
+	//calculaResumo();
+	//atualizaCamposVenda();
+	//calcFinanciamento();
+	//calcDiferenca();
+
+	var apro = "<?php echo $this->negociacao['aprovada'];?>";
+	
+	if(apro == 1){
+	
+		$("#aprovar").click();
+		
+	}
+	
+	if(apro == -1){
+	
+		$("#reprovar").click();
+	
+	}
+	
+	function verificaDataTerminoRevisao(){
+	
+		if($("#data_termino_revisao").val() == "" || $("#data_termino_revisao").val() == "0000-00-00"){
+		
+			$("#data_termino_revisao").val('<?php echo date("Y-m-d")?>');
+		
+		}
+	
+	}
+	
+	<?php
+	
+	if($_SESSION['sessionUser']['id_perfil'] == VENDEDOR) {
+	
+	?>
+	
+		//$("#comissoes").remove();
+		//$("#comissoes").css("diaplay","none");
+	
+	<?php
+	
+	}
+	
+	?>
+	
+//	mudaComissaoSupervisor();
+//	mudaComissaoGerente();
+	
+	populaCamposTrocaInicio(<?php echo $this->negociacao['id'];?>);
+	populaCamposTroca2Inicio(<?php echo $this->negociacao['id'];?>);
+	calculaRetorno();
+
+</script>

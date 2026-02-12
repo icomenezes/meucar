@@ -1,0 +1,1527 @@
+<style>
+	.table tr:hover{
+		background-color:#EEE;
+		
+	}
+
+	.table tr td:hover{
+		background-color:#DDD;
+		
+	}
+	
+	.table tr td{
+		font-size:11px;
+	}
+</style>
+
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="" class="form" method="post">
+	
+	<div class="inline" style="height:auto;margin-bottom:10px;">
+		<label class="label">DADOS PESSOAIS   <?php if($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239){?><span id="etapas" style="color:red; font-size:16px; cursor:help">(<b title="Abordagem">A</b>-<b title="Sondagem">S</b>-<b title="Explicação">E</b>-<b title="Fechamento">F</b>-<b title="Sustentação">S</b>)</span><?php } ?></label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" value="<?php echo $this->dados['nome']; ?>" />
+		<input type="hidden" id="id_cliente_fluxo" name="id_cliente_fluxo" value="<?php echo $this->dados['id']; ?>" />
+		<input type="hidden" id="id_usuario" name="id_usuario" value="<?php echo $this->id_usuario; ?>" />
+	</div>
+	
+	<div class="inline">
+		<table width="100%">
+			<tr>
+				<td>
+					<label class="label">Origem</label>
+				</td>
+				<td>
+					<label class="label">Data</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<select id="origem" name="origem" class="text req">
+						<option>Selecione</option>
+					</select>
+				</td>
+				<td>
+					<input type="text" id="data" name="data" disabled class="text req" value=""  />
+				</td>
+			</tr>
+		</table>
+	</div>
+	<?php
+	$disabled = "";
+	if($_SESSION['sessionUser']['id_perfil'] != 9 && $_SESSION['sessionUser']['id_perfil'] != 2){
+		$disabled = "disabled";
+	}
+	?>
+	<div class="inline">
+		<label class="label">Vendedor</label>
+		<select id="id_vendedor" name="id_vendedor" <?php echo $disabled; ?> class="text">
+			<option value="">Selecione</option>
+			<?php echo $this->strVendedores; ?>
+		</select>
+	</div>
+	
+	<!--
+	<div class="inline">
+		<label class="label">Data</label>
+		<input type="text" id="data" name="data" disabled class="text req" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Origem</label>
+		<select id="origem" name="origem" class="text req">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="telefone" name="telefone" class="text req" value="<?php echo $this->dados['telefone']; ?>" onkeyup="verificaCelular();" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 2</label>
+		<input type="text" id="telefone2" name="telefone2" class="text" value="<?php echo $this->dados['telefone2']; ?>" onkeyup="verificaCelular();" />
+	</div>
+	--->
+	
+	<div class="inline">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Telefone</label>
+				</td>
+				<td>
+					<label class="label">Telefone 2</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" id="telefone" name="telefone" style="width:90%" class="text req" value="<?php echo $this->dados['telefone']; ?>" onkeyup="verificaCelular();" />
+				</td>
+				<td>
+					<input type="text" id="telefone2" name="telefone2" style="width:90%" class="text" value="<?php echo $this->dados['telefone2']; ?>" onkeyup="verificaCelular();" />
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular</label>
+		<input type="text" id="celular" name="celular" class="text" value="<?php echo $this->dados['celular']; ?>" onkeyup="verificaCelular();" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">E-mail</label>
+		<input type="text" id="email" name="email" class="text" value="<?php echo $this->dados['email']; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Profissão</label>
+		<input type="text" id="profissao" name="profissao" class="text" value="<?php echo $this->dados['profissao']; ?>" />
+	</div>
+	
+	<?php
+		$disabled = "";
+		if($this->dados['resultado'] == "Agendado"){
+			$disabled = 'disabled="disabled"';
+			$title = 'title="Para alterar o resultado é necessário cancelar o agendamento."';
+		}else{
+			$title = 'title="Selecione o resultado."';
+		}
+	?>
+	
+	<div class="inline" <?php echo $title; ?>>
+		<label class="label">Resultado</label>
+		<select <?php echo $disabled; ?> id="resultado" name="resultado" class="text req" onChange="mudaResultado(this.value);">
+			<option title="Selecione a situação." style="background-color:white; color:#333;" value="">Selecione</option>
+			<option title="Desistiu de comprar." style="background-color:pink; color:#333;" value="Desistiu">Desistiu</option>
+			<option title="Fechou a venda conosco." style="background-color:#00FF00; color:#333;" value="Fechou">Fechou</option>
+			<option title="Comprou do concorrente." style="background-color:red; color:white;" value="Concorrente">Concorrente</option>
+			<option title="Este em negociação." style="background-color:yellow; color:#333;" value="Negociação">Negociação</option>
+			<option title="Vai fechar." style="background-color:orange; color:#FFF;" value="Vai fechar">Vai fechar</option>
+			<option title="Só venda." style="background-color:blue; color:#FFF;" value="Só venda">Só venda</option>
+			<option title="Contato duplicado." style="background-color:#000; color:#FFF;" value="Duplicado">Duplicado</option>
+			<option style="background-color:#ddd; color:#555; display:none;" value="Agendado">Agendado</option>
+		</select>
+	</div>
+
+	<div class="inline">
+		<label class="label">Motivo</label>
+		<select title="Selecione o motivo." id="motivo_pre" name="motivo_pre" class="text req" onchange="outroMotivoDescricao(this.value);">
+			<option value="">Selecione</option>
+			<?php
+
+			foreach($this->arrMotivos as $motivo){
+				$sel = '';
+				if($this->dados['motivo_pre'] == $motivo['id']){
+					$sel = 'selected = "selected"';
+				}
+				
+				if($motivo['id'] != 8){
+					echo '<option '.$sel.' value="'.$motivo['id'].'">'.$motivo['descricao'].'</option>';
+				}
+				
+			}
+			?>
+		</select>
+	</div>
+
+	<div class="inline" style="width:98%; height:30%; clear:both; <?php if($this->dados['motivo_pre'] == 1){echo "display:block;";}else{echo "display:none;";} ?>">
+		<label class="label">Descrição do motivo</label>
+		<textarea id="motivo" name="motivo" class="text req"><?php echo $this->dados['motivo']; ?></textarea>
+	</div>
+
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">FORMA DE PAGAMENTO <span style="color:red;">(SONDAGEM)</span></label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Valor do carro pretendido</label>
+		<input type="text" id="valor" name="valor" class="text req" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['valor'])):""; ?>"  />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Entrada pretendida</label>
+		<input type="text" id="entrada" name="entrada" class="text req" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['entrada'])):""; ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Parcela pretendida</label>
+		<input type="text" id="parcela" name="parcela" class="text req" value="<?php echo ($this->dados['valor'])?str_replace(".",",",money_format("%i",$this->dados['parcela'])):""; ?>" />
+	</div>
+	
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">VE&Iacute;CULO NA TROCA</label>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Marca ve&iacute;culo na troca</label>
+		<select id="marca_troca" name="marca_troca" class="text" onChange="buscaModeloTroca(this.value)">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Modelo ve&iacute;culo na troca</label>
+		<select id="veiculo_troca" name="veiculo_troca" class="text">
+			<option value="">Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano ve&iacute;culo na troca</label>
+		<select id="ano_modelo_troca" name="ano_modelo_troca" class="text">
+			<option value="">Selecione</option>
+			<?php
+			for($i = 1; $i > -90; $i--){
+
+				echo "<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>";
+
+			}
+			?>
+		</select>
+	</div>
+	
+	<div class="inline" style="height:auto; margin-bottom:10px; margin-top:10px; clear:both;">
+		<label class="label">VE&Iacute;CULO DESEJADO <input type="button" class="btn-mini btn-include" value="Add" style="margin-left:10px;" title="Mais um veículo" onClick="adicionaVeiculo();" /></label>
+	</div>
+	
+	<div id="dados_veiculo_1"></div>
+	
+	
+	<div class="inline" style="width:98%; height:30%;">
+		<table width="100%">
+			<tr>
+				<td>
+					<label class="label">Observa&ccedil;&otilde;es</label>
+					<textarea id="obs" name="obs" style="height:300px; width:96%;" class="text"><?php echo $this->dados['obs']; ?></textarea>
+				</td>
+				<td>
+					<label class="label">Atividades</label>
+					<textarea readonly="readonly" id="atividades" name="atividades" style="height:300px; width:96%; background-color:#eee;"><?php echo $this->dados['atividades']; ?></textarea>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="clear:both; margin-top:10px; width:100%;">
+		<input type="button" id="bnt" class="btn-small btn-add" value="Salvar" onclick="validaCampo();"/>
+		<input type="button" id="bnt" class="btn-small btn-voltar" value="Voltar Lista" onclick="javascript:window.location.href='/clientes/lista-fluxo'"/>
+		
+		
+		<input type="button" id="bnt_email" class="btn-small btn-email" style="display:none;" value="Enviar e-mail" onclick="abreCampoEmail(this.id);"/>
+
+		
+		<?php
+		if($this->dados['data_agendamento']){
+			$dataAgendamentoValue = implode("/",array_reverse(explode("-",$this->dados['data_agendamento'])));
+		}else{
+			$dataAgendamentoValue = "Agendar";
+		}
+		?>
+		
+		<input type="button" id="bnt_whatsapp" class="btn-small btn-whatsapp" style="display:none;" value="WhatsApp" onclick="abreCampoEmail(this.id);"/>
+		<input type="button" class="btn-small btn-edt" style="display:inline;" value="Novo modelo de mensagem" onclick="javascript:$('#modelo_email').css('display','block');"/>
+		<input type="button" id="btn_agendar" class="btn-small btn-calendar" style="display:none;" value="<?php echo $dataAgendamentoValue; ?>"/>
+		
+	</div>
+	
+	<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+	
+	
+	<div class="inline" style="height:auto; margin-top:10px; margin-bottom:10px;clear:both;">
+		<label class="label">ESTOQUE </label>
+	</div>
+	
+	<div id="estoque" style="width:98%; overflow: auto; border: solid 1px #CC0000;"></div>
+
+	
+	
+</form>
+
+<div id="modelo_email" style="width:70%; position:fixed; background-color:#eee; display:none; overflow: auto; border: solid 1px #bbb; margin-left:20px; -webkit-box-shadow: 0px 3px 10px #333;">
+	<div style="font-size:20px; margin-top:10px; margin-left:44px;">Modelo de mensagem</div>
+	<div style="margin-top:10px; margin-left:44px;">
+		<label style="font-weight:bold;">Título</label><br/>
+		<input type="text" id="titulo" name="titulo" style="height:23px; width:300px;" value="" />
+	</div>
+	<input type="hidden" id="id_modelo_email" value="" />
+	<center>
+		<textarea id="texto_email" style="width:90%; height:300px; margin-top:5px;"></textarea>
+		<br/>
+		<br/>
+		<input type="button" id="bnt" class="btn-small btn-add" value="Salvar" onclick="salvaTextoEmail(); $('#modelo_email').css('display','none'); $('#texto_email').val(''); $('#titulo').val(''); $('#id_modelo_email').val('');"/>
+		<input type="button" class="btn-small btn-del" value="Cancelar" onclick="$('#modelo_email').css('display','none'); $('#texto_email').val(''); $('#titulo').val(''); $('#id_modelo_email').val('');"/>
+		<br/>
+		<br/>
+	</center>
+</div>
+
+	
+<div id="area_email" style="width:70%; position:fixed; background-color:#eee; display:none; overflow: auto; border: solid 1px #bbb; margin-left:20px; -webkit-box-shadow: 0px 3px 10px #333;">
+	<div style="font-size:20px; margin-top:10px; margin-left:44px;">E-mail</div>
+	<div style="margin-top:10px; margin-left:44px;">
+		<label style="font-weight:bold;">Modelos</label><br/>
+		<select id="modelos_email" name="modelos_email"  style="height:27px; width:300px;" onChange="getTextoEmail(this.value); $('#id_modelo_email').val(this.value);">
+			<option value="">Selecione</option>
+		</select>
+		<input type="button" id="btn_edt_modelo" class="btn-small  btn-include" value="Adicionar" onclick="javascript:$('#modelo_email').css('display','block'); $('#area_email').css('display','none'); $('#texto_email').val(arrTextoEmail[$('#id_modelo_email').val()]); $('#titulo').val(arrTituloEmail[$('#id_modelo_email').val()]);"/>
+	</div>
+	<center>
+		<textarea id="msg_email" style="width:90%; height:200px; margin-top:5px;"></textarea>
+		<br/>
+		<br/>
+		<input type="button" id="bnt_enviar" class="btn-small btn-enviar-email" value="Enviar" onclick=""/>
+		<input type="button" class="btn-small btn-del" value="Cancelar" onclick="$('#area_email').css('display','none'); $('#texto_email').val(''); $('#titulo').val(''); $('#id_modelo_email').val('');"/>
+		<br/>
+		<br/>
+	</center>
+</div>
+
+
+<script type="text/javascript">
+	
+	var arrTextoEmail = new Array();
+	var arrTituloEmail = new Array();
+	var whatsapp = false;
+	var num = "";
+	
+	
+
+	
+	function enviaWhatsapp(){
+
+		var userAgent = navigator.userAgent.toLowerCase();
+	
+		if( userAgent.search(/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i)!= -1 ){
+			window.open("whatsapp://send?phone=55"+num.replace('(','').replace(')','').replace(' ','').replace('-','')+"&text="+$("#msg_email").val(), "_blank");
+		}else{
+			window.open("http://web.whatsapp.com/send?phone=55"+num.replace('(','').replace(')','').replace(' ','').replace('-','')+"&text="+$("#msg_email").val(), "_blank");
+		}
+
+		logContatoWhatsApp();
+		$('#area_email').css('display','none');
+		
+	}
+	
+	
+	function abreCampoEmail(id){
+		
+		if($('#id_cliente_fluxo').val() != ''){
+			if(id == "bnt_email"){
+				$('#msg_email').val('');
+				$('#area_email').css('display','block');
+				$('#area_email').children().first().html("E-mail");
+				$("#bnt_enviar").attr("onclick","enviaEmail(); $('#area_email').css('display','none'); $('#texto_email').val(''); $('#titulo').val(''); $('#id_modelo_email').val('');");
+				$("#bnt_enviar").attr("class","btn-small btn-enviar-email");
+				getModeloEmail();
+			}
+			if(id == "bnt_whatsapp"){
+				$('#msg_email').val('');
+				$('#area_email').css('display','block');
+				$('#area_email').children().first().html("WhatsApp");
+				$("#bnt_enviar").attr("onclick","enviaWhatsapp();");
+				$("#bnt_enviar").attr("class","btn-small btn-whatsapp");
+				getModeloEmail();
+			}
+		}else{
+			alert('É necessário salvar o contato para enviar o e-mail.');
+		}
+		
+	}
+	
+	function getTextoEmail(id){
+		
+		$("#msg_email").val(arrTextoEmail[id]);
+
+		if(id != ""){
+			$("#btn_edt_modelo").val("Editar");
+			$("#btn_edt_modelo").attr("class","btn-small btn-edt");
+		}else{
+			$("#btn_edt_modelo").val("Adicionar");
+			$("#btn_edt_modelo").attr("class","btn-small btn-include");
+		}
+		
+	}
+
+	function getModeloEmail(){
+		
+		$.ajax({
+			type: "POST",
+			url: '/emails/ajax/fn/get_modelos_emails',
+			async: true,
+			dataType:"text",
+			success:function(resp){
+
+				var str = "<option value=''>Selecione</option>";
+
+				arrTemp = resp.split('||');
+
+				for(x in arrTemp){
+					arrTempDois = arrTemp[x].split('|');
+					
+					str += "<option value='"+arrTempDois[0]+"'>"+arrTempDois[1]+"</option>";
+					
+					arrTextoEmail[arrTempDois[0]] = arrTempDois[2];
+					arrTituloEmail[arrTempDois[0]] = arrTempDois[1];
+					
+				}
+				
+				$("#modelos_email").html(str);
+				
+			}
+
+		});
+		
+	}
+
+	function salvaTextoEmail(){
+		
+		if($("#titulo").val() != "" && $("#texto_email").val() != ""){
+		
+			$.ajax({
+				type: "POST",
+				url: '/emails/ajax/fn/modelo_email',
+				async: true,
+				dataType:"text",
+				data: ({'id':$("#id_modelo_email").val(), 'titulo':$("#titulo").val(), 'texto':$("#texto_email").val()}),
+				success:function(resp){
+
+					if(resp == "sucesso"){
+						alert("Modelo salvo com sucesso!");
+					}else{
+						alert(resp);
+					}
+
+				}
+
+			});
+		
+		}
+		
+	}
+
+
+	function logContatoWhatsApp(){
+		
+		if($("#id_cliente_fluxo").val()){
+
+			$.ajax({
+				type: "POST",
+				url: '/clientes/ajax/fn/log_whatsapp',
+				async: true,
+				dataType:"text",
+				data: ({'id_cliente_fluxo':$("#id_cliente_fluxo").val(), 'mensagem':$("#msg_email").val()}),
+				success:function(resp){
+					
+					if(resp){
+						$("#atividades").val(resp);
+						scrollBaixo();
+					}
+
+				}
+
+			});
+			
+		}
+		
+	}
+
+
+	function verificaCelular(){
+		
+		$("#bnt_whatsapp").css("display","none");
+		var whatsapp = false;
+		num = $("#telefone").val();
+		
+		if(num != ""){
+			var arrUm = num.split(" ");
+			var arrDois = arrUm[1].split("-");
+			
+			if(arrDois[0].length == 5){
+				
+				if(arrDois[0].slice(0,1) == 9){
+
+					whatsapp = true;
+
+				}
+				
+			}else{
+				
+				if(arrDois[0].length == 4){
+				
+					if(arrDois[0].slice(0,1) == 9 || arrDois[0].slice(0,1) == 8 || arrDois[0].slice(0,1) == 7){
+						
+						whatsapp = true;
+
+					}
+				
+				}
+				
+			}
+			
+		}
+		
+		
+		if(!whatsapp){
+			
+			num = "";
+		
+			num = $("#telefone2").val();
+			
+			if(num != ""){
+				var arrUm = num.split(" ");
+				var arrDois = arrUm[1].split("-");
+				
+				if(arrDois[0].length == 5){
+					if(arrDois[0].slice(0,1) == 9){
+						
+						whatsapp = true;
+
+					}
+					
+				}else{
+					
+					if(arrDois[0].length == 4){
+					
+						if(arrDois[0].slice(0,1) == 9 || arrDois[0].slice(0,1) == 8 || arrDois[0].slice(0,1) == 7){
+							
+							whatsapp = true;
+
+						}
+					
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		if(!whatsapp){
+			
+			num = "";
+		
+			num = $("#celular").val();
+			
+			if(num != ""){
+				var arrUm = num.split(" ");
+				var arrDois = arrUm[1].split("-");
+				
+				if(arrDois[0].length == 5){
+					if(arrDois[0].slice(0,1) == 9){
+						
+						whatsapp = true;
+
+					}
+					
+				}else{
+					
+					if(arrDois[0].length == 4){
+					
+						if(arrDois[0].slice(0,1) == 9 || arrDois[0].slice(0,1) == 8 || arrDois[0].slice(0,1) == 7){
+
+							whatsapp = true;
+
+						}
+					
+					}
+					
+				}
+				
+			}
+			
+		}
+		/*
+		if(whatsapp){
+
+			var userAgent = navigator.userAgent.toLowerCase();
+	
+			if( userAgent.search(/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i)!= -1 ){
+				$("#bnt_whatsapp").css("display","inline");
+			}else{
+				$("#bnt_whatsapp").css("display","inline");
+			}
+
+		}
+		*/
+	}
+
+	function enviaEmail(){
+
+		if($("#msg_email").val() == ""){
+			alert("O texto do e-mail não pode ser vazio!");
+		}else{
+		
+			if($("#id_cliente_fluxo").val() != ""){
+				
+				$("body").prepend('<div id="div_aguarde" style="text-align:center; opacity:0.8; background-color:#000;width:100%; height:1000px; position:fixed; font-size: 30px; color:#fff;"><div style="margin-top:200px;">Enviando! Aguarde...</div></div>');
+				
+				$.ajax({
+					type: "POST",
+					url: '/emails/ajax/fn/email_fluxo',
+					async: true,
+					dataType:"text",
+					data: ({'email':$("#email").val(), 'mensagem':$("#msg_email").val(), 'id_cliente_fluxo':$("#id_cliente_fluxo").val()}),
+					success:function(resp){
+						if(resp != "Erro"){
+							$("#atividades").val(resp);
+							$("#div_aguarde").remove();
+							$("body").prepend('<div id="div_aguarde" style="text-align:center; opacity:0.8; background-color:#000;width:100%; height:1000px; position:fixed; font-size: 30px; color:#fff;"><div style="margin-top:200px;">Enviando com sucesso!</div></div>');
+							$("#div_aguarde").fadeOut(2000);
+							scrollBaixo();
+
+						}
+					}
+
+				});
+				
+			}
+		
+		}
+		
+	}
+
+	$(document).ready(function(){
+		
+		$.ajax({
+			type: "POST",
+			url: '/clientes/ajax/fn/data_ultima_visualizacao',
+			async: true,
+			dataType:"text",
+			data: ({'ultima_visualizacao':'<?php echo @date('Y-m-d'); ?>', 'id':'<?php echo $this->dados['id']; ?>'}),
+			success:function(resp){
+				//alert(resp);
+			}
+
+		});
+		
+		$(":text").focusout(function(){
+			validaCampo();
+		});
+		
+		$("select").focusout(function(){
+			validaCampo();
+		});
+		
+		$("#obs").focusout(function(){
+			validaCampo();
+		});
+		
+		$("#motivo").focusout(function(){
+			validaCampo();
+		});
+		
+		verificaCelular();
+		
+		scrollBaixo();
+
+	});
+
+
+
+	
+	var qtdVeiculos = 1;
+	var strVeiculo = "";
+	
+	
+	function mudaResultado(){
+		
+		var arrStyle = $("#resultado option:selected").attr("style").split(";");
+		var title = $("#resultado option:selected").attr("title");
+		
+		var arrStyleTemp = arrStyle[0].split(":");
+		var arrStyleTemp2 = arrStyle[1].split(":");
+
+		$("#resultado").css("background-color", arrStyleTemp[1]);
+		$("#resultado").css("color", arrStyleTemp2[1]);
+		//$("#resultado").attr("title", title);
+
+		if($("#resultado").val() == "Concorrente" || $("#resultado").val() == "Desistiu"){
+			$("#motivo_pre").parent().css('display','block');
+		}else{
+			$("#motivo_pre").parent().css('display','none');
+			$("#motivo_pre").val("");
+			
+			$("#motivo").parent().css('display','none');
+			$("#motivo").val("");
+		}
+
+	}
+
+	
+	function outroMotivoDescricao(id){
+		if(id == 1){
+			$("#motivo").parent().css('display','block');
+		}else{
+			$("#motivo").parent().css('display','none');
+			$("#motivo").val("");
+		}
+	}
+
+	function validaCampo(){
+
+		var msg = "";
+		var erros = false;
+		
+		
+		if($("#nome").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Nome' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#data").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Data' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#origem").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Origem' deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#telefone").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Telefone' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#id_vendedor").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Vendedor' deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#resultado").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Resultado' deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#resultado").val() == "Desistiu" || $("#resultado").val() == "Concorrente"){
+			
+			if($("#motivo_pre").val() == ""){
+			
+				erros = true;
+				msg += "O campo 'Motivo' deve ser selecionado.<br/>";
+				
+			}
+			
+			if($("#motivo_pre").val() == 1){
+
+				if($("#motivo").val() == ""){
+				
+					erros = true;
+					msg += "O campo 'Descrição do motivo' deve ser preenchido.<br/>";
+					
+				}
+
+			}
+
+		}
+		
+		if($("#valor").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Valor do carro pretendido' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#entrada").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Entrada pretendida' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#parcela").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Parcela pretendida' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#obs").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Observações' deve ser preenchido.<br/>";
+
+		}
+		
+		if($("#dados_veiculo_1").html() != ""){
+		
+			for(i = 1;i <= 50; i++){
+
+				if($("#dados_veiculo_"+i).html() != null){
+
+					if($("#veiculo_"+i).val() == ""){
+						
+						erros = true;
+						msg += "Os campos do 'Veículo Desejado' devem ser selecionados.<br/>";
+						break;
+						
+					}else{
+							
+						if($("#ano_modelo_"+i).val() == ""){
+							
+							erros = true;
+							msg += "Os campos do 'Veículo Desejado' devem ser selecionados.<br/>";
+							break;
+							
+						}
+						
+					}
+					
+				}
+
+			}
+		
+		}else{
+			
+			erros = true;
+			msg += "É necessário adicionar pelo menos um Veículo Desejado.<br/>";
+		
+		}
+		
+		if(erros){
+		
+			$("#msg").removeClass('sucess');
+			$("#msg").addClass('erro');
+			$("#msg").html(msg);
+			
+			$("#bnt_email").css("display","none");
+			$("#bnt_whatsapp").css("display","none");
+			$("#btn_agendar").css("display","none");
+		
+		}else{
+			
+			$("#msg").html("");
+			$("#msg").removeClass('erro');
+			$("#msg").removeClass('sucess');
+		
+			$("body").prepend('<div id="div_msg" style="display:none; position:fixed; float:bottom; text-align: center; background-color:#008000; color:#ffffff; width:100%; padding:20px; font-size:20px;">Salvando, aguarde....</div>');
+			
+			$("#div_msg").fadeIn(1000);
+			
+			strVeiculosIteressados = "";
+			
+			if($("#email").val() == ""){
+				$("#bnt_email").css("display","none");
+			}else{
+				$("#bnt_email").css("display","inline");
+			}
+			
+			if(!whatsapp){
+				$("#bnt_whatsapp").css("display","inline");
+			}
+			
+			if($("#id_cliente_fluxo").val() == ""){
+				
+				for(i = 2;i <= qtdVeiculos; i++){
+			
+					if($("#dados_veiculo_"+i).html() != null){
+					
+						strVeiculosIteressados += "veiculo_"+i+":"+$("#veiculo_"+i).val()+"|"+"ano_modelo_"+i+":"+$("#ano_modelo_"+i).val()+"|"+"estoque_"+i+":"+$("#estoque_"+i).val()+"||";
+		
+					}
+		
+				}
+
+				$.ajax({
+					type: "POST",
+					url: '/clientes/ajax/fn/salva_cadastro',
+					async: false,
+					dataType:"text",
+					data: ({'nome':$("#nome").val(), 'email':$("#email").val(), 'origem':$("#origem").val(), 'telefone':$("#telefone").val(), 'telefone2':$("#telefone2").val(), 'celular':$("#celular").val(), 'valor':$("#valor").val(), 'data':$("#data").val(), 'resultado':$("#resultado").val(), 'profissao':$("#profissao").val(), 'motivo':$("#motivo").val(), 'motivo_pre':$("#motivo_pre").val(), 'entrada':$("#entrada").val(), 'parcela':$("#parcela").val(), 'veiculo_troca':$("#veiculo_troca").val(), 'ano_modelo_troca':$("#ano_modelo_troca").val(), 'id_vendedor':$("#id_vendedor").val(), 'obs':$("#obs").val(), 'veiculos_interesse':strVeiculosIteressados}),
+					success:function(resp){
+
+						if(resp == "erro"){
+							
+							$("#div_msg").html("Erro ao cadastrar dados, por favor tente novamente!");
+							
+							$("#div_msg").fadeOut(1000);
+						
+						}else{
+						
+							$("#id_cliente_fluxo").val(resp);
+							
+							$("#div_msg").html("Dados cadastrados com sucesso!");
+							
+							$("#div_msg").fadeOut(1000);
+						
+						}
+						
+					}
+
+				});
+	
+			}else{
+			
+				for(i = 2;i <= qtdVeiculos; i++){
+			
+					if($("#dados_veiculo_"+i).html() != null){
+
+						strVeiculosIteressados += "veiculo_"+i+":"+$("#veiculo_"+i).val()+"|"+"ano_modelo_"+i+":"+$("#ano_modelo_"+i).val()+"|"+"estoque_"+i+":"+$("#estoque_"+i).val()+"||";
+	
+					}
+		
+				}
+
+				$.ajax({
+					type: "POST",
+					url: '/clientes/ajax/fn/edita_cadastro',
+					async: false,
+					dataType:"text",
+					data: ({'id_cliente_fluxo':$("#id_cliente_fluxo").val(), 'nome':$("#nome").val(), 'email':$("#email").val(), 'resultado':$("#resultado").val(), 'profissao':$("#profissao").val(), 'motivo':$("#motivo").val(), 'motivo_pre':$("#motivo_pre").val(), 'origem':$("#origem").val(), 'telefone':$("#telefone").val(), 'telefone2':$("#telefone2").val(), 'celular':$("#celular").val(), 'valor':$("#valor").val(), 'entrada':$("#entrada").val(), 'parcela':$("#parcela").val(), 'veiculo_troca':$("#veiculo_troca").val(), 'ano_modelo_troca':$("#ano_modelo_troca").val(), 'id_vendedor':$("#id_vendedor").val(), 'obs':$("#obs").val(), 'veiculos_interesse':strVeiculosIteressados}),
+					success:function(resp){
+
+						if(resp == "erro"){
+							
+							$("#div_msg").html("Erro ao editar dados, por favor tente novamente!");
+							
+							$("#div_msg").fadeOut(1000);
+						
+						}else{
+						
+							$("#id_cliente_fluxo").val(resp);
+							
+							$("#div_msg").html("Dados editados com sucesso!");
+							
+							$("#div_msg").fadeOut(1000);
+							
+						}
+
+					}
+
+				});
+			
+			}
+
+			if($("#id_cliente_fluxo").val()){
+				$("#btn_agendar").css("display","inline");
+			}
+
+		}
+
+	}
+	
+	
+	function deletaVeiculo(numId){
+
+		$("#dados_veiculo_"+numId).remove();
+		validaCampo();
+
+	}
+	
+	function adicionaVeiculo(){
+	
+		qtdVeiculos++;
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input class='btn-small btn-del' style='margin-left:10px;' title='Deletar veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				"<span style='margin-left:10px; background-color:silver; color:#555; font-weight:bold; padding:7px;' title='Encontrar veículo para o cliente'>Prospecção</span>"+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='0' />"+
+			"</div>"+
+			
+		"</div>";
+		
+		$("#dados_veiculo_1").append(strVeiculo);
+		
+		buscaMarcas(qtdVeiculos);
+
+	}
+	
+	
+	function adicionaVeiculoCheio(marca, modelo, ano_modelo){
+	
+		qtdVeiculos++;
+		
+		arr = modelo.split(" ");
+		modelo = arr[0];
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>"+marca+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value='"+modelo+"'>"+modelo+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input id='btn_deletar_"+qtdVeiculos+"' class='btn-small btn-del' style='margin-left:10px;' title='Deletar veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				"<span style='margin-left:10px; background-color:green; color:white; font-weight:bold; padding:7px;' title='Veículo que está em estoque'>Estoque</span>"+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='1' />"+
+			"</div>"+
+	
+		"</div>";
+
+		if($("#veiculo_1").val() == ""){
+			/*
+			$("#marca_1 option[value='"+marca+"']").attr("selected", true);
+
+			buscaModelo(marca, 1);
+			
+			$("#veiculo_1 option[value='"+modelo+"']").attr("selected", true);
+			$("#ano_modelo_1 option[value='"+ano_modelo+"']").attr("selected", true);
+			$("#str_estoque_1").html("Estoque");
+			*/
+		}else{
+			
+			$("#dados_veiculo_1").append(strVeiculo);
+			
+		}
+
+		buscaMarcas(qtdVeiculos);
+		
+		$("#marca_"+qtdVeiculos+" option[value='"+marca+"']").attr("selected", true);
+		$("#ano_modelo_"+qtdVeiculos+" option[value='"+ano_modelo+"']").attr("selected", true);
+
+	}
+	
+	
+	function buscaModelo(strMmarca, numId){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#veiculo_"+numId).html(data);
+				
+			}
+		});
+	
+	}
+	
+	
+	function buscaModeloTroca(strMmarca){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#veiculo_troca").html(data);
+				
+			}
+		});
+	
+	}
+	
+	function buscaMarcas(numId){
+	
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_marca',
+			async: true,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+				
+				$("#marca_"+numId).html(data);
+				$("#marca_troca").html(data);
+				
+			}
+		});
+	
+	}
+	
+	$.ajax({
+		url : '/clientes/ajax/fn/busca_origem',
+		async: true,
+		type : 'POST',
+		dataType: 'text',
+		success: function(data){
+			
+			$("#origem").html(data);
+			
+			$("#origem option[value='<?php echo $this->dados['origem']; ?>']").attr("selected", true);
+			
+		}
+	});
+	
+	
+	
+	$.ajax({
+		url : '/veiculos/ajax/fn/busca_estoque',
+		async: true,
+		type : 'POST',
+		dataType: 'text',
+		success: function(data){
+			
+			$("#estoque").html(data);
+
+		}
+	});
+	
+	
+	
+	
+	$("#data").mask("99/99/9999");
+	$("#data").val("<?php if(!$this->dados['data']){ echo @date("d/m/Y H:i:s"); }else{ echo implode("/",array_reverse(explode("-",current(explode(" ",$this->dados['data'])))))." ".end(explode(" ",$this->dados['data'])); }?>");
+	$('#data').focus(function(){
+		$(this).calendario({
+			target:'#data',
+			minDate:''
+		});
+	});
+	
+	
+	$('#telefone').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#telefone2').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#celular').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	
+	buscaMarcas(1);
+	
+	$("#valor").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#entrada").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#parcela").attr("onkeyup","validaMoedaBR(this.id)");
+	
+	$("#veiculo_troca").html("<option><?php echo $this->dados['veiculo_troca']; ?></option>");
+	$("#ano_modelo_troca option[value='<?php echo $this->dados['ano_modelo_troca']; ?>']").attr("selected", true);
+	
+	$("#veiculo_1").html("<option><?php echo $this->dadosVeiculos[0]['veiculo']; ?></option>");
+	$("#ano_modelo_1 option[value='<?php echo $this->dadosVeiculos[0]['ano_modelo']; ?>']").attr("selected", true);
+	
+	
+	function adicionaVeiculoEdt(veiculo, ano, estoque){
+	
+		qtdVeiculos++;
+		propesccao = "<span style='margin-left:10px; background-color:silver; color:#555; font-weight:bold; padding:7px;' title='Encontrar veículo para o cliente'>Prospecção</span>";
+		
+		if(estoque == "1"){
+			
+			propesccao = "<span style='margin-left:10px; background-color:green; color:white; font-weight:bold; padding:7px;' title='Veículo que está em estoque'>Estoque</span>";
+		
+		}
+		
+		strVeiculo = "<div id='dados_veiculo_"+qtdVeiculos+"'>"+
+			"<div class='inline' style='clear:both;'>"+
+				"<label class='label'>Marca</label>"+
+				"<select id='marca_"+qtdVeiculos+"' name='marca_"+qtdVeiculos+"' class='text req' onChange='buscaModelo(this.value, "+qtdVeiculos+")'>"+
+					"<option value=''>Selecione</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Modelo</label>"+
+				"<select id='veiculo_"+qtdVeiculos+"' name='veiculo_"+qtdVeiculos+"' class='text req'>"+
+					"<option value='"+veiculo+"'>"+veiculo+"</option>"+
+				"</select>"+
+			"</div>"+
+		
+			"<div class='inline'>"+
+				"<label class='label'>Ano</label>"+
+				"<select id='ano_modelo_"+qtdVeiculos+"' name='ano_modelo_"+qtdVeiculos+"' class='text req' style='width:33%;'>"+
+					"<option value=''>Selecione</option>"+
+					<?php
+					for($i = 1; $i > -90; $i--){
+
+						echo "\"<option value='".(@date("Y")+$i)."'>".(@date("Y")+$i)."</option>\"+";
+		
+					}
+					?>
+				"</select>"+
+				"<input class='btn-small btn-del' style='margin-left:10px;' title='Excluir veículo' type='button' value='Delete' onclick='deletaVeiculo("+qtdVeiculos+")'>"+
+				propesccao+
+				"<input id=estoque_"+qtdVeiculos+" type='hidden' value='"+estoque+"' />"+
+			"</div>"+
+	
+		"</div>";
+		
+		$("#dados_veiculo_1").append(strVeiculo);
+		
+		buscaMarcas(qtdVeiculos);
+		
+		$("#ano_modelo_"+qtdVeiculos+" option[value='"+ano+"']").attr("selected", true);
+
+	}
+	
+
+	<?php
+
+		if($this->dados['id']){
+	
+			foreach($this->dadosVeiculos as $key=> $dadosVeiculos){
+
+				//if($key != 0){
+					
+					echo "adicionaVeiculoEdt('".$dadosVeiculos['veiculo']."', '".$dadosVeiculos['ano_modelo']."', '".$dadosVeiculos['estoque']."');\n";
+					
+				//}
+			
+			}
+		
+		}
+		
+	?>
+
+	$("#resultado option[value='<?php echo $this->dados['resultado']; ?>']").attr("selected", true);
+	
+	mudaResultado();
+	
+	$("#etapas b").tipsy({gravity: 'n'});
+	
+	function scrollBaixo(){
+		var objScrDiv = document.getElementById("atividades");
+		objScrDiv.scrollTop = objScrDiv.scrollHeight;
+	}
+	
+	$(document).ready(function(){
+		
+		$('#btn_agendar').click(function(){
+			
+			<?php
+				$arrData = explode("-",$this->dados['data']);
+				$data = @date('d/m/Y', mktime(0,0,0,$arrData[1],$arrData[2]+15,$arrData[0]));
+			?>
+			
+			dataAtual = '<?php echo $data; ?>';
+			
+			$(this).calendario({target:'#btn_agendar', minDate:'<?php echo $data; ?>', funcao:true});
+			
+			if($('#btn_agendar').attr("value") != "Agendar"){
+			
+				var p = $("#cal_btn_agendar").position();
+				
+				$("#cal_btn_agendar").after("<div class='cancel_agenda'><a>Cancelar agendamento</a></div>");
+				
+				$(".cancel_agenda").css({
+					'z-index': 20,
+					'text-align':'center',
+					'position': 'absolute',
+					'top': p.top+$("#cal_btn_agendar").height(),
+					'left': p.left,
+					'width':$("#cal_btn_agendar").width(),
+					'background-color':'#f00',
+					'padding-top':5,
+					'padding-bottom':5,
+					'cursor':'pointer',
+					'border':'solid 1px'
+					
+				});
+				
+				$(".cancel_agenda a").css({
+					'text-weight':'bold',
+					'color':'white',
+					'font-weight':'bold'
+				});
+				
+				$('.cancel_agenda').click(function(){
+					if(confirm("Deseja realmente cancelar?")){
+						$('.cancel_agenda').remove();
+						$('#btn_agendar').attr("value","Agendar");
+						$('#resultado').attr("value","Agendar");
+						$("#cal_btn_agendar").remove();
+						agendaContato(true);
+					}
+				});
+				
+				$('.fechar').click(function(){
+					$('.cancel_agenda').remove();
+					$("#cal_btn_agendar").remove();
+				});
+				
+			}
+			
+			$('li a').click(function(){
+				$('.cancel_agenda').remove();
+			});
+			
+			$(document).keyup(function(e) {
+				$(".cancel_agenda").remove();
+			});
+
+		});
+		
+	});
+	
+	
+	
+	function agendaContato(cancelar){
+		
+		if($("#id_cliente_fluxo").val()){
+			
+			if(cancelar == false && $('#btn_agendar').attr("value") != "Agendar"){
+				var data = $('#btn_agendar').attr("value");
+				$("#resultado").val('Agendado');
+				$("#resultado").css({'background-color':'#eee','color':'#555'});
+				$("#resultado").attr('disabled','disabled');
+				$("#resultado").parent().attr('title','Para alterar o resultado é necessário cancelar o agendamento.');
+				validaCampo();
+			}else{
+				if(cancelar == true && $('#btn_agendar').attr("value") == "Agendar"){
+					var data = "";
+					$("#resultado").val('Negociação');
+					$("#resultado").css({'background-color':'yellow','color':'#333'});
+					$("#resultado").attr('disabled',false);
+					$("#resultado").parent().attr('title','Selecione o resultado.');
+					validaCampo();
+				}
+			}
+
+			$.ajax({
+				type: "POST",
+				url: '/clientes/ajax/fn/agenda_contato',
+				async: true,
+				dataType:"text",
+				data: ({'id_cliente_fluxo':$("#id_cliente_fluxo").val(), 'data':data}),
+				success:function(resp){
+					
+					if(resp){
+						$("#atividades").val(resp);
+						scrollBaixo();
+					}
+
+				}
+
+			});
+			
+		}
+		
+	}
+	
+	$(document).ready(function(){
+
+		var erros = false;
+
+		if($("#nome").val() == ""){
+			erros = true;
+		}
+		
+		if($("#data").val() == ""){
+			erros = true;
+		}
+		
+		if($("#origem").val() == ""){
+			
+			erros = true;
+			msg += "O campo 'Origem' deve ser selecionado.<br/>";
+
+		}
+		
+		if($("#telefone").val() == ""){
+			erros = true;
+		}
+		
+		if($("#resultado").val() == ""){
+			erros = true;
+		}
+		
+		if($("#resultado").val() == "Desistiu" || $("#resultado").val() == "Concorrente"){
+			
+			if($("#motivo_pre").val() == ""){
+				erros = true;
+			}
+			
+			if($("#motivo_pre").val() == 1){
+
+				if($("#motivo").val() == ""){
+					erros = true;
+				}
+
+			}
+
+		}
+		
+		if($("#valor").val() == ""){
+			erros = true;
+		}
+		
+		if($("#entrada").val() == ""){
+			erros = true;
+		}
+		
+		if($("#parcela").val() == ""){
+			erros = true;
+		}
+		
+		if($("#obs").val() == ""){	
+			erros = true;
+		}
+		
+		if($("#dados_veiculo_1").html() != ""){
+		
+			for(i = 1;i <= 50; i++){
+
+				if($("#dados_veiculo_"+i).html() != null){
+
+					if($("#veiculo_"+i).val() == ""){
+						erros = true;
+						break;
+					}else{
+							
+						if($("#ano_modelo_"+i).val() == ""){
+							erros = true;
+							break;
+						}
+						
+					}
+					
+				}
+
+			}
+		
+		}else{
+			erros = true;
+		}
+		
+		if(!erros){
+			if($("#email").val() == ""){
+				$("#bnt_email").css("display","none");
+			}else{
+				$("#bnt_email").css("display","inline");
+			}
+			
+			if(!whatsapp){
+				$("#bnt_whatsapp").css("display","inline");
+			}else{
+				$("#bnt_whatsapp").css("display","none");
+			}
+		}else{
+			$("#bnt_email").css("display","none");
+			$("#bnt_whatsapp").css("display","none");
+		}
+		
+		$("#resultado").parent().tipsy({gravity: 'w'});
+		
+		if($("#id_cliente_fluxo").val()){
+			$("#btn_agendar").css("display","inline");
+		}
+		
+	});
+	
+
+</script>

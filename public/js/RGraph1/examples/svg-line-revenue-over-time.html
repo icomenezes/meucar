@@ -1,0 +1,127 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+
+    <script src="../libraries/RGraph.svg.common.core.js" ></script>
+    <script src="../libraries/RGraph.svg.line.js" ></script>
+    
+
+    <title>RGraph demo: An SVG Line chart showing revenue over time</title>
+
+    
+    <meta name="description" content="An SVG Line chart showing revenue over time" />
+
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    <h1>An SVG Line chart showing revenue over time</h1>
+
+    
+    <div style="width:750px; height: 350px" id="chart-container"></div>        
+
+    <script>
+        data = [500,600,800,720,900,1100];
+
+        line = new RGraph.SVG.Line({
+            id: 'chart-container',
+            data: data,
+            options: {
+                colors: ['#00AD4B'],
+                linewidth: 5,
+                backgroundGrid: false,
+                xaxisLabels: ['Febuary','March','April','May','June','July'],
+                backgroundGridColor: '#999',
+                hmargin: 50,
+                tickmarksStyle: 'circle',
+                tickmarksSize: 8,
+                textSize: 18,
+                marginLeft: 75
+            }
+        }).draw();
+
+        label = RGraph.SVG.numberFormat({
+            num: line.data[0][line.data[0].length - 1],
+            thousand: ','
+        });
+
+        // Add the label above the last point
+        RGraph.SVG.text({
+            object: line,
+            x:      line.coords[line.coords.length - 1].x,
+            y:      line.coords[line.coords.length - 1].y - 25,
+            text:   label,
+            valign: 'bottom',
+            halign: 'center',
+            size:   20,
+            bold:   true
+        });
+    </script>
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="../libraries/RGraph.svg.common.core.js" &gt;&lt;/script&gt;
+&lt;script src="../libraries/RGraph.svg.line.js" &gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;div style="width: 950px; height: 250px" id="chart-container"&gt;&lt;/div&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    data = [500,600,800,720,900,1100];
+
+    line = new RGraph.SVG.Line({
+        id: 'chart-container',
+        data: data,
+        options: {
+            colors: ['#00AD4B'],
+            linewidth: 5,
+            backgroundGrid: false,
+            xaxisLabels: ['Febuary','March','April','May','June','July'],
+            backgroundGridColor: '#999',
+            hmargin: 50,
+            tickmarksStyle: 'circle',
+            tickmarksSize: 8,
+            textSize: 18,
+            marginLeft: 75
+        }
+    }).draw();
+
+    label = RGraph.SVG.numberFormat({
+        num: line.data[0][line.data[0].length - 1],
+        thousand: ','
+    });
+
+    <span>// Add the label above the last point</span>
+    RGraph.SVG.text({
+        object: line,
+        x:      line.coords[line.coords.length - 1].x,
+        y:      line.coords[line.coords.length - 1].y - 25,
+        text:   label,
+        valign: 'bottom',
+        halign: 'center',
+        size:   20,
+        bold:   true
+    });
+&lt;/script&gt;
+</pre>
+
+
+
+    
+    
+
+
+
+</body>
+</html>

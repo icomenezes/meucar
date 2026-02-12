@@ -1,0 +1,232 @@
+<form id="usuarios" name="usuarios" enctype="application/x-www-form-urlencoded" action="/usuarios/edt-usuario-site" class="form" method="post">
+
+	<div class="inline"">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text req" title="Nome do Usuario" value="<?php echo $this->usuario['nome'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF</label>
+		<input type="text" id="cpf" name="cpf" class="text" title="CPF do Usuario" value="<?php echo $this->usuario['cpf'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">RG</label>
+		<input type="text" id="rg" name="rg" class="text" title="RG do Usuario" value="<?php echo $this->usuario['rg'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" id="endereco" name="endereco" class="text" title="Endere&ccedil;o do Usuario" value="<?php echo $this->usuario['endereco'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" id="bairro" name="bairro" class="text" title="Bairro do Usuario" value="<?php echo $this->usuario['bairro'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" title="Cidade do Usuario" value="<?php echo $this->usuario['cidade'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" id="estado" name="estado" class="text" title="Estado do Usuario" value="<?php echo $this->usuario['estado'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone</label>
+		<input type="text" id="telefone" name="telefone" class="text req" title="Telefone do Usuario" value="<?php echo $this->usuario['telefone'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Celular</label>
+		<input type="text" id="celular" name="celular" class="text" title="Celular do Usuario" value="<?php echo $this->usuario['celular'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">E-mail</label>
+		<input type="text" id="email" name="email" class="text" title="E-mail do Usuario" value="<?php echo $this->usuario['email'];?>" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="hidden" id="id" name="id" value="<?php echo $this->usuario['id'];?>"/>
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo('')"/>
+		
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+	
+	var msg = "";
+	var erro = false;
+	
+	if($("#id_perfil").val() == 0){
+		
+		erro = true;
+		
+		msg += "<br>O campo perfil deve ser selecionado.";
+	
+	}
+	
+	
+	if($("#nome").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome deve ser preenchido.";
+	
+	}
+	
+	if($("#telefone").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo telefone deve ser preenchido.";
+	
+	}
+	
+	if($("#id_perfil").val() != <?php echo FUNCIONARIO; ?>){
+		
+		if($("#login").val() == ''){
+			
+			alert($("#login").val());
+		
+			erro = true;
+			
+			msg += "<br>O campo login deve ser preenchido.";
+		
+		}
+
+		if($("#senha").val() == ''){
+
+			alert($("#login").val());
+			
+			erro = true;
+		
+			msg += "<br>O campo senha deve ser preenchido.";
+		
+		}
+		
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+
+	valor = float2moeda($("#valor_fixo_mensal").val());
+	$("#valor_fixo_mensal").val(valor);
+	
+	valor = float2moeda($("#valor_fixo").val());
+	$("#valor_fixo").val(valor);
+
+	$("#cpf").mask("999.999.999-99");
+	$("#rg").mask("99.999.999-9");
+	$("#valor_fixo_mensal").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#valor_fixo").attr("onkeyup","validaMoedaBR(this.id)");
+	
+	$('#telefone').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	$('#celular').focusout(function(){
+    var phone, element;
+    element = $(this);
+    element.unmask();
+    phone = element.val().replace(/\D/g, '');
+    if(phone.length > 10) {
+        element.mask("(99) 99999-999?9");
+    } else {
+        element.mask("(99) 9999-9999?9");
+    }
+	}).trigger('focusout');
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#data_nascimento').focus(function(){
+		$(this).calendario({
+			target:'#data_nascimento'
+		});
+	});
+	
+	$('#data_contratacao').focus(function(){
+		$(this).calendario({
+			target:'#data_contratacao'
+		});
+	});
+
+})
+
+function ativaDivVend(destino, c){
+	
+	if(c == <?php echo VENDEDOR; ?> || c == <?php echo GERENTE;?> || c == <?php echo SUPERVISOR;  ?>){
+		
+		$("#funcionario").css('display','none');
+		$("#"+destino).css('display','inline');
+	
+	}else{
+	
+		$("#"+destino).css('display','none');
+	
+	}
+	
+}
+
+function ativaDivFunc(destino, c){
+	
+	if(c == <?php echo FUNCIONARIO; ?>){
+		
+		$("#"+destino).css('display','inline');
+		$("#divLogin").css('display','none');
+		$("#divSenha").css('display','none');
+	
+	}else{
+	
+		$("#"+destino).css('display','inline');
+		$("#divLogin").css('display','inline');
+		$("#divSenha").css('display','inline');
+		
+	}
+	
+}
+
+</script>

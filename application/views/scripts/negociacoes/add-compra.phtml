@@ -1,0 +1,897 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add-compra" class="form" method="post">
+	
+<table class="table">
+	<tr id="subAbas">
+		<td class="selecionado"><a href="#" onclick="ativaSubAba('cliente', this)" />Cliente</a></td>
+		<td><a href="#" onclick="ativaSubAba('venda', this)" />Ve&iacute;culo</a></td>
+		<td style="display:none"><a href="#" onclick="ativaSubAba('transf', this)" />Transf. Troca</a></td>
+		<td><a href="#" onclick="ativaSubAba('recebimento', this);calcDiferenca()" />Pagamento</a></td>
+		<td><a href="#" onclick="ativaSubAba('datas', this)" />Datas / Obs</a></td>
+	</tr>
+</table>
+
+<div id="cliente" style="width:98.1%;">
+
+	<div class="inline">
+		<label class="label">Buscar pelo Nome ou CPF</label>
+		<input type="text" id="find_cpf" name="find_cpf" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" value="" />
+		<div id="resClientes" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="padding-top:5px;">
+		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>clientes/add')" />
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<label class="label">Origem</label>
+		<select id="origem" name="origem" class="select">
+			<option>Selecione</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Nome</label>
+		<input type="text" readonly="readonly" id="nome" name="nome" class="text" value="" />
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->id_empresa; ?>" />
+		<input type="hidden" id="id_cliente" name="id_cliente" value="" >
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF</label>
+		<input type="text" readonly="readonly" id="cpf" name="cpf" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">RG</label>
+		<input type="text" readonly="readonly" id="rg" name="rg" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Nacionalidade</label>
+		<input type="text" readonly="readonly" id="nacionalidade" name="nacionalidade" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Endere&ccedil;o</label>
+		<input type="text" readonly="readonly" id="endereco" name="endereco" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">N&uacute;mero</label>
+		<input type="text" readonly="readonly" id="numero_endereco" name="numero_endereco" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Bairro</label>
+		<input type="text" readonly="readonly" id="bairro" name="bairro" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Complemento</label>
+		<input type="text" readonly="readonly" id="complemento" name="complemento" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" readonly="readonly" id="cidade" name="cidade" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Estado</label>
+		<input type="text" readonly="readonly" id="estado" name="estado" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CEP</label>
+		<input type="text" readonly="readonly" id="cep" name="cep" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 1</label>
+		<input type="text" readonly="readonly" id="tel1" name="tel1" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 2</label>
+		<input type="text" readonly="readonly" id="tel2" name="tel2" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Telefone 3</label>
+		<input type="text" readonly="readonly" id="cel" name="cel" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Email</label>
+		<input type="text" readonly="readonly" id="email" name="email" class="text" value="" />
+	</div>
+
+</div>
+
+
+
+<div id="venda" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<label class="label">Buscar pelo Modelo ou Placa</label>
+		<input type="text" id="find_placa" name="find_placa" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value)" autocomplete="off" value="" />
+		<div id="resVeiculos" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="padding-top:5px;">
+		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>veiculos/add')" />
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa" name="placa" class="text" value="" />
+		<input type="hidden" id="id_veiculo" name="id_veiculo" value="">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca" name="marca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo" name="modelo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo" name="ano_modelo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" readonly="readonly" id="cor" name="cor" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" id="valor_venda" name="valor_venda" class="text" value="" />
+		<input type="hidden" id="valor_aquisicao" name="valor_aquisicao" value="" />
+		<input type="hidden" id="data_aquisicao" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Custos Transfer&ecirc;ncia</label>
+		<input type="text" id="custos_transferencia" name="custos_transferencia" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Dias Garantia</label>
+		<input type="text" id="dias_garantia" name="dias_garantia" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Garantia</label>
+		<input type="text" id="km_garantia" name="km_garantia" class="text" value="" />
+		<input type="hidden" id="data_termino_revisao" name="data_termino_revisao" value=""/>
+	</div>
+</div>
+
+
+
+<div id="recebimento" style="width:98.1%;display:none">
+
+	<div class="inline" style="clear:both;width:90%;">
+		<label class="label" style="margin-left:7px; font-size:15px;">Descri&ccedil;&atilde;o de Pagamentos e D&eacute;bitos</label>
+		<label style="color:red; margin-left:7px; margin-top:5px;"><b>Aten&ccedil;&atilde;o:</b> As formas de pagamento: 'Devolu&ccedil;&atilde;o ao Cliente', 'D&eacute;bitos do  Ve&iacute;culo de Troca' e 'Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca', devem ser preenchidos com o valor negativo.</label>
+	</div>
+	
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Forma</th>
+				<th>Data</th>
+				<th>N&uacute;mero</th>
+				<th>Banco</th>
+				<th>Ag&ecirc;ncia</th>
+				<th>CC</th>
+				<th>Valor</th>
+				<th>Baixar</th>
+				<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		
+		<tbody id="pgtos_programados">
+			<tr>
+				<td colspan="9" style="color:red;"></td>
+				</tr>
+				<tr id="pgto_line_0">
+				<td><select class="select" style="width:150px;" name="Rforma_0" id="Rforma_0">
+						<option value="">Selecione</option>
+						<option value="1">Cart&atilde;o de Cr&eacute;dito</option>
+						<option value="2">Cheque</option>
+						<option value="3">Dinheiro</option>
+						<option value="4">Promiss&oacute;rias</option>
+						<option value="5">TED</option>
+						<option value="6">Devolu&ccedil;&atilde;o ao Cliente</option>
+						<option value="7">D&eacute;bitos do  Ve&iacute;culo de Troca</option>
+						<option value="8">Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>
+				</select></td>
+				<td><input type="text" id="Rdata_0" name="Rdata_0" class="text" value="" /></td>
+				<td><input type="text" id="Rnumero_0" name="Rnumero_0" class="text" value="" /></td>
+				<td><input type="text" id="Rbanco_0" name="Rbanco_0" class="text" value="" /></td>
+				<td><input type="text" id="Ragencia_0" name="Ragencia_0" class="text" value="" /></td>
+				<td><input type="text" id="Rcc_0" name="Rcc_0" class="text" value="" /></td>
+				<td><input type="text" id="Rvalor_0" name="Rvalor_0" class="text" value="" onkeyup=\"validaMoedaBR(this.id); calcDiferenca();\"/></td>
+				<td><input type="checkbox" id="Rbaixado_0" name="Rbaixado_0" value="1" /></td>
+				<td style="width:145px;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeletePagamento(0);"/><input type="button" id="btn_0" class="btn-mini btn-include" value="Add" onclick="addPgto()"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+</div>
+
+
+
+<div id="datas" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<label class="label">Data / Hora Abertura</label>
+		<input type="text" readonly="readonly" id="data_abertura" name="data_abertura" class="text" value="<?php echo @date('d/m/Y H:i:s'); ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data / Hora de Concretiza&ccedil;&atilde;o</label>
+		<input type="text" id="data_concretizacao" name="data_concretizacao" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data / Hora de Cancelamento</label>
+		<input type="text" readonly="readonly" id="data_cancelamento" name="data_cancelamento" class="text" value="" />
+	</div>
+<!--	
+	<div class="inline">
+		<label class="label">Data / Hora de Entrega do Ve&iacute;culo</label>
+		<input type="text" id="data_entrega_veiculo" name="data_entrega_veiculo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Entrega Ve&iacute;culo</label>
+		<input type="text" id="km_entrega_veiculo" name="km_entrega_veiculo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data T&eacute;rmino Garantia</label>
+		<input type="text" id="data_termino_garantia" name="data_termino_garantia" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Data / Hora de Recebimento do Ve&iacute;culo</label>
+		<input type="text" id="data_recebimento_veiculo" name="data_recebimento_veiculo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Km Recebimento Ve&iacute;culo</label>
+		<input type="text" id="km_recebimento_veiculo" name="km_recebimento_veiculo" class="text" value="" />
+	</div>
+-->	
+	<div class="inline">
+		<label class="label">Data da Compra Ve&iacute;culo</label>
+		<input type="text" readonly="readonly" id="data_compra" class="text" value=""/>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Observa&ccedil;&otilde;es</label>
+		<textarea id="obs" name="obs" class="text" ></textarea>
+	</div>
+
+	<div class="inline" style="display:table;">
+		<label class="label">Observa&ccedil;&otilde;es Internas</label>
+		<textarea id="obs_interna" name="obs_interna" class="text" ></textarea>
+	</div>
+
+</div>
+
+
+	
+<div class="inline" style="clear:both; display:table;">
+	<input type="button" class="btn-small btn-add" id="bnt_cadastrar" value="Cadastrar" onclick="validaCampo()" />
+	<input type="button" class="btn-small" value="Contratos" onclick="javascript:alert('Para gerar um contrato é necessário primeiro cadastrar a negociação');" style="margin-left:10px;"/>
+</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+$.ajax({
+	url : '/clientes/ajax/fn/busca_origem',
+	async: true,
+	type : 'POST',
+	dataType: 'text',
+	success: function(data){
+
+		$("#origem").html(data);
+
+		//$("#origem option[value='<?php echo $this->dados['origem']; ?>']").attr("selected", true);
+
+	}
+});
+
+
+
+function promissoria(valor,obj){
+
+	if(valor == 4){
+
+		$(obj).next().next().css("display","block");
+	
+	}else{
+	
+		$(obj).next().next().css("display","none");
+	
+	}
+
+}
+
+function geraPromissoria(obj){
+
+	dataPromissoria = $(obj).parent().next().children().val();
+	
+	var datas = new Array();
+	
+	datas = dataPromissoria.split('/');
+	
+	dataPromissoria = datas[0]+"-"+datas[1]+"-"+datas[2];
+	
+	numPromissoria = $(obj).parent().next().next().children().val();
+	valPromissoria = $(obj).parent().next().next().next().next().next().next().children().val();
+	nomeCliente = $("#nome").val();
+	cpfCliente = $("#cpf").val();
+	enderecoCliente = $("#endereco").val();
+	cidadeCliente = $("#cidade").val();
+	estadoCliente = $("#estado").val();
+	cepCliente = $("#cep").val();
+	
+	var msg = "";
+	var erro = false;
+	
+	if(datas == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo data deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(numPromissoria == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo n&uacute;mero deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(valPromissoria == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo valor deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(nomeCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cpfCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cpf da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(enderecoCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo endere&ccedil;o da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cidadeCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cidade da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(estadoCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo estado da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(cepCliente == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo cep da aba cliente deve ser preenchido para gerar a impress&atilde;o.";
+	
+	}
+	
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+	
+		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria/data_promissoria/"+dataPromissoria+"/num_promissoria/"+numPromissoria+"/valor_promissoria/"+valPromissoria+"/nome/"+nomeCliente+"/cpf/"+cpfCliente+"/endereco/"+enderecoCliente+"/cidade/"+cidadeCliente+"/estado/"+estadoCliente+"/cep/"+cepCliente);
+
+	}
+}
+
+/*function calcFinanciamento(){
+
+	var valFinanciado = moeda2float($("#valor_financiado").val()) + moeda2float($("#tac").val());
+	var cf = moeda2float($("#coeficiente_financeira").val()); //coeficiente : ex 0.36721
+	
+	$("#valor_prestacoes").val(float2moeda(valFinanciado * cf));
+	validaMoedaBR("valor_prestacoes");
+	
+}*/
+
+function esconde(f){
+	
+	$(f).css("display","none");
+	
+}
+
+function findCliente(f){
+	
+	$("#resClientes").css("display","block");
+	
+	var resp = $.ajax({
+		url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resClientes ul").html(resp);
+
+}
+
+function populaCamposCliente(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>clientes/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposClientes = $("#cliente div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+			
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_cliente"){
+					
+					$(this).val(arrPartes[1]);
+					
+				}
+		
+			}
+		
+		}
+	
+	});
+
+}
+
+function findVeiculo(f){
+
+	$("#resVeiculos").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/vendido/no/fn_compra/true',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculos ul").html(resp);
+
+}
+
+function populaCamposVeiculo(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#venda div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+				
+				if(arrPartes[0] == 'valor_venda'){
+				
+					arrPartes[1] = arrPartes[1].replace(".",",");
+					
+					$(this).val(arrPartes[1]);
+					$("#valor_base_calculo").val(arrPartes[1]);
+				
+				}
+				
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_veiculo"){
+					
+					$(this).val(arrPartes[1]);
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+		
+	dataAquisicao = $("#data_aquisicao").val().split("-");
+	$("#data_compra").val(dataAquisicao[2]+"/"+dataAquisicao[1]+"/"+dataAquisicao[0]);
+	
+	atualizaCamposVenda();
+
+}
+
+
+function findTabelaDespesas(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getTableDespesasByIdVeiculo',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#despesas_negociacao").html(resp);
+
+}
+
+function ativaSubAba(destino, c){
+
+	$("#subAbas td").each(function(){
+		
+		$(this).removeClass('selecionado');
+		
+	});
+	
+	$(c).parent().addClass('selecionado');
+	
+	var divAbas = new Array('cliente', 'venda', 'despesa', 'troca', 'transf', 'recebimento', 'comissoes', 'datas', 'resumo');
+
+	for(x in divAbas){
+		
+		$("#"+divAbas[x]).css('display','none');
+	
+	}
+	
+	$("#"+destino).css('display','inline');
+	
+	calculaResumo();
+
+}
+
+function confirmaDeletePagamento(id){
+
+decisao = confirm("Deseja realmente deletar?");
+	
+	if (decisao){
+	
+		var temElemento = true;
+		
+		if(id != 0){
+
+			$("#Rdata_"+id).parent().parent().remove();
+			
+		}else{
+		
+			alert("É necessário cadastrar no mínimo uma forma de pagamento!");
+		
+		}
+
+	}
+	
+}
+
+function adicionarPgto(){
+
+	pagamento = "<tr>"+
+					"<td colspan=\"9\" style=\"color:red;\">"+
+					"</td>"+
+				"</tr>"+
+				"<tr id=\"pgto_line_0\">"+
+				"<td><select class=\"select\" style=\"width:150px;\" name=\"Rforma_0\" id=\"Rforma_0\">"+
+						"<option value=\"\">Selecione</option>"+
+						"<option value=\"1\">Cart&atilde;o de Cr&eacute;dito</option>"+
+						"<option value=\"2\">Cheque</option>"+
+						"<option value=\"3\">Dinheiro</option>"+
+						"<option value=\"4\">Promiss&oacute;rias</option>"+
+						"<option value=\"5\">TED</option>"+
+						"<option value=\"6\">Devolu&ccedil;&atilde;o ao Cliente</option>"+
+						"<option value=\"7\">D&eacute;bitos do  Ve&iacute;culo de Troca</option>"+
+						"<option value=\"8\">Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>"+
+				"</select></td>"+
+				"<td><input type=\"text\" id=\"Rdata_0\" name=\"Rdata_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rnumero_0\" name=\"Rnumero_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rbanco_0\" name=\"Rbanco_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Ragencia_0\" name=\"Ragencia_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rcc_0\" name=\"Rcc_0\" class=\"text\" value=\"\" /></td>"+
+				"<td><input type=\"text\" id=\"Rvalor_0\" name=\"Rvalor_0\" class=\"text\" value=\"\" onkeyup=\"validaMoedaBR(this.id); calcDiferenca();\"/></td>"+
+				"<td><input type=\"checkbox\" id=\"Rbaixado_0\" name=\"Rbaixado_0\" value=\"1\" /></td>"+
+				"<td style=\"width:145px;\"><input type=\"button\" class=\"btn-small btn-del\" id=\"deleta\" value=\"Deletar\" onclick=\"confirmaDeletePagamento(0);\"/><input type=\"button\" id=\"btn_0\" class=\"btn-mini btn-include\" value=\"Add\" onclick=\"addPgto()\"></td>"+
+			"</tr>";
+			
+	$("#pgtos_programados").html(pagamento);
+	$("#Rdata_0").mask("99/99/9999");
+	$('#Rdata_0').focus(function(){
+		$(this).calendario({
+			target:'#Rdata_0'
+		});
+	});
+
+}
+
+var pgtosAdd = 1;
+var cont = 1;
+
+function addPgto(){
+
+	pgtosAdd++;
+	cont++;
+
+	var line = $("#pgto_line_0").clone();
+	
+	$("#pgtos_programados").append(line);
+	
+	$("#pgtos_programados tr:last td").each(function(){
+
+		var idLine = $(this).children().attr('id').split("_");
+		$(this).children().attr('id', idLine[0]+"_"+pgtosAdd);
+		$(this).children().attr('name', idLine[0]+"_"+pgtosAdd);
+		
+		if($(this).children().attr('id') == "deleta_"+pgtosAdd){
+		
+			$("#deleta_"+pgtosAdd).attr('onClick',"confirmaDeletePagamento("+pgtosAdd+");");
+			
+		}
+
+	});
+	
+	$("#Rdata_"+pgtosAdd).val("");
+	$("#Rnumero_"+pgtosAdd).val("");
+	$("#Rbanco_"+pgtosAdd).val("");
+	$("#Ragencia_"+pgtosAdd).val("");
+	$("#Rcc_"+pgtosAdd).val("");
+	$("#Rvalor_"+pgtosAdd).val("");
+	$("#Rbaixado_"+pgtosAdd).attr("checked",false);
+	
+	$("#Rdata_"+cont).mask("99/99/9999");
+	$('#Rdata_'+cont).focus(function(){
+		$(this).calendario({
+			target:'#Rdata_'+cont
+		});
+	});
+
+}
+
+var despesasAdd = 1;
+
+
+function atualizaCamposVenda(){
+
+	valo = $("#valor_venda").val();
+	
+	valo = valo.replace(".","");
+	valo = valo.replace(",",".");
+
+	$("#recebimento input[id='valor_venda']").val(valo);
+	
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+
+	if($("#origem").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Cliente o campo origem deve ser preenchido.";
+	
+	}
+	
+	if($("#valor_venda").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>Na aba Ve&iacute;culo o campo valor deve ser preenchido.";
+	
+	}
+	
+	
+	
+	$("#pgtos_programados input").each(function (){
+		
+		if($(this).attr('id').substr(0,5) == "Rdata"){
+	
+			if($(this).val() == ""){
+	
+				erro = true;
+			
+				msg += "<br>Na aba Pagamentos o campo data deve ser preenchido.";
+				
+			}
+			
+		}
+	
+	});
+	
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+		
+		return false;
+	
+	}else{
+		
+		$("form").submit();
+		
+		$("#bnt_cadastrar").remove();
+		
+		return true;
+	
+	}
+
+}
+
+$(function(){
+
+	$("#cnpj").mask("99.999.999/9999-99");
+	$("#tel").mask("(99) 9999-9999");
+	$("#cel1").mask("(99) 9999-9999");
+	$("#cel2").mask("(99) 9999-9999");
+	$("#cep").mask("99999-999");
+	
+	$("#data_concretizacao").mask("99/99/9999 99:99:99");
+	$("#data_cancelamento").mask("99/99/9999 99:99:99");
+	$("#data_entrega_veiculo").mask("99/99/9999 99:99:99");
+	$("#data_termino_garantia").mask("99/99/9999 99:99:99");
+	$("#data_recebimento_veiculo").mask("99/99/9999 99:99:99");
+	$("#Rdata_0").mask("99/99/9999");
+	
+	$("#placa_troca").mask("aaa-9*99");
+	
+	$("#valor_venda").attr("onkeyup","validaMoedaBR(this.id); atualizaCamposVenda()");
+	$("#custos_transferencia").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#preco_troca").attr("onkeyup","validaMoedaBR(this.id); atualizaValorTroca(this.value);");
+	$("#divida").attr("onkeyup","validaMoedaBR(this.id)");
+	//$("#valor_financiado").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();calcDiferenca()");
+	$("#valor_financiado").attr("onkeyup","validaMoedaBR(this.id);calcDiferenca()");
+	$("#tac").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();");
+	$("#coeficiente_financeira").attr("onkeyup","validaMoedaBR(this.id);calcFinanciamento();");
+	$("#valor_prestacoes").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#Rvalor_0").attr("onkeyup","validaMoedaBR(this.id);calcDiferenca()");
+	$("#valor_base_calculo").attr("onkeyup","validaMoedaBR(this.id)");
+	$("#comissao_vendedor_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	$("#comissao_supervisor_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	$("#comissao_gerente_real").attr("onkeyup","validaMoedaBR(this.id);calculaPercComissao()");
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+	$('#data_abertura').focus(function(){
+		$(this).calendario({
+			target:'#data_abertura'
+		});
+	});
+	
+	$('#data_concretizacao').focus(function(){
+		$(this).calendario({
+			target:'#data_concretizacao'
+		});
+	});
+	
+	$('#data_cancelamento').focus(function(){
+		$(this).calendario({
+			target:'#data_cancelamento'
+		});
+	});
+	
+	$('#data_entrega_veiculo').focus(function(){
+		$(this).calendario({
+			target:'#data_entrega_veiculo'
+		});
+	});
+	
+	$('#data_termino_garantia').focus(function(){
+		$(this).calendario({
+			target:'#data_termino_garantia'
+		});
+	});
+	
+	$('#data_recebimento_veiculo').focus(function(){
+		$(this).calendario({
+			target:'#data_recebimento_veiculo'
+		});
+	});
+	
+	
+	$('#Rdata_0').focus(function(){
+		$(this).calendario({
+			target:'#Rdata_0'
+		});
+	});
+	
+})
+
+	function verificaDataTerminoRevisao(){
+	
+		if($("#data_termino_revisao").val() == "" || $("#data_termino_revisao").val() == "0000-00-00"){
+		
+			$("#data_termino_revisao").val('<?php echo date("Y-m-d")?>');
+		
+		}
+	
+	}
+
+</script>

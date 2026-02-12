@@ -1,0 +1,117 @@
+
+
+<form class="form" action="" method="post">
+
+	<div class="inline">
+		<label class="label">Ve&iacute;culo</label>
+		<select id="id_veiculo" name="id_veiculo" class="select" value="">
+			<option value="">Todos</option>
+			
+			<?php
+			
+				foreach($this->arrVeiculos as $veiculo){
+					
+					if($veiculo['descricao_site']){
+						$veiculo['modelo'] = $veiculo['descricao_site'];
+					}
+					
+					echo "<option value='".$veiculo['id']."'>".$veiculo['modelo']." - ".$veiculo['placa']."</option>";
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Servi&ccedil;o</label>
+		<select id="servico" name="servico" class="select" value="">
+			<option value="">Todos</option>
+			<option value="mecanico">Mec&acirc;nico</option>
+			<option value="funilaria">Funilaria</option>
+			<option value="martelinho">Martelinho</option>
+			<option value="eletrica">El&eacute;trica</option>
+			<option value="tapecaria">Tape&ccedil;aria</option>
+			<option value="lavacar">Lavacar</option>
+			<option value="volante">Volante</option>
+			<option value="calotas">Calotas</option>
+			<option value="pneus">Pneus</option>
+			<option value="chaveiro">Chaveiro</option>
+			<option value="pincelar">Pincelar</option>
+			<option value="outros">Outros</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="button" class="btn-small btn-find" value="Pesquisar" onclick="buscaServicos();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('relatorio','Preparação');"/>
+	</div>
+	
+</form>
+
+<div id="relatorio">
+</div>
+
+<script>
+
+	function imprimir(id, pg){
+		$("table").css("font-family","Arial, Helvetica, sans-serif");
+		$("table").css("width","99%");
+		$("table").css("border-left","1px solid #d4d4d4");
+		$("table").css("border-top","1px solid #d4d4d4");
+		$("table").css("margin-bottom","15px");
+		$("table").css("margin-left","auto");
+		$("table").css("margin-right","auto");
+
+		$("table tr th").css("padding","2px 5px");
+		$("table tr td").css("padding","2px 5px");
+		$("table tr th").css("background","#a3a3a3");
+		$("table tr th").css("color","#FFF");
+		$("table tr th").css("text-align","center");
+		
+		$("table tr td").css("border-right","1px solid #d4d4d4");
+		$("table tr td").css("border-bottom","1px solid #d4d4d4");
+		$("table tr td").css("vertical-align","middle");
+		
+		$("table tr.zebra td").css("background","#F2F2F2");
+		
+		$("table .table-options").css("padding","10px");
+		
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+		
+	}
+
+
+	function buscaServicos(){
+		
+		var idVeiculo = $("#id_veiculo").val();
+		var servico = $("#servico").val();
+
+		$.ajax({
+			type: "POST",
+			url: '/novos-relatorios/ajax/fn/preparacao',
+			async: true,
+			dataType:"text",
+			data: ({'id_veiculo':idVeiculo, 'servico':servico}),
+		
+			success:function(resp){
+				
+				$("#relatorio").html(resp);
+				
+			}
+		});
+	
+		
+	}
+	
+	buscaServicos();
+	
+
+</script>

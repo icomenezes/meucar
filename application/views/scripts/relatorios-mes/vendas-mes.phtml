@@ -1,0 +1,689 @@
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<style>
+
+.table {
+	width:99%;
+	border-left:1px solid #d4d4d4;
+	border-top:1px solid #d4d4d4;
+	margin-bottom:15px;
+	margin-left:auto;
+	margin-right:auto;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+	
+	.table tr th, .table tr td {
+		padding:5px 10px;
+	}
+	
+	.table tr td img{
+		padding-right:10px;
+	}
+	
+	.table tr th {
+		background:#a3a3a3;
+		color:#FFF;
+		text-align:center;
+	}
+	
+	.table tr td {
+		border-right:1px solid #d4d4d4;
+		border-bottom:1px solid #d4d4d4;
+		vertical-align:middle;
+	}
+	
+	.table tr.zebra td {
+		background:#F2F2F2;
+	}
+	
+	.table .table-options {
+		padding:10px;
+	}
+	
+	.table .table-sub {
+		background: #F9F9F9;
+		padding:15px;
+	}
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+	#table_cabeca tr th{
+		vertical-align:middle;
+		border: solid 1px #CCCCCC;
+	}
+	
+	#table_dados td{
+		border: solid 1px #CCCCCC;
+		padding: 5px;
+		vertical-align:middle;
+	}
+
+</style>
+<form class="form" action="vendas-mes" method="post">
+	
+	<div class="inline" id="div_select">
+	<label class="label">Vendedor</label>
+	<select name = "id_vendedor" id="id_vendedor" class="select">
+		<option value = "0">Todos</option>
+		<?php
+		foreach($this->vendedores as $vendedor){
+		
+			if($vendedor['id'] == $this->id_vendedor){
+			
+				echo "<option selected='selected' value = '".$vendedor['id']."'>".$vendedor['nome']."</option>";
+			
+			}else{
+		
+				echo "<option value = '".$vendedor['id']."'>".$vendedor['nome']."</option>";
+			
+			}
+		
+		}
+		?>
+		</select>		
+	</div>
+
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->data_inicial; ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->data_final; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Teste');"/>
+	</div>
+
+</form>
+<br>
+
+	<div class="inline" style="clear:both; margin-top:20px; margin-bottom:10px; margin-left:10px; width:40%; height:auto; font-family: Arial, Helvetica, sans-serif;" id="div_num">
+		<b><label class="label">N&uacute;mero de Vendas: <span id="num_veiculos"><?php echo count($this->arrNegociacoes); ?></span><span id="dados"></span></label></b>
+	</div>
+
+<?php
+$divisorFI=0;
+
+		$count=0;
+
+		foreach($this->arrNegociacoes as $key=>$negociacao){
+			
+			$count++;
+			
+			$dataTmp = explode(" ",$negociacao['data_concretizacao']);
+			$dataTmp2 = explode("-",$dataTmp[0]);
+			$negociacao['data_concretizacao'] = implode("/",array_reverse($dataTmp2));
+			$dataConcretizacao = $negociacao['data_concretizacao'];
+			$negociacao['data_concretizacao'] = $negociacao['data_concretizacao'] . " " . $dataTmp[1];
+			
+			$dataIni = explode("-",$negociacao['data_aquisicao']);
+			$timestamp1 = mktime(0,0,0,$dataTmp2[1],$dataTmp2[2],$dataTmp2[0]); 
+			$timestamp2 = mktime(0,0,0,$dataIni[1],$dataIni[2],$dataIni[0]);
+			$segundos_diferenca = $timestamp1 - $timestamp2;
+			$dias_diferenca = ($segundos_diferenca /(60 * 60 * 24));
+			
+			$dataRev = explode("-",$negociacao['data_termino_revisao']);
+			$timesRev = mktime(0,0,0,$dataRev[1],$dataRev[2],$dataRev[0]); 
+			$segundos_diferenca_rev = $timesRev - $timestamp2;
+			$dias_diferenca_rev = ($segundos_diferenca_rev /(60 * 60 * 24));
+			
+			$statusEstoque = "class=''";
+			$statusRevisao = "class=''";
+			$statusLucro = "class=''";
+			$lucro = $negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']);
+			
+			if($dias_diferenca <= $this->arrCores['verde_estoque']){
+			
+				$statusEstoque = "class='verde'";
+				
+			}elseif($dias_diferenca <= $this->arrCores['amarelo_estoque'] && $dias_diferenca > $this->arrCores['verde_estoque']){
+			
+				$statusEstoque = "class='amarelo'";
+				
+			}elseif($dias_diferenca > $this->arrCores['amarelo_estoque']){
+			
+				$statusEstoque = "class='vermelho'";
+				
+			}
+			
+			if($dias_diferenca_rev <= $this->arrCores['verde_revisao']){
+			
+				$statusRevisao = "class='verde'";
+				
+			}elseif($dias_diferenca_rev <= $this->arrCores['amarelo_revisao'] && $dias_diferenca_rev > $this->arrCores['verde_revisao']){
+			
+				$statusRevisao = "class='amarelo'";
+				
+			}elseif($dias_diferenca_rev > $this->arrCores['amarelo_revisao']){
+			
+				$statusRevisao = "class='vermelho'";
+				
+			}
+			
+			if($lucro <= $this->arrCores['vermelho_lucro']){
+			
+				$statusLucro = "class='vermelho'";
+				
+			}elseif($lucro <= $this->arrCores['amarelo_lucro'] && $lucro > $this->arrCores['vermelho_lucro']){
+			
+				$statusLucro = "class='amarelo'";
+				
+			}elseif($lucro > $this->arrCores['amarelo_lucro']){
+			
+				$statusLucro = "class='verde'";
+				
+			}
+			
+			if($this->arrNegociacoes[$key+1]['id_vendedor'] != $negociacao['id_vendedor']){
+			
+				if($this->id_vendedor == 0){
+				
+					$count += 1;
+				
+				}
+		
+				$tabelaCima = "<tr>
+					<td id='td_vendedor' rowspan='".$count."'>".$negociacao['nomeUsuario']."</td>
+					<td id='td_cliente'>".$negociacao['nome']."</td>
+					<td id='td_data_venda'>".$dataConcretizacao."</td>
+					<td id='td_modelo'>".$negociacao['marca']." - ".$negociacao['modelo']."</td>
+					<td id='td_origem'>".$negociacao['origem']."</td>
+					<td id='td_cor'>".$negociacao['cor']."</td>
+					<td id='td_placa' style='width:60px;'>".$negociacao['placa']."</td>
+					<td id='td_ano' style='width:40px;'>".$negociacao['ano_modelo']."</td>
+					<td id='td_km'>".$negociacao['km']."</td>
+					<td id='td_valor_venda'>R$ ".money_format("%i",$negociacao['valor_venda'])."</td>
+					<td id='td_dias_estoque' style='width:60px;'".$statusEstoque.">".round($dias_diferenca,0)." dias</td>
+					<td id='td_custo'>R$ ".money_format("%i",$negociacao['valor_despesas']+$negociacao['valor_aquisicao'])."</td>
+					<td id='td_compra'>R$ ".money_format("%i",$negociacao['valor_aquisicao'])."</td>
+					<td id='td_despesas' style='width:72px;'>R$ ".money_format("%i",$negociacao['valor_despesas'])."</td>
+					<td id='td_lucroR'".$statusLucro.">R$ ".money_format("%i",$negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))."</td>
+					<td id='td_lucroP' ".$statusLucro.">".round((($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100),2)."%</td>";
+			
+				if($negociacao['id_financeira']){
+				
+					$tabelaCima .= "<td id='td_fiR'>R$ ".money_format("%i",((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'])."</td>
+								<td id='td_fiP'>".round((((((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'])+($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100),2)."%</td>";
+				
+				}else{
+				
+					$tabelaCima .= "<td id='td_fiR'>R$ ".money_format("%i",0)."</td>
+								<td id='td_fiP'>".round(0,2)."%</td>";
+				
+				}
+					
+				$tabelaCima .= "<td id='td_data_compra'>".$dataIni[2]."/".$dataIni[1]."/".$dataIni[0]."</td>
+					<td id='td_data_revisao'>".$dataRev[2]."/".$dataRev[1]."/".$dataRev[0]."</td>
+					<td id='td_dia_revisao' style='width:70px;'".$statusRevisao.">".round($dias_diferenca_rev,0)." dias</td>
+				</tr>";
+				
+				
+				$subVenda += $negociacao['valor_venda'];
+				$subCusto += ($negociacao['valor_despesas']+$negociacao['valor_aquisicao']);
+				$subCompra += $negociacao['valor_aquisicao'];
+				$subDespesas += $negociacao['valor_despesas'];
+				$subLucro += ($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']));
+				$subLucroPorcento += (($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100);
+				
+				if($negociacao['id_financeira']){
+				
+					$divisorFI++;
+					$subFI += ((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'];
+			
+				}
+				
+				$strTabela .= $tabelaCima.$tabela;
+				
+				if($this->id_vendedor == 0){
+				
+				 $strTabela .= "<tr>
+								<td style='text-align:right; background-color:#EEEEEE;' colspan='8'><b>SUBTOTAL</b></td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subVenda)."</td>
+								<td style='background-color:#EEEEEE;'></td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subCusto)."</td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subCompra)."</td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subDespesas)."</td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subLucro)."</td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subLucroPorcento)."</td>
+								<td style='background-color:#EEEEEE;'>R$ ".money_format("%i",$subFI)."</td>
+								<td style='background-color:#EEEEEE;' colspan='4'></td>
+							   </tr>";
+				}
+				
+				$tabela = "";
+				$count = 0;
+				$subVenda = 0;
+				$subCusto = 0;
+				$subCompra = 0;
+				$subDespesas = 0;
+				$subLucro = 0;
+				$subLucroPorcento = 0;
+				$subFI = 0;
+		
+			}else{
+			
+				$subVenda += $negociacao['valor_venda'];
+				$subCusto += ($negociacao['valor_despesas']+$negociacao['valor_aquisicao']);
+				$subCompra += $negociacao['valor_aquisicao'];
+				$subDespesas += $negociacao['valor_despesas'];
+				$subLucro += ($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']));
+				$subLucroPorcento += (($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100);
+				
+				if($negociacao['id_financeira']){
+				
+					$divisorFI++;
+					$subFI += ((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'];
+			
+				}
+			
+				$tabela .= "<tr>
+					<td>".$negociacao['nome']."</td>
+					<td>".$dataConcretizacao."</td>
+					<td>".$negociacao['marca']." - ".$negociacao['modelo']."</td>
+					<td >".$negociacao['origem']."</td>
+					<td>".$negociacao['cor']."</td>
+					<td>".$negociacao['placa']."</td>
+					<td>".$negociacao['ano_modelo']."</td>
+					<td>".$negociacao['km']."</td>
+					<td>R$ ".money_format("%i",$negociacao['valor_venda'])."</td>
+					<td ".$statusEstoque.">".round($dias_diferenca,0)." dias</td>
+					<td>R$ ".money_format("%i",$negociacao['valor_despesas']+$negociacao['valor_aquisicao'])."</td>
+					<td>R$ ".money_format("%i",$negociacao['valor_aquisicao'])."</td>
+					<td>R$ ".money_format("%i",$negociacao['valor_despesas'])."</td>
+					<td ".$statusLucro.">R$ ".money_format("%i",$negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))."</td>
+					<td ".$statusLucro.">".round((($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100),2)."%</td>";
+			
+				if($negociacao['id_financeira']){
+				
+					$tabela .= "<td>R$ ".money_format("%i",((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'])."</td>
+								<td>".round((((((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'])+($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100),2)."%</td>";
+				
+				}else{
+				
+					$tabela .= "<td>R$ ".money_format("%i",0)."</td>
+								<td>".round(0,2)."%</td>";
+				
+				}
+					
+				$tabela .= "<td>".$dataIni[2]."/".$dataIni[1]."/".$dataIni[0]."</td>
+					<td>".$dataRev[2]."/".$dataRev[1]."/".$dataRev[0]."</td>
+					<td ".$statusRevisao.">".round($dias_diferenca_rev,0)." dias</td>
+				</tr>";
+			}
+			
+			$somaValorVenda += $negociacao['valor_venda'];
+			$somaDiasEstoque += $dias_diferenca;
+			$somaCusto += ($negociacao['valor_despesas']+$negociacao['valor_aquisicao']);
+			$somaCompra += $negociacao['valor_aquisicao'];
+			$somaDespesas += $negociacao['valor_despesas'];
+			$somaLucro += ($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']));
+			$somaLucroPorcento += (($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao']))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100);
+			
+			if($negociacao['id_financeira']){
+				$divisorFI++;
+				$somaFI += ((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'];
+			
+			}
+			
+			$somaFIPorcento += (((((($negociacao['retorno_financeira']*1.2)*$negociacao['valor_financiado'])/100)-$negociacao['imposto_financeira'])+($negociacao['valor_venda']-($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])))/($negociacao['valor_despesas']+$negociacao['valor_aquisicao'])*100);
+			$somaDiasRevisao += $dias_diferenca_rev;
+			$somaValorDespachante += $negociacao['imposto'];
+			
+		}
+		
+		if($this->arrNegociacoes){
+			
+			$mediaValorVenda = $somaValorVenda/count($this->arrNegociacoes);
+			$mediaDiasEstoque = $somaDiasEstoque/count($this->arrNegociacoes);
+			$mediaCusto = $somaCusto/count($this->arrNegociacoes);
+			$mediaCompra = $somaCompra/count($this->arrNegociacoes);
+			$mediaDespesas = $somaDespesas/count($this->arrNegociacoes);
+			$mediaLucro = $somaLucro/count($this->arrNegociacoes);
+			$mediaLucroPorcento = $somaLucroPorcento/count($this->arrNegociacoes);
+			$mediaFI = $somaFI/$divisorFI;
+			$mediaFIPorcento = $somaFIPorcento/count($this->arrNegociacoes);
+			$mediaDiasRevisao = $somaDiasRevisao/count($this->arrNegociacoes);
+		
+		}
+		
+	$strTabela .= "<tr>
+				<td style='border:solid 2px; text-align:right;' colspan='9'><b>MÉDIA</b></td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaValorVenda)."</td>
+				<td style='border:solid 2px;'>".round($mediaDiasEstoque,0)." dias</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaCusto)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaCompra)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaDespesas)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaLucro)."</td>
+				<td style='border:solid 2px;'>".round($mediaLucroPorcento,2)."%</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$mediaFI)."</td>
+				<td style='border:solid 2px;'>".money_format("%i",$mediaFIPorcento)."%</td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'>".round($mediaDiasRevisao,0)." dias</td>
+			 </tr>";
+			 
+	$strTabela .= "<tr>
+				<td style='border:solid 2px; text-align:right;' colspan='9'><b>TOTAL</b></td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaValorVenda)."</td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaCusto)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaCompra)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaDespesas)."</td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaLucro)."</td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'>R$ ".money_format("%i",$somaFI)."</td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'></td>
+				<td style='border:solid 2px;'></td>
+			 </tr>
+			 </tbody>
+			 </table>";
+			 
+	$strTabela = "<table id='table_dados' style='margin-top:52px; width:1600px;'>".$strTabela;
+	
+?>	
+
+<div id="div_cabeca" style="height:1px;">
+	<table class="table" id="table_cabeca" style="height:40px; width:1600px;">
+		<tr>
+			<th colspan="21" style="color:#FFFFFF; height:20px; border:0px;">
+				<div style="margin-top:3px; margin-left:3px; float:left;">
+					Para visualizar o fim do relat&oacute;rio passe o mouse sobre o cabe&ccedil;alho da tabela na horizontal.
+				</div>
+			</th>
+		</tr>
+		<tr>
+			<th id="th_vendedor">Vendedor</th>
+			<th id="th_cliente">Cliente</th>
+			<th id="th_data_venda">Venda</th>
+			<th id="th_modelo">Modelo</th>
+			<th id="th_origem">Origem</th>
+			<th id="th_cor">Cor</th>
+			<th id="th_placa">Placa</th>
+			<th id="th_ano">Ano</th>
+			<th id="th_km">KM</th>
+			<th id="th_valor_venda">Venda</th>
+			<th id="th_dias_estoque">Em Estoque</th>
+			<th id="th_custo">Custo</th>
+			<th id="th_compra">Compra</th>
+			<th id="th_despesas">Despesas</th>
+			<th id="th_lucroRP" colspan='2'>Lucro</th>
+			<th id="th_fiRP" colspan='2'>F & I</th>
+			<th id="th_data_compra">Compra</th>
+			<th id="th_data_revisao">Retorno Revis&atilde;o</th>
+			<th id="th_dia_revisao">Tempo Revis&atilde;o</th>
+		</tr>
+	</table>
+</div>
+<br>	
+
+<?php
+	echo $strTabela;
+?>
+
+<table class="table" style="width:70%;">
+	<thead>
+		<tr>
+			<td colspan="2"><center><label style="font-size:15px;"><b>Resultado Final Total<b></label></center></td>
+		</tr>
+		<tr>
+			<th>Item</th>
+			<th>Valor</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="verde">Lucro Bruto dos Carros</td>
+			<td class="verde">R$ <?php echo money_format("%i",$somaLucro); ?></td>
+		</tr>
+		<tr>
+			<td class="verde">F&I </td>
+			<td class="verde">R$ <?php echo money_format("%i",$somaFI); ?></td>
+		</tr>
+		
+		<tr>
+			<td class="verde">Despachantes</td>
+			<td class="verde">R$ <?php echo money_format("%i",$somaValorDespachante); ?></td>
+		</tr>
+		
+		<?php
+			$finalCredito = $somaLucro+$somaFI+$somaValorDespachante;
+			$corCreditoDebito = "class='verde'";
+			foreach($this->gruposFinanceiros as $chave=>$grupos){
+				
+				if($grupos['credito_debito'] == 0){
+				
+					$finalCredito += $grupos['valor_lancamento'];
+				
+					$corCreditoDebito = "class='verde'";
+					
+					echo "<tr>
+							<td ".$corCreditoDebito.">".$grupos['descricao']."</td>
+							<td ".$corCreditoDebito.">R$ ".money_format("%i",$grupos['valor_lancamento'])."</td>
+						 </tr>";
+					
+				}
+				
+			}	
+			
+			echo "<tr>
+					<td style='border-bottom:solid 1px; border-top:solid 1px; border-left:solid 1px;'".$corCreditoDebito."><b>TOTAL CR&Eacute;DITOS</b></td>
+					<td style='border-bottom:solid 1px; border-top:solid 1px; border-right:solid 1px;'".$corCreditoDebito."><b>R$ ".money_format("%i",$finalCredito)."</b></td>
+				 </tr>";
+
+			foreach($this->gruposFinanceiros as $chave=>$grupos){
+			
+				if($grupos['credito_debito'] == 1){
+				
+					$finalDebito += $grupos['valor_lancamento'];
+				
+					$corCreditoDebito = "class='vermelho'";
+					
+					echo "<tr>
+							<td ".$corCreditoDebito.">".$grupos['descricao']."</td>
+							<td ".$corCreditoDebito.">R$ ".money_format("%i",$grupos['valor_lancamento'])."</td>
+						</tr>";
+				
+				}
+				
+			}
+			
+			echo "<tr>
+					<td class='vermelho'>Garantias</td>
+					<td class='vermelho'>R$ ".money_format("%i",$this->garantia[0]['valor'])."</td>
+				</tr>";
+
+	
+			
+			$finalDebito += $this->garantia[0]['valor'];
+			
+		?>
+		<tr>
+			<td class="vermelho" style="border-bottom:solid 1px; border-top:solid 1px; border-left:solid 1px;"><b>TOTAL D&Eacute;BITOS</b></td>
+			<td class="vermelho" style="border-bottom:solid 1px; border-top:solid 1px; border-right:solid 1px;"><b>R$ <?php echo money_format("%i",$finalDebito); ?></b></td>
+		</tr>
+		
+		<tr>
+			<td style="border-bottom:solid 2px; border-top:solid 2px; border-left:solid 2px;"><b>TOTAL</b></td>
+			<td style="border-bottom:solid 2px; border-top:solid 2px; border-right:solid 2px;"><b>R$ <?php echo money_format("%i",$finalCredito-$finalDebito); ?></b></td>
+		</tr>
+	</tbody>
+</table>
+<br><br><br><br><br>
+<?php
+	
+	if($this->arrTabelas){
+	
+		if(count($this->arrTabelas) != 1){
+		
+			foreach($this->arrTabelas as $tabelas){
+			
+				echo $tabelas['tabela'];
+			
+			}
+		
+		}
+	
+	}
+?>
+
+</div>
+<script type="text/javascript">
+
+var vendedores = new Array();
+
+ vendedores[0] = "Todos";
+
+<?php
+	foreach($this->vendedores as $vendedor){
+			
+		echo "vendedores[".$vendedor['id']."] = '".$vendedor['nome']."';\n";
+			
+	}
+?>
+
+function imprimir(id, pg) {
+	
+	$("#div_select").css("display","none");
+	$("#div_datas").css("display","none");
+	$("#div_botoes").css("display","none");
+	
+	$("#dados").html("<br>Vendedor: "+vendedores[$("#id_vendedor").val()]+"<br>Data: de "+$("#data_inicial").val()+" até "+$("#data_final").val());
+	
+	var oPrint, oJan;
+	oPrint = window.document.getElementById(id).innerHTML;
+	oJan = window.open(pg);
+	oJan.document.write(oPrint);
+	oJan.window.print();
+       oJan.document.close();
+       oJan.focus();
+
+	$("#div_select").css("display","inline");
+	$("#div_datas").css("display","inline");
+	$("#div_botoes").css("display","inline");
+	$("#dados").html("");
+	
+}
+	
+	//$("#num_veiculos").html(<?php echo $count;?>);
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+
+	function geraXls(){
+	
+		dataInicial = $("#data_inicial").val();
+		dataFinal = $("#data_final").val();
+		idVendedor = $("#id_vendedor").val();
+		
+		if(dataInicial != ""){
+			dataI = dataInicial.split("/");
+			dataInicial = dataI[2]+"-"+dataI[1]+"-"+dataI[0];
+		}
+		
+		if(dataFinal != ""){
+			dataF = dataFinal.split("/");
+			dataFinal = dataF[2]+"-"+dataF[1]+"-"+dataF[0];
+		}
+
+		window.location.href="/relatorios-mes/relatorio-xls/data_inicial/"+dataInicial+"/data_final/"+dataFinal+"/id_vendedor/"+idVendedor+"/nome_vendedor/"+vendedores[$("#id_vendedor").val()];
+		
+	}
+	
+	
+	var posicaoLeft;
+	var posicaoTop;
+	
+	$("#content").scroll(function(){
+
+		posicaoLeft = $(this).scrollLeft();
+		$('#div_cabeca').css({position:'relative', left:0});
+
+	});
+	
+	$(document).scroll(function(){
+
+		posicaoTop = $(this).scrollTop();
+		
+		if(posicaoTop >= 225){
+
+			$('#div_cabeca').css({position:'relative', top:(posicaoTop-225)});
+		
+		}else{
+		
+			$('#div_cabeca').css({position:'relative', top:'0px'});
+		
+		}
+
+	});
+	
+	$("#div_cabeca").mousemove(function(e){
+		
+		$("#content").scrollLeft(e.pageX-600);
+	
+	});
+	
+	$("#th_vendedor").css("width",$("#td_vendedor").width()-11);
+	$("#th_cliente").css("width",$("#td_cliente").width()-10);
+	$("#th_data_venda").css("width",$("#td_data_venda").width()-10);
+	$("#th_modelo").css("width",$("#td_modelo").width()-10);
+	$("#th_origem").css("width",$("#td_origem").width()-10);
+	$("#th_cor").css("width",$("#td_cor").width()-10);
+	$("#th_placa").css("width",$("#td_placa").width()-10);
+	$("#th_ano").css("width",$("#td_ano").width()-10);
+	$("#th_km").css("width",$("#td_km").width()-10);
+	$("#th_valor_venda").css("width",$("#td_valor_venda").width()-10);
+	$("#th_dias_estoque").css("width",$("#td_dias_estoque").width()-10);
+	$("#th_custo").css("width",$("#td_custo").width()-10);
+	$("#th_compra").css("width",$("#td_compra").width()-10);
+	$("#th_despesas").css("width",$("#td_despesas").width()-10);
+	$("#th_lucroRP").css("width",($("#td_lucroR").width()+$("#td_lucroP").width())+10);
+	$("#th_fiRP").css("width",($("#td_fiR").width()+$("#td_fiP").width())+10);
+	$("#th_data_compra").css("width",$("#td_data_compra").width()-10);
+	$("#th_data_revisao").css("width",$("#td_data_revisao").width()-10);
+	$("#th_dia_revisao").css("width",$("#td_dia_revisao").width()-10);
+	
+</script>

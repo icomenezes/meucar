@@ -1,0 +1,358 @@
+<div id="fundo_preto" style="display:none; width:100%; height:100%; background-color:#fff; opacity: 0.70; z-index:3; position:fixed;">
+	<div style="width:300px; height:150px; background-color:#FFFFFF; z-index: 4; position:fixed; top:50%; margin-top:-75px; left:50%;margin-left:-150px;">
+	Salvando, Aguarde...
+	</div>
+</div>
+<form class="form" action="lista" method="post">
+<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value=""/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value=""/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<br/>
+		<input type="button" class="btn-small btn-find" value="Pesquisar" onClick="buscaIndicacoesCaracteristicas();" />
+	</div>
+	
+</form>
+
+<table class="table" id="table_indicacoes">
+	
+	
+
+</table>
+
+<div class="inline" >
+	<input type="button" id="botao" value="Salvar" onclick="salvaDados();" style="margin-left:5px; display:none; width:100px; height:30px;" />
+</div>
+
+
+<script type="text/javascript">
+	
+	function salvaDados(){
+
+		$("#fundo_preto").fadeIn(10);
+	
+		var valor = 0;
+		var id = 0;
+		var resultado = 0;
+		var arrId = new Array();
+	
+		$("#table_indicacoes").children().children().children().children().each(function(){
+
+			if($(this).get(0).nodeName == "INPUT"){
+
+				valor = $(this).val();
+			
+			}
+			
+			if($(this).get(0).nodeName == "SELECT"){
+	
+				arrId = $(this).attr("id").split("_");
+				id = arrId[1];
+				resultado = $(this).val();
+
+				//if(valor != 0 && resultado != 0){
+				
+					$.ajax({
+						type: "POST",
+						url: '/negociacoes/ajax/fn/salva_indicacoes',
+						async: false,
+						dataType:"text",
+						data: ({"id":id, "valor":valor, "resultado":resultado}),
+						success:function(resp){
+
+							//alert(resp);
+							$("#botao").css("display","none");
+
+						}
+						
+						
+						
+					});
+				
+				//}
+			
+			}
+
+		});
+		
+		$("#fundo_preto").fadeOut(1000);
+
+	}
+	
+	function mudaCorSelect(){
+		
+		$("#table_indicacoes").children().children().children().children().each(function(){
+			
+			if($(this).get(0).nodeName == "SELECT"){
+				
+				if($(this).val() == 0){
+					
+					$(this).css("background-color","#FFFFFF");
+					$(this).css("color","#000000");
+				
+				}
+				
+				if($(this).val() == 1){
+					
+					$(this).css("background-color","green");
+					$(this).css("color","#FFFFFF");
+				
+				}
+				
+				if($(this).val() == 2){
+					
+					$(this).css("background-color","red");
+					$(this).css("color","#FFFFFF");
+				
+				}
+				
+				if($(this).val() == 3){
+					
+					$(this).css("background-color","yellow");
+					$(this).css("color","#000000");
+				
+				}
+			
+			}
+			
+		});
+		
+		$("#botao").css("display","block");
+		
+	}
+	
+	function buscaIndicacoes(){
+		
+		$.ajax({
+			type: "POST",
+			url: '/negociacoes/ajax/fn/indicacoes_corretoras',
+			async: true,
+			dataType:"text",
+			data: ({}),
+			success:function(resp){
+
+				$("#table_indicacoes").html(resp);
+				
+				
+				$("#table_indicacoes").children().children().children().children().each(function(){
+			
+					if($(this).get(0).nodeName == "SELECT"){
+						
+						if($(this).val() == 0){
+							
+							$(this).css("background-color","#FFFFFF");
+							$(this).css("color","#000000");
+						
+						}
+						
+						if($(this).val() == 1){
+							
+							$(this).css("background-color","green");
+							$(this).css("color","#FFFFFF");
+						
+						}
+						
+						if($(this).val() == 2){
+							
+							$(this).css("background-color","red");
+							$(this).css("color","#FFFFFF");
+						
+						}
+						
+						if($(this).val() == 3){
+							
+							$(this).css("background-color","yellow");
+							$(this).css("color","#000000");
+						
+						}
+					
+					}
+					
+				});
+				
+				
+			}
+		
+		});
+	
+	}
+	
+	function buscaIndicacoesCaracteristicas(){
+		
+		var arrDataInicial = $("#data_inicial").val().split("/");
+		var arrDataFinal = $("#data_final").val().split("/");
+		
+		$.ajax({
+			type: "POST",
+			url: '/negociacoes/ajax/fn/indicacoes_corretoras_caracteristicas',
+			async: true,
+			dataType:"text",
+			data: ({"data_inicial": arrDataInicial[2]+"-"+arrDataInicial[1]+"-"+arrDataInicial[0],"data_final": arrDataFinal[2]+"-"+arrDataFinal[1]+"-"+arrDataFinal[0]}),
+			success:function(resp){
+
+				$("#table_indicacoes").html(resp);
+
+				$("#table_indicacoes").children().children().children().children().each(function(){
+			
+					if($(this).get(0).nodeName == "SELECT"){
+						
+						if($(this).val() == 0){
+							
+							$(this).css("background-color","#FFFFFF");
+							$(this).css("color","#000000");
+						
+						}
+						
+						if($(this).val() == 1){
+							
+							$(this).css("background-color","green");
+							$(this).css("color","#FFFFFF");
+						
+						}
+						
+						if($(this).val() == 2){
+							
+							$(this).css("background-color","red");
+							$(this).css("color","#FFFFFF");
+						
+						}
+						
+						if($(this).val() == 3){
+							
+							$(this).css("background-color","yellow");
+							$(this).css("color","#000000");
+						
+						}
+					
+					}
+					
+				});
+				
+				
+			}
+		
+		});
+	
+	}
+	
+	
+	$(function(){
+		
+		$("#main-title").remove();
+		$("#sidebar").remove();
+		$("#home_meucar_link").attr("onclick","javascript:window.location.href='/negociacoes/corretoras'");
+		
+		buscaIndicacoes();
+		
+	
+	});
+	
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

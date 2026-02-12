@@ -1,0 +1,322 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add" class="form" method="post">
+
+<div id="venda" style="width:98.1%;display:none">
+	
+	<div class="inline">
+		<label class="label">Buscar pelo Modelo ou Placa</label>
+		<input type="text" id="find_placa" name="find_placa" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value)" autocomplete="off" value="" />
+		<div id="resVeiculos" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa" name="placa" class="text" value="" />
+		<input type="hidden" id="id_veiculo" name="id_veiculo" value="">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca" name="marca" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo" name="modelo" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo" name="ano_modelo" class="text" value=""/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" readonly="readonly" id="cor" name="cor" class="text" value="" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Valor</label>
+		<input type="text" readonly="readonly" id="valor_venda" name="valor_venda" class="text" value="" />
+		<input type="hidden" id="valor_aquisicao" name="valor_aquisicao" value="" />
+	</div>
+
+	<div class="inline" style="display:none">
+		<label class="label">Custos Transfer&ecirc;ncia</label>
+		<input type="text" id="custos_transferencia" name="custos_transferencia" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Dias Garantia</label>
+		<input type="text" id="dias_garantia" name="dias_garantia" class="text" value="90" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Garantia</label>
+		<input type="text" id="km_garantia" name="km_garantia" class="text" value="3000" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data da Venda</label>
+		<input type="text" readonly="readonly" id="data_concretizacao"  class="text" value="" />
+	</div>
+</div>
+
+
+<table class="table" style="width:94.2%; float:left!important;margin-left:10px; margin-top:20px;">
+	<tr id="subAbas">
+		<td class="selecionado"><a href="#" onclick="ativaSubAba('entrada', this)" />Entrada</a></td>
+		<td><a href="#" onclick="ativaSubAba('saida', this)" />Sa&iacute;da</a></td>
+	</tr>
+</table>
+
+
+<div id="entrada" style="width:98.1%;display:table;heught:auto">
+
+	<div class="inline" style="display:table;height:auto">
+		<label class="label">Descri&ccedil;&atilde;o Defeito</label>
+		<textarea id="descricao_defeito" name="descricao_defeito" class="text"></textarea>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Entrada</label>
+		<input type="text" id="km_entrada" name="km_entrada" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Entrada</label>
+		<input type="text" id="data_entrada" name="data_entrada" class="text" value="" />
+	</div>
+
+</div>
+
+<div id="saida" style="width:98.1%;display:none">
+	
+	<div class="inline">
+		<label class="label">Km Sa&iacute;da</label>
+		<input type="text" id="km_saida" name="km_saida" class="text" value="" />
+	</div>
+	
+		<div class="inline">
+		<label>Fornecedores</label>
+		<select name="id_fornecedor" id="id_fornecedor" class="text req" title="Fornecedores">
+		    <option value="NULL">Sem Fornecedor</option>			
+			<?php
+				
+				foreach($this->fornecedores as $fornecedor){
+					
+					echo "<option value=\"" . $fornecedor['id'] . "\" label = \"" . $fornecedor['razao_social'] ."\">  ". $fornecedor['razao_social'] ." </option>";
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" style="display:table;height:auto">
+		<label class="label">Solu&ccedil;&atilde;o</label>
+		<textarea id="solucao" name="solucao" class="text"></textarea>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Custo</label>
+		<input type="text" id="custo" name="custo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Sa&iacute;da</label>
+		<input type="text" id="data_saida" name="data_saida" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Cancelamento</label>
+		<input type="text" id="data_cancelamento" name="data_cancelamento" class="text" value="" />
+	</div>
+
+</div>
+
+<div class="inline" style="clear:both; display:table;">
+	<input type="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo()"/>
+</div>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function ativaSubAba(destino, c){
+
+	$("#subAbas td").each(function(){
+		
+		$(this).removeClass('selecionado');
+		
+	});
+	
+	$(c).parent().addClass('selecionado');
+	
+	var divAbas = new Array('entrada', 'saida');
+
+	for(x in divAbas){
+		
+		$("#"+divAbas[x]).css('display','none');
+	
+	}
+	
+	$("#"+destino).css('display','inline');
+	
+	$("#venda").css('display','inline');
+	
+	//calculaResumo();
+
+}
+
+$("#venda").css('display','inline');
+
+function findVeiculo(f){
+
+	$("#resVeiculos").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/vendido/1',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculos ul").html(resp);
+
+}
+
+function populaCamposVeiculo(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#venda div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+				
+				if(arrPartes[0] == 'valor_venda'){
+				
+					arrPartes[1] = arrPartes[1].replace(".",",");
+					
+					$(this).val(arrPartes[1]);
+					$("#valor_base_calculo").val(arrPartes[1]);
+				
+				}
+			
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_veiculo"){
+					
+					$(this).val(arrPartes[1]);
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+	
+	var data = new Array();
+	var datas = new Array();
+	
+	data = $("#data_concretizacao").val().split(" ");
+	datas = data[0].split("-");
+	$("#data_concretizacao").val(datas[2]+"/"+datas[1]+"/"+datas[0]);
+
+}
+
+function esconde(f){
+	
+	$(f).css("display","none");
+	
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#id_veiculo").val() == ""){
+
+		erro = true;
+		
+		msg += "<br>O Ve&iacute;culo n&atilde;o cadastrado.";
+		
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+	$(function(){
+	
+		$("#data_entrada").mask("99/99/9999");
+		$("#data_saida").mask("99/99/9999");
+		$("#data_cancelamento").mask("99/99/9999");
+		$("#custo").attr("onkeyup","validaMoedaBR(this.id)");
+		
+		if($("#msg").html().length > 0){
+				
+			if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+			
+				$("#msg").addClass('sucess');
+			
+			}else{
+			
+				$("#msg").addClass('erro');
+			
+			}
+		
+		}
+		
+		$('#data_entrada').focus(function(){
+		$(this).calendario({
+			target:'#data_entrada'
+		});
+	});
+	
+		$('#data_saida').focus(function(){
+		$(this).calendario({
+			target:'#data_saida'
+		});
+	});
+	
+		$('#data_cancelamento').focus(function(){
+		$(this).calendario({
+			target:'#data_cancelamento'
+		});
+	});
+
+})
+
+</script>
+
+</form>

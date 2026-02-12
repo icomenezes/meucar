@@ -1,0 +1,323 @@
+
+<form class="form" action="lista" method="post">
+	
+	<div class="inline">
+		<label class="label">Ve&iacute;culo</label>
+		<input type="text" id="modelo" name="modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Placa</label>
+		<input type="text" id="placa" name="placa" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano Modelo</label>
+		<input type="text" id="ano_modelo" name="ano_modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline">	
+		<label class="label">Ve&iacute;culo Sem Foto</label>
+		<input name="tipo" id="tipo" type="checkbox" value="1">		
+	</div>
+	
+	<!--<div class="inline">	
+		<label class="label">Ve&iacute;culo Vendido</label>
+		<input name="venda" id="venda" type="checkbox" value="1">		
+	</div>!-->
+	
+	<div class="inline">
+	<label class="label">Vendidos/Estoque</label>
+	<select name = "venda" id="venda" class="select" >
+		<option value = "0">selecione</option>
+		<option value = "1">Somente Ve&iacute;culo Vendido</option>
+		<option value = "2">Somente Ve&iacute;culo Em Estoque</option>
+		</select>		
+	</div>	
+	
+	<div class="inline" style="clear:both; width:70%;">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>veiculos/add'" />
+		<!--<input type="button" id="button_imp" class="btn-small-imp" value="Imprimir" onclick="printDiv('print', 'Estoque')"/>-->
+	<?php
+		if($_SESSION['sessionUser']['id_perfil'] != 10) {
+	?>
+		<input type="button" class="btn-small" value="Estoque Vendedores" onclick="javascript:window.open('/novos-relatorios/lista-estoque-vendedores');"/>
+	<?php
+		}
+	?>
+	</div>
+
+
+	<div class="inline" style="clear:both; margin-top:20px; height:auto;">
+		<label class="label">N&uacute;mero de Ve&iacute;culos: <span id="num_veiculos"></span></label>
+	</div>
+
+</form>
+	
+<div id="print">
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<table class = 'table'>
+<style>
+	td{
+	
+		font-size:10px;
+		
+	}
+	
+	th{
+	
+		font-size:10px;
+		
+	}
+</style>
+<thead><tr>
+		<th>Ve&iacute;culo</th>
+		<th>Placa</th>
+		<th>Cor</th>
+		<th>Modelo</th>
+		<th>KM</th>
+		<th>Opcionais</th>
+		<th>Pre&ccedil;o</th>
+		<th>Ativo</th>
+		<th>Consig</th>
+		<th>Fotos</th>
+		<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><th>D.E.</th><?php } ?>
+		<th>&Uacute;ltima Altera&ccedil;&atilde;o</th>
+		<th>A&ccedil;&otilde;es</th>
+	   </tr>
+</thead>
+
+<tbody>
+
+<?php
+	
+	
+
+	$count = 0;
+	//var_export($this->veiculos);
+if($this->veiculos){
+	foreach($this->veiculos as $veiculos){
+	
+	//var_export($veiculos['marca']."->".$veiculos['vendido']);
+	//exit;
+	
+		if($veiculos['descricao_site'] != ""){
+		
+			$veiculos['modelo'] = $veiculos['descricao_site'];
+		
+		}
+	
+		$dataTmp = explode(" ",$veiculos['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$veiculos['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$veiculos['hora_alteracao'] = $veiculos['hora_alteracao'] . " " . $dataTmp[1];
+		
+		if($_POST['tipo']==1){
+			
+			if($veiculos['fotos']==0){
+			
+				$mA = $veiculos['marca'];
+				
+			}
+				
+		}else if($_POST['venda']==1){
+			
+			if($veiculos['vendido']==1){
+				
+				$mA = $veiculos['marca'];
+				
+			}
+				
+		}elseif($_POST['venda']==2){
+			
+			if($veiculos['vendido']==0){
+				
+				$mA = $veiculos['marca'];
+				
+			}
+			
+		}else{
+				
+			$mA = $veiculos['marca'];
+			
+		}			
+		
+		if($mT != $mA){
+			
+			if($_POST['tipo']==1){
+			
+				if($veiculos['fotos']==0){
+				
+					echo "<tr style=\"height:50px; background-color:#EEEEEE;\"><td colspan=\"13\"><b>".$veiculos['marca']."</b></td></tr>";
+					
+				}
+			}else if($_POST['venda']==1){
+			
+				if($veiculos['vendido']==1){
+
+					echo "<tr style=\"height:50px; background-color:#EEEEEE;\"><td colspan=\"13\"><b>".$veiculos['marca']."</b></td></tr>";
+			
+				}
+				
+			}else if($_POST['venda']==2){
+
+				if($veiculos['vendido']==0){
+				
+					echo "<tr style=\"height:50px; background-color:#EEEEEE;\"><td colspan=\"13\"><b>".$veiculos['marca']."</b></td></tr>";
+			
+				}
+			}else{
+			
+				echo "<tr style=\"height:50px; background-color:#EEEEEE;\"><td colspan=\"13\"><b>".$veiculos['marca']."</b></td></tr>";
+
+			}
+		}
+		
+	
+		$mT = $mA;
+	
+		if($veiculos['consignado'] == 0){
+			
+			$consignado = "N&atilde;o";
+			
+		}else{
+		
+			$consignado = "Sim";
+			
+		}
+		if($_POST['tipo']==1){
+			
+			if($veiculos['fotos']==0){
+			$count++;
+	?>	
+		<tr>
+			<td ><?php echo $veiculos['modelo'] ?></td>
+			<td ><?php echo $veiculos['placa'] ?></td>
+			<td><?php echo $veiculos['cor'] ?></td>
+			<td><?php echo $veiculos['ano_fabricacao']."/".$veiculos['ano_modelo'] ?></td>
+			<td><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+			<td ><?php echo $veiculos['opcionais'] ?></td>
+			<td ><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.') ?></td>
+			<td><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+			<td><?php echo $consignado; ?></td>
+			<td ><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+			<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><td><?php echo $veiculos['de']; ?></td><?php } ?>
+			<td><?php echo $veiculos['nome']." - ".$veiculos['hora_alteracao']; ?></td>
+			<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+		</tr>
+<?php
+		
+		}	
+		}else if($_POST['venda']==1){
+			
+			if($veiculos['vendido']==1){
+			$count++;
+	?>	
+		<tr>
+			<td ><?php echo $veiculos['modelo'] ?></td>
+			<td ><?php echo $veiculos['placa'] ?></td>
+			<td><?php echo $veiculos['cor'] ?></td>
+			<td><?php echo $veiculos['ano_fabricacao']."/".$veiculos['ano_modelo'] ?></td>
+			<td><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+			<td ><?php echo $veiculos['opcionais'] ?></td>
+			<td ><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.') ?></td>
+			<td><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+			<td><?php echo $consignado; ?></td>
+			<td ><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+			<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><td><?php echo $veiculos['de']; ?></td><?php } ?>
+			<td><?php echo $veiculos['nome']." - ".$veiculos['hora_alteracao']; ?></td>
+			<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+		</tr>
+<?php
+		
+			}
+		
+		}else if($_POST['venda']==2){
+			
+			if($veiculos['vendido']==0){
+			$count++;
+	?>	
+		<tr>
+			<td ><?php echo $veiculos['modelo'] ?></td>
+			<td ><?php echo $veiculos['placa'] ?></td>
+			<td><?php echo $veiculos['cor'] ?></td>
+			<td><?php echo $veiculos['ano_fabricacao']."/".$veiculos['ano_modelo'] ?></td>
+			<td><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+			<td ><?php echo $veiculos['opcionais'] ?></td>
+			<td ><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.') ?></td>
+			<td><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+			<td><?php echo $consignado; ?></td>
+			<td ><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+			<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><td><?php echo $veiculos['de']; ?></td><?php } ?>
+			<td><?php echo $veiculos['nome']." - ".$veiculos['hora_alteracao']; ?></td>
+			<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+		</tr>
+<?php
+		
+			}
+		
+		}else{
+		$count++;
+		?>	
+			<tr>
+				<td ><?php echo $veiculos['modelo'] ?></td>
+				<td ><?php echo $veiculos['placa'] ?></td>
+				<td><?php echo $veiculos['cor'] ?></td>
+				<td><?php echo $veiculos['ano_fabricacao']."/".$veiculos['ano_modelo'] ?></td>
+				<td><?php echo number_format($veiculos['km'],0,'','.') ?></td>
+				<td ><?php echo $veiculos['opcionais'] ?></td>
+				<td ><?php echo "R$ ".number_format($veiculos['valor_venda'],2,',','.') ?></td>
+				<td><?php echo ($veiculos['ativo'])?"Sim":"N&atildeo"; ?></td>
+				<td><?php echo $consignado; ?></td>
+				<td ><?php echo ($veiculos['fotos'] > 0) ? $veiculos['fotos'] : "<label style=\"color:#FF0000;\">0</label>"; ?></td>
+				<?php if($_SESSION['sessionUser']['id_perfil'] != VENDEDOR) { ?><td><?php echo $veiculos['de']; ?></td><?php } ?>
+				<td><?php echo $veiculos['nome']." - ".$veiculos['hora_alteracao']; ?></td>
+				<td width="140px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $veiculos['id']; ?>'" /><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('Veículo <?php echo $veiculos['modelo'] ?>',<?php echo $veiculos['id'] ?>)"/></td> 
+			</tr>
+		
+		<?php
+		}
+	}
+}	
+	?>
+
+</tbody>
+</table>
+
+</div>
+
+<script type="text/javascript">
+
+function printDiv(id, pg) {
+	
+	//$("#button").css("display","none");
+	//$("#button_imp").css("display","none");
+	
+	var oPrint, oJan;
+	oPrint = window.document.getElementById(id).innerHTML;
+	oJan = window.open(pg);
+	oJan.document.write(oPrint);
+	oJan.window.print();
+       oJan.document.close();
+       oJan.focus();
+	   
+	//$("#button").css("display","inline");
+	//$("#button_imp").css("display","inline");
+}
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href='del/id/'+id;
+		
+		}
+		
+	}
+	
+	$("#num_veiculos").html(<?php echo $count;?>);
+	
+	//$("#placa").mask("aaa-9*99");
+
+</script>

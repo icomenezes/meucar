@@ -1,0 +1,284 @@
+
+<table id="table_busca">
+	<tr>
+		
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			<table>
+				<tr>
+					<td>
+						<img id="button_carro" src="/arquivos_site/images/button_carro.gif" onclick="buscaMarca();" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img id="button_moto" src="/arquivos_site/images/button_moto.gif" onclick="buscaMarca(1);" />
+					</td>
+				</tr>
+				<input type="hidden" id="segmento" name="segmento" value="carro" />
+			</table>
+		</td>
+		<td>
+			
+			&nbsp;&nbsp;<b>Fabricante</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b> De <input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit" style="width:60px;" id="buttom_busca"  value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+
+<?php
+
+	if($this->arrEmpresa[0]['sistema_site'] == 0 && $this->arrEmpresa){
+	
+		if($this->arrEmpresa[0]['path_frente_loja'] == ""){
+			
+			$this->arrEmpresa[0]['path_frente_loja'] = "images/frente_loja_nao_disponivel.jpg";
+		
+		}
+		
+		
+		if($this->arrEmpresa[0]['path'] == ""){
+			
+			$this->arrEmpresa[0]['path'] = "images/logo_nao_disponivel.jpg";
+		
+		}
+	
+	
+?>
+		<div>
+			<table class="table_empresa">
+				<tr>
+					<td rowspan="4">
+						<img width="570px;" style="border: solid 2px #CCCCCC;" src="/<?php echo $this->arrEmpresa[0]['path_frente_loja']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td style="vertical-align:top; height:190px;">
+						<img width="400px;" style="border: solid 2px #CCCCCC;" src="/<?php echo $this->arrEmpresa[0]['path']; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button class="bnt" style="width:150px; height:30px;" onclick="mostraEndereco(this);"><span class="gb_g">Visualizar Endereço</span></button>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<button class="bnt" style="width:150px; height:30px;" onclick="mostraTelefone(this);"><span class="gb_g">Visualizar Telefone</span></button>
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		
+		
+		
+<?php
+
+	}
+	
+?>
+
+<table class="veiculos"></table>
+
+
+
+
+   <script type="text/javascript">
+   
+		function mostraEndereco(este){
+			
+			endereco = "<?php echo $this->arrEmpresa[0]['endereco']." - ".$this->arrEmpresa[0]['bairro']." - ".$this->arrEmpresa[0]['cidade']." - ".$this->arrEmpresa[0]['estado']."<br/>"; ?>";
+			
+			$(este).parent().html(endereco);
+			
+		}
+   
+		function mostraTelefone(este){
+			
+			endereco = "<?php echo $this->arrEmpresa[0]['tel1']." - ".$this->arrEmpresa[0]['tel2']." - ".$this->arrEmpresa[0]['tel3']." - ".$this->arrEmpresa[0]['nextel']; ?>";
+			
+			$(este).parent().html(endereco);
+			
+		}
+   
+		
+		var arrVeiculos = new Array();
+		var e = 10;
+		var a = 0;
+		
+		<?php
+
+		if($this->veiculos){
+		
+			foreach($this->veiculos as $key=>$arrVeiculo){
+			
+				$toolTip = "onmouseover=\"tooltipo(this);\" name=\'".str_replace(" ","-",$arrVeiculo['cidade'])."/".str_replace(" ","-",$arrVeiculo['nome_fantasia'])."/id-empresa/".$arrVeiculo['id_empresa']." \'";
+			
+				if($arrVeiculo['path'] == ""){
+					
+					$arrVeiculo['path'] = "arquivos_site/images/preparacao_final.jpg";
+					
+				}
+				
+				if($arrVeiculo['descricao_site'] != ""){
+					
+					$arrVeiculo['modelo'] = $arrVeiculo['descricao_site'];
+					
+				}
+				
+				
+				if($arrVeiculo['nome_fantasia'] == ""){
+					
+					$arrVeiculo['nome_fantasia'] = $arrVeiculo['razao_social'];
+					$toolTip = "";
+					
+				}
+				
+				if($arrVeiculo['sistema_site'] == 1){
+
+					$toolTip = "";
+					
+				}
+			
+				echo "arrVeiculos[".$key."] = '<tr class=\"tr-veiculo-estoque\" style=\"cursor:POINTER;\" onclick=\"abre(".$arrVeiculo['id'].", \'".str_replace(" ","-",$arrVeiculo['cidade'])."\', \'".str_replace(" ","-",$arrVeiculo['modelo'])."\')\">'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div></div>'+
+													'</td>'+
+													'<td width=\"140px;\" class=\"dados-veiculo-estoque\" bgcolor=\"#EFEFEF\">'+
+														'<img class=\"img-veiculo-estoque\" src=\"/".$arrVeiculo['path']."\" />'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div>".$arrVeiculo['modelo']."</div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div>".$arrVeiculo['ano_fabricacao']."/".$arrVeiculo['ano_modelo']."</div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div>".$arrVeiculo['combustivel']."</div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div>R$ ".money_format("%i",$arrVeiculo['valor_venda'])."</div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div>".$arrVeiculo['cidade']."</div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div><span ".$toolTip." >".$arrVeiculo['nome_fantasia']."</span></div>'+
+													'</td>'+
+													'<td class=\"dados-veiculo-estoque\">'+
+														'<div></div>'+
+													'</td>'+
+												'</tr>'\n";
+			
+			}
+			
+		}else{
+			
+			echo "$('.veiculos').html(\"<div style='margin-top:20px; font-size:18px; margin-bottom:300px;'>Não foi encontrado nenhum veículo com as características buscadas, por favor tente novamente.</div>\");";
+		
+		}
+			
+		?>
+
+		function exibeVeiculos(){
+		
+			for(i=a; i< e;i++){
+
+				if(arrVeiculos[i] != ""){
+			
+					$(".veiculos").append(arrVeiculos[i]);
+					
+					//alert(arrVeiculos[i]);
+				
+				}
+
+			}
+
+			a = e;
+			e += 10;
+			
+		}
+   
+      (function(i, s, o, g, r, a, m) {
+         i['GoogleAnalyticsObject'] = r;
+         i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+         }, i[r].l = 1 * new Date();
+         a = s.createElement(o),
+                 m = s.getElementsByTagName(o)[0];
+         a.async = 1;
+         a.src = g;
+         m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+      ga('send', 'pageview');
+
+      $("#table_carros tr td span").css("text-transform", "uppercase");
+
+	function abre(id, cidade, modelo){
+
+		window.open('/carros-usados/veiculo/'+cidade+'/'+modelo+'/id/'+id);
+	
+	}
+	
+	var limite = $(".principal").height()/2;
+	 
+	$(window).scroll(function(){
+	
+		posicaoTop = $(this).scrollTop();
+
+		if(posicaoTop > limite){
+
+			exibeVeiculos();
+			
+			limite = $(".principal").height()/2;
+
+		}
+
+	});
+	  
+	$(document).ready(function(){
+	  
+	
+	  
+	exibeVeiculos();
+	
+	buscaMarca();
+	
+	});
+	  
+   </script>
+</section>

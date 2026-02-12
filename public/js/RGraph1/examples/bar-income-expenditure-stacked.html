@@ -1,0 +1,130 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script type="text/javascript" src="../libraries/RGraph.common.core.js" ></script>
+    <script type="text/javascript" src="../libraries/RGraph.bar.js" ></script>
+    
+    <title>RGraph demo: A stacked Bar chart showing income/expenditure</title>
+    
+    
+    <meta name="description" content="A stacked Bar chart showing income/expenditure" />
+    
+
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+
+    <h1>A stacked Bar chart showing income/expenditure</h1>
+
+    <canvas id="cvs" width="600" height="250">[No canvas support]</canvas>
+
+    <script>
+        data1 = [[2,5,9],[4,2,6],[6,5,8]];
+        data2 = [-4,-5,-20];
+        
+        // Top bar chart
+        bar1 = new RGraph.Bar({
+            id: 'cvs',
+            data: data1,
+            options: {
+                shadow: false,
+                colorsStroke: 'rgba(0,0,0,0)',
+                axes: false,
+                yaxisLabels: false,
+                colors: ['blue','pink','aqua'],
+                hmargin: 25,
+                colorsStroke: 'rgba(0,0,0,0)',
+                backgroundGrid: false,
+                marginBottom: 125,
+                grouping: 'stacked',
+                yaxisScaleMax: 20
+            }
+        }).wave();
+
+        // Bottom bar chart
+        bar2 = new RGraph.Bar({
+            id: 'cvs',
+            data: data2,
+            options: {
+                shadow: false,
+                colors: ['red'],
+                hmargin: 25,
+                xaxisPosition: 'center',
+                backgroundGrid: false,
+                yaxisScaleMax: 20
+            }
+        }).wave();
+    </script>
+
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.bar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="600" height="250"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    data1 = [[2,5,9],[4,2,6],[6,5,8]];
+    data2 = [-4,-5,-20];
+    
+    <span>// Top bar chart</span>
+    bar1 = new RGraph.Bar({
+        id: 'cvs',
+        data: data1,
+        options: {
+            shadow: false,
+            colorsStroke: 'rgba(0,0,0,0)',
+            axes: false,
+            yaxisLabels: false,
+            colors: ['blue','pink','aqua'],
+            hmargin: 25,
+            colorsStroke: 'rgba(0,0,0,0)',
+            backgroundGrid: false,
+            marginBottom: 125,
+            grouping: 'stacked',
+            yaxisScaleMax: 20
+        }
+    }).wave();
+
+    <span>// Bottom bar chart</span>
+    bar2 = new RGraph.Bar({
+        id: 'cvs',
+        data: data2,
+        options: {
+            shadow: false,
+            colors: ['red'],
+            hmargin: 25,
+            xaxisPosition: 'center',
+            backgroundGrid: false,
+            yaxisScaleMax: 20
+        }
+    }).wave();
+&lt;/script&gt;
+</pre>
+
+
+    
+
+
+</body>
+</html>

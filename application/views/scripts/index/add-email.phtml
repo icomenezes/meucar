@@ -1,0 +1,129 @@
+<?php
+if(!$_GET['erro']){
+?>
+
+<style type="text/css">
+	.show{
+		margin-top: 20px;
+	}
+
+	.bg-primary{
+		color: #FFF;
+	}
+	.disabled{
+		cursor:not-allowed;
+	}
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+		<div class="col-lg-4 col-sm-0 col-0 show">
+			
+			<div class="card border-secondary mb-3">
+				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
+				<div class="card-body">
+					<form method="post" action="/index/add-email" id="add_email">
+					    <div class="form-group">
+					    	<div class="alert alert-dismissible alert-warning">
+							  	<h4 class="alert-heading">Atenção!</h4>
+							  	<p class="mb-0">O sistema identificou que em seu cadastro não foi informado um e-mail.</p>
+							  	<p class="mb-0">Para melhorar nossos serviços e a segurança de dados, informe abaixo um e-mail em que só você tenha acesso, pois esse e-mail será usado para recuperação ou redefinição de sua senha.</p>
+							</div>
+						</div>
+					    <div class="form-group has-danger">
+							<div class="form-floating">
+							    <input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+							    <label for="email">E-mail</label>
+							</div>
+						</div>
+						<br>
+						<div class="form-group has-danger">
+							<div class="form-floating">
+							    <input type="email" class="form-control" id="email2" name="email2" placeholder="Corfirme o e-mail">
+							    <label for="email">Corfirme o e-mail</label>
+							</div>
+						</div>
+						<div class="invalid-feedback msg">Um e-mail deve ser informado.</div>
+						<br>
+						
+						<br>
+						<div class="d-grid gap-2 disabled">
+						  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	var disabled;
+
+	$("#email,#email2").keyup(function(){
+
+		$("#email").removeClass("is-invalid");
+		$("#email2").removeClass("is-invalid");
+		$(".msg").css("display","none");
+
+		let disabled = false;
+
+		if($("#email").val() != "" && $("#email").val().indexOf('@') != -1){
+			$("#email").addClass("is-valid");
+		}else{
+			disabled = true;
+			$("#email").addClass("is-invalid");
+		}
+		
+		if($("#email2").val() != "" && $("#email").val() == $("#email2").val()){
+			$("#email2").addClass("is-valid");
+		}else{
+			disabled = true;
+			$("#email2").addClass("is-invalid");
+		}
+
+		$("#entrarButton").attr("disabled", disabled);
+
+	});
+
+	$("#entrarButton").click(function(){
+
+		if(disabled){
+			$(".msg").css("display","block");
+		}else{
+			if($("#email").val() == $("#email2").val()){
+				$("#entrarButton").attr("disabled", true);
+				$("#entrarButton").html("Aguarde...");
+
+				$('.alert').removeClass('alert-warning');
+				$('.alert').addClass('alert-success');
+
+				$('.alert').html(
+					'<h4 class="alert-heading">Sucesso!</h4>'+
+				  	'<p class="mb-0">Agradecemos sua atenção.</p>'
+					);
+
+				setTimeout(function(){
+					$("#add_email").submit();
+				}, 2000);
+
+			}
+		}
+	
+	});
+
+
+</script>
+
+<?php
+}else{
+	echo '<div class="alert alert-dismissible alert-danger">
+			<strong>Erro!</strong><br>
+			Houve um erro inesperado!<br>Por favor, entre em contato com o administrador do sistema.
+			</div>';
+}
+?>

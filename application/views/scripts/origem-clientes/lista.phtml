@@ -1,0 +1,53 @@
+<div class="inline" style="margin-left:5px; margin-bottom:5px">
+	<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>origem-clientes/add'" />
+</div>
+<table class = "table">
+
+<thead><tr><th>Origem</th><th>Exibir</th><th style="width:25%;">Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->origemClientes as $e){
+		
+?>		
+	<tr>
+		<td><?php echo $e['descricao']; ?></td>
+		<td><?php echo ($e['exibir'] ? "Sim" : "Não"); ?></td>
+		<td>
+			<?php
+				if($e['id_empresa']){
+			?>	
+			<input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" />
+			<input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Origem <?php echo $e['descricao']?>', <?php echo $e['id']?>)" />
+			<?php	
+				}else{
+			?>
+				<input type="button" class="btn-small btn-edt" style="color: #ccc;" value="Editar" onclick="alert('Não é possível editar essa origem, por favor contate o administrador do sistema')" />
+				<input type="button" class="btn-small btn-del" style="color: #ccc;" value="Delete" onclick="alert('Não é possível deletar essa origem, por favor contate o administrador do sistema')" />
+			<?php	
+				}
+			?>
+		</td>
+	</tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

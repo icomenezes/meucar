@@ -1,0 +1,81 @@
+<form id="propaganda_site" name="propaganda_site" enctype="application/x-www-form-urlencoded" action="/upload-propagandas/edt-slide" class="form" method="post">
+
+	
+	<div class="inline" style="width: 97%; height: 300px;">
+		<img style="width: 100%;" src="/<?php echo $this->imagem[0]['path']; ?>"/>
+	</div>
+	<div class="inline" style="clear:both;">
+		<input type="radio" id="ativo" name="ativo" value="1" <?php echo ($this->imagem[0]['ativo'])==1?"checked='checked;'":""; ?>/>Ativo
+		<br>
+		<input type="radio" id="ativo2" name="ativo" value="0" <?php echo ($this->imagem[0]['ativo'])==0?"checked='checked;'":""; ?>/>Inativo
+	</div>
+	<div class="inline" style="clear:both;">
+		<label class="label">Título</label>
+		<input type="text" id="titulo" name="titulo" class="text" title="Link" value="<?php echo $this->imagem[0]['titulo']; ?>" />
+	</div>
+
+	<div class="inline" style="clear:both; width:97%;">
+		<label class="label">Link</label>
+		<input type="text" id="link" name="link" class="text" title="Link" value="<?php echo $this->imagem[0]['link']; ?>" />
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<input type="hidden" id="id" name="id" value="<?php echo $this->imagem[0]['id']; ?>"/>
+		<input type="button" id="button" class="btn-small btn-add" value="Salvar" onClick="validaCampo();"/>
+	</div>
+
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#titulo").val() == ""){
+		erro = true;
+		msg += "<br>O campo título deve ser preenchido.";
+	}
+
+	if($("#link").val() == ""){
+		erro = true;
+		msg += "<br>O campo link deve ser preenchido.";
+	}
+	
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

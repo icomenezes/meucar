@@ -1,0 +1,13 @@
+<?php
+
+	header("Cache-Control: public");
+	header("Content-Description: File Transfer");
+	header("Content-Disposition: attachment; filename=".$this->nome.".xml");
+	header("Content-Type: text/xml");
+	header("Content-Transfer-Encoding: binary");
+
+	echo $this->strXml;
+
+	exit();
+
+?>

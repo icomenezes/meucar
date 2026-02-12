@@ -1,0 +1,81 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" class="form" method="post">
+<div class="inline">
+	<label class="label">Buscar pelo Nome ou CPF do Cliente</label>
+	<input type="text" id="find_cpf" name="find_cpf" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" value="" />
+	<div id="resClientes" class="autocomplete"><ul></ul></div>
+</div>
+</form>
+<div id="print" style="display:none;">
+
+	<?php
+		echo $this->conteudo;
+	?>
+ 
+</div>
+ 
+<div class="inline" style="clear:both; margin-left:10px;">
+	<a href="#" id="button_imp" onclick="printDiv('print', 'Termo')"></a>
+</div>
+
+<script type="text/javascript">
+
+	function printDiv(id, pg) {
+		
+		
+		$("#print").css("display","block");
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		   oJan.document.close();
+		   oJan.focus();
+		   
+		$("#print").css("display","none");
+		
+	}
+	
+	function esconde(f){
+	
+		$(f).css("display","none");
+	
+	}
+	
+	
+	function findCliente(f){
+		
+		$("#resClientes").css("display","block");
+		
+		var resp = $.ajax({
+			url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+				async: false,
+				type: 'POST',
+				data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+
+		$("#resClientes ul").html(resp);
+
+	}
+	
+	function populaCamposCliente(f){
+
+		var resp = $.ajax({
+			url: '<?php echo URL ?>clientes/ajax/fn/getById',
+				async: false,
+				type: 'POST',
+				data: ({'f':f}),
+				dataType: 'text'
+		}).responseText;
+		
+		var dados = resp.split("|");
+		var nome = dados[2].split(":");
+		
+		$("#nome_cliente").html(nome[1]);
+		$("#button_imp").html("Imprimir termo de responsabilidade com nome do cliente: "+nome[1]);
+
+		//alert(resp);
+
+	}
+
+</script>

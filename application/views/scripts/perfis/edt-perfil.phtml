@@ -1,0 +1,78 @@
+<form id="perfis" name="perfis" enctype="application/x-www-form-urlencoded" action="<?php echo URL ?>perfis/edt-perfil" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Perfil</label>
+		<input type="text" id="perfil" name="perfil" class="text" title="Nome do Perfil" value="<?php echo $this->perfil['perfil'] ?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Permissões</label><br/>
+		<p><input type="checkbox"  <?php if($this->permissoes['usuarios'] == 1){ echo 'checked="checked" value="1"';}?>id="usuarios" name="usuarios" title="Permitir módulo de usuário?" value="1" />Módulo Usuários.</p><br/>
+		<!--<p><input type="checkbox"  <?php if($this->permissoes['empresas'] == 1){ echo 'checked="checked"';}?>id="empresas" name="empresas" title="Perimtir módulo de empresas?" value="1" />Módulo Empresas.</p><br/>-->
+		<p><input type="checkbox"  <?php if($this->permissoes['hierarquias'] == 1){ echo 'checked="checked"';}?>id="hierarquias" name="hierarquias" title="Permitir módulo de hierarquias?" value="1" />Módulo Hierarquias.</p><br/>
+		<p><input type="checkbox"  <?php if($this->permissoes['tipos'] == 1){ echo 'checked="checked"';}?>id="tipos" name="tipos" title="Permitir módulo de tipos?" value="1" />Módulo Tipos.</p><br/>
+		<p><input type="checkbox"  <?php if($this->permissoes['perfis'] == 1){ echo 'checked="checked"';}?>id="perfis" name="perfis" title="Permitir módulo de perfis?" value="1" />Módulo Perfis.</p><br/>
+		<!--<p><input type="checkbox"  <?php if($this->permissoes['nfs'] == 1){ echo 'checked="checked"';}?>id="nfs" name="nfs" title="Permitir módulo de nfs?" value="1" />Módulo NFS.</p><br/>-->
+		<p><input type="checkbox"  <?php if($this->permissoes['uploads'] == 1){ echo 'checked="checked"';}?>id="uploads" name="uploads" title="Permitir módulo de Uploads?" value="1" />Módulo Uploads.</p><br/>
+	</div>
+	
+	<div>
+		<input type="hidden" id="id_permissao" name="id_permissao" value="<?php echo $this->permissoes['id']?>"/>
+		<input type="hidden" id="id" name="id" value="<?php echo $this->perfil['id'] ?>"/>
+		<input type="button" id="button" name="button" class="btn-small" value="Cadastrar" onclick="validaCampo()"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	
+	if($("#perfil").val() == ''){
+	
+		erro = true;
+	
+		msg += "<br>O campo perfil deve ser preenchido.";
+	
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+
+</script>

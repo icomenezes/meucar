@@ -1,0 +1,207 @@
+<div class="container padding-x">
+	<div class="row">
+		<div class="coluna-leads col-lg-4">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 5%; padding-right: 5%">
+				<div class="container-fluid">
+				    <a class="navbar-brand" href="#">Navbar</a>
+				    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+				      <span class="navbar-toggler-icon"></span>
+				    </button>
+				</div>
+			</nav>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="padding-left: 5%; padding-right: 5%">
+					<input type="text" class="form-control form-control-sm" placeholder="Busque por nome ou telefone" id="busca_lead" onkeyup="atualizaChats(this.value)">
+		  	</nav>
+	  		<div class="container-fluid invisible-scroll" id="list_leads" style="overflow-y: scroll; height: 10px;">
+	  			<table class="table table-hover">
+				  	<tbody id="chats">
+				  		<tr class="table-secondary"> <th scope="row">Atualizando...</th></tr>
+				  	</tbody>
+				</table>
+	  		</div>
+		</div>
+		<div class="coluna-leads col-lg-8">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 5%; padding-right: 5%">
+				<div class="container-fluid">
+				    <a class="navbar-brand" href="#">&nbsp;</a>
+				    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+				      <span class="navbar-toggler-icon"></span>
+				    </button>
+				</div>
+			</nav>
+			<div class="container-fluid invisible-scroll" id="list_messages" style="overflow-y: scroll; height: 10px;">
+	  			<table class="table">
+				  	<tbody id="table_messages">
+				  		
+				  	</tbody>
+				</table>
+	  		</div>
+	  		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			  <div class="container">
+			    	<button type="button" class="btn btn-outline-warning">Anexar</button>
+			      	<div class="d-flex" style="width: 80%;">
+			        	<input class="form-control" type="text" id="message" placeholder="Digite uma mensagem">
+			        	<input type="hidden" id="telefone" value="">
+			      	  <button class="btn btn-secondary" onclick="enviaMensagem()" disabled="" id="btn_enviar" type="button">Enviar</button>
+			      	</div>
+			  </div>
+			</nav>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+	var jsonChats;
+	var primeiraBusca = 0;
+	var arrayChats = new Array();
+	var arrayMessages= new Array();
+
+	function getChats(){
+
+		var urlChats = "https://api.z-api.io/instances/39A0776065BCE0F5750B1295DB729EC3/token/2B77F291531BFFB3DA2D54F1/chats?pageSize=50"
+
+		$.ajax(
+        {
+            type: 'GET',
+            url: urlChats,
+            dataType: 'json',
+            crossDomain: true,
+            async: true,
+            success: function (chats) {
+
+            	jsonChats = chats;
+
+	    		$.each(chats, function(index, dados){
+	    			arrayChats[dados.phone] = dados;
+	    		});
+
+				atualizaChats("");
+
+            }
+
+        });
+
+	}
+
+	function atualizaChats(valor){
+
+		if(valor.length >= 1 || valor == ""){
+
+			var strTr = '';
+	    	$.each(jsonChats, function(index, dado){
+
+	    		var nome = typeof dado.name !== 'undefined' ? dado.name : dado.phone; 
+	    		var foto = typeof dado.profileThumbnail !== 'undefined' ? dado.profileThumbnail : dado.phone; 
+
+	    		if(nome.toLowerCase().indexOf(valor.toLowerCase()) != -1){
+
+	    			//console.log(dado);
+	    			strTr += '<tr class="contato" onclick="listaMensagens('+dado.phone+'); getMensagens('+dado.phone+')"> <td><img src="'+foto+'" class="foto-profile"></td> <td>'+nome+'</td></tr>';
+
+	    		}
+	    	});
+
+	    	$("#chats").html(strTr);
+
+	    }
+
+	}
+
+
+	function getMensagens(phone){
+
+		$("#telefone").val(phone);
+
+		$("#btn_enviar").removeAttr("disabled");
+
+		var urlMsg = "https://api.z-api.io/instances/39A0776065BCE0F5750B1295DB729EC3/token/2B77F291531BFFB3DA2D54F1/chat-messages/"+phone+"?amount=50";
+
+		$.ajax(
+        {
+            type: 'GET',
+            url: urlMsg,
+            dataType: 'json',
+            crossDomain: true,
+            async: true,
+            success: function (data) {
+
+            	//console.log(array);
+            	var arrayMessagesFilho = new Array();
+		    	$.each(data, function(index, dado){
+	            	arrayMessagesFilho[index] = dado;
+		    	});
+
+	            arrayMessages[phone] = arrayMessagesFilho;
+
+	            console.log(phone);
+        		listaMensagens(phone);
+
+		    }
+
+        });
+
+	}
+
+	function listaMensagens(phone){
+
+		if(typeof arrayMessages[phone] !== 'undefined'){
+
+			var array = arrayMessages[phone];
+
+			var strTr = '';
+	        for(i in array){
+
+	    		var message = typeof array[i].text !== 'undefined'? array[i].text.message : "Áudio";
+
+	    		if(array[i].fromMe){
+	    			strTr += '<tr class=""> <td class=""><div class="popover fade show bs-popover-start" id="" style="position: relative; float: right;" data-popper-placement="left"><div class="popover-arrow" style="position: absolute; transform: translate(0px, 7px); top: 0px;"></div><div class="popover-body">'+message+'</div></div></td></tr>';
+	    		}else{
+
+	    			
+	    			strTr += '<tr class=""> <td class=""><div class="popover fade show bs-popover-end" id="" style="position: relative;" data-popper-placement="right"><div class="popover-arrow" style="position: absolute; top: 0px; transform: translate(0px, 7px);"></div><div class="popover-body">'+message+'</div></div></td></tr>';
+	    		}
+
+	    	}
+
+	   	 	$("#table_messages").html(strTr);
+
+	    }
+	}
+
+
+	function enviaMensagem(){
+
+		var urlEnvuaMsg = 'https://api.z-api.io/instances/39A0776065BCE0F5750B1295DB729EC3/token/2B77F291531BFFB3DA2D54F1/send-messages';
+
+		var telefone = $("#telefone").val();
+		var mensagem = $("#message").val();
+
+		$("#message").val("");
+
+		$.ajax(
+        {
+            type: 'POST',
+            url: urlEnvuaMsg,
+            dataType: 'json',
+            crossDomain: true,
+            async: false,
+            data:{ "phone":telefone, "message":mensagem},
+            complete: function(xhr, textStatus) {
+            	setTimeout(function(){
+		        	listaMensagens(telefone);
+              		getChats();
+            	},3000);
+		    }
+        });
+		
+	}
+
+
+	$(document).ready(function(){
+		$("#list_leads").css({"height": window.innerHeight-110});
+		$("#list_messages").css({"height": window.innerHeight-130});
+		getChats();
+		setInterval(function(){getChats(); }, (15000));
+	});
+</script>

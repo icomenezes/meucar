@@ -1,0 +1,182 @@
+	<script src="/js/RGraph/libraries3/RGraph.common.core.js" ></script>
+    <script src="/js/RGraph/libraries3/RGraph.common.dynamic.js" ></script>
+    <script src="/js/RGraph/libraries3/RGraph.common.tooltips.js" ></script>
+    <script src="/js/RGraph/libraries3/RGraph.common.effects.js" ></script>
+    <script src="/js/RGraph/libraries3/RGraph.line.js" ></script>
+    <script src="/js/RGraph/libraries3/jquery.min.js" ></script>
+	<style>
+		#legenda{
+			margin-top:5px;
+			width:95%; 
+		}
+	
+		#legenda td{
+			width:25%;
+			height:30px;
+			#border:solid 1px;
+		}
+		
+		#legenda td div{
+			width:90%;
+			height:90%;
+			border:solid 1px;
+			color:white;
+		}
+		
+		#legenda td div span{
+			
+		}
+	</style>
+	<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="visualiza-estatistica" class="form" method="post">
+		
+		<div class="inline">
+			<label>Ve&iacute;culo</label>
+			<select name="id_veiculo" id="id_veiculo" class="text" title="Veiculos">
+				<option value="">Todos</option>
+				<?php
+					foreach($this->arrVeiculos as $veiculo){
+					
+						if($veiculo['descricao_site']){
+						
+							$veiculo['modelo'] = $veiculo['descricao_site'];
+						
+						}
+						
+						if($this->idVeiculo == $veiculo['id']){
+						
+							$sel = "selected='selectes'";
+						
+						}else{
+						
+							$sel = "";
+						
+						}
+					
+						echo "<option ".$sel." value='".$veiculo['id']."'>".$veiculo['modelo']."</option>";	
+					
+					}
+				?>
+					
+			</select>
+		</div>
+		
+		<div class="inline">
+			<label>Per&iacute;odo</label>
+			<select name="dias" id="dias" class="text" title="Per&iacute;odo" onchange="submit();">
+				<option value="15">Selecione</option>			
+				<option value="7">&Uacute;ltimos 7 Dias</option>			
+				<option value="15">&Uacute;ltimos 15 Dias</option>			
+				<option value="30">&Uacute;ltimos 30 Dias</option>			
+			</select>
+		</div>
+	
+	</form>
+	
+	<div id="grafico" style="width:100%;">
+
+		<center>
+			<canvas id="cvs" width="900" height="400">[No canvas support]</canvas>
+			</table>
+	<div id="rodape" >
+		<table style="margin-top:10px;">
+			<tr>
+				<td style="height:30px; background-color:#9C9C9C; width:200px;"><center><div style="margin-top:10px; color:#FFFFFF"><b>Visualiza&ccedil;&otilde;es do Endere&ccedil;o: <span style="color:#FFFFFF"> <?php echo $this->totalEndereco; ?></span></b><div></center></td>
+				<td style="height:30px; background-color:#43CD80;"><center><div style="width:200px; margin-top:10px; color:#FFFFFF"><b>Visualiza&ccedil;&otilde;es do Estoque: <span style="color:#FFFFFF"> <?php echo $this->totalEstoque; ?></span></b><div></center></td>
+				<td style="height:30px; background-color:#63B8FF;"><center><div style="width:200px; margin-top:10px; color:#FFFFFF"><b>Visualiza&ccedil;&otilde;es do Telefone: <span style="color:#FFFFFF"> <?php echo $this->totalTelefone; ?></span></b><div></center></td>
+				<td style="height:30px; background-color:#FFA500;"><center><div style="width:200px; margin-top:10px; color:#FFFFFF"><b>Visitas: <span style="color:#FFFFFF"> <?php echo $this->totalVisitas; ?></span></b><div></center></td>
+				<td style="height:30px; background-color:red;"><center><div style="width:200px; margin-top:10px; color:#FFFFFF"><b>Interesses: <span style="color:#FFFFFF"> <?php echo $this->totalInteresses; ?></span></b><div></center></td>
+			</tr>
+		</table>
+	</div>
+</div>
+		</center>
+	
+	</div>
+    
+	<script type="text/javascript">
+	
+        window.onload = function (){
+		
+			//alert($("#grafico").width());
+		
+			var qtdDias = <?php echo $this->qtdDias; ?>;
+		
+			if(qtdDias == 15){
+			
+				var sizeLetra = 10;
+				$("#cvs").attr("width",$("#grafico").width());
+			
+			}
+			
+			if(qtdDias == 30){
+			
+				if($("#grafico").width() < 900){
+				
+					var sizeLetra = 5;
+				
+				}else{
+			
+					var sizeLetra = 7;
+				
+				}
+				
+				$("#cvs").attr("width",$("#grafico").width());
+			
+			}
+			
+			if(qtdDias == 7){
+			
+				var sizeLetra = 10;
+				$("#cvs").attr("width",$("#grafico").width());
+			
+			}
+
+           
+			var dias = <?php echo $this->dias; ?>;
+			var telefone = <?php echo $this->telefone; ?>;
+			var endereco = <?php echo $this->endereco; ?>;
+			var estoque = <?php echo $this->estoque; ?>;
+			var visitas = <?php echo $this->visitas; ?>;
+			var interesses = <?php echo $this->interesses; ?>;
+
+            var myLine = new RGraph.Line('cvs',endereco, estoque, telefone, visitas, interesses);
+            myLine.Set('chart.labels', dias);
+            myLine.Set('chart.gutter.left', 40);
+            myLine.Set('chart.gutter.right', 15);
+            myLine.Set('chart.gutter.bottom', 20);
+            myLine.Set('chart.colors', ['#999', '#4C8', '#6BF', '#FA0', 'red']);
+            myLine.Set('chart.units.post', '');
+            myLine.Set('chart.linewidth', 5);
+            myLine.Set('chart.hmargin', 15);
+            myLine.Set('chart.text.color', '#333');
+            myLine.Set('chart.text.font', 'Arial');
+            myLine.Set('chart.background.grid.autofit', true);
+            myLine.Set('chart.background.grid.autofit.numvlines', qtdDias);
+            myLine.Set('chart.shadow', true);
+            myLine.Set('chart.shadow.color', 'rgba(20,20,20,0.3)');
+            myLine.Set('chart.shadow.blur',  10);
+            myLine.Set('chart.shadow.offsetx', 10);
+            myLine.Set('chart.shadow.offsety', 7);
+            myLine.Set('chart.background.grid.vlines', false);
+            myLine.Set('chart.background.grid.border', true);
+            myLine.Set('chart.noxaxis', true);
+            myLine.Set('chart.title', 'Estatísticas de Acesso');
+            myLine.Set('chart.axis.color', '#666');
+            myLine.Set('chart.text.color', '#666');
+            myLine.Set('chart.text.size', sizeLetra);
+            myLine.Set('chart.spline', false);
+		   
+            if (RGraph.isOld()) {
+                // IE7/8 don't support shadow blur, so set custom shadow properties
+                myLine.Set('chart.shadow.offsetx', 3);
+                myLine.Set('chart.shadow.offsety', 3);
+                myLine.Set('chart.shadow.color', '#aaa');
+                myLine.Draw();
+            } else {
+                myLine.Set('chart.tooltips', [<?php echo $this->enderecoViewInfo; ?>, <?php echo $this->estoqueViewInfo; ?>, <?php echo $this->telefoneViewInfo; ?>, <?php echo $this->visitasViewInfo; ?>, <?php echo $this->interessesViewInfo; ?>]);
+
+                
+                RGraph.Effects.Line.jQuery.UnfoldFromCenterTrace(myLine, {'duration': 100});
+            }
+        }
+    </script>

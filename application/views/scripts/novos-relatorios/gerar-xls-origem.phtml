@@ -1,0 +1,39 @@
+<?php
+
+$nomeArquivo = "Relatório de Origem de clientes, ".$this->dataInicial." até ".$this->dataFinal;
+
+header("Content-type: application/msexcel");
+header("Content-Disposition: attachment; filename=".$nomeArquivo.".xls");
+
+if($this->idOrigem == ""){
+	
+	$origem = "";
+
+}else{
+	
+	$origem = $this->idOrigem;
+
+}
+
+?>
+
+<div id="relatorio"></div>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+	$.ajax({
+		url : '/novos-relatorios/ajax/fn/origem_clientes',
+		async: false,
+		type : 'POST',
+		dataType: 'text',
+		data: ({'origem':<?php echo $origem; ?>, 'data_inicial':<?php echo $this->dataInicial; ?>, 'data_final':<?php echo $this->dataFinal; ?>, 'xls':<?php echo $this->xls; ?>}),
+		success: function(data){
+
+			$("#relatorio").html(data);
+
+		}
+	});
+</script>
+<?php
+
+//exit;
+?>

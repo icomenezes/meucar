@@ -1,0 +1,201 @@
+<?php
+	
+	$arrVeiculos = $this->arrVeiculos;
+	$arrVeiculosNovos = $this->arrVeiculosNovos;
+
+?>
+<table id="table_busca" style="width:983px;">
+	<tr>
+		
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			<table>
+				<tr>
+					<td>
+						<img id="button_carro" alt="Carro" src="/arquivos_site/images/button_carro.gif" onclick="buscaMarca();" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<img id="button_moto" alt="Moto" src="/arquivos_site/images/button_moto.gif" onclick="buscaMarca(1);" />
+					</td>
+				</tr>
+				<input type="hidden" id="segmento" name="segmento" value="carro" />
+			</table>
+		</td>
+		<td>
+			
+			&nbsp;&nbsp;<b>Marca</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b>De<input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit" style="width:60px;" id="buttom_busca"  value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+
+<div class="grid_9" style= " margin-top:8px; width:980px; height:400px; background-color:#EEE;  border-radius:5px; border:2px solid #CC0000; -moz-border-radius:5px; -webkit-border-radius:5px; ">
+	<div id="div_texto" style="font-size:20px; margin-left:8px;">
+		<br>
+		Sim nós temos Carros Usados em Jundiaí!<br><br>
+		O site Meu Car tem as melhores ofertas de carros para compra ou venda em Jundiaí, nossos classificados são um verdadeiro Feirão de Carros!<br><br>
+		Contando com as melhores lojas de carros em Jundiaí e região, aqui você encontra:<br><br>
+
+		<li style= "margin-left:10px;">Carros Usados;</li>
+		<li style= "margin-left:10px;">Carros novos</li>
+		<li style= "margin-left:10px;">Carros semi novos</li>
+		<li style= "margin-left:10px;">Automoveis Okm</li>
+		<br><br>
+		Nós ajudamos você a encontrar carros a venda em Jundiai e a comprar seu carro! Afinal nos somos o site especializado em classificados de veículos Meu Car.
+		<br><br>
+		
+	</div>
+	<br/>
+	<center><b><a href="/carros-usados">O CARRO QUE VOCÊ PROCURA ESTÁ AQUI!</a></b></center><br>
+	<div style="width:980px; border:solid 1px #DDDDDD; background-color:#FCFCFC; text-align:left;  margin-bottom:7px; clear:both; margin-right:-4px; float:left;">
+				
+				<?php
+				for($i = 5; $i < 17; $i++){
+				
+					if($arrVeiculos[$i]['descricao_site']){
+					
+						$arrVeiculos[$i]['modelo'] = $arrVeiculos[$i]['descricao_site'];
+					
+					}
+					
+					
+					$arrVeiculos[$i]['modelo'] = $arrVeiculos[$i]['segmento']." - ".$arrVeiculos[$i]['modelo'];
+					
+					if($arrVeiculos[$i]['exibir_valor_site'] == 1){
+					
+						//$valor = "R$ ".money_format("%i",$arrVeiculos[$i]['valor_venda']);
+						$valor = "R$ ".$arrVeiculos[$i]['valor_venda'];
+					
+					}else{
+						
+						$valor = "Consulte-nos";
+					
+					}
+					
+					
+				
+					?>
+
+					<div class="carros_index" style="width:146px;">
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculos[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculos[$i]['modelo'])); ?>/id/<?php echo $arrVeiculos[$i]['id']; ?>"  style="text-decoration:none;">
+							<img style="width:141px;  height:105px;" src="/<?php echo $arrVeiculos[$i]['path'] ?>" alt="<?php echo $arrVeiculos[$i]['modelo'] ?>" />
+						</a >
+						<a href="/carros-usados/veiculo/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculos[$i]['cidade'])); ?>/<?php echo str_replace(" ","-",$arrVeiculos[$i]['modelo']); ?>/id/<?php echo $arrVeiculos[$i]['id']; ?>" style="text-decoration:none;">	
+							<span class="texto_carros"><?php echo ucwords(strtolower(substr($arrVeiculos[$i]['modelo'],0,20))); ?></span><br/>
+							<span class="texto_carros"><?php echo ucwords(strtolower($arrVeiculos[$i]['combustivel'])); ?></span><br/>
+							<span class="texto_carros"><?php echo $arrVeiculos[$i]['ano_fabricacao']." / ". $arrVeiculos[$i]['ano_modelo']; ?></span><br/>
+							<span class="texto_carros"><?php echo $valor; ?></span><br/>
+						</a>
+					</div>
+
+				<?php
+				}
+				?>
+				
+				<?php
+				for($i = 4; $i < 10; $i++){
+				
+					if($arrVeiculosNovos[$i]['descricao_site']){
+					
+						$arrVeiculosNovos[$i]['modelo'] = $arrVeiculosNovos[$i]['descricao_site'];
+					
+					}
+					
+					$arrVeiculosNovos[$i]['modelo'] = $arrVeiculosNovos[$i]['segmento']." - ".$arrVeiculosNovos[$i]['modelo'];
+					
+					if($arrVeiculosNovos[$i]['exibir_valor_site'] == 1){
+					
+						//$valor = "R$ ".money_format("%i",$arrVeiculosNovos[$i]['valor_venda']);
+						$valor = "R$ ".$arrVeiculosNovos[$i]['valor_venda'];
+					
+					}else{
+						
+						$valor = "Consulte-nos";
+					
+					}
+					
+					
+				
+					?>
+
+					<div class="carros_index" style="width:146px;">
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosNovos[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosNovos[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosNovos[$i]['id']; ?>"  style="text-decoration:none;">
+							<img style="width:141px; height:105px;" src="/<?php echo $arrVeiculosNovos[$i]['path'] ?>" alt="<?php echo $arrVeiculosNovos[$i]['modelo'] ?>" />
+						</a >
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosNovos[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosNovos[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosNovos[$i]['id']; ?>" style="text-decoration:none;">	
+							<span class="texto_carros"><?php echo ucwords(strtolower(substr($arrVeiculosNovos[$i]['modelo'],0,20))); ?></span><br/>
+							<span class="texto_carros"><?php echo ucwords(strtolower($arrVeiculosNovos[$i]['combustivel'])); ?></span><br/>
+							<span class="texto_carros"><?php echo $arrVeiculosNovos[$i]['ano_fabricacao']." / ". $arrVeiculosNovos[$i]['ano_modelo']; ?></span><br/>
+							<span class="texto_carros"><?php echo $valor; ?></span><br/>
+						</a>
+					</div>
+
+				<?php
+				}
+				?>
+			</div>
+	
+</div>
+
+   <script type="text/javascript">
+	  
+	  buscaMarca();
+
+   </script>
+
+   <script>
+      (function(i, s, o, g, r, a, m) {
+         i['GoogleAnalyticsObject'] = r;
+         i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+         }, i[r].l = 1 * new Date();
+         a = s.createElement(o),
+                 m = s.getElementsByTagName(o)[0];
+         a.async = 1;
+         a.src = g;
+         m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+      ga('send', 'pageview');
+
+      $(".link-2").css("text-transform", "uppercase");
+	  
+	  $("title").html("Carros usados em Jundiaí");
+
+   </script>
+
+<!--</section>--->

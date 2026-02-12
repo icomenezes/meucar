@@ -1,0 +1,987 @@
+    <link rel="stylesheet" type="text/css" href="/css/avaliacoes/bootstrap2.css">
+    <link rel="stylesheet" type="text/css" href="/css/avaliacoes/index.css">
+
+    <div id="preview" style="transform-origin:left top; -webkit-transform: rotate(-90deg); z-index:11; position: fixed; display: none;">
+        <div id="close_foto" style="padding-left: 5px; padding-right: 5px; border: solid 2px #fff; position: fixed; margin-left: -90px; margin-top: 7px; font-size: 18px; color: #FFF;">Fechar</div>
+        <img src="">
+    </div>
+    <!-- <div id="div_aguarde" style="z-index: 10; text-align:center; opacity:0.8; background-color:#000;width:100%; height:1000px; position:fixed; font-size: 30px; color:#fff;">
+        <div style="margin-top:200px;">Aguarde...</div>
+    </div> -->
+    <div class="modal" style="display:none;" id="reparo_externo">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title title_reparo">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" >&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        Reparo<br>
+                        <select id="reparo" name="" disabled="" class="custom-select form-control-lg">
+                            <option selected="">Selecione</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" id="btn_salvar_reparo" disabled class="btn btn-primary">Salvar</button> -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" style="display:none;" id="aprovar">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Liberar?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" >&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button type="button"  onclick="anviaAprovacao(1)" data-dismiss="modal" class="btn btn-success">Aprovar</button>
+                    <button type="button" onclick="anviaAprovacao(-1)" data-dismiss="modal" class="btn btn-danger">Desaprovar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" style="display:none;" id="sucesso_avaliacao">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Avaliação</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" >&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        Avaliação alterada com sucesso!
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <img src="/images/avaliacoes/whatsapp.png" width="25px" /><a id="link_whatsapp" target="_blank" href="">Notificar</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form id="form_edt" action="" method="post" enctype="multipart/form-data" >
+    <div class="jumbotron">
+        <h5>Dados do cliente</h5>
+        <hr class="my-4">
+        <div class="form-group">
+            Nome<br>
+            <input type="text" class="form-control btn-lg" disabled id="nome" name="nome" aria-describedby="nomeHelp" placeholder="Informe o nome do cliente." value="">
+            <small id="nomeHelp" class="invalid-feedback">É obrigatório informar o nome do cliente.</small>
+        </div>
+        <div class="form-group">
+            Telefone<br>
+            <input type="telefone" class="form-control btn-lg" disabled id="telefone" name="telefone" aria-describedby="telefoneHelp" placeholder="Informe o telefone do cliente." value="">
+            <small id="telefoneHelp" class="invalid-feedback">É obrigatório informar o telefone do cliente.</small>
+        </div>
+    </div>
+   
+    <div class="jumbotron">
+        <h5>Dados do veículo</h5>
+        <hr class="my-4">
+        <form id="form_principal" enctype="multipart/form-data">
+            <div class="form-group">
+                Marca<br>
+                <select id="marcas" name="marca" disabled class="custom-select form-control-lg marcas" onchange="getModelos(this.value);">
+                    <option value="">Selecione a marca</option>
+                </select>
+                <small id="marcasHelp" class="invalid-feedback">É obrigatório selecionar a marca.</small>
+            </div>
+            <div class="form-group">
+                Modelo<br>
+                <select id="modelos" name="modelo" disabled class="custom-select form-control-lg" onchange="getAnoModelos(this.value);">
+                    <option value="">Selecione o modelo</option>
+                </select>
+                <small id="modelosHelp" class="invalid-feedback">É obrigatório selecionar o modelo.</small>
+            </div>
+            <div class="form-group">
+                Versão(Ano/Combustivel)<br>
+                <select id="valor_ano_modelo" name="valor_ano_modelo" disabled class="custom-select form-control-lg">
+                    <option value="0">Selecione o ano/versão</option>
+                </select>
+                <small id="valor_ano_modeloHelp" class="invalid-feedback">É obrigatório selecionar o ano ou versão.</small>
+                <input type="hidden" id="ano_modelo" name="ano_modelo" value="">
+            </div>
+
+            <div class="form-group" id="bloco_valor_fipe" style="display: none;">
+                Valor FIPE<br>
+                <h3 id="valor_fipe" class="control-label moeda" style="color: green;"></h3>
+            </div>
+
+            <div class="form-group">
+                Ano de fabricação<br>
+                <select id="ano_fabricacao" name="ano_fabricacao" disabled class="custom-select form-control-lg ano_fabricacao">
+                    <option value="">Selecione o ano de fabricação</option>
+                </select>
+                <small id="ano_fabricacaoHelp" class="invalid-feedback">É obrigatório selecionar o ano de fabricação.</small>
+            </div>
+
+            <div class="form-group">
+                Portas<br>
+                <select id="portas" name="portas" disabled class="custom-select form-control-lg">
+                    <option value="">Selecione as portas</option>
+                    <option value="2">2 portas</option>
+                    <option value="3">3 portas</option>
+                    <option value="4">4 portas</option>
+                    <option value="5">5 portas</option>
+                </select>
+                <small id="portasHelp" class="invalid-feedback">É obrigatório selecionar a quantidade de portas.</small>
+            </div>
+
+            <div class="form-group">
+                Cor<br>
+                <select id="cor" name="cor" disabled class="custom-select form-control-lg">
+                    <option value="">Selecione a cor</option>
+                    <option value="Amarelo">Amarelo</option>
+                    <option value="Azul">Azul</option>
+                    <option value="Bege">Bege</option>
+                    <option value="Branco">Branco</option>
+                    <option value="Bronze">Bronze</option>
+                    <option value="Cinza">Cinza</option>
+                    <option value="Chumbo">Chumbo</option>
+                    <option value="Dourado">Dourado</option>
+                    <option value="Laranja">Laranja</option>
+                    <option value="Marrom">Marrom</option>
+                    <option value="Preto">Preto</option>
+                    <option value="Prata">Prata</option>
+                    <option value="Rosa">Rosa</option>
+                    <option value="Roxo">Roxo</option>
+                    <option value="Verde">Verde</option>
+                    <option value="Vermelho">Vermelho</option>
+                </select>
+                <small id="corHelp" class="invalid-feedback">É obrigatório selecionar a cor.</small>
+            </div>
+            <div class="form-group">
+                Kilometragem<br>
+                <input type="number" class="form-control btn-lg" id="km" name="km" disabled aria-describedby="descricaoHelp" placeholder="Informe a kilometragem do veículo.">
+                <small id="kmHelp" class="invalid-feedback">É obrigatório informar a kilometragem do veículo.</small>
+            </div>
+            <div class="form-group">
+                Placa<br>
+                <input type="email" class="form-control btn-lg" id="placa" name="placa" disabled aria-describedby="placaHelp" value="" placeholder="Informe a placa do veículo. Ex: ASD-1234">
+                <small id="placaHelp" class="invalid-feedback">É obrigatório informar a placa do veículo.</small>
+            </div>
+            <hr class="my-4">
+            <center>
+                <h5>Foto do documento do veículo</h5>
+                <div class="form-group">
+                    <img id="doc_carro" onclick="previewFoto(this.id)" src="/images/avaliacoes/doc_carro.jpg" style="width: 40%;" />
+                    <small id="doc_carroHelp" class="invalid-feedback">É obrigatório uma foto do documento do veículo.</small>
+                </div>
+            </center>
+            <br>
+            <hr class="my-4">
+            <center>
+                <h5>Fotos <label style="font-size: 12px;">(opcional)</label></h5>
+                <div class="form-group">
+                    <style type="text/css">
+                        .table_fotos{
+                            width: 100%;
+                        }
+                        .table_fotos tr td{
+                            text-align: center;
+                            width: 49%;
+                        }
+                        .table_fotos tr td img{
+                            width: 99.5%;
+                            padding: 1%;
+                            border: solid 2px #ddd;
+                        }
+                    </style>
+                    <table class="table_fotos">
+                        <tr>
+                            <td><img id="foto_1" onclick="previewFoto(this.id)" src="/images/avaliacoes/foto.jpg" /></td>
+                            <td><img id="foto_2" onclick="previewFoto(this.id)" src="/images/avaliacoes/foto.jpg" /></td>
+                        </tr>
+                        <tr>
+                            <td><img id="foto_3" onclick="previewFoto(this.id)" src="/images/avaliacoes/foto.jpg" /></td>
+                            <td><img id="foto_4" onclick="previewFoto(this.id)" src="/images/avaliacoes/foto.jpg" /></td>
+                        </tr>
+                    </table>
+                </div>
+            </center>
+    </div>
+
+    <div class="jumbotron">
+        <h5>Opcionais existentes</h5>
+        <hr class="my-4">
+        <table id="table_opcionais" width="100%">
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="1"><label class="custom-control-label" for="1"><b>Ar-condicionado</b></label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="50"><label class="custom-control-label" for="50"><b>Alarme</b></label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="52"><label class="custom-control-label" for="52"><b>Ar quente</b></label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="5"><label class="custom-control-label" for="5"><b>Câmbio automático</b></label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="2"><label class="custom-control-label" for="2"><b>Direção hidráulica</b></label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="9"><label class="custom-control-label" for="9"><b>Desembaçador traseiro</b></label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="20"><label class="custom-control-label" for="20"><b>Limpador traseiro</b></label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="34"><label class="custom-control-label" for="34"><b>Rodas de liga leve</b></label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="4"><label class="custom-control-label" for="4"><b>Travas elétricas</b></label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="42"><label class="custom-control-label" for="42"><b>Vidros elétricos</b></label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="49"><label class="custom-control-label" for="49">Air bag laterais</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="48"><label class="custom-control-label" for="48">Air bag do motorista</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="51"><label class="custom-control-label" for="51">Ar condicionado digital</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="41"><label class="custom-control-label" for="41">Tração 4x4</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="16"><label class="custom-control-label" for="16">Freio ABS</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="47"><label class="custom-control-label" for="47">Air bag duplo</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="55"><label class="custom-control-label" for="55">Bancos em couro</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="6"><label class="custom-control-label" for="6">Computador de bordo</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="3"><label class="custom-control-label" for="3">CD Player</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="15"><label class="custom-control-label" for="15">Freio a disco</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="13"><label class="custom-control-label" for="13">Farol de neblina</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="22"><label class="custom-control-label" for="22">Piloto Automático</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="25"><label class="custom-control-label" for="25">Porta-malas elétrico</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="32"><label class="custom-control-label" for="32">Retrovisores elétricos</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="33"><label class="custom-control-label" for="33">Retrovisor fotocrômico</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="35"><label class="custom-control-label" for="35">Sensor de chuva</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="36"><label class="custom-control-label" for="36">Sensor de estacionamento</label></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="38"><label class="custom-control-label" for="38">Teto solar</label></div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="custom-control custom-checkbox"><input type="checkbox" disabled class="custom-control-input" id="44"><label class="custom-control-label" for="44">Volante com regulagem de altura</label></div>
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        </table>
+        <input type="hidden" name="opcionais" id="opcionais" value="" />
+    </div>
+    <style type="text/css">
+        .label-defeito{
+            position: absolute;
+            font-size: 30px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .invalido{
+            color: #F00;
+            background-color: #FAA;
+            border: solid 1px #F00;
+            padding: 5px;
+        }
+    </style>
+    <div class="jumbotron" id="externo_lataria">
+        <h5>Externo</h5>(funilaria/outros)
+        <hr class="my-4">
+        <div>
+            <img id="lateral_dianteira_esquerda" class="defeito" src="/images/avaliacoes/carro/lateral_dianteira_esquerda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lateral_dianteira_esquerda" name="data_lateral_dianteira_esquerda" value="" />
+
+            <img id="lateral_traseira_esquerda" class="defeito" src="/images/avaliacoes/carro/lateral_traseira_esquerda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lateral_traseira_esquerda" name="data_lateral_traseira_esquerda" value="" />
+
+            <img id="porta_traseira_esquerda" class="defeito" src="/images/avaliacoes/carro/porta_traseira_esquerda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_porta_traseira_esquerda" name="data_porta_traseira_esquerda" value="" />
+
+            <img id="porta_dianteira_esquerda" class="defeito" src="/images/avaliacoes/carro/porta_dianteira_esquerda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_porta_dianteira_esquerda" name="data_porta_dianteira_esquerda" value="" />
+
+            <img id="vidro_dianteiro_esquerdo" class="defeito" src="/images/avaliacoes/carro/vidro_dianteiro_esquerdo.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_dianteiro_esquerdo" name="data_vidro_dianteiro_esquerdo" value="" />
+
+            <img id="vidro_traseiro_esquerdo" class="defeito" src="/images/avaliacoes/carro/vidro_traseiro_esquerdo.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_traseiro_esquerdo" name="data_vidro_traseiro_esquerdo" value="" />
+
+            <img id="roda_traseira_esquerda" class="defeito" src="/images/avaliacoes/carro/roda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_roda_traseira_esquerda" name="data_roda_traseira_esquerda" value="" />
+
+            <img id="roda_dianteira_esquerda" class="defeito" src="/images/avaliacoes/carro/roda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_roda_dianteira_esquerda" name="data_roda_dianteira_esquerda" value="" />
+
+            <img id="carro_lateral_esquerda" style="width: 100%;" src="/images/avaliacoes/carro/carro_lateral_esquerda.png">
+        </div>
+        <hr class="my-4">
+        <div>
+            <img id="porta_traseira_direita" class="defeito" src="/images/avaliacoes/carro/porta_traseira_direita.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_porta_traseira_direita" name="data_porta_traseira_direita" value="" />
+
+            <img id="porta_dianteira_direita" class="defeito" src="/images/avaliacoes/carro/porta_dianteira_direita.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_porta_dianteira_direita" name="data_porta_dianteira_direita" value="" />
+
+            <img id="vidro_dianteiro_direito" class="defeito" src="/images/avaliacoes/carro/vidro_dianteiro_direito.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_dianteiro_direito" name="data_vidro_dianteiro_direito" value="" />
+
+            <img id="vidro_traseiro_direito" class="defeito" src="/images/avaliacoes/carro/vidro_traseiro_direito.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_traseiro_direito" name="data_vidro_traseiro_direito" value="" />
+
+            <img id="lateral_traseira_direita" class="defeito" src="/images/avaliacoes/carro/lateral_traseira_direita.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lateral_traseira_direita" name="data_lateral_traseira_direita" value="" />
+
+            <img id="lateral_dianteira_direita" class="defeito" src="/images/avaliacoes/carro/lateral_dianteira_direita.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lateral_dianteira_direita" name="data_lateral_dianteira_direita" value="" />
+
+            <img id="roda_traseira_direita" class="defeito" src="/images/avaliacoes/carro/roda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_roda_traseira_direita" name="data_roda_traseira_direita" value="" />
+
+            <img id="roda_dianteira_direita" class="defeito" src="/images/avaliacoes/carro/roda.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_roda_dianteira_direita" name="data_roda_dianteira_direita" value="" />
+
+            <img id="carro_lateral_direita" style="width: 100%;" src="/images/avaliacoes/carro/carro_lateral_direita.png">
+        </div>
+        <hr class="my-4">
+        <div>
+            <img id="vidro_dianteiro" class="defeito" src="/images/avaliacoes/carro/vidro_dianteiro.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_dianteiro" name="data_vidro_dianteiro" value="" />
+
+            <img id="capo" class="defeito" src="/images/avaliacoes/carro/capo.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_capo" name="data_capo" value="" />
+
+            <img id="parachoque_dianteiro" class="defeito" src="/images/avaliacoes/carro/parachoque_dianteiro.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_parachoque_dianteiro" name="data_parachoque_dianteiro" value="" />
+
+            <img id="farol_direito" class="defeito" src="/images/avaliacoes/carro/farol_direito.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_farol_direito" name="data_farol_direito" value="" />
+
+            <img id="farol_esquerdo" class="defeito" src="/images/avaliacoes/carro/farol_esquerdo.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_farol_esquerdo" name="data_farol_esquerdo" value="" />
+
+            <img id="retrovisor_direito" class="defeito" src="/images/avaliacoes/carro/retrovisor_direito.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_retrovisor_direito" name="data_retrovisor_direito" value="" />
+
+            <img id="retrovisor_esquerdo" class="defeito" src="/images/avaliacoes/carro/retrovisor_esquerdo.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_retrovisor_esquerdo" name="data_retrovisor_esquerdo" value="" />
+
+            <img id="carro_frente" style="width: 100%;" src="/images/avaliacoes/carro/carro_frente.png">
+        </div>
+        <hr class="my-4">
+        <div>
+            <img id="parachoque_traseiro" class="defeito" src="/images/avaliacoes/carro/parachoque_traseiro.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_parachoque_traseiro" name="data_parachoque_traseiro" value="" />
+
+            <img id="tampa_porta-malas" class="defeito" src="/images/avaliacoes/carro/tampa_porta-malas.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_tampa_porta-malas" name="data_tampa_porta" value="" />
+
+            <img id="vidro_traseiro" class="defeito" src="/images/avaliacoes/carro/vidro_traseiro.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_vidro_traseiro" name="data_vidro_traseiro" value="" />
+
+            <img id="lanterna_esquerda_traseira" class="defeito" src="/images/avaliacoes/carro/lanterna_esquerda_traseira.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lanterna_esquerda_traseira" name="data_lanterna_esquerda_traseira" value="" />
+
+            <img id="lanterna_direita_traseira" class="defeito" src="/images/avaliacoes/carro/lanterna_direita_traseira.png">
+            <label class="label-defeito"></label>
+            <input type="hidden" id="data_lanterna_direita_traseira" name="data_lanterna_direita_traseira" value="" />
+
+            <img id="carro_traseira" style="width: 100%;" src="/images/avaliacoes/carro/carro_traseira.png">
+        </div>
+        <hr class="my-4">
+        <center>
+        <div class="form-group">
+            <h5>Reparo no teto?</h5>
+            <select id="teto" name="teto" disabled class="custom-select form-control-lg">
+                <option value="">Nenhum reparo</option>
+                <option value="1">1-Martelinho</option>
+                <option value="2">2-Pincelar</option>
+                <option value="3">3-Pintar</option>
+                <option value="4">4-Funilaria</option>
+                <option value="5">5-Trocar Peças</option>
+            </select>
+            <input type="hidden" id="data_teto" value="" />
+        </div>
+    </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_teto" name="obs_teto" disabled rows="5"></textarea>
+        </div>
+
+        <hr class="my-4">
+        <center>
+        <h5>Quantos pneus estão ruins?</h5>
+        <div class="btn-group mr-2" role="group" aria-label="First group">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="0" autocomplete="off">Nenhum</label>
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="1" autocomplete="off">1</label>
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="2" autocomplete="off">2</label>
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="3" autocomplete="off">3</label>
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="4" autocomplete="off">4</label>
+                <label class="btn btn-primary btn-lg"><input type="radio" name="qtd_pneus" value="5" autocomplete="off">5</label>
+            </div>
+        </div>
+        <div>
+            <br>
+            <br>
+            <h5>Informe as medidas</h5>
+            <div class="btn-group mr-2" role="group" aria-label="First group">
+                <div class="form-group">
+                    <table>
+                        <tr>
+                            <td>
+                                <select id="largura" name="largura" disabled class="custom-select form-control-lg">
+                                    <option value="">Largura</option>
+                                    <option value="165">165</option>
+                                    <option value="175">175</option>
+                                    <option value="185">185</option>
+                                    <option value="195">195</option>
+                                    <option value="205">205</option>
+                                    <option value="215">215</option>
+                                    <option value="225">225</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="perfil" name="perfil" disabled class="custom-select form-control-lg">
+                                    <option value="">Perfil</option>
+                                    <option value="40">40</option>
+                                    <option value="45">45</option>
+                                    <option value="50">50</option>
+                                    <option value="55">55</option>
+                                    <option value="60">60</option>
+                                    <option value="65">65</option>
+                                    <option value="70">70</option>
+                                    <option value="75">75</option>
+                                    <option value="80">80</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select id="aro" name="aro" disabled class="custom-select form-control-lg">
+                                    <option value="">Aro</option>
+                                    <option value="aro_13">R13</option>
+                                    <option value="aro_14">R14</option>
+                                    <option value="aro_15">R15</option>
+                                    <option value="aro_16">R16</option>
+                                    <option value="aro_17">R17</option>
+                                    <option value="aro_18">R18</option>
+                                    <option value="off_road">Off Road</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_pneus" name="obs_pneus" disabled rows="5"></textarea>
+        </div>
+
+        <hr class="my-4">
+        <center>
+            <h5>Possui vestígio de acidente?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="acidente" id="acidente_sim" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="acidente" id="acidente_nao" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_acidente" name="obs_acidente" disabled rows="5"></textarea>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <h5>Elétrica</h5>
+        <hr class="my-4">
+        <center>
+           <h5>Elétrica com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="eletrica" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="eletrica" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_eletrica" name="obs_eletrica" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+           <h5>Existe alguma luz de defeito acesa no painel?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="luz_painel" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="luz_painel" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_luz_painel" name="obs_luz_painel" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+           <h5>Ar condicionado com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="ar_condicionado" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="ar_condicionado" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_ar_condicionado" name="obs_ar_condicionado" disabled rows="5"></textarea>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+        <h5>Tapeçaria</h5>
+        <hr class="my-4">
+        <center>
+            <h5>Informe o material.</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="tapecaria" value="faixa_couro" autocomplete="off"> Couro
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="tapecaria" value="faixa_tecido" autocomplete="off"> Tecido
+                </label>
+            </div>
+            <br>
+            <br>
+            <h5>Quantas faixas precisam ser trocadas?</h5>
+            <select id="faixas" name="faixas" disabled class="custom-select form-control-lg">
+                <option value="">Nenhuma</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="-1">Todas</option>
+            </select>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_tapecaria" name="obs_tapecaria" disabled rows="5"></textarea>
+        </div>
+    </div>
+    
+    <div class="jumbotron">
+        <h5>Mecânica</h5>
+        <hr class="my-4">
+        <center>
+            <h5>O motor está com defeito?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="motor" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="motor" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_motor" name="obs_motor" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+         <center>
+            <h5>Vazamento ou defeito na caixa de direção?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="caixa_direcao" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="caixa_direcao" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_caixa_direcao" name="obs_caixa_direcao" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+         <center>
+            <h5>Tipo de câmbio?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="tipo_cambio" value="manual" autocomplete="off"> Manual
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="tipo_cambio" value="automatico" autocomplete="off"> Automático
+                </label>
+            </div>
+            <br>
+            <br>
+            <h5>Câmbio com defeito?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="cambio" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="cambio" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_cambio" name="obs_cambio" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+            <h5>Suspensão com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="suspensao" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="suspensao" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_suspensao" name="obs_suspensao" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+            <h5>Embreagem com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="embreagem" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="embreagem" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_embreagem" name="obs_embreagem" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+            <h5>Freios com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="freios" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="freios" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_freios" name="obs_freios" disabled rows="5"></textarea>
+        </div>
+        <hr class="my-4">
+        <center>
+            <h5>Escapamento com problemas?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="escapamento" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="escapamento" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_escapamento" name="obs_escapamento" disabled rows="5"></textarea>
+        </div>
+    </div>
+
+
+    <!-- <div class="jumbotron">
+        <h5>Pneus</h5>
+
+       
+    </div>
+
+     -->
+    
+    <div class="jumbotron">
+        <h5>Manutenção</h5>
+        <hr class="my-4">
+        <center>
+           <h5>Veículo de manutenção cara?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="manutencao" value="Sim" autocomplete="off"> Sim
+                </label>
+                <label class="btn btn-primary btn-lg">
+                    <input type="radio" name="manutencao" value="Não" autocomplete="off"> Não
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_manutencao" name="obs_manutencao" disabled rows="5"></textarea>
+        </div>
+    </div>
+    
+        <div class="jumbotron">
+        <h5>Mercado</h5>
+        <hr class="my-4">
+        <center>
+           <h5>Veículo bom de mercado?</h5>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-primary">
+                    <input type="radio" name="mercado" value="mercado_normal" autocomplete="off"> Normal
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="mercado" value="mercado_ruim" autocomplete="off"> Ruim
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="mercado" value="mercado_pessimo" autocomplete="off"> Péssimo
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="mercado" value="mercado_nao_sei" autocomplete="off"> Não sei
+                </label>
+            </div>
+        </center>
+        <br>
+        <div class="form-group">
+            <label for="exampleTextarea">Observação <label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_mercado" name="obs_mercado" disabled rows="5"></textarea>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <h5>Finalidade</h5>
+        <hr class="my-4">
+        <center>
+        <div class="form-group">
+            <h5>Qual a finalidade?</h5>
+            <select id="finalidade" name="finalidade" disabled class="custom-select form-control-lg">
+                <option value="0">Selecione a finalidade</option>
+            </select>
+        </div>
+        </center>
+
+        <input type="hidden" name="app_avaliacoes" value="true" />
+        <input type="hidden" id="id_upload" name="id_upload" value="" />
+        <input type="hidden" id="id_empresa" name="id_empresa" value="" />
+        <input type="hidden" id="id_usuario" name="id_usuario" value="" />
+        <input type="hidden" id="id" name="id_app" value="" />
+        <input type="hidden" id="data" name="data" value="" />
+        <input type="hidden" id="solicitar_liberacao" name="solicitar_liberacao" value="" />
+        <input type="hidden" id="login" name="login" value="" />
+        <input type="hidden" id="senha" name="senha" value="" />
+
+        <input type="hidden" id="telefone_avaliador" name="telefone_avaliador" value="" />
+
+
+        <div id="veiculo_troca_interesse" style="display: none;">
+        <br>
+        <h6><b>Veículo de interesse</b></h6>
+            <div class="form-group">
+                Marca<br>
+                <select id="marca_interesse" name="marca_interesse"  disabled class="custom-select form-control-lg marcas" onchange="getModelosLimpos(this.value);">
+                    <option value="">Selecione a marca</option>
+                </select>
+            </div>
+            <div class="form-group">
+                Modelo<br>
+                <select id="modelo_interesse" name="modelo_interesse" disabled class="custom-select form-control-lg">
+                    <option value="">Selecione o modelo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                Ano Modelo<br>
+                <select id="ano_interesse" name="ano_interesse" disabled class="custom-select form-control-lg ano_fabricacao">
+                    <option value="">Selecione o ano de fabricação</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <h5>Pretensão</h5>
+        <hr class="my-4">
+        <div class="form-group">
+            Pretensão<br>
+            <input type="telefone" class="form-control btn-lg moeda" id="pretencao" name="pretencao" disabled aria-describedby="telefoneHelp" placeholder="Informe o valor que o cliente deseja." value="">
+            <small id="pretencaoHelp" class="invalid-feedback">É obrigatório informar o valor que o cliente deseja.</small>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <h5 id="outras_despesas_label">Outras despesas <label style="font-size: 12px;">(Máximo de 5 despesas) </label><button type="button" id="adiciona_despesa" disabled class="btn btn-primary">+</button></h5>
+        <div id="outras_despesas"></div>
+    </div>
+    <div class="jumbotron">
+        <h5>Observação Final</h5>
+        <hr class="my-4">
+        <div class="form-group">
+            <label for="exampleTextarea">Observação Final<label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="obs_final" name="obs_final" disabled rows="5"></textarea>
+        </div>
+    </div>
+    <input type="hidden" name="total" id="total" value=""/>
+
+    <div class="jumbotron">
+        <h5>Observações Gerência</h5>
+        <hr class="my-4">
+        <div class="form-group">
+            <label for="exampleTextarea">Observações Gerência<label style="font-size: 12px;">(opcional)</label></label>
+            <textarea class="form-control" id="observacoes_gerencia" name="observacoes_gerencia" rows="5"></textarea>
+        </div>
+    </div>
+
+</form>
+
+
+    <div class="card text-white bg-dark mb-3">
+        <div class="card-header"><strong style="color: white;">Resumo</strong></div>
+        <div class="card-body">
+            <p><strong style="color: white;">FIPE: </strong><span style="color: white;" id="fipe_resumo"></span></p>
+            <p><strong style="color: white;">Gastos: </strong><span style="color: white;" id="gastos_resumo"></span></p>
+            <p><strong style="color: white;">Outros: </strong><span style="color: white;" id="outros_resumo"></span></p>
+            <p><strong style="color: white;">Margem: </strong><span style="color: white;" id="margem_resumo"></span></p>
+
+            <button type="button" id="button_sub_total" onclick="$('#aprovar').css('display','block');" style="display: block; color: white;" class="btn btn-success btn-lg btn-block">
+                <span id="liberacao" style="font-size: 18px; color: white;"></span> <span id="label_total" style="font-size: 18px; color: white;"></span>
+            </button>
+
+        </div>
+    </div>
+    
+
+    <!-- <button type="button" id="button_sub_total" onclick="$('#aprovar').css('display','block');" style="display: block;" class="btn btn-success btn-lg btn-block">
+        <span id="liberacao" style="font-size: 18px; color: #FFF;"></span> <span id="label_total" style="font-size: 18px; color: #FFF;"></span>
+    </button> -->
+
+
+    <script type="text/javascript" src="/js/avaliacoes/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/avaliacoes/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/avaliacoes/index.js"></script>
+    <script type="text/javascript" src="/js/avaliacoes/fipe.js"></script>
+    <script type="text/javascript" src="/js/avaliacoes/parametros.js"></script>
+    <script type="text/javascript" src="/js/avaliacoes/edt_sistema.js"></script>

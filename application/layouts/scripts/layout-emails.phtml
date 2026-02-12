@@ -1,0 +1,233 @@
+<?php
+
+header("Content-Type: text/html; charset=UTF-8",true);
+Zend_Session::start();
+
+if(!$_SESSION){header("Location: ".URL);}
+
+$ts = @date('Ymdhis');
+?>
+
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Meu Car</title>
+<link rel="icon" type="image/png" href="http://www.selectveiculos.com.br/images/icon_64.png" />
+<link rel="shortcut icon" href="http://www.selectveiculos.com.br/images/icon_64.png"/>
+
+<?php 
+	$file = "/css/gerenciador_emails/bootstrap.css?ts=$ts";
+	echo $this->headLink()->appendStylesheet($file); 
+
+	$file = "/js/gerenciador_emails/jquery-1.10.2.min.js?ts=$ts";
+	$this->headScript()->appendFile($file);
+	echo $this->headScript()->appendFile("/js/gerenciador_emails/bootstrap.min.js?ts=$ts"); 
+?>
+<style>
+
+	.navbar{
+		position:fixed;
+		float:top;
+		width:100%;
+		z-index: 10;
+	}
+	
+	.menu_left{
+		background-color:#000;
+		width:60px;
+		position:fixed;
+		float:left;
+		height:100%;
+		z-index: 1;
+	}
+	
+	.nav-stacked{
+		margin-top:41px;
+	}
+	.conteudo{
+		margin-left:66px;
+		margin-top:40px;
+		position:absolute;
+		float:left;
+		color:#333;
+	}
+	
+	.dropdown-menu li a{
+		font-size:15px;
+	}
+	
+	.mobile{
+		display:none;
+	}
+	
+	.cpu{
+		display:block;
+	}
+	
+	
+	@media(max-width: 767px){
+		.menu_left{
+			display:none;
+		}
+		
+		.conteudo{
+			margin-left:6px;
+		}
+		
+		.mobile{
+			display:block;
+		}
+		
+		.cpu{
+			display:none;
+		}
+	}
+
+</style>
+<script>
+	///*
+	$(document).ready(function(){
+		$('ul.nav li.dropdown').hover(function() {
+		  $(this).find('.dropdown-menu').css("display", "block");
+		}, function() {
+		  $(this).find('.dropdown-menu').css("display", "none");
+		});  
+	});
+	//*/
+</script>
+
+
+</head>
+	<body>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a href="/avaliacoes" class="navbar-brand cpu"><?php echo $this->titulo; ?></a>
+					<ul class="nav nav-pills mobile">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<img width="20px" src="/images/gerenciador_emails/envelope-of-white-paper.png" />
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/gerenciador-emails">Atividades</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown">
+								<img width="20px" src="/images/gerenciador_emails/plus-black-symbol.png" />
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/gerenciador-emails/add">Novo contato</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<img width="20px" src="/images/gerenciador_emails/group-profile-users.png" />
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/gerenciador-emails">Vendedores</a></li>
+								<li><a href="/gerenciador-emails">Novo Vendedor</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<img width="20px" src="/images/gerenciador_emails/bar-graph-on-a-rectangle.png" />
+							</a>
+							<ul class="dropdown-menu">
+								<li><a>Relatórios</a></li>
+								<li class="divider"></li>
+								<li><a href="/gerenciador-emails">Geral</a></li>
+								<li><a href="/gerenciador-emails">Vendedor</a></li>
+								<li><a href="/gerenciador-emails">Vendas por origem</a></li>
+								<li><a href="/gerenciador-emails">Leads</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<img width="20px" src="/images/gerenciador_emails/eye-open.png" />
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/gerenciador-emails">Controle de uso</a></li>
+							</ul>
+						</li>
+					</ul>
+					
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul style="float:right;" class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+								<?php echo $_SESSION['sessionUser']['nome']; ?>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/gerenciador-emails">Sair</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="menu_left" id="bs-example-navbar-collapse-1">
+			<ul class="nav nav-pills nav-stacked">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+						<img width="100%" src="/images/gerenciador_emails/envelope-of-white-paper.png" />
+					</a>
+					<ul class="dropdown-menu pull-left">
+					  	<li><a href="/avaliacoes">Parâmetros</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+						<img width="100%" src="/images/gerenciador_emails/plus-black-symbol.png" />
+					</a>
+					<ul class="dropdown-menu pull-left">
+						<li><a href="/gerenciador-emails">Novo contato</a></li>
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+						<img width="100%" src="/images/gerenciador_emails/group-profile-users.png" />
+					</a>
+					<ul class="dropdown-menu pull-left">
+						<li><a href="/gerenciador-emails">Vendedores</a></li>
+						<li><a href="/gerenciador-emails">Novo Vendedor</a></li>
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+						<img width="100%" src="/images/gerenciador_emails/bar-graph-on-a-rectangle.png" />
+					</a>
+					<ul class="dropdown-menu pull-left">
+						<li><a>Relatórios</a></li>
+						<li class="divider"></li>
+						<li><a href="/gerenciador-emails">Geral</a></li>
+						<li><a href="/gerenciador-emails">Vendedor</a></li>
+						<li><a href="/gerenciador-emails">Vendas por origem</a></li>
+						<li><a href="/gerenciador-emails">Leads</a></li>
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+						<img width="100%" src="/images/gerenciador_emails/eye-open.png" />
+					</a>
+					<ul class="dropdown-menu pull-left">
+						<li><a href="/gerenciador-emails">Controle de uso</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+
+		<div class="conteudo">
+			<?php echo $this->layout()->content; ?>
+		</div>
+		
+	</body>
+</html>

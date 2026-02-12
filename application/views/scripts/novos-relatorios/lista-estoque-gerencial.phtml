@@ -1,0 +1,350 @@
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+</style>
+
+<form class="form" action="lista-estoque-gerencial" method="post">
+	
+	<div class="inline">
+		<label class="label">Origem</label>
+		<select class="text" id="origem" name="origem">
+			<option value="">Selecione</option>
+			<option value="Compra">Compra</option>
+			<option value="Concession&aacute;ria">Concession&aacute;ria</option>
+			<option value="Indica&ccedil;&atilde;o">Indica&ccedil;&atilde;o</option>
+			<option value="Leil&atilde;o">Leil&atilde;o</option>
+			<option value="Troca">Troca</option>
+			<option value="Outros">Outros</option>
+		</select>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->arrEstoque; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Estoque Gerencial"/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Gerencial');"/>
+	</div>
+
+</form>
+
+<div id="print">
+	
+	<div style="margin-left:10px; margin-bottom:10px; font-family: Arial, Helvetica, sans-serif;">
+		<b>TOTAL DE VEÍCULOS EM ESTOQUE: <?php echo $this->arrQtdVeiculos; ?></b>
+	</div>
+	
+<style>
+
+	.vermelho{
+		color:#FF0000;
+		background-color: #FFCCCC;
+		#border:1px solid #FF0000;
+	}
+	
+	.amarelo{
+		background-color: #FFF68F;
+		#border:1px solid #EEC900;
+	}
+	
+	.verde{
+		color:#005500;
+		background-color: #AAFFAA;
+		#border:1px solid #005500;
+	}
+	
+	*{
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:12px;
+	}
+	
+	#table_dados tr td{
+		
+		border-right: solid 1px #FFFFFF;
+		border-left: solid 1px #FFFFFF;
+		height:18px;
+		vertical-align:middle;
+		horizontal-align:center;
+		#padding: 2px;
+		margin-top:200px;
+	}
+	
+	#table_dados{
+		margin-top:65px;
+	}
+	
+</style>
+	<div id="div_cabeca" style="height:1px;">
+		<table style="background-color:#999999;" id="table_cabeca">
+			<tr>
+				<th colspan="20" style="color:#FFFFFF; height:25px;">
+					<div style="margin-top:6px; margin-left:6px;">
+						Para visualizar o fim do relat&oacute;rio passe o mouse sobre o cabe&ccedil;alho da tabela na horizontal.
+					</div>
+				</th>
+			</tr>
+			<tr>
+				<th id="th_modelo" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Modelo</center></th>
+				<th id="th_opcionais" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Opcionais</center></th>
+				<th id="th_consignado" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Consignado</center></th>
+				<th id="th_comb" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Com</center></th>
+				<th id="th_cor" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Cor</center></th>
+				<th id="th_ano" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Ano</center></th>
+				<th id="th_placa" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Placa</center></th>
+				<th id="th_origem" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Origem</center></th>
+				<th id="th_km" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>KM</center></th>
+				<th id="th_venda" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Venda</center></th>
+				<th id="th_estoque" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Em Est</center></th>
+				<th id="th_custo" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Custo</center></th>
+				<th id="th_compra" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Compra</center></th>
+				<th id="th_revisao" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Revisao</center></th>
+				<th id="th_lucro" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca' colspan='2'><center>Lucro</center></th>
+				<th id="th_Dcompra" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Compra</center></th>
+				<th id="th_termino_revisao" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Termino Revisao</center></th>
+				<th id="th_em_revisao" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>Em Re</center></th>
+				<th id="th_fipe" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>FIPE</center></th>
+				<th id="th_fotos" style="color:#FFFFFF; border:solid 1px #CCCCCC; vertical-align:middle; height:40px;" class='cabeca'><center>F</center></th>
+			</tr>
+		</table>
+	</div>
+	<?php
+		echo $this->arrEstoque;
+	?>
+	
+<script type="text/javascript">
+
+	$("#th_modelo").attr("width",$("#modelo").width()+"px");
+	$("#th_opcionais").attr("width",$("#opcionais").width()+"px");
+	$("#th_consignado").attr("width",$("#consignado").width()+"px");
+	$("#th_comb").attr("width",$("#comb").width()+"px");
+	$("#th_cor").attr("width",$("#cor").width()+"px");
+	$("#th_ano").attr("width",$("#ano").width()+"px");
+	$("#th_placa").attr("width",$("#placa").width()+"px");
+	$("#th_origem").attr("width",$("#td_origem").width()+"px");
+	$("#th_km").attr("width",$("#km").width()+"px");
+	$("#th_venda").attr("width",$("#venda").width()+"px");
+	$("#th_estoque").attr("width",$("#estoque").width()+"px");
+	$("#th_custo").attr("width",$("#custo").width()+"px");
+	$("#th_compra").attr("width",$("#compra").width()+"px");
+	$("#th_revisao").attr("width",$("#revisao").width()+"px");
+	$("#th_lucro").attr("width",($("#lucro").width()+$("#lucro_porcento").width())+"px");
+	$("#th_Dcompra").attr("width",$("#Dcompra").width()+"px");
+	$("#th_termino_revisao").attr("width",$("#termino_revisao").width()+"px");
+	$("#th_em_revisao").attr("width",$("#em_revisao").width()+"px");
+	$("#th_fipe").attr("width",$(".fipe").width()+"px");
+	$("#th_fotos").attr("width",$("#fotos").width()+"px");
+	
+	//alert($("#origem").width());
+
+	function imprimir(id, pg) {
+	
+		//$("#table_dados").css("margin-top","65px");
+		
+		$("#th_modelo").attr("width",($("#modelo").width()-8)+"px");
+		$("#th_opcionais").attr("width",$("#opcionais").width()+"px");
+		$("#th_consignado").attr("width",$("#consignado").width()+"px");
+		$("#th_comb").attr("width",$("#comb").width()+"px");
+		$("#th_cor").attr("width",($("#cor").width()-8)+"px");
+		$("#th_ano").attr("width",$("#ano").width()+"px");
+		$("#th_placa").attr("width",($("#placa").width()-7)+"px");
+		$("#th_origem").attr("width",($("#td_origem").width()-5)+"px");
+		$("#th_km").attr("width",($("#km").width()-3)+"px");
+		$("#th_venda").attr("width",($("#venda").width()-6)+"px");
+		$("#th_estoque").attr("width",($("#estoque").width()-1)+"px");
+		$("#th_custo").attr("width",($("#custo").width()-7)+"px");
+		$("#th_compra").attr("width",($("#compra").width()-7)+"px");
+		$("#th_revisao").attr("width",($("#revisao").width()-5)+"px");
+		$("#th_lucro").attr("width",($("#lucro").width()+$("#lucro_porcento").width())+"px");
+		$("#th_Dcompra").attr("width",($("#Dcompra").width()-7)+"px");
+		$("#th_termino_revisao").attr("width",($("#termino_revisao").width()-5)+"px");
+		$("#th_em_revisao").attr("width",$("#em_revisao").width()+"px");
+		$("#th_fipe").attr("width",($("#fipe").width()-7)+"px");
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+		
+		//$("#table_dados").css("margin-top","65px");
+		
+		$("#th_modelo").attr("width",$("#modelo").width()+"px");
+		$("#th_opcionais").attr("width",$("#opcionais").width()+"px");
+		$("#th_consignado").attr("width",$("#consignado").width()+"px");
+		$("#th_comb").attr("width",$("#comb").width()+"px");
+		$("#th_cor").attr("width",$("#cor").width()+"px");
+		$("#th_ano").attr("width",$("#ano").width()+"px");
+		$("#th_placa").attr("width",$("#placa").width()+"px");
+		$("#th_origem").attr("width",$("#td_origem").width()+"px");
+		$("#th_km").attr("width",$("#km").width()+"px");
+		$("#th_venda").attr("width",$("#venda").width()+"px");
+		$("#th_estoque").attr("width",$("#estoque").width()+"px");
+		$("#th_custo").attr("width",$("#custo").width()+"px");
+		$("#th_compra").attr("width",$("#compra").width()+"px");
+		$("#th_revisao").attr("width",$("#revisao").width()+"px");
+		$("#th_lucro").attr("width",($("#lucro").width()+$("#lucro_porcento").width())+"px");
+		$("#th_Dcompra").attr("width",$("#Dcompra").width()+"px");
+		$("#th_termino_revisao").attr("width",$("#termino_revisao").width()+"px");
+		$("#th_em_revisao").attr("width",$("#em_revisao").width()+"px");
+		$("#th_fipe").attr("width",$("#fipe").width()+"px");
+		$("#th_fotos").attr("width",$("#fotos").width()+"px");
+
+	}
+
+	function geraXls(){
+	
+		$("form").attr("action","/relatorios-mes/gerar-xls");
+		$("form").submit();
+		$("form").attr("action","lista-estoque-gerencial");
+	
+	}
+	
+	var posicaoLeft;
+	var posicaoTop;
+	
+	$("#content").scroll(function(){
+
+		posicaoLeft = $(this).scrollLeft();
+		$('#div_cabeca').css({position:'relative', left:0});
+
+	});
+	
+	$(document).scroll(function(){
+
+		posicaoTop = $(this).scrollTop();
+		
+		if(posicaoTop >= 230){
+
+			$('#div_cabeca').css({position:'relative', top:(posicaoTop-230)});
+		
+		}else{
+		
+			$('#div_cabeca').css({position:'relative', top:'0px'});
+		
+		}
+
+	});
+	
+	$("#table_cabeca").css("width",$("#table_dados").width());
+	
+	$("#div_cabeca").mousemove(function(e){
+		
+		if($(document).width() < 900){
+		
+			$("#content").scrollLeft((e.pageX*2.5)-$(document).width());
+		
+		}else{
+		
+			if($(document).width() < 1050){
+			
+				$("#content").scrollLeft((e.pageX*2)-$(document).width());
+			
+			}
+			
+		}
+		
+		if($(document).width() >= 1050){
+		
+			$("#content").scrollLeft(e.pageX-600);
+		
+		}
+	
+	});
+	
+	var objetoAnterior = "";
+	var color = "";
+	var colorDiasEstoque = "";
+	var colorLucro = "";
+	var colorLucroPorcento = "";
+	var emRevisao = "";
+	var fipe = "";
+	
+	$("tr").click(function(){
+
+		if($(this).children().attr("bgcolor") == "#DDDDDD" || $(this).children().attr("bgcolor") == "#FFFFFF" ){
+			
+			$(objetoAnterior).children().css("border-bottom","solid 0px");
+			$(objetoAnterior).children().css("border-top","solid 0px");
+			$(objetoAnterior).children().css("border-left","solid 1px #FFFFFF");
+			$(objetoAnterior).children().css("border-right","solid 1px #FFFFFF");
+			$(objetoAnterior).children().css("font-weight","normal");
+			$(objetoAnterior).children().css("background-color", color);
+			$(objetoAnterior).find("#estoque").css("background-color",colorDiasEstoque);
+			$(objetoAnterior).find("#lucro").css("background-color",colorLucro);
+			$(objetoAnterior).find("#lucro_porcento").css("background-color",colorLucroPorcento);
+			$(objetoAnterior).find("#em_revisao").css("background-color",emRevisao);
+			$(objetoAnterior).find("#fipe").css("background-color",fipe);
+	
+	
+			color = $(this).children().attr("bgcolor");
+			colorDiasEstoque = $(this).find("#estoque").css("background-color");
+			colorLucro = $(this).find("#lucro").css("background-color");
+			colorLucroPorcento = $(this).find("#lucro_porcento").css("background-color");
+			emRevisao = $(this).find("#em_revisao").css("background-color");
+			fipe = $(this).find("#fipe").css("background-color");
+			objetoAnterior = $(this);
+	
+	
+			$(this).children().css("border-bottom","solid 2px #6CA6CD");
+			$(this).children().css("border-top","solid 2px #6CA6CD");
+			$(this).children().css("border-left","solid 1px #A4D3EE");
+			$(this).children().css("border-right","solid 1px #A4D3EE");
+			$(this).children().css("font-weight","bold");
+			$(this).children().css("background-color", "#A4D3EE");
+
+		}
+
+	});
+
+
+	$(document).ready(() => {
+		$("#table_dados tr").each((ind, ele) => {
+			if($(ele).find(".cod_fipe").html() && $(ele).find(".codigo_ano").html()) {
+				console.log($(ele).find(".cod_fipe").html());
+				console.log($(ele).find(".codigo_ano").html());
+				console.log($(ele).find(".segmento").html());
+				getFipeGDS($(ele).find(".cod_fipe").html().trim(), $(ele).find(".codigo_ano").html().trim(), $(ele).find(".segmento").html().trim(), $(ele).find(".fipe").attr("id").trim());
+			}
+		});
+	});
+
+
+	function getFipeGDS(cod_fipe, codigo_ano, segmento, id_fipe) {
+		$.ajax({
+			type: "POST",
+			url:"/modelos/ajax",
+			async: true,
+			dataType:"json",
+			data:{
+				codigo_ano: codigo_ano,
+				cod_fipe: cod_fipe,
+				tipo: segmento,
+				fn:"get_valor_fipe"
+			},
+			success:function(retorno){
+				$("#"+id_fipe).html(retorno.valor);
+			}
+		});
+
+
+	}
+
+</script>

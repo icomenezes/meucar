@@ -1,0 +1,249 @@
+
+
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Cargo</label>
+		<select id="id_perfil" name="id_perfil" class="select" value="">
+			<option value="">Indiferente</option>
+			<?php
+				foreach($this->arrPerfis as $key=>$perfis){
+					
+					if($this->arrPerfis[$key+1]['perfil'] != $perfis['perfil']){
+					
+						echo "<option value='".$perfis['id_perfil']."'>".$perfis['perfil']."</option>";
+					
+					}
+					
+				}
+			?>
+		</select>
+	</div>
+	
+	<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo "01/".@date("m")."/".@date("Y"); ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo @date("d/m/Y", mktime(0,0,0,@date("m")+1, 0, @date("Y"))); ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Funcionário</label>
+		<select id="id_usuario" name="id_usuario" class="select" value="">
+			<option value="">Indiferente</option>
+			<?php
+				foreach($this->arrUsuarios as $key=>$perfis){
+
+					echo "<option value='".$perfis['id']."'>".$perfis['nome']."</option>";
+
+				}
+			?>
+		</select>
+	</div>
+
+	
+	<div class="inline" style="clear:both">
+		<input type="button" class="btn-small btn-find" value="Pesquisar" onclick="buscaFolha();"/>
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('pagamento','Folha-Pagamento');"/>
+	</div>
+</form>
+<div id="pagamento">
+	
+	<style>
+		
+	.funcionario{
+		width:100%;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+	.funcionario tr th{
+		border-right: solid 1px #aaaaaa;
+		padding:2px;
+		background-color:#999999;
+		color:#FFFFFF;
+		text-align:center;
+	}
+
+	.funcionario tr td{
+		border-right: solid 1px #AAA;
+		border-bottom: solid 1px #AAA;
+		padding:2px;
+		vertical-align:middle;
+	}
+	</style>
+	<div id="folha"></div>
+
+</div>
+
+<script type="text/javascript">
+
+function buscaFolha(){
+
+	$("#folha").html("<center>Carregando.....</center>");
+
+	var usuario = $("#id_usuario").val();
+	var perfil = $("#id_perfil").val();
+	var dataInicial = $("#data_inicial").val();
+	var dataFinal = $("#data_final").val();
+
+	$.ajax({
+		type: "POST",
+		url: '/novos-relatorios/ajax/fn/folha_pagamento',
+		async: true,
+		dataType:"text",
+		data: ({'data_inicial':dataInicial, 'data_final':dataFinal, 'id_perfil':perfil, 'id_usuario':usuario}),
+		success:function(resp){
+
+			$("#folha").html(resp);
+				
+		}
+	});
+	
+}
+
+$("#data_inicial").mask("99/99/9999");
+
+$('#data_inicial').focus(function(){
+	$(this).calendario({
+		target:'#data_inicial'
+	});
+});
+	
+$("#data_final").mask("99/99/9999");
+
+$('#data_final').focus(function(){
+	$(this).calendario({
+		target:'#data_final'
+	});
+});
+
+function imprimir(id, pg) {
+	
+	$(".funcionario").css("border","solid 1px #ccc");
+	$(".funcionario tr td").css("font-size","10px");
+	$(".funcionario tr td").css("padding","1px");
+	$(".funcionario tr th").css("font-size","10px");
+	$(".funcionario tr th").css("padding","1px");
+	
+	var oPrint, oJan;
+	oPrint = window.document.getElementById(id).innerHTML;
+	oJan = window.open(pg);
+	oJan.document.write(oPrint);
+	oJan.window.print();
+	oJan.document.close();
+	oJan.focus();
+	
+	$(".funcionario tr td").css("font-size","12px");
+	$(".funcionario tr td").css("padding","2px");
+	$(".funcionario tr th").css("font-size","12px");
+	$(".funcionario tr th").css("padding","2px");
+
+}
+
+buscaFolha();
+
+function enviaPeriodo(valor){
+
+	if(valor != "0"){
+		
+		var arrData = valor.split("_");
+		var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+		var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+	
+		$("#data_inicial").val(dataInicial);
+		$("#data_final").val(datafinal);
+		
+	}
+	
+}
+
+</script>

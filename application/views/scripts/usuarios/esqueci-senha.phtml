@@ -1,0 +1,92 @@
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<style>
+	#envia_email{
+		width:400px;
+		height:250px;
+		border: solid 1px #CCCCCC;
+		margin-top:10%;
+		background:#EEEEEE;
+		color: #666666;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+	}
+	
+	#email{
+		width:300px;
+		height:28px;
+		font-family: Arial, Helvetica, sans-serif;
+		color: #666666;
+	}
+	
+	#campo{
+		margin-top:80px;
+	}
+	
+	#button{
+		border: outset 1px #888888;
+		width:60px;
+		height:30px;
+		background:#666666;
+		color: #FFFFFF;
+	}
+	
+	#button:hover{
+		border: solid 1px #888888;
+		width:60px;
+		height:30px;
+		background:#888888;
+	}
+</style>
+
+<center>
+	<div id="envia_email">
+		<label><h2>Recupera&ccedil;&atilde;o de Senha</h2></label>
+		<div id="campo">
+		<?php
+			if($this->status == 0){
+		?>
+		<label id="lbn_email"><b>Informe seu e-mail de cadastro que enviaremos uma nova senha.</b></label>
+		<form id="emails" name="emails" enctype="application/x-www-form-urlencoded" action="/usuarios/esqueci-senha" method="post">
+		<input type="text" id="email" name="email"/><br><br>
+		<input type="button" id="button" name="button" value="Enviar" onClick="validaCampo();"/>
+		</form>
+		<?php
+			}elseif($this->status == 1){
+			
+				echo "<label id='lbn_email'>".$this->mensagem."</label>";
+			
+			}elseif($this->status == -1){
+			
+				echo "<label id='lbn_email'>".$this->mensagem."</label>";
+			
+			}
+		?>
+		</div>
+	</div>
+</center>
+
+<script>
+
+function validaCampo(){
+	
+	var msg = "";
+	var erro = true;
+	
+	if($("#email").val() == ""){
+		
+		erro = false;
+	
+	}
+
+	if(erro){
+	
+		$("#emails").submit();
+	
+	}else{
+		
+		alert("O campo email deve ser preenchido.");
+	
+	}
+
+}
+</script>

@@ -1,0 +1,152 @@
+<?php
+	session_destroy();
+?>
+
+<style>
+
+	#link{
+		width:96%;
+		margin-top:50px;
+		margin-left:11px;
+		margin-bottom:50px;
+	}
+	
+	#link td{
+		width:33%;
+		font-size:13px;
+		color:#333333;
+		height:50px;
+	}
+	
+	#table_busca{
+		#float:top;
+		margin-left:11px;
+		width:97.8%;
+		background-color:#E8E8E8;
+		margin-bottom:10px;
+		margin-top:-20px;
+		height:60px;
+		border-bottom: solid 2px #CFCFCF;
+		border-top: solid 2px #CFCFCF;
+		border-right: solid 2px #CFCFCF;
+		border-left: solid 2px #CFCFCF;
+		color:#666666;
+	}
+	
+	#table_busca tr td {
+		margin-left:10px;
+		background-color:#E8E8E8;
+		vertical-align:middle;
+	}
+	
+	#table_busca tr td select{
+		margin-left:5px;
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:150px;
+		height:30px;
+		vertical-align:middle;
+	}
+	
+	.texto{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:70px;
+		height:25px;
+		#vertical-align:middle;
+	}
+	
+	.texto2{
+		border-top: outset 1px #E8E8E8;
+		border-left: outset 1px #E8E8E8;
+		border-right: outset 1px #E8E8E8;
+		border-bottom: outset 2px #E8E8E8;
+		width:140px;
+		height:25px;
+		#vertical-align:middle;
+	}
+
+</style>
+
+</header>
+
+<section id="content">
+<table id="table_busca">
+	<tr>
+		<td>
+			<form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Modelo</b><br><input style="margin-left:5px;" type="text" class="texto2" name="str_veiculo" id="str_veiculo"/><br>&nbsp;&nbsp;<span style="font-size:10px;">Exemplo: Celta</span></td><td style="border-right: solid 2px #CCCCCC;"><input style="width:60px; margin-right:5px;" type="submit"  id="buttom_busca"  value="Buscar"/><br>
+			</form>
+		</td>
+		<td>
+			<form name="busca" method="post" action="/carros-usados/busca-veiculos">
+			&nbsp;&nbsp;<b>Fabricante</b> <select id="marca_usado" name="marca" onChange="buscaModelo(this.value);">
+					<option value="">Selecione</option>
+				</select><br>&nbsp;	
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Modelo</b> <select id="modelo_usado" name="modelo" onChange="buscaCidade(this.value);">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Cidade</b> <select id="cidade_usado" name="cidade">
+				<option value="">Selecione</option>
+			</select><br>&nbsp;		
+		</td>
+		<td>
+			&nbsp;&nbsp;<b>Valor:</b> De <input type="text" style="margin-left:5px;" class="texto" name="minimo_preco" id="minimo_preco" onKeyUp="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		<td>
+			at&eacute; <input type="text" class="texto" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+			<br>&nbsp;	
+		</td>
+		
+		<td>
+			<br><input type="submit"  id="buttom_busca" style="width:60px;" value="Buscar"/>
+			<br>&nbsp;
+		</td>
+	</tr>
+	</form>
+</table>
+	<table id="link">
+		<tr>
+			<td colspan="3"><span style="font-size:25px;"><b>Bem vindo</b></span> a nossa página de anúncios especialmente desenvolvida para você que quer vender seu carro usado no particular sem ter altos custos.<br><br>
+O custo para você anunciar um veículo particular em nosso site é de apenas R$ 19,90 válido por 60 dias, é um anúncio de baixo custo com potenciais chances para você vender seu veículo.<br><br>
+Mas nós temos  mais para você!<br><br>
+Você pode fazer um único anúncio grátis do seu carro válido por 30 dias para experimentar nossos serviços, para isso basta fazer o seu login através da sua conta do Facebook.<br><br>
+Não perca tempo, certamente existe alguém procurando um veículo igual ao seu para comprar! Anuncie agora mesmo!<br><br>
+Escolha a opção abaixo:<br><br></td>
+		</tr>
+		<tr>
+			<td valign="bottom"><center><a style="width:200px;" class="header-bot" href="/carros-usados/cadastro-site">Cadastrar an&uacute;ncio pago</a></center></td>
+			<td valign="bottom"><center><a style="width:200px;" class="header-bot" href="http://sistemameucar.com.br/index/login-facebook">Entrar com Facebook</a></center></td>
+			<td valign="bottom"><center><a style="width:200px;" class="header-bot" href="<?php echo URL ?>index/adm">Já sou cadastrado</a></center></td>
+		</tr>
+	</table>
+
+
+<script type="text/javascript">
+
+	$("#menu_busca").remove();
+	
+</script>
+
+<script>
+
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	 
+	ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+	ga('send', 'pageview');
+ 
+</script>
+
+</section>

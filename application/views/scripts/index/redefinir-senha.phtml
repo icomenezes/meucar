@@ -1,0 +1,217 @@
+<?php
+if($this->form){
+?>
+
+<style type="text/css">
+	.show{
+		margin-top: 50px;
+	}
+
+	.bg-primary{
+		color: #FFF;
+	}
+	.disabled{
+		cursor:not-allowed;
+	}
+
+	.erro {
+		opacity: 0.7;
+		font-size: 14px;
+		color: red;
+		background-repeat: no-repeat;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='20' height='20' fill='none' stroke='%23f04124'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23f04124' stroke='none'/%3e%3c/svg%3e");
+	}
+
+	.sucesso {
+		opacity: 0.7;
+		font-size: 14px;
+		color: green;
+		background-repeat: no-repeat;
+		background-size: 17px;
+		background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2343ac6a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+	}
+
+</style>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+		<div class="col-lg-4 col-sm-0 col-0 show">
+			<div class="card border-secondary mb-3">
+				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
+				<div class="card-body">
+				<form method="post" action="/index/redefinir-senha" id="salvar_senha">
+					<div class="form-group">
+					  	<div class="form-floating mb-3">
+					    	<input type="password" class="form-control" id="senha1"  name="senha1" placeholder="Nova senha" onkeyup="verificaSenha();">
+					   	 	<label for="senha1">Nova senha</label>
+					  	</div>
+					</div>
+				    <div class="form-group">
+					  	<div class="form-floating mb-3">
+					    	<input type="password" class="form-control" id="senha2"  name="senha2" placeholder="Repita nova senha" onkeyup="verificaSenha();">
+					   	 	<label for="senha2">Repita nova senha</label>
+					  	</div>
+					</div>
+					<div class="form-group">
+						<div class="form-check form-switch">
+					        <input class="form-check-input" type="checkbox" id="verSenha" >
+					        <label class="form-check-label" for="verSenha">Ver senha</label>
+					    </div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="maiuscula">Letra maiúscula</div>
+					    </div>
+					    <div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="minuscula">Letra minúscula</div>
+					    </div>
+					    <div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="numero">Número</div>
+					    </div>
+					   	<div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="caracteres">Caracter especial</div>
+					    </div>
+					    <div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="minimo_caracteres">Mínimo 8 caracteres</div>
+					    </div>
+					     <div class="col-lg-6 col-sm-6 col-6">
+						 	<div class="form-check erro" id="iguais">Repetir senha</div>
+					    </div>
+					</div>
+					<br>
+					<center>
+						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="6LdfehsbAAAAAFxJ4uaYetFPi5btiTCztXQK6mAj"></div>
+					</center>
+					<br>
+					<input type="hidden" name="not-secret" value="<?php echo $_GET['u']; ?>">
+					<div class="d-grid gap-2 disabled">
+					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="salvarButton">Salvar</button>
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-sm-0 col-0"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+	var captcha = false;
+
+	function recaptchaExpired(){
+		enableBtn();
+	}
+
+	function enableBtn(){
+		captcha = captcha ? false : true;
+		verificaSenha();
+	}
+
+	$("#salvarButton").click(function(){
+		if(!verificaSenha()){
+			$("#salvarButton").html("Aguarde...");
+			$("#salvar_senha").submit();
+		}
+	});
+
+
+	function verificaSenha(){
+
+		let senha = $("#senha1").val();
+		let erro = false;
+
+		$("#senha1").removeClass("is-invalid");
+		$("#senha2").removeClass("is-invalid");
+		$("#senha1").removeClass("is-valid");
+		$("#senha2").removeClass("is-valid");
+
+		$("#salvarButton").attr("disabled", true);
+
+		if(senha.match(/[A-Z]/g) != null){
+			alteraClasse('maiuscula', true);
+		}else{
+			alteraClasse('maiuscula', false);
+			erro = true;
+		}
+
+		if(senha.match(/[a-z]/g) != null){
+			alteraClasse('minuscula', true);
+		}else{
+			alteraClasse('minuscula', false);
+			erro = true;
+		}
+
+		if(senha.match(/[0-9]/g) != null){
+			alteraClasse('numero', true);
+		}else{
+			alteraClasse('numero', false);
+			erro = true;
+		}
+
+		if(senha.match(/[@ _.,;:#$%^&/]/g) != null){
+			alteraClasse('caracteres', true);
+		}else{
+			alteraClasse('caracteres', false);
+			erro = true;
+		}
+
+		if(senha.length >= 8){
+			alteraClasse('minimo_caracteres', true);
+		}else{
+			alteraClasse('minimo_caracteres', false);
+			erro = true;
+		}
+
+		if($("#senha1").val() == $("#senha2").val()){
+			alteraClasse('iguais', true);
+		}else{
+			alteraClasse('iguais', false);
+			erro = true;
+		}
+
+		if(erro){
+			$("#senha1").addClass("is-invalid");
+			$("#senha2").addClass("is-invalid");
+		}else{
+			$("#senha1").addClass("is-valid");
+			$("#senha2").addClass("is-valid");
+
+			if(captcha){
+				$("#salvarButton").attr("disabled", false);
+			}
+		}
+
+		return erro;
+
+	}
+
+	function alteraClasse(id, valid){
+		if(valid){
+			$("#"+id).removeClass("erro");
+			$("#"+id).addClass("sucesso");
+		}else{
+			$("#"+id).removeClass("sucesso");
+			$("#"+id).addClass("erro");
+		}
+	}
+
+	$("#verSenha").click(function(){
+		if($( "#verSenha" ).prop("checked")){
+			$('#senha1').get(0).type = 'text';
+			$('#senha2').get(0).type = 'text';
+		}else{
+			$('#senha1').get(0).type = 'password';
+			$('#senha2').get(0).type = 'password';
+		}
+	});
+
+</script>
+
+<?php
+}else{
+	echo $this->mensagem;
+}
+?>

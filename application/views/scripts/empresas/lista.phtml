@@ -1,0 +1,75 @@
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Raz&atilde;o Social</label>
+		<input type="text" id="razao_social" name="razao_social" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNPJ</label>
+		<input type="text" id="cnpj" name="cnpj" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>empresas/add'" />
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Nome Fantasia</th><th>Raz&atilde;o Social</th><th>Cidade</th><th>Financeiro</th><th>Site</th><th>Treinamento</th><th>Ativo</th><th>Observa&ccedil;&otilde;es</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th style="width:21%;">Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->empresas as $e){
+	
+		// $dataTmp = explode(" ",$e['hora_alteracao']);
+		// $dataTmp2 = explode("-",$dataTmp[0]);
+		// $e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		// $e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+
+		$dia = implode("/",array_reverse(explode("-",explode(" ",$e['hora_alteracao'])[0])));
+		if(count(explode(" ", $e['hora_alteracao'])) == 2){
+			$e['hora_alteracao'] = $dia." ".explode(" ",$e['hora_alteracao'])[1];
+		}
+?>		
+		<tr>
+		<td><?php echo $e['nome_fantasia']?></td>
+		<td><?php echo $e['razao_social']?></td>
+		<td><?php echo $e['cidade']?></td>
+		<td><?php echo ($e['financeiro'])?"Sim":"N&atilde;o"?></td>
+		<td><?php echo ($e['site'])?"Sim":"N&atilde;o"?></td>
+		<td><?php echo ($e['treinamento'])?"Sim":"N&atilde;o"?></td>
+		<td><?php echo ($e['ativo'])?"Sim":"N&atilde;o"?></td>
+		<td width="10%"><?php echo $e['obs']?></td>
+		<td><?php echo $e['nome']." - ".$e['hora_alteracao']; ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Empresa: <?php echo $e['razao_social']?>', <?php echo $e['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

@@ -1,0 +1,298 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.drawing.yaxis.js" ></script>
+    <script src="../libraries/RGraph.bar.js" ></script>
+    
+    <title>RGraph demo: A 3D Bar chart with multiple rows</title>
+    
+    
+    <meta name="description" content="A 3D Bar chart with multiple rows" />
+    
+
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+
+    <h1>A 3D Bar chart with multiple rows</h1>
+    
+    <p>
+        This style of 3D chart is not supported natively but is pretty easy to
+        achieve - especially as all the source code is below and you can just
+        copy it!
+    </p>
+
+    <canvas id="cvs" width="650" height="300">[No canvas support]</canvas>
+
+    <script>
+        marginLeft    = 60;
+        marginRight   = 25;
+        marginTop     = 45;
+        marginBottom  = 65;
+        hmargin       = 15;
+        yaxisScaleMax = 35;
+
+        data = [
+
+                // If you don't need a third dataset take out this FIRST
+                // dataset and replace it with the word: null
+
+                // null, // [12,16,10,12,13,15,16]
+                [5,16,10,12,13,15,16],
+
+                [20,21,24,23,18,19,20],
+                [35,34,32,28,26,35,34]
+            ],
+            colors = [
+                'Gradient(#696:#0f0:#0f0)',
+                'Gradient(#966:#f00:#f00)',
+                'Gradient(#669:blue:blue)'
+            ],
+            xaxisLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+        bar = new RGraph.Bar({
+            id: 'cvs',
+            data: data[2],
+            options: {
+                variant: '3d',
+                variantThreedYaxis: false,
+                variantThreedXaxis: false,
+                colorsStroke: 'rgba(0,0,0,0)',
+                colors: [colors[2]],
+                shadow: true,
+                shadowOffsetx: 10,
+                backgroundGridColor: '#ccc',
+                backgroundGridHlinesCount: 5,
+                backgroundGridVlinesCount: 14,
+                axesColor: '#ddd',
+                marginBottom: marginBottom,
+                marginTop: marginTop,
+                marginLeft: marginLeft,
+                marginRight: marginRight,
+                hmargin: hmargin,
+                yaxisScaleMax: yaxisScaleMax,
+                axes: false,
+                yaxisLabels: false
+            }
+        }).grow();
+
+        new RGraph.Bar({
+            id: 'cvs',
+            data: data[1],
+            options: {
+                variant: '3d',
+                variantThreedYaxis: false,
+                variantThreedXaxis: false,
+                colorsStroke: 'rgba(0,0,0,0)',
+                colors: [colors[1]],                
+                shadow: true,
+                shadowOffsetx: 10,
+                shadowColor: 'rgba(0,0,0,0.5)',
+                backgroundGrid: false,
+                axesColor: '#ddd',
+                yaxisLabels: false,
+                xaxisLabels: [],
+                marginBottom: marginBottom - 10,
+                marginTop: marginTop + 10,
+                marginLeft: marginLeft - 25,
+                marginRight: marginRight + 25,
+                hmargin: hmargin,
+                yaxisScaleMax: yaxisScaleMax,
+                axes: false
+            }
+        }).grow();
+
+        if (data[0]) {
+            bar3 = new RGraph.Bar({
+                id: 'cvs',
+                data: data[0],
+                options: {
+                    variant: '3d',
+                    variantThreedYaxis: false,
+                    variantThreedXaxis: false,
+                    colorsStroke: 'rgba(0,0,0,0)',
+                    colors: [colors[0]],
+                    xaxisLabels: xaxisLabels,
+                    shadow: true,
+                    shadowOffsetx: 10,
+                    shadowColor: 'rgba(0,0,0,0.5)',
+                    backgroundGrid: false,
+                    axesColor: '#ddd',
+                    yaxisScaleUnitsPost: 'km',
+                    marginTop: marginTop + 20,
+                    marginBottom: marginBottom - 20,
+                    marginLeft: marginLeft - 40,
+                    marginRight: marginRight + 40,
+                    hmargin: hmargin,
+                    yaxisScaleMax: yaxisScaleMax,
+                    axes: false,
+                    yaxisLabels: false
+                }
+            }).grow();
+        }
+
+        new RGraph.Drawing.YAxis({
+            id: 'cvs',
+            x: bar.canvas.width - 15,
+            options: {
+                colors:       ['rgba(0,0,0,0)'],
+                textColor:    'black',
+                marginTop:    40,
+                marginBottom: 70,
+                yaxisScaleMax:          bar.scale2.max,
+                yaxisTickmarksAlign: 'right'
+            }
+        }).draw();
+    </script>
+
+
+
+
+    <p />
+
+
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.bar.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="650" height="300"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    marginLeft    = 60;
+    marginRight   = 25;
+    marginTop     = 45;
+    marginBottom  = 65;
+    hmargin       = 15;
+    yaxisScaleMax = 35;
+
+    data = [
+
+            <span>// If you don't need a third dataset take out this FIRST
+            // dataset and replace it with the word: null</span>
+
+            <span>// null, // [12,16,10,12,13,15,16]</span>
+            [5,16,10,12,13,15,16],
+
+            [20,21,24,23,18,19,20],
+            [35,34,32,28,26,35,34]
+        ],
+        colors = [
+            'Gradient(#696:#0f0:#0f0)',
+            'Gradient(#966:#f00:#f00)',
+            'Gradient(#669:blue:blue)'
+        ],
+        xaxisLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+    bar = new RGraph.Bar({
+        id: 'cvs',
+        data: data[2],
+        options: {
+            variant: '3d',
+            variantThreedYaxis: false,
+            variantThreedXaxis: false,
+            colorsStroke: 'rgba(0,0,0,0)',
+            colors: [colors[2]],
+            shadow: true,
+            shadowOffsetx: 10,
+            backgroundGridColor: '#ccc',
+            backgroundGridHlinesCount: 5,
+            backgroundGridVlinesCount: 14,
+            axesColor: '#ddd',
+            marginBottom: marginBottom,
+            marginTop: marginTop,
+            marginLeft: marginLeft,
+            marginRight: marginRight,
+            hmargin: hmargin,
+            yaxisScaleMax: yaxisScaleMax,
+            axes: false,
+            yaxisLabels: false
+        }
+    }).grow();
+
+    new RGraph.Bar({
+        id: 'cvs',
+        data: data[1],
+        options: {
+            variant: '3d',
+            variantThreedYaxis: false,
+            variantThreedXaxis: false,
+            colorsStroke: 'rgba(0,0,0,0)',
+            colors: [colors[1]],                
+            shadow: true,
+            shadowOffsetx: 10,
+            shadowColor: 'rgba(0,0,0,0.5)',
+            backgroundGrid: false,
+            axesColor: '#ddd',
+            yaxisLabels: false,
+            xaxisLabels: [],
+            marginBottom: marginBottom - 10,
+            marginTop: marginTop + 10,
+            marginLeft: marginLeft - 25,
+            marginRight: marginRight + 25,
+            hmargin: hmargin,
+            yaxisScaleMax: yaxisScaleMax,
+            axes: false
+        }
+    }).grow();
+
+    if (data[0]) {
+        bar3 = new RGraph.Bar({
+            id: 'cvs',
+            data: data[0],
+            options: {
+                variant: '3d',
+                variantThreedYaxis: false,
+                variantThreedXaxis: false,
+                colorsStroke: 'rgba(0,0,0,0)',
+                colors: [colors[0]],
+                xaxisLabels: xaxisLabels,
+                shadow: true,
+                shadowOffsetx: 10,
+                shadowColor: 'rgba(0,0,0,0.5)',
+                backgroundGrid: false,
+                axesColor: '#ddd',
+                yaxisScaleUnitsPost: 'km',
+                marginTop: marginTop + 20,
+                marginBottom: marginBottom - 20,
+                marginLeft: marginLeft - 40,
+                marginRight: marginRight + 40,
+                hmargin: hmargin,
+                yaxisScaleMax: yaxisScaleMax,
+                axes: false,
+                yaxisLabels: false
+            }
+        }).grow();
+    }
+    
+    new RGraph.Drawing.YAxis({
+        id: 'cvs',
+        x: bar.canvas.width - 15,
+        options: {
+            colors:       ['rgba(0,0,0,0)'],
+            textColor:    'black',
+            marginTop:    40,
+            marginBottom: 70,
+            yaxisScaleMax:          bar.scale2.max,
+            yaxisTickmarksAlign: 'right'
+        }
+    }).draw();
+&lt;/script&gt;
+</pre>
+
+</body>
+</html>

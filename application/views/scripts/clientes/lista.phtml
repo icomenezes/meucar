@@ -1,0 +1,194 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="lista" class="form" method="post">
+
+	<div class="inline">
+		<label class="label">Nome/Raz&atilde;o Social</label>
+		<input type="text" id="nome" name="nome" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CPF/CNPJ</label>
+		<input type="text" id="cpf" name="cpf" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Cidade</label>
+		<input type="text" id="cidade" name="cidade" class="text" value="" />
+	</div>
+	
+	<!-- 
+	<div class="inline">
+		<label class="label">Data Nascimento Inicio</label>
+		<input type="text" id="nascInicial" name="nascInicial" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Nascimento Fim</label>
+		<input type="text" id="nascFinasl" name="nascFinal" class="text" value="" />
+	</div>
+	 -->
+	
+	<div class="inline">
+		<label class="label">Data Compra Inicio</label>
+		<input type="text" id="compraInicial" name="compraInicial" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Compra Fim</label>
+		<input type="text" id="compraFinal" name="compraFinal" class="text" value="" />
+	</div>
+
+	<div class="inline">
+	<label class="label">Mês Aniversário</label>
+	<select name = "mes_niver" id="mes_niver" class="select" >
+		<option value = "">Selecione</option>
+		<option value = "1">Janeiro</option>
+		<option value = "2">Fevereiro</option>
+		<option value = "3">Mar&ccedil;o</option>
+		<option value = "4">Abril</option>
+		<option value = "5">Maio</option>
+		<option value = "6">Junho</option>
+		<option value = "7">Julho</option>
+		<option value = "8">Agosto</option>
+		<option value = "9">Setembro</option>
+		<option value = "10">Outubro</option>
+		<option value = "11">Novembro</option>
+		<option value = "12">Dezembro</option>
+		</select>		
+	</div>
+
+	<div class="inline">
+		<label class="label">Somente clientes com celular</label>
+		<input type="checkbox" id="somente_celular" name="somente_celular" class="checkbox"/>
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='/clientes/add'" />
+		<input type="button" class="btn-mini" value="Nova Negocia&ccedil;&atilde;o" onclick="javascript:window.location.href='<?php echo URL ?>negociacoes/add'" />
+	</div>
+
+</form>
+
+<style>
+	#table_clientes tr td{
+		padding:2px;
+	}
+</style>
+
+<table class = 'table' id="table_clientes">
+
+<thead><tr><th>Nome</th><th>CPF/CNPJ</th><th>Cidade</th><th>E-mail</th><th colspan="2">Telefones</th><th>Nascimento</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th>Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->clientes as $e){
+	
+		$dataTmp = explode(" ",$e['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+		
+?>		
+		<tr>
+		<td><?php echo $e['nome']?></td>
+		<td><?php echo $e['cpf']?></td>
+		<td><?php echo $e['cidade']?></td>
+		<td><?php echo $e['email']?></td>
+		<td><?php echo $e['tel1']?></td>
+		<td><?php echo $e['tel2']?></td>
+		<td><?php echo implode("/", array_reverse(explode("-", $e['nascimento'])))?></td>
+		<td><?php echo $e['nome_alterou']."<br/>".$e['hora_alteracao']; ?></td>
+		<td width="145px"><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Empresa: <?php echo $e['nome']?>', <?php echo $e['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+	<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+	
+	function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+} 
+
+$(function(){
+
+	$("#nascInicial").mask("99/99/9999");
+	$("#nascFinal").mask("99/99/9999");
+	
+	$("#compraInicial").mask("99/99/9999");
+	$("#compraFinal").mask("99/99/9999");
+	
+	//$("#hora").mask("99:99:99");
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	$('#nascInicial').focus(function(){
+		$(this).calendario({
+			target:'#nascInicial'
+		});
+	});
+ 
+	$('#nascFinal').focus(function(){
+		$(this).calendario({
+			target:'#nascFinal'
+		});
+	});
+
+	$('#compraInicial').focus(function(){
+		$(this).calendario({
+			target:'#compraInicial'
+		});
+	});
+
+	$('#compraFinal').focus(function(){
+		$(this).calendario({
+			target:'#compraFinal'
+		});
+	});
+
+})
+</script>

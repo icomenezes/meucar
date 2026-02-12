@@ -1,0 +1,389 @@
+<?php
+
+	$cont = 0;
+	$continua = true;
+
+	while($continua){
+
+		$cont++;
+	
+		$conexao = mysql_connect ("186.202.152.73","meucar1","m3uc4r"); 
+		mysql_select_db ("meucar1",$conexao) or die("N�o foi poss�vel estabelecer a conexao");
+		
+		$sql = "SELECT `v`.*, `e`.`login_icarros`, `e`.`senha_icarros`, `m`.`ano_modelo` 
+				FROM `veiculos` AS `v` 
+				INNER JOIN `empresas` AS `e` ON v.id_empresa = e.id 
+				INNER JOIN `modelos_11` AS `m` ON m.id = v.id_modelo 
+				WHERE (v.icarros = 2) 
+				ORDER BY `v`.`id_empresa` ASC";
+
+	
+		$result = mysql_query($sql,$conexao) or die(mysql_error());
+
+		while($row = mysql_fetch_array($result)){
+		
+			$arrVeiculos[] = $row;
+		
+		}
+
+		if($arrVeiculos){
+
+			$status = edtIcarrosSistemaTodas($arrVeiculos, $conexao);
+
+			if(count($arrVeiculos) == $status){
+				
+				echo "\nSucesso! ".count($arrVeiculos)." veiculos atualizados. ".@date("d/m/Y H:i:s");
+				$continua = false;
+				
+			}else{
+
+				echo "\nErro ".$cont." ".@date("d/m/Y H:i:s");
+				mysql_close($conexao);
+				
+				sleep(60);
+				
+			}
+		
+		}else{
+			
+			
+			echo "\nNao ha veiculos desatualizados no icarros. ".@date("d/m/Y H:i:s");
+			$continua = false;
+			
+		
+		}
+		
+		if($cont == 60){
+			
+			$continua = false;
+		
+		}
+	
+	}
+	
+	
+	
+	function getEstoqueIcarros($token, $idAnunciante, $client){
+		
+		$arr = get_object_vars($client->obterEstoqueAnunciante($token, $idAnunciante));
+
+		if($arr['status'] == "OK"){
+
+			$arrAnuncio = $arr['anuncios'];
+			
+			foreach($arrAnuncio as $arAnuncio){
+				
+				$arrAnuncios[] = get_object_vars($arAnuncio);
+			
+			}
+		
+			return $arrAnuncios;
+	
+		}else{
+			
+			return $arr;
+		
+		}
+	
+	}
+	
+	function edtIcarrosSistemaTodas($arrEdt, $conexao){
+	
+		$countAtualizados = 0;
+	
+		foreach($arrEdt as $chave=>$edt){
+
+			if($edt['id_empresa'] != $arrEdt[$chave-1]['id_empresa']){
+		
+				try{
+					
+					$url = 'https://paginasegura.icarros.com.br/services/icarroswebservice?wsdl';
+
+					$client = new SoapClient($url, array('compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP));
+				
+					$client->__setLocation('http://www.icarros.com.br/services/icarroswebservice');
+				
+					$token = $client->autenticarAcesso($edt['login_icarros'], $edt['senha_icarros']);
+					
+				}catch (SoapFault $exception){
+					
+					echo $exception->getMessage();
+			
+				}
+				
+				$arrAnu = get_object_vars($client->obterListaAnunciantes($token));
+				$arrAnuci = get_object_vars($arrAnu['dados']);
+				$idAnunciante = $arrAnuci['id'];
+			
+				$arrIcarros = getEstoqueIcarros($token, $idAnunciante, $client);
+			
+			}
+			
+			foreach($arrIcarros as $key=>$arrI){
+			
+				if(strtolower(substr($edt['placa'],0,3).substr($edt['placa'],4)) == strtolower($arrI['placa'])){
+				
+					////////QTD PORTAS////////////////
+		
+					if(stripos($edt['modelo'], "5p")){
+						$portas = 5;
+					}elseif(stripos($edt['modelo'], "4p")){
+						$portas = 4;
+					}elseif(stripos($edt['modelo'], "3p")){
+						$portas = 3;
+					}else{
+						$portas = 2;
+					}
+					//////////////////////////////////
+					//////////OPCIONAIS///////////////////
+		
+					$sqlOpcionais = "SELECT `o`.`id_opcionais_icarros`
+									 FROM `veiculos_opcionais` AS `vo`
+									 INNER JOIN `opcionais` AS `o` ON o.id = vo.id_opcional
+									 WHERE (vo.id_veiculo = ".$edt['id'].") 
+									 ORDER BY `o`.`opcional` ASC";
+									 
+					$result = mysql_query($sqlOpcionais,$conexao) or die(mysql_error());
+
+					while($row = mysql_fetch_array($result)){
+					
+						$arrOpcionais[] = $row;
+					
+					}
+				
+					$arrOpcional = array();
+				
+					foreach($arrOpcionais as $opcionais){
+			
+						if($opcionais['id_opcionais_icarros'] != ""){
+					
+							$arrOpcional[] = $opcionais['id_opcionais_icarros'];
+					
+						}
+				
+					}
+					////////////////////////////////////
+					////////COMBUSTIVEL//////////////////
+			
+					if($edt['combustivel'] == "Flex"){
+				
+						$combustivel = 5;
+				
+					}elseif($edt['combustivel'] == "Gasolina"){
+				
+						$combustivel = 2;
+				
+					}elseif($edt['combustivel'] == "Diesel"){
+				
+						$combustivel = 6;
+					
+					}elseif($edt['combustivel'] == "Etanol"){
+			
+						$combustivel = 3;
+			
+					}elseif($edt['combustivel'] == "GNV"){
+					
+						$combustivel = 4;
+					
+					}else{
+				
+						$combustivel = 0;
+				
+					}
+			
+					//////////////////////////////////////////
+				
+					////////////////CORES/////////////////////
+				
+					if(strtolower($edt['cor']) == "amarelo"){
+				
+						$cor = 1;
+				
+					}elseif(strtolower($edt['cor']) == "amarela"){
+				
+						$cor = 1;
+				
+					}elseif(strtolower($edt['cor']) == "bege"){
+			
+						$cor = 4;
+				
+					}elseif(strtolower($edt['cor']) == "branco"){
+				
+						$cor = 5;
+				
+					}elseif(strtolower($edt['cor']) == "branca"){
+			
+						$cor = 5;
+				
+					}elseif(strtolower($edt['cor']) == "prata"){
+				
+						$cor = 7;
+				
+					}elseif(strtolower($edt['cor']) == "preto"){
+			
+						$cor = 8;
+				
+					}elseif(strtolower($edt['cor']) == "preta"){
+			
+						$cor = 8;
+			
+					}elseif(strtolower($edt['cor']) == "verde"){
+			
+						$cor = 9;
+			
+					}elseif(strtolower($edt['cor']) == "vermelho"){
+				
+						$cor = 10;
+				
+					}elseif(strtolower($edt['cor']) == "vermelha"){
+				
+						$cor = 10;
+				
+					}elseif(strtolower($edt['cor']) == "azul"){
+				
+						$cor = 11;
+				
+					}elseif(strtolower($edt['cor']) == "cinza"){
+				
+						$cor = 12;
+				
+					}elseif(strtolower($edt['cor']) == "dourada"){
+				
+						$cor = 13;
+					
+					}elseif(strtolower($edt['cor']) == "dourado"){
+				
+						$cor = 13;
+					
+					}elseif(strtolower($edt['cor']) == "marrom"){
+					
+						$cor = 14;
+					
+					}elseif(strtolower($edt['cor']) == "vinho"){
+					
+						$cor = 15;
+					
+					}elseif(strtolower($edt['cor']) == "roxo"){
+					
+						$cor = 16;
+				
+					}elseif(strtolower($edt['cor']) == "laranja"){
+				
+						$cor = 17;
+				
+					}elseif(strtolower($edt['cor']) == "varias cores"){
+				
+						$cor = 23;
+				
+					}elseif(strtolower($edt['cor']) == "rosa"){
+				
+						$cor = 25;
+				
+					}elseif(strtolower($edt['cor']) == "bronze"){
+					
+						$cor = 26;
+					
+					}else{
+					
+						$cor = 24;
+				
+					}
+			
+					//////////////////////////////////////////
+			
+			
+					$arrAnuncio['id'] = $arrI['id'];
+					$arrAnuncio['versao_id'] = $arrI['versao_id'];
+					$arrAnuncio['anoFabricacao'] = $edt['ano_fabricacao'];
+					$arrAnuncio['anoModelo'] = $edt['ano_modelo'];
+					$arrAnuncio['portas'] = $portas;
+					$arrAnuncio['listaOpcionais_ids'] = $arrOpcional;
+					$arrAnuncio['km'] = $edt['km'];
+					$arrAnuncio['preco'] = $edt['valor_venda'];
+					$arrAnuncio['combustivel_id'] = $combustivel;
+					$arrAnuncio['cor_id'] = $cor;
+					$arrAnuncio['placa'] = substr($edt['placa'],0,3).substr($edt['placa'],4);
+					$arrAnuncio['texto'] = $edt['obs_site'];
+					$arrAnuncio['tipoAnuncio_id'] = $arrI['tipoAnuncio_id'];
+					$arrAnuncio['status'] = 1;
+					$arrAnuncio['anuncio0km'] = false;
+					$arrAnuncio['spotlight'] = false;
+					$arrAnuncio['anunciante_id'] = $idAnunciante;
+
+					
+					
+					$status = $client->alterarAnuncio($token, $arrAnuncio);
+
+					$arrStatus = get_object_vars($status);
+
+					if($arrStatus['status'] == "OK"){
+					
+						if($arrI['fotos']){
+						
+							foreach($arrI['fotos'] as $fotoId){
+								
+								$client->excluirFoto($token, $key, $fotoId);
+							
+							}
+						
+						}
+						
+						$sqlFotos= "SELECT `fv`.*
+									FROM `fotos_veiculos` AS `fv`
+									WHERE (fv.id_veiculo = ".$edt['id'].")
+									ORDER BY `capa` DESC";
+									
+						$result = mysql_query($sqlFotos,$conexao) or die(mysql_error());
+
+						while($row = mysql_fetch_array($result)){
+						
+							$arrFotos[] = $row;
+						
+						}
+					
+						if($arrFotos){
+						
+							foreach($arrFotos as $fotos){
+							
+								$filename =  $fotos['path'];
+								$extensao = end(explode(".",$filename));
+								$handle = fopen ($filename, "rb");
+								$arrFotosBinario = fread ($handle, filesize ($filename));
+								fclose($handle);
+								
+								$client->inserirFoto($token, $key, $extensao, $arrFotosBinario);
+					
+							}
+						
+						}
+						
+						if($edt['id']){
+
+							$sqlUpdate = "UPDATE veiculos SET icarros= 1 WHERE id=".$edt['id'];
+
+							if(mysql_query($sqlUpdate,$conexao)){
+								
+								$countAtualizados++;
+							
+							}
+							
+						}
+					
+					}
+					
+					
+
+				}
+			
+			}
+		
+		}
+		
+		return $countAtualizados;
+		//return $arrStatus['descricao'];
+		//return $token;
+		
+		
+	}
+
+?>

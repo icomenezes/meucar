@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+<div class="inline" style="clear:both; margin-left:5px; margin-bottom:10px;" id="div_botoes">
+	<input type="button" class="btn-small-imp" id="impri" value="Imprimir" onclick="imprimir('content','Permissoes');"/>
+</div>
+<table class="table">
+	<thead>
+		<tr>
+			<th>Usu&aacute;rio</th>
+			<th>Perfil</th>
+			<th>Cargo</th>
+			<th>Permiss&otilde;es</th>
+		</tr>
+	</thead>
+	<tbody>
+	
+	<?php
+	
+		$cont=1;
+		
+		foreach($this->permissoes as $v){
+		
+			$nome = ucwords($v['nome']);
+			echo "<tr><td><div style=\"float:left; display:inline; width:112px; margin-bottom:5px;\" >".$v['nome']."</div></td><td><div style=\"float:left; display:inline; width:112px; margin-bottom:5px;\" >".$v['perfil']."</div></td><td><div style=\"float:left; display:inline; width:112px; margin-bottom:5px;\" >".$v['cargo']."</div></td><td>";
+			
+			foreach($v as $k=>$v2){
+			
+				if($v2==1){
+					$arrPerm = explode("_", $k);					
+					$perm= implode(" ",$arrPerm);
+					$perm = ucwords($perm);
+					
+					echo "<div style=\"float:left; display:inline; width:215px; margin-bottom:5px;\" >".$perm."</div>";
+				}
+			}
+			echo "</td></tr>";
+		}
+	
+	?>
+	</tbody>
+</table>
+
+<script type="text/javascript">
+
+function imprimir(id, pg){
+
+		$("#impri").css("display","none");
+	
+		var oPrint, oJan;
+		oPrint = document.getElementById(id).innerHTML;
+		//oPrint = $("#"+id).html();
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.focus();
+		oJan.window.print();
+		oJan.document.close();
+
+		$("#impri").css("display","inline");
+
+	}
+	
+</script>

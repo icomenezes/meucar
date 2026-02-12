@@ -1,0 +1,567 @@
+<form class="form" action="novo-relatorio-fluxo-loja" method="post" id="form">
+	<?php
+		$disab = "";
+		if($_SESSION['sessionUser']['id_perfil'] != 2){
+			$disab = "disabled='disabled'";
+		}
+	?>
+	<div class="inline" id="div_select">
+		<label class="label">Vendedor</label>
+		<select <?php echo $disab; ?> name = "id_usuario" id="id_usuario" class="select">
+			<option value = "0">Todos</option>
+			<?php
+			
+				foreach($this->vendedores as $vendedor){
+				
+					if($vendedor['id'] == $this->vendedor){
+					
+						echo "<option selected='selected' value = '".$vendedor['id']."'>".$vendedor['nome']."</option>";
+
+					}elseif($vendedor['id'] == $_SESSION['sessionUser']['id'] && $_SESSION['sessionUser']['id_perfil'] != 2){
+
+						echo "<option selected='selected' value = '".$vendedor['id']."'>".$vendedor['nome']."</option>";
+					
+					}else{
+				
+						echo "<option value = '".$vendedor['id']."'>".$vendedor['nome']."</option>";
+					
+					}
+				
+				}
+			?>
+			</select>
+	</div>
+
+
+	<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" name="mes" onChange="enviaPeriodo(this.value);" >
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+
+					if($this->mes == $ultimoDia."_".$mesNum."_".$anoNum){
+						echo "<option selected='selected' value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+					}else{
+						echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+					}
+					
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text"  style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->dataInicial; ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text"  style="width:90%" name="data_final" id="data_final" value="<?php echo $this->dataFinal; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline" style="clear:both; width:50%;" id="div_botoes">
+		<input type="hidden" id="relatorio" name="relatorio" value="<?php echo $this->relatorio; ?>"/>
+		<input type="hidden" id="tipo_relatorio" name="tipo_relatorio" value="Relatorio Fluxo Loja"/>
+		<input type="submit" class="btn-small btn-find" value="Pesquisar"/>
+		<!-- <input type="button" class="btn-small-xls" value="Gerar XLS" onclick="geraXls();"/> -->
+		<input type="button" class="btn-small-imp" value="Imprimir" onclick="imprimir('print','Fornecedores');"/>
+	</div>
+
+</form>
+
+
+
+<div id="print">
+
+	<link rel="stylesheet" href="/css/style.css" type="text/css" media="print">
+
+	<?php
+
+		if ($this->arrRelatorio){
+
+			$count = 0;
+			$mes = "";
+
+			foreach ($this->arrRelatorio as $relatorio){
+
+				if(substr($relatorio['data'], 5, 2) != $mes){
+					$count++;
+					$mes = substr($relatorio['data'], 5, 2);
+				}
+
+			}
+
+
+
+			if($count == 1){
+
+				$head = "<tr><th>RALE</th>";
+
+				$linhaR = "<tr><td><b><span style='font-size: 15px; color: red;'>R</span>etornos Realizados</b></td>";
+				$r = 0;
+				$rTotal = 0;
+
+				$linhaA = "<tr><td><b><span style='font-size: 15px; color: red;'>A</span>tendimentos Loja</b></td>";
+				$a = 0;
+				$aTotal = 0;
+
+				$linhaL = "<tr><td><b><span style='font-size: 15px; color: red;'>L</span>igações Recebidas</b></td>";
+				$l = 0;
+				$lTotal = 0;
+
+				$linhaE = "<tr><td><b><span style='font-size: 15px; color: red;'>E</span>ntregas Realizadas</b></td>";
+				$e = 0;
+				$eTotal = 0;
+
+
+				foreach ($this->arrRelatorio as $key=>$relatorio){
+
+					$arrUsuarios[$relatorio['id_usuario']][$key] = $this->arrRelatorio[$key];
+
+					if($relatorio['id_origem_cliente'] == 6){
+
+						$r += $relatorio['qtd'];
+						$rTotal += $relatorio['qtd'];
+
+						if($this->arrRelatorio[$key+1]['data'] != $relatorio['data']){
+							$head .= "<th style='vertical-align:middle;'>".substr(implode("/",array_reverse(explode("-",$relatorio['data']))), 0, 5)."</th>";
+							$linhaR .= "<td style='text-align: center;'><span>".$r."</span></td>";
+							$r = 0;
+						}
+
+					}
+
+					if($relatorio['id_origem_cliente'] == 7){
+
+						$a += $relatorio['qtd'];
+						$aTotal += $relatorio['qtd'];
+
+						if($this->arrRelatorio[$key+1]['data'] != $relatorio['data']){
+							$linhaA .= "<td style='text-align: center;'><span>".$a."</span></td>";
+							$a = 0;
+						}
+
+					}
+
+					if($relatorio['id_origem_cliente'] == 8){
+
+						$l += $relatorio['qtd'];
+						$lTotal += $relatorio['qtd'];
+
+						if($this->arrRelatorio[$key+1]['data'] != $relatorio['data']){
+							$linhaL .= "<td style='text-align: center;'><span>".$l."</span></td>";
+							$l = 0;
+						}
+
+					}
+
+					if($relatorio['id_origem_cliente'] == 9){
+
+						$e += $relatorio['qtd'];
+						$eTotal += $relatorio['qtd'];
+
+						if(!isset($this->arrRelatorio[$key+1]['data']) || ($this->arrRelatorio[$key+1]['data'] != $relatorio['data'])){
+							$linhaE .= "<td style='text-align: center;'><span>".$e."</span></td>";
+							$e = 0;
+						}
+
+					}
+
+				}
+
+
+				$head .= "<th>TOTAL</th></tr>";
+				$linhaR .= "<td style='text-align: center;'>".$rTotal."</td></tr>";
+				$linhaA .= "<td style='text-align: center;'>".$aTotal."</td></tr>";
+				$linhaL .= "<td style='text-align: center;'>".$lTotal."</td></tr>";
+				$linhaE .= "<td style='text-align: center;'>".$eTotal."</td></tr>";
+
+				echo "<table class='table'>".$head.$linhaR.$linhaA.$linhaL.$linhaE."</table>";
+
+
+				foreach ($arrUsuarios as $usuarios){
+
+					$arrNome = current($usuarios);
+					$head = "<tr><th>".$arrNome['nomeUsuario']."</th>";
+
+					$linhaR = "<tr><td><b><span style='font-size: 15px; color: red;'>R</span>etornos Realizados</b></td>";
+					$r = 0;
+					$rTotal = 0;
+
+					$linhaA = "<tr><td><b><span style='font-size: 15px; color: red;'>A</span>tendimentos Loja</b></td>";
+					$a = 0;
+					$aTotal = 0;
+
+					$linhaL = "<tr><td><b><span style='font-size: 15px; color: red;'>L</span>igações Recebidas</b></td>";
+					$l = 0;
+					$lTotal = 0;
+
+					$linhaE = "<tr><td><b><span style='font-size: 15px; color: red;'>E</span>ntregas Realizadas</b></td>";
+					$e = 0;
+					$eTotal = 0;
+
+					$strTable = "<br><br><table class='table'>";
+					
+
+					foreach ($usuarios as $key => $usuario){
+						
+						if($usuario['id_origem_cliente'] == 6){
+
+							$r += $usuario['qtd'];
+							$rTotal += $usuario['qtd'];
+
+							if(!isset($usuarios[$key+1]['data']) || ($usuarios[$key+1]['data'] != $usuario['data'])){
+								$head .= "<th style='vertical-align:middle;'>".substr(implode("/",array_reverse(explode("-",$usuario['data']))), 0, 5)."</th>";
+								$linhaR .= "<td style='text-align: center;'><span>".$r."</span></td>";
+								$r = 0;
+							}
+
+						}
+
+						if($usuario['id_origem_cliente'] == 7){
+
+							$a += $usuario['qtd'];
+							$aTotal += $usuario['qtd'];
+
+							if(!isset($usuarios[$key+1]['data']) || ($usuarios[$key+1]['data'] != $usuario['data'])){
+								$linhaA .= "<td style='text-align: center;'><span>".$a."</span></td>";
+								$a = 0;
+							}
+
+						}
+
+						if($usuario['id_origem_cliente'] == 8){
+
+							$l += $usuario['qtd'];
+							$lTotal += $usuario['qtd'];
+
+							if(!isset($usuarios[$key+1]['data']) || ($usuarios[$key+1]['data'] != $usuario['data'])){
+								$linhaL .= "<td style='text-align: center;'><span>".$l."</span></td>";
+								$l = 0;
+							}
+
+						}
+
+						if($usuario['id_origem_cliente'] == 9){
+
+							$e += $usuario['qtd'];
+							$eTotal += $usuario['qtd'];
+
+							if(!isset($usuarios[$key+1]['data']) || ($usuarios[$key+1]['data'] != $usuario['data'])){
+								$linhaE .= "<td style='text-align: center;'><span>".$e."</span></td>";
+								$e = 0;
+							}
+
+						}
+
+					}
+
+					$head .= "<th>TOTAL</th></tr>";
+					$linhaR .= "<td style='text-align: center;'>".$rTotal."</td></tr>";
+					$linhaA .= "<td style='text-align: center;'>".$aTotal."</td></tr>";
+					$linhaL .= "<td style='text-align: center;'>".$lTotal."</td></tr>";
+					$linhaE .= "<td style='text-align: center;'>".$eTotal."</td></tr>";
+
+					$strTable .= $head;
+					$strTable .= $linhaR;
+					$strTable .= $linhaA;
+					$strTable .= $linhaL;
+					$strTable .= $linhaE;
+
+					$strTable .= "</table>";
+
+					echo $strTable;
+					
+				}
+
+
+				//print("<pre>");
+				//var_export($this->arrRelatorio);
+				//var_export($arrUsuarios);
+				//print("</pre>");
+
+			}else{
+
+				$option2 = "";
+
+				$totalRetorno = 0;
+				$totalAtendimento = 0;
+				$totalLigacoes = 0;
+				$totalEntregas = 0;
+
+				$thead = "<tr><th>RALE</th>";
+
+				foreach ($this->arrRelatorio as $relatorio){
+
+					switch (substr($relatorio['data'], 5, 2)){
+						case '01':
+							$option =  "Janeiro";
+							break;
+							
+						case '02':
+							$option =  "Fevereiro";
+							break;
+						
+						case '03':
+							$option =  "Março";
+							break;
+							
+						case '04':
+							$option =  "Abril";
+							break;
+							
+						case '05':
+							$option =  "Maio";
+							break;
+							
+						case '06':
+							$option =  "Junho";
+							break;
+							
+						case '07':
+							$option =  "Julho";
+							break;
+							
+						case '08':
+							$option =  "Agosto";
+							break;
+							
+						case '09':
+							$option =  "Setembro";
+							break;
+						
+						case '10':
+							$option =  "Outubro";
+							break;
+							
+						case '11':
+							$option =  "Novembro";
+							break;
+							
+						case '12':
+							$option =  "Dezembro";
+							break;
+			
+					}
+
+					if($relatorio['id_origem_cliente'] == 6){
+
+						$arrMeses[$relatorio['id_origem_cliente']][substr($relatorio['data'], 5, 2)] += $relatorio['qtd'];
+						$totalRetorno += $relatorio['qtd'];
+
+						
+
+						if($option != $option2){
+							$thead .= "<th style='vertical-align:middle;'>".$option."</th>";
+							$option2 = $option;
+						}
+
+						$retorno = "<tr><td><b><span style='font-size: 15px; color: red;'>R</span>etornos Realizados</b></td>";
+					}elseif($relatorio['id_origem_cliente'] == 7){
+						$arrMeses[$relatorio['id_origem_cliente']][substr($relatorio['data'], 5, 2)] += $relatorio['qtd'];
+						$totalAtendimento += $relatorio['qtd'];
+						$atendimento = "<tr><td><b><span style='font-size: 15px; color: red;'>A</span>tendimento Loja</b></td>";
+					}elseif($relatorio['id_origem_cliente'] == 8){
+						$arrMeses[$relatorio['id_origem_cliente']][substr($relatorio['data'], 5, 2)] += $relatorio['qtd'];
+						$totalLigacoes += $relatorio['qtd'];
+						$ligacoes = "<tr><td><b><span style='font-size: 15px; color: red;'>L</span>igações Recebidas</b></td>";
+					}elseif($relatorio['id_origem_cliente'] == 9){
+						$arrMeses[$relatorio['id_origem_cliente']][substr($relatorio['data'], 5, 2)] += $relatorio['qtd'];
+						$totalEntregas += $relatorio['qtd'];
+						$entregas = "<tr><td><b><span style='font-size: 15px; color: red;'>E</span>ntregas Realizadas</b></td>";
+					}
+
+				}
+
+
+				foreach ($arrMeses as $key => $arrMes){
+
+					if($key == 6){
+						foreach ($arrMes as $value){
+							$retorno .= "<td>".$value."</td>";
+						}
+					}elseif($key == 7){
+						foreach ($arrMes as $value){
+							$atendimento .= "<td>".$value."</td>";
+						}
+					}elseif($key == 8){
+						foreach ($arrMes as $value){
+							$ligacoes .= "<td>".$value."</td>";
+						}
+					}elseif($key == 9){
+						foreach ($arrMes as $value){
+							$entregas .= "<td>".$value."</td>";
+						}
+					}
+					
+				}
+
+				// print "<br><br><br><br><br><br><br><br><br><br><pre>";
+				// var_export($arrMeses);
+				// print "</pre>";
+
+				$thead .= "<th>Total</th></tr>";
+				$retorno .= "<td>".$totalRetorno."</td></tr>";
+				$atendimento .= "<td>".$totalAtendimento."</td></tr>";
+				$ligacoes .= "<td>".$totalLigacoes."</td></tr>";
+				$entregas .= "<td>".$totalEntregas."</td></tr>";
+
+				echo "<table class='table'>".$thead.$retorno.$atendimento.$ligacoes.$entregas."</table>";
+
+			}
+
+		}else{
+
+			echo "<span style='margin-left: 11px; font-size:20px; color: red;'>Não há dados para serem exibidos!</span>";
+			
+		}
+
+	?>
+
+	<div id="usuarios"></div>
+
+</div>
+
+<script type="text/javascript">
+
+
+	function usuarios(){
+
+		$.ajax({
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			async: false,
+			type : 'POST',
+			dataType: 'text',
+			success: function(data){
+
+				$("#veiculo").html(data);
+
+			}
+		});
+
+	}
+
+	function imprimir(id, pg) {
+	
+		var oPrint, oJan;
+		oPrint = window.document.getElementById(id).innerHTML;
+		oJan = window.open(pg);
+		oJan.document.write(oPrint);
+		oJan.window.print();
+		oJan.document.close();
+		oJan.focus();
+
+    }
+
+	function geraXls(){
+	
+		$("form").attr("action","gerar-xls");
+		$("form").submit();
+		$("form").attr("action","fornecedores");
+	
+	}
+	
+$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+	
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

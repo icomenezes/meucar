@@ -1,0 +1,88 @@
+<form id="propaganda_site" name="propaganda_site" enctype="application/x-www-form-urlencoded" action="/upload-propagandas/edt" class="form" method="post">
+
+	
+	<div class="inline" <?php echo ($this->imagem[0]['tipo_imagem'])==1?"style='height:300px;'":"style='width:600px; height:150px;'"; ?>>
+		<img <?php echo ($this->imagem[0]['tipo_imagem'])==1?"style='height:300px;'":"style='width:600px;'"; ?> src="/<?php echo $this->imagem[0]['path']; ?>"/>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<input type="radio" id="tipo_imagem" name="tipo_imagem" value="1" <?php echo ($this->imagem[0]['tipo_imagem'])==1?"checked='checked;'":""; ?>/>Retrato
+		<br>
+		<input type="radio" id="tipo_imagem2" name="tipo_imagem" value="2" <?php echo ($this->imagem[0]['tipo_imagem'])==2?"checked='checked;'":""; ?>/>Paisagem
+	</div>
+	
+	<div class="inline" style="clear:both; width:97%;">
+		<label class="label">Link</label>
+		<input type="text" id="link" name="link" class="text" title="Link" value="<?php echo $this->imagem[0]['link']; ?>" />
+	</div>
+
+	<div class="inline" style="clear:both;">
+		<input type="hidden" id="id" name="id" value="<?php echo $this->imagem[0]['id']; ?>"/>
+		<input type="button" id="button" class="btn-small btn-add" value="Salvar" onClick="validaCampo();"/>
+	</div>
+
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if(!$("#tipo_imagem").is(":checked")){
+	
+		if(!$("#tipo_imagem2").is(":checked")){
+		
+			erro = true;
+			
+			msg += "<br>Selecione o tipo de imagem retraro ou paisagem.";
+		
+		}
+	
+	}
+	
+	if($("#link").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo link deve ser preenchido.";
+	
+	}
+	
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

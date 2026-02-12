@@ -1,0 +1,265 @@
+<!---<section id="content">-->
+<div class="grid_9" style= "margin-left:8px; height:400px; background-color:#FFFFFF;  border-radius:3px; border:1px solid #CCCCCC; -moz-border-radius:3px; -webkit-border-radius:3px; ">
+	<div id="div_texto" style="font-size:20px; margin-left:8px;">
+		<br><br>
+		Sim nós temos Carros Usados em Jundiaí!<br><br>
+		O site Meu Car tem as melhores ofertas de carros para compra ou venda em Jundiaí, nossos classificados são um verdadeiro Feirão de Carros!<br><br>
+		Contando com as melhores lojas de carros em Jundiaí e região, aqui você encontra:<br><br>
+
+		<li style= "margin-left:10px;">Carros Usados;</li>
+		<li style= "margin-left:10px;">Carros novos</li>
+		<li style= "margin-left:10px;">Carros semi novos</li>
+		<li style= "margin-left:10px;">Automoveis Okm</li>
+		<br><br>
+		Nós ajudamos você a encontrar carros a venda em Jundiai e a comprar seu carro! Afinal nos somos o site especializado em classificados de veículos Meu Car.
+		<br><br>
+		<center><a href="/carros-usados">O CARRO QUE VOCÊ PROCURA ESTÁ AQUI!</a></center>
+	</div>
+	
+	
+            <div class="wrapper" style="margin-top:30px;">
+               <ul class="tabs-1">
+                  <li><a href="#tab3">Carros <span>Usados</span></a></li>
+                  <li><a href="#tab4">Carros <span>0KM</span></a></li>
+               </ul>
+            </div>
+
+            <div class="tab_container-1">
+               <div id="tab3" class="tab_content-1">
+                  <div class="tabs-1-padd">
+<?php
+
+	$arrVeiculos = $this->arrVeiculos;
+	$arrVeiculosNovos = $this->arrVeiculosNovos;
+
+$cont = 0;
+
+for ($i = 5; $i <= 16; $i++) {
+
+   if ($arrVeiculos[$i]['descricao_site']) {
+
+      $arrVeiculos[$i]['modelo'] = $arrVeiculos[$i]['descricao_site'];
+   }
+
+   if ($arrVeiculos[$i]['exibir_valor_site'] == 1) {
+
+      $arrVeiculos[$i]['valor_venda'] = "<br>R$ " . money_format("%i", $arrVeiculos[$i]['valor_venda']);
+   } else {
+
+      $arrVeiculos[$i]['valor_venda'] = "<br>Consulte-nos";
+   }
+
+   $cont++;
+
+   if ($cont == 1) {
+
+      echo "<div class='wrapper img-indent-bot1'>";
+   }
+
+   if ($cont == 4) {
+
+      echo "<div class='tab-col' style='height:170px;'>";
+   } else {
+
+      echo "<div class='tab-col tab-col-indent'>";
+   }
+
+   if ($arrVeiculos[$i]['descricao_site']) {
+
+      echo "<a href='/carros-usados/veiculo/id/" . $arrVeiculos[$i]['id'] . "'>
+											<div class='p2'>
+												<img style='height:97px; width:138px;' src='/" . $arrVeiculos[$i]['path'] . "' alt='' />
+											</div>
+												<span class='block mb5'><a href='/carros-usados/veiculo/id/" . $arrVeiculos[$i]['id'] . "' class='link-2'>" . $arrVeiculos[$i]['modelo'] . "<br><span style='font-size:12px;'> " . $arrVeiculos[$i]['combustivel'] . " " . $arrVeiculos[$i]['ano_modelo'] . " " . $arrVeiculos[$i]['valor_venda'] . "</span></a></span>
+											</div>
+										  </a>";
+   } else {
+
+      echo "<a href='/carros-usados/veiculo/id/" . $arrVeiculos[$i]['id'] . "'><div class='p2'>
+												<img style='height:97px; width:138px;' src='/" . $arrVeiculos[$i]['path'] . "' alt='' />
+											</div>
+												<span class='block mb5'><a href='/carros-usados/veiculo/id/" . $arrVeiculos[$i]['id'] . "' class='link-2'>" . $arrVeiculos[$i]['modelo'] . " " . $arrVeiculos[$i]['ano_modelo'] . "<span style='font-size:12px;'>" . $arrVeiculos[$i]['valor_venda'] . "</span></a></span>
+										</div></a>";
+   }
+
+   if ($cont == 4) {
+
+      echo "</div>";
+
+      $cont = 0;
+   }
+}
+?>
+
+                  </div>
+               </div>
+               <div id="tab4" class="tab_content-1">
+                  <div class="tabs-1-padd">
+
+                     <?php
+                     if (count($arrVeiculosNovos) < 12) {
+
+                        $terminoFor = count($arrVeiculosNovos) - 1;
+                     } else {
+
+                        $terminoFor = 11;
+                     }
+
+
+                     $cont = 0;
+
+                     for ($i = 0; $i <= $terminoFor; $i++) {
+
+                        if ($arrVeiculosNovos[$i]['descricao_site']) {
+
+                           $arrVeiculosNovos[$i]['modelo'] = $arrVeiculosNovos[$i]['descricao_site'];
+                        }
+
+                        if ($arrVeiculosNovos[$i]['exibir_valor_site'] == 1) {
+
+                           $arrVeiculosNovos[$i]['valor_venda'] = "<br>R$ " . money_format("%i", $arrVeiculosNovos[$i]['valor_venda']);
+                        } else {
+
+                           $arrVeiculosNovos[$i]['valor_venda'] = "<br>Consulte-nos";
+                        }
+
+                        $cont++;
+
+                        if ($cont == 1) {
+
+                           echo "<div class='wrapper img-indent-bot1'>";
+                        }
+
+                        if ($cont == 4) {
+
+                           echo "<div class='tab-col' style='height:170px;'>";
+                        } else {
+
+                           echo "<div class='tab-col tab-col-indent'>";
+                        }
+
+                        if ($arrVeiculosNovos[$i]['descricao_site']) {
+
+                           echo "<a href='/carros-usados/veiculo/id/" . $arrVeiculosNovos[$i]['id'] . "'>
+											<div class='p2'>
+												<img style='height:97px; width:138px;' src='/" . $arrVeiculosNovos[$i]['path'] . "' alt='' />
+											</div>
+												<span class='block mb5'><a href='/carros-usados/veiculo/id/" . $arrVeiculosNovos[$i]['id'] . "' class='link-2'>" . $arrVeiculosNovos[$i]['modelo'] . "<br><span style='font-size:12px;'> " . $arrVeiculosNovos[$i]['combustivel'] . " " . $arrVeiculosNovos[$i]['ano_modelo'] . " " . $arrVeiculosNovos[$i]['valor_venda'] . "</span></a></span>
+											</div>
+										  </a>";
+                        } else {
+
+                           echo "<a href='/carros-usados/veiculo/id/" . $arrVeiculosNovos[$i]['id'] . "'><div class='p2'>
+												<img style='height:97px; width:138px;' src='/" . $arrVeiculosNovos[$i]['path'] . "' alt='' />
+											</div>
+												<span class='block mb5'><a href='/carros-usados/veiculo/id/" . $arrVeiculosNovos[$i]['id'] . "' class='link-2'>" . $arrVeiculosNovos[$i]['modelo'] . " " . $arrVeiculosNovos[$i]['ano_modelo'] . "<span style='font-size:12px;'>" . $arrVeiculosNovos[$i]['valor_venda'] . "</span></a></span>
+										</div></a>";
+                        }
+
+                        if ($cont == 4) {
+
+                           echo "</div>";
+
+                           $cont = 0;
+                        }
+                     }
+                     ?>
+                  </div>
+               </div>
+            </div>
+        
+</div>
+
+   <div class="container_12">
+      <div class="wrapper" >
+         <div class="grid_3">
+            <div class="box-1 box-indent">
+               <h3 class="dark"><b>Simulador de Financiamentos</b></h3>
+               <div class="box-1-container">
+                  <ul class="list-1 p2">
+                     <li><b>Fa&ccedil;a uma busca dos ve&iacute;culos dispon&iacute;veis para venda informando o valor da entrada que deseja investir e o valor das parcelas mensais<br>&Eacute; simples e r&aacute;pido!</b></li>
+                  </ul>
+                  <center><a href="/carros-usados/simulador" class="link-1 color-3">SIMULADOR</a></center>
+               </div>
+            </div>
+            <div class="box-2">
+				<?php
+				$maximo = rand(0, count($this->arrPropagandasR) - 1);
+
+				echo "<a target='new' href='" . $this->arrPropagandasR[$maximo]['link'] . "'><img style='width:220px;' src='/" . $this->arrPropagandasR[$maximo]['path'] . "'/></a>";
+				?>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <script type="text/javascript">
+
+     // $("#home").attr("class", "current");
+
+      var cont = 0;
+      var ids = new Array();
+
+      ids[0] = "<?php echo $arrVeiculos[0]['id'] ?>";
+      ids[1] = "<?php echo $arrVeiculos[1]['id'] ?>";
+      ids[2] = "<?php echo $arrVeiculos[2]['id'] ?>";
+      ids[3] = "<?php echo $arrVeiculos[3]['id'] ?>";
+      ids[4] = "<?php echo $arrVeiculos[4]['id'] ?>";
+
+      function mudaFotoIndex(id, click) {
+
+         var idTemp = new Array();
+
+         path = $("#" + id).attr('src');
+         desc = $("#" + id).attr('alt');
+
+         idTemp = id.split("_");
+
+         $("#capa").attr('src', path);
+         $("#alt_capa").html(desc);
+
+         $("#visualizar_veiculo").attr('href', '/carros-usados/veiculo/id/' + idTemp[1]);
+
+         if (click == 0) {
+
+            cont++;
+
+            if (cont == 5) {
+
+               cont = 0;
+
+            }
+
+            setTimeout('mudaFotoIndex("foto_' + ids[cont] + '",0)', 10000);
+
+         }
+
+      }
+
+      mudaFotoIndex('foto_<?php echo $arrVeiculos[0]['id'] ?>', 0);
+
+   </script>
+
+   <script>
+      (function(i, s, o, g, r, a, m) {
+         i['GoogleAnalyticsObject'] = r;
+         i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+         }, i[r].l = 1 * new Date();
+         a = s.createElement(o),
+                 m = s.getElementsByTagName(o)[0];
+         a.async = 1;
+         a.src = g;
+         m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+      ga('send', 'pageview');
+
+      $(".link-2").css("text-transform", "uppercase");
+	  
+	  $("title").html("Carros usados em Jundiaí");
+
+   </script>
+
+<!--</section>--->

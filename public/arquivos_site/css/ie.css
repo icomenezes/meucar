@@ -1,0 +1,21 @@
+.button,
+.header-but,
+.menu ,
+ul.tabs li.firs a,
+ul.tabs li.last a,
+.tab_container,
+.list-img,
+.box-2,
+.box-1,
+h3.light,
+h3.light1,
+ul.tabs-1,
+.tab_container-1,
+.footer-menu,
+.marker {behavior: url(js/PIE.htc); position:relative;}
+
+.header-search input {
+	line-height:18px;	
+}
+
+ul.tabs li.active.firs a { margin:0 0px 0px 0px; text-indent:-1px;}

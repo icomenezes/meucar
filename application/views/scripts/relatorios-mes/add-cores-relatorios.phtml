@@ -1,0 +1,231 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add-cores-relatorios" class="form" method="post">
+
+	
+	<label class="label" style="margin-left:10px; margin-bottom:10px;  margin-top:10px;">DIAS EM ESTOQUE</label>
+
+	<div class="inline" style="margin-left:30px;">
+		<label class="label">Verde at&eacute;</label>
+		<input type="text" id="verde_estoque" name="verde_estoque" class="text req" value="<?php echo $this->arrCores['verde_estoque']; ?>" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Amarelo at&eacute;</label>
+		<input type="text" id="amarelo_estoque" name="amarelo_estoque" class="text req" value="<?php echo $this->arrCores['amarelo_estoque']; ?>" onKeyUp="vermelhoEstoque(this.value);" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Vermelho apartir de</label>
+		<input type="text" readonly="readonly" id="vermelho_estoque" class="text req" value="" />
+	</div>
+	
+	<label class="label" style="clear:both; margin-left:10px; margin-bottom:10px;  margin-top:10px;">DIAS DE REVIS&Atilde;O</label>
+
+	<div class="inline" style="margin-left:30px;">
+		<label class="label">Verde at&eacute;</label>
+		<input type="text" id="verde_revisao" name="verde_revisao" class="text req" value="<?php echo $this->arrCores['verde_revisao']; ?>" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Amarelo at&eacute;</label>
+		<input type="text" id="amarelo_revisao" name="amarelo_revisao" class="text req" value="<?php echo $this->arrCores['amarelo_revisao']; ?>" onKeyUp="vermelhoRevisao(this.value);"/>
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Vermelho apartir de</label>
+		<input type="text" readonly="readonly" id="vermelho_revisao" class="text req" value="" />
+	</div>
+	
+	<label class="label" style="clear:both; margin-left:10px; margin-bottom:10px;  margin-top:10px;">LUCRO</label>
+
+	<div class="inline" style="margin-left:30px;">
+		<label class="label">Vermelho at&eacute;</label>
+		<input type="text" id="vermelho_lucro" name="vermelho_lucro" class="text req" value="<?php echo money_format("%i",$this->arrCores['vermelho_lucro']); ?>" onKeyUp="validaMoedaBR(this.id);" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Amarelo at&eacute;</label>
+		<input type="text" id="amarelo_lucro" name="amarelo_lucro" class="text req" value="<?php echo money_format("%i",$this->arrCores['amarelo_lucro']); ?>" onKeyUp="vermelhoLucro(this.value); validaMoedaBR(this.id);" />
+	</div>
+	
+	<div class="inline" style="margin-bottom:30px;">
+		<label class="label">Verde apartir de</label>
+		<input type="text" readonly="readonly" id="verde_lucro" class="text req" value="" />
+	</div>
+
+	<div class="inline" style="clear:both; margin-top:10px;">
+		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->arrCores['id_empresa']; ?>"/>
+		<input type="button" id="button" name="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo('')"/>
+	</div>
+	
+</form>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function vermelhoRevisao(valor){
+
+	if(valor == ""){
+	
+		$("#vermelho_revisao").val("");
+	
+	}else{
+	
+		valor = parseInt(valor);
+	
+		$("#vermelho_revisao").val(valor+1);
+		
+	}
+
+}
+
+function vermelhoEstoque(valor){
+
+	if(valor == ""){
+	
+		$("#vermelho_estoque").val("");
+	
+	}else{
+	
+		valor = parseInt(valor);
+	
+		$("#vermelho_estoque").val(valor+1);
+		
+	}
+
+}
+
+function vermelhoLucro(valor){
+
+	if(valor == ""){
+	
+		$("#verde_lucro").val("");
+	
+	}else{
+	
+		valor = valor.replace(",",".");
+	
+		valor = parseFloat(valor);
+	
+		$("#verde_lucro").val(valor+0.01);
+		
+	}
+
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#vermelho_estoque").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if($("#amarelo_estoque").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if($("#vermelho_revisao").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if($("#amarelo_revisao").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if($("#vermelho_lucro").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if($("#amarelo_lucro").val() == ""){
+		
+		erro = true;
+		
+		//msg += "<br>O H&aacute; campo n&atilde;o preenchido.";
+	
+	}
+	
+	if(parseFloat($("#amarelo_lucro").val().replace(",",".")) <= parseFloat($("#vermelho_lucro").val().replace(",","."))){
+		
+		erro = true;
+		
+		msg += "<br>O valor lucro amarelo n&atilde;o pode ser menor ou igual ao lucro vermelho";
+	
+	}
+	
+	if(parseInt($("#amarelo_estoque").val()) <= parseInt($("#verde_estoque").val())){
+		
+		erro = true;
+		
+		msg += "<br>O valor estoque amarelo n&atilde;o pode ser menor ou igual ao estoque verde";
+	
+	}
+	
+	if(parseInt($("#amarelo_revisao").val()) <= parseInt($("#verde_revisao").val())){
+		
+		erro = true;
+		
+		msg += "<br>O valor revis&atilde;o amarelo n&atilde;o pode ser menor ou igual ao revis&atilde;o verde";
+	
+	}
+
+	if(erro){
+		
+		msg += "<br>H&aacute; campo(s) n&atilde;o preenchido(s).";
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+	
+	vermelhoRevisao($("#amarelo_revisao").val());
+	vermelhoEstoque($("#amarelo_estoque").val());
+	vermelhoLucro($("#amarelo_lucro").val());
+
+})
+</script>

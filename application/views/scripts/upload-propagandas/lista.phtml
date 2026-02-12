@@ -1,0 +1,39 @@
+<div class="inline" style="clear:both; margin-bottom:10px; margin-left:5px;">
+	<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>upload-propagandas/upload'" />
+</div>
+<table class = 'table'>
+
+<thead><tr><th>Imagem</th><th>Tipo Imagem</th><th>Link</th><th>Data Upload</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+	foreach($this->imagens as $m){
+?>		
+		<tr>
+			<td><center><img <?php echo ($m['tipo_imagem'])==1?"style='height:200px;'":"style='width:500px;'"; ?> src="/<?php echo $m['path'] ?>"/></center></td>
+			<td><?php echo ($m['tipo_imagem'])==1?"Retrato":"Paisagem"; ?></td>
+			<td><?php echo $m['link']; ?></td>
+			<td><?php echo implode("/",array_reverse(explode("-",$m['data_upload']))); ?></td>
+			<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $m['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete(<?php echo $m['id']?>)" /></td>
+		</tr>
+<?php		
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(id){
+	
+		if(confirm("Deseja realmente excluir a imagem?")){
+		
+			window.location.href = "del/id/"+id;
+		
+		}
+	
+	}
+
+</script>

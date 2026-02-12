@@ -1,0 +1,268 @@
+/usr/sbin/mysqld, Version: 5.1.71-rel14.9-log ((Percona Server (GPL), 14.9)). started with:
+Tcp port: 0  Unix socket: /var/lib/mysql/mysql.sock
+Time                 Id Command    Argument
+/usr/sbin/mysqld, Version: 5.1.71-rel14.9-log ((Percona Server (GPL), 14.9)). started with:
+Tcp port: 3306  Unix socket: /var/lib/mysql/mysql.sock
+Time                 Id Command    Argument
+/usr/sbin/mysqld, Version: 5.1.71-rel14.9-log ((Percona Server (GPL), 14.9)). started with:
+Tcp port: 0  Unix socket: /var/lib/mysql/mysql.sock
+Time                 Id Command    Argument
+# Time: 140808 14:46:24
+# User@Host: meucar_dedicado[meucar_dedicado] @  [189.69.41.104]
+# Thread_id: 139622  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 23.203112  Lock_time: 0.000098  Rows_sent: 32310  Rows_examined: 32310  Rows_affected: 0  Rows_read: 32310
+# Bytes_sent: 2759559
+use meucar_dedicado;
+SET timestamp=1407519984;
+
+SELECT *
+FROM meucar_dedicado.modelos
+limit 100000;
+# Time: 140808 14:54:17
+# User@Host: meucar_dedicado[meucar_dedicado] @  [189.69.41.104]
+# Thread_id: 139622  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 23.132282  Lock_time: 0.000105  Rows_sent: 32310  Rows_examined: 32310  Rows_affected: 0  Rows_read: 32310
+# Bytes_sent: 2759559
+SET timestamp=1407520457;
+SELECT *
+FROM meucar_dedicado.modelos
+limit 100000;
+# Time: 140930  8:34:19
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853628  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.001443  Lock_time: 0.000121  Rows_sent: 0  Rows_examined: 5  Rows_affected: 0  Rows_read: 5
+# Bytes_sent: 291
+SET timestamp=1412076859;
+SELECT fv.*
+				 FROM fotos_veiculos as fv
+				 WHERE id_veiculo=1555 AnD SLeeP(3);
+# Time: 140930  8:34:43
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853628  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 24.002266  Lock_time: 0.000143  Rows_sent: 0  Rows_examined: 16  Rows_affected: 0  Rows_read: 16
+# Bytes_sent: 90
+SET timestamp=1412076883;
+SELECT o.opcional
+					 FROM veiculos_opcionais as vo
+					 INNER JOIN opcionais AS o ON o.id = vo.id_opcional 
+					 WHERE vo.id_veiculo=1555 AnD SLeeP(3);
+# Time: 140930  8:35:01
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853639  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.001432  Lock_time: 0.000104  Rows_sent: 0  Rows_examined: 5  Rows_affected: 0  Rows_read: 5
+# Bytes_sent: 291
+SET timestamp=1412076901;
+SELECT fv.*
+				 FROM fotos_veiculos as fv
+				 WHERE id_veiculo=1555 AnD slEEP('3');
+# Time: 140930  8:35:25
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853639  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 24.002462  Lock_time: 0.000107  Rows_sent: 0  Rows_examined: 16  Rows_affected: 0  Rows_read: 16
+# Bytes_sent: 90
+SET timestamp=1412076925;
+SELECT o.opcional
+					 FROM veiculos_opcionais as vo
+					 INNER JOIN opcionais AS o ON o.id = vo.id_opcional 
+					 WHERE vo.id_veiculo=1555 AnD slEEP('3');
+# Time: 140930  8:35:44
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853646  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.001507  Lock_time: 0.000123  Rows_sent: 0  Rows_examined: 5  Rows_affected: 0  Rows_read: 5
+# Bytes_sent: 291
+SET timestamp=1412076944;
+SELECT fv.*
+				 FROM fotos_veiculos as fv
+				 WHERE id_veiculo=1555/**/AND/**/SLEEP(3);
+# Time: 140930  8:36:08
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853646  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 24.002518  Lock_time: 0.000138  Rows_sent: 0  Rows_examined: 16  Rows_affected: 0  Rows_read: 16
+# Bytes_sent: 90
+SET timestamp=1412076968;
+SELECT o.opcional
+					 FROM veiculos_opcionais as vo
+					 INNER JOIN opcionais AS o ON o.id = vo.id_opcional 
+					 WHERE vo.id_veiculo=1555/**/AND/**/SLEEP(3);
+# Time: 140930  8:36:27
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853653  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.001502  Lock_time: 0.000120  Rows_sent: 0  Rows_examined: 5  Rows_affected: 0  Rows_read: 5
+# Bytes_sent: 291
+SET timestamp=1412076987;
+SELECT fv.*
+				 FROM fotos_veiculos as fv
+				 WHERE id_veiculo=1555 AnD SLeeP(3) #;
+# Time: 140930  8:36:51
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853653  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 24.002238  Lock_time: 0.000116  Rows_sent: 0  Rows_examined: 16  Rows_affected: 0  Rows_read: 16
+# Bytes_sent: 90
+SET timestamp=1412077011;
+SELECT o.opcional
+					 FROM veiculos_opcionais as vo
+					 INNER JOIN opcionais AS o ON o.id = vo.id_opcional 
+					 WHERE vo.id_veiculo=1555 AnD SLeeP(3) #;
+# Time: 140930  8:37:09
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853657  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.001537  Lock_time: 0.000150  Rows_sent: 0  Rows_examined: 5  Rows_affected: 0  Rows_read: 5
+# Bytes_sent: 291
+SET timestamp=1412077029;
+SELECT fv.*
+				 FROM fotos_veiculos as fv
+				 WHERE id_veiculo=1555 AND SLEEP(3) oRDeR BY 1 #;
+# Time: 140930  8:37:33
+# User@Host: meucar_dedicado[meucar_dedicado] @  [186.202.153.197]
+# Thread_id: 853657  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 24.002478  Lock_time: 0.000139  Rows_sent: 0  Rows_examined: 16  Rows_affected: 0  Rows_read: 16
+# Bytes_sent: 90
+SET timestamp=1412077053;
+SELECT o.opcional
+					 FROM veiculos_opcionais as vo
+					 INNER JOIN opcionais AS o ON o.id = vo.id_opcional 
+					 WHERE vo.id_veiculo=1555 AND SLEEP(3) oRDeR BY 1 #;
+# Time: 141016 15:24:40
+# User@Host: meucar_dedicado[meucar_dedicado] @  [187.56.86.187]
+# Thread_id: 1079966  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 10.725809  Lock_time: 0.000094  Rows_sent: 59  Rows_examined: 59  Rows_affected: 0  Rows_read: 59
+# Bytes_sent: 749248
+SET timestamp=1413483880;
+SELECT * FROM meucar_dedicado.contratos_recibos
+LIMIT 0, 1000;
+# Time: 141020 14:09:01
+# User@Host: meucar_dedicado[meucar_dedicado] @  [187.56.83.185]
+# Thread_id: 1136943  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 29.307680  Lock_time: 0.000090  Rows_sent: 32750  Rows_examined: 32750  Rows_affected: 0  Rows_read: 32750
+# Bytes_sent: 2798207
+SET timestamp=1413821341;
+SELECT * FROM meucar_dedicado.modelos limit 100000;
+# Time: 141104 17:35:04
+# User@Host: meucar_dedicado[meucar_dedicado] @  [187.101.153.113]
+# Thread_id: 1637354  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 83.813188  Lock_time: 0.000118  Rows_sent: 32750  Rows_examined: 32750  Rows_affected: 0  Rows_read: 32750
+# Bytes_sent: 2798207
+SET timestamp=1415129704;
+SELECT * FROM meucar_dedicado.modelos limit 100000;
+# Time: 141105 15:37:12
+# User@Host: meucar_dedicado[meucar_dedicado] @  [187.101.152.208]
+# Thread_id: 1688775  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 50.300281  Lock_time: 0.000092  Rows_sent: 32750  Rows_examined: 32750  Rows_affected: 0  Rows_read: 32750
+# Bytes_sent: 2798207
+SET timestamp=1415209032;
+SELECT * FROM meucar_dedicado.modelos limit 100000;
+# Time: 141212 18:49:53
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 10.469832  Lock_time: 0.000102  Rows_sent: 2886  Rows_examined: 2886  Rows_affected: 0  Rows_read: 2886
+# Bytes_sent: 637582
+SET timestamp=1418417393;
+SELECT * FROM meucar_dedicado.veiculos limit 10000;
+# Time: 141212 21:05:55
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 12.756317  Lock_time: 0.000108  Rows_sent: 2889  Rows_examined: 2889  Rows_affected: 0  Rows_read: 2889
+# Bytes_sent: 638009
+SET timestamp=1418425555;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 21:21:10
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 10.175632  Lock_time: 0.000091  Rows_sent: 9738  Rows_examined: 9738  Rows_affected: 0  Rows_read: 9738
+# Bytes_sent: 624474
+SET timestamp=1418426470;
+SELECT * FROM meucar_dedicado.fotos_veiculos limit 100000;
+# Time: 141212 21:26:27
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 14.693312  Lock_time: 0.000106  Rows_sent: 2890  Rows_examined: 2890  Rows_affected: 0  Rows_read: 2890
+# Bytes_sent: 638140
+SET timestamp=1418426787;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 21:48:59
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 15.469205  Lock_time: 0.000108  Rows_sent: 2892  Rows_examined: 2892  Rows_affected: 0  Rows_read: 2892
+# Bytes_sent: 638406
+SET timestamp=1418428139;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 21:49:36
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 10.435790  Lock_time: 0.000104  Rows_sent: 2886  Rows_examined: 2886  Rows_affected: 0  Rows_read: 2886
+# Bytes_sent: 637582
+SET timestamp=1418428176;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 21:54:53
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 13.239015  Lock_time: 0.000144  Rows_sent: 9739  Rows_examined: 9739  Rows_affected: 0  Rows_read: 9739
+# Bytes_sent: 624530
+SET timestamp=1418428493;
+SELECT * FROM meucar_dedicado.fotos_veiculos limit 100000;
+# Time: 141212 21:56:53
+# User@Host: meucar_dedicado[meucar_dedicado] @  [177.95.197.158]
+# Thread_id: 3502288  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 10.340044  Lock_time: 0.000101  Rows_sent: 2887  Rows_examined: 2887  Rows_affected: 0  Rows_read: 2887
+# Bytes_sent: 637721
+SET timestamp=1418428613;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 22:41:12
+# User@Host: meucar_dedicado[meucar_dedicado] @  [201.92.12.73]
+# Thread_id: 3514333  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 37.195613  Lock_time: 0.000100  Rows_sent: 2887  Rows_examined: 2887  Rows_affected: 0  Rows_read: 2887
+# Bytes_sent: 637719
+SET timestamp=1418431272;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 141212 22:42:10
+# User@Host: meucar_dedicado[meucar_dedicado] @  [201.92.12.73]
+# Thread_id: 3514333  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 17.587836  Lock_time: 0.000107  Rows_sent: 9738  Rows_examined: 9738  Rows_affected: 0  Rows_read: 9738
+# Bytes_sent: 624474
+SET timestamp=1418431330;
+SELECT * FROM meucar_dedicado.fotos_veiculos limit 100000;
+# Time: 141212 22:43:26
+# User@Host: meucar_dedicado[meucar_dedicado] @  [201.92.12.73]
+# Thread_id: 3514333  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 14.342536  Lock_time: 0.000098  Rows_sent: 2886  Rows_examined: 2886  Rows_affected: 0  Rows_read: 2886
+# Bytes_sent: 637582
+SET timestamp=1418431406;
+SELECT * 
+FROM meucar_dedicado.veiculos
+limit 10000;
+# Time: 150305 17:05:55
+# User@Host: meucar_dedicado[meucar_dedicado] @  [187.101.152.72]
+# Thread_id: 8109282  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 31.618089  Lock_time: 0.000086  Rows_sent: 33393  Rows_examined: 33393  Rows_affected: 0  Rows_read: 33393
+# Bytes_sent: 2855330
+SET timestamp=1425585955;
+SELECT * FROM meucar_dedicado.modelos limit 100000;
+# Time: 150323 12:07:06
+# User@Host: meucar_dedicado[meucar_dedicado] @  [201.0.120.173]
+# Thread_id: 9292909  Schema: meucar_dedicado  Last_errno: 0  Killed: 0
+# Query_time: 13.550641  Lock_time: 0.000092  Rows_sent: 2630  Rows_examined: 2630  Rows_affected: 0  Rows_read: 2630
+# Bytes_sent: 1134705
+SET timestamp=1427123226;
+SELECT * FROM meucar_dedicado.clientes limit 100000;
+/usr/sbin/mysqld, Version: 5.1.71-rel14.9-log ((Percona Server (GPL), 14.9)). started with:
+Tcp port: 0  Unix socket: /var/lib/mysql/mysql.sock
+Time                 Id Command    Argument
+# Time: 150326  1:32:59
+# User@Host: c0780695ae4188[c0780695ae4188] @ localhost []
+# Thread_id: 9  Schema:   Last_errno: 0  Killed: 0
+# Query_time: 13.799691  Lock_time: 0.000383  Rows_sent: 0  Rows_examined: 135  Rows_affected: 0  Rows_read: 135
+# Bytes_sent: 11
+SET timestamp=1427344379;
+select count(*) into @discard from `information_schema`.`PARTITIONS`;

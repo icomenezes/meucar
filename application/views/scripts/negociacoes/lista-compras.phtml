@@ -1,0 +1,401 @@
+<form class="form" action="lista-compras" method="post">
+
+	<div class="inline">
+		<label class="label">Nome / CPF / CNPJ</label>
+		<input type="text" id="nome" name="nome" class="text" value="" />
+	</div>
+	
+	<div class="inline" id="div_mes">
+		<label class="label">Mês</label>
+		<select class="select" onChange="enviaPeriodo(this.value);" >
+			<option value="0">Selecione</option>
+			<?php
+				
+				for($i = @date("m"); $i > (@date("m")-25); $i--){
+				
+					$mesNum = @date("m", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$anoNum = @date("Y", mktime(0, 0, 0, $i, 01, @date("Y")));
+					$ultimoDia = @date("d", mktime(0, 0, 0, $i+1, 0, @date("Y")));
+					
+					
+					
+					switch ($mesNum){
+						case 1:
+							$option =  "Janeiro - ".$anoNum;
+							break;
+							
+						case 2:
+							$option =  "Fevereiro - ".$anoNum;
+							break;
+						
+						case 3:
+							$option =  "Março - ".$anoNum;
+							break;
+							
+						case 4:
+							$option =  "Abril - ".$anoNum;
+							break;
+							
+						case 5:
+							$option =  "Maio - ".$anoNum;
+							break;
+							
+						case 6:
+							$option =  "Junho - ".$anoNum;
+							break;
+							
+						case 7:
+							$option =  "Julho - ".$anoNum;
+							break;
+							
+						case 8:
+							$option =  "Agosto - ".$anoNum;
+							break;
+							
+						case 9:
+							$option =  "Setembro - ".$anoNum;
+							break;
+						
+						case 10:
+							$option =  "Outubro - ".$anoNum;
+							break;
+							
+						case 11:
+							$option =  "Novembro - ".$anoNum;
+							break;
+							
+						case 12:
+							$option =  "Dezembro - ".$anoNum;
+							break;
+			
+					}
+					
+					echo "<option value='".$ultimoDia."_".$mesNum."_".$anoNum."'>".$option."</option>";
+				
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" id="div_datas">
+		<table>
+			<tr>
+				<td>
+					<label class="label">Data Inicial</label>
+				</td>
+				<td>
+					<label class="label">Data Final</label>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_inicial" id="data_inicial" value="<?php echo $this->data_inicial; ?>"/>
+				</td>
+				<td>
+					<input type="text" class="text" style="width:90%" name="data_final" id="data_final" value="<?php echo $this->data_final; ?>"/>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Placa / Renavam</label>
+		<input type="text" id="placa" name="placa" class="text" value="" />
+	</div>
+	
+<!--	
+	<div class="inline">
+		<label class="label">Status</label>
+		<select id="aprovada" name="aprovada" class="select" value="">
+			<option value="">Indiferente</option>
+			<option value="1">Aprovada</option>
+			<option value="-1">Cancelada</option>
+			<option value="0">Pendente</option>
+		</select>
+	</div>
+--->	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>negociacoes/add-compra'" />
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Nome</th><th>Data de Abertura</th><th>Data de concretiza&ccedil;&atilde;o</th><th>Status</th><th>Modelo</th><th>Placa</th><th>Valor</th><th>Vendedor</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->negociacoes as $n){
+	
+		if($n['descricao_site']){
+		
+			$n['modelo'] = $n['descricao_site'];
+		
+		}
+		
+		$arrTmpAbertura = explode(" ",$n['data_abertura']);
+		$arrTmpAbertura2 = explode("-",$arrTmpAbertura[0]);
+		$arrTmpAbertura2 = array_reverse($arrTmpAbertura2);
+		$n['data_abertura'] = implode("/",$arrTmpAbertura2) . " " . $arrTmpAbertura[1];
+		
+		$arrTmpAbertura3 = explode(" ",$n['data_concretizacao']);
+		$arrTmpAbertura4 = explode("-",$arrTmpAbertura3[0]);
+		$arrTmpAbertura4 = array_reverse($arrTmpAbertura4);
+		$n['data_concretizacao'] = implode("/",$arrTmpAbertura4) . " " . $arrTmpAbertura3[1];
+		
+		if($n['aprovada'] == -1){
+			
+			$n['aprovada'] = "Cancelada";
+			$cor = "#66CCFF";
+			
+		}elseif($n['aprovada'] == 1){
+			
+			$n['aprovada'] = "Aprovada";
+			$cor = "#66CCFF";
+			
+		}else{
+		
+			$n['aprovada'] = "Pendente";
+			$cor = "#66CCFF";
+			
+		}
+		
+?>		
+		<tr style="background-color:<?php echo $cor; ?>">
+			<td><?php echo $n['nome']?></td>
+			<td><?php echo $n['data_abertura']?></td>
+			<td><?php echo $n['data_concretizacao']?></td>
+			<td><?php echo $n['aprovada']?></td>
+			<td><?php echo $n['modelo']?></td>
+			<td><?php echo $n['placa']?></td>
+			<td><?php echo number_format($n['valor_venda'],2,',','.')?></td>
+			<td><?php echo isset($n['nomeUsuario']) ? $n['nomeUsuario'] : '' ?></td>
+			<td>
+				<input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt-compra/id/<?php echo $n['id']?>'" />
+				<input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('compra <?php echo $n['id'] ?>',<?php echo $n['id'] ?>)"/>
+			</td> 
+		</tr>
+<?php	
+	}
+?>
+
+<?php
+
+	if($this->negociacoesTroca){
+
+		foreach($this->negociacoesTroca as $n){
+		
+			if($n['descricao_site']){
+			
+				$n['modelo'] = $n['descricao_site'];
+			
+			}
+			
+			$arrTmpAbertura = explode(" ",$n['data_abertura']);
+			$arrTmpAbertura2 = explode("-",$arrTmpAbertura[0]);
+			$arrTmpAbertura2 = array_reverse($arrTmpAbertura2);
+			$n['data_abertura'] = implode("/",$arrTmpAbertura2) . " " . $arrTmpAbertura[1];
+			
+			$arrTmpAbertura3 = explode(" ",$n['data_concretizacao']);
+			$arrTmpAbertura4 = explode("-",$arrTmpAbertura3[0]);
+			$arrTmpAbertura4 = array_reverse($arrTmpAbertura4);
+			$n['data_concretizacao'] = implode("/",$arrTmpAbertura4) . " " . $arrTmpAbertura3[1];
+			
+			if($n['aprovada'] == -1){
+				
+				$n['aprovada'] = "Cancelada";
+				$cor = "#66CCFF";
+				
+			}elseif($n['aprovada'] == 1){
+				
+				$n['aprovada'] = "Aprovada";
+				$cor = "#66CCFF";
+				
+			}else{
+			
+				$n['aprovada'] = "Pendente";
+				$cor = "#66CCFF";
+				
+			}
+			
+	?>		
+			<tr style="background-color:<?php echo $cor; ?>">
+				<td><?php echo $n['nome']?></td>
+				<td><?php echo $n['data_abertura']?></td>
+				<td><?php echo $n['data_concretizacao']?></td>
+				<td><?php echo $n['aprovada']?></td>
+				<td><?php echo $n['modelo']?></td>
+				<td><?php echo $n['placa']?></td>
+				<td><?php echo number_format($n['valor_venda'],2,',','.')?></td>
+				<td><?php echo isset($n['nomeUsuario']) ? $n['nomeUsuario'] : '' ?></td>
+				<td>
+					<input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt-compra/id/<?php echo $n['id']?>'" />
+					<input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDelete('compra <?php echo $n['id'] ?>',<?php echo $n['id'] ?>)"/>
+				</td> 
+			</tr>
+	<?php	
+		}
+	
+	}
+	?>
+
+</tbody>
+</table>
+
+<?php
+// bloco de resumo para compras: cards por vendedor (inclui sem vendedor)
+if(isset($this->resumoVendedores) && count($this->resumoVendedores) > 0){
+
+	$arrResumo = array();
+	foreach($this->resumoVendedores as $r){
+		$vid = (isset($r['id_vendedor']) && $r['id_vendedor']) ? $r['id_vendedor'] : '0';
+		$status = $r['aprovada'];
+		$valor = $r['soma'];
+		$qtd = isset($r['qtd']) ? (int)$r['qtd'] : 0;
+		$nome = $r['nomeUsuario'];
+		if(!$nome) $nome = 'Sem vendedor';
+		if(!isset($arrResumo[$vid])){
+			$arrResumo[$vid] = array('nome'=>$nome, 'Aprovada'=>0, 'Pendente'=>0, 'Cancelada'=>0, 'qtdAprovada'=>0,'qtdPendente'=>0,'qtdCancelada'=>0);
+		}
+		if($status == 1){
+			$arrResumo[$vid]['Aprovada'] += $valor;
+			$arrResumo[$vid]['qtdAprovada'] += $qtd;
+		}elseif($status == -1){
+			$arrResumo[$vid]['Cancelada'] += $valor;
+			$arrResumo[$vid]['qtdCancelada'] += $qtd;
+		}else{
+			$arrResumo[$vid]['Pendente'] += $valor;
+			$arrResumo[$vid]['qtdPendente'] += $qtd;
+		}
+	}
+
+	echo "<div style='margin-top:20px; display:flex; flex-wrap:wrap; gap:12px;'>";
+
+	foreach($arrResumo as $vid => $dados){
+		echo "<div style='border:1px solid #DDD; padding:12px; width:240px; background:#FFF; box-shadow:0 1px 2px rgba(0,0,0,0.04);'>";
+		echo "<div style='font-weight:700; margin-bottom:8px;'>".htmlspecialchars($dados['nome'])."</div>";
+		echo "<div style='font-size:12px; color:#2a7;'>Aprovadas: <strong>R$ ".number_format($dados['Aprovada'],2,',','.')."</strong> <span style='color:#666;'> (Qtd: ".(isset($dados['qtdAprovada'])? $dados['qtdAprovada'] : '0').")</span></div>";
+		echo "<div style='font-size:12px; color:#b85;'>Pendentes: <strong>R$ ".number_format($dados['Pendente'],2,',','.')."</strong> <span style='color:#666;'> (Qtd: ".(isset($dados['qtdPendente'])? $dados['qtdPendente'] : '0').")</span></div>";
+		echo "<div style='font-size:12px; color:#d33;'>Canceladas: <strong>R$ ".number_format($dados['Cancelada'],2,',','.')."</strong> <span style='color:#666;'> (Qtd: ".(isset($dados['qtdCancelada'])? $dados['qtdCancelada'] : '0').")</span></div>";
+		echo "</div>";
+	}
+
+	echo "</div>";
+
+}
+?>
+
+	<?php
+	// bloco de verificação opcional: soma os registros visíveis e compara com resumoVendedores
+	if(isset($_GET['verifica_resumo']) && $_GET['verifica_resumo'] == 1){
+
+		// calcula a soma a partir das linhas já carregadas (negociacoes + negociacoesTroca)
+		$calc = array();
+		$processRow = function($n) use (&$calc){
+			// determinar status numérico a partir do texto atual
+			if($n['aprovada'] === 'Aprovada'){
+				$s = 1;
+			}elseif($n['aprovada'] === 'Cancelada'){
+				$s = -1;
+			}else{
+				$s = 0;
+			}
+			$vid = (isset($n['id_vendedor']) && $n['id_vendedor']) ? $n['id_vendedor'] : '0';
+			if(!isset($calc[$vid])) $calc[$vid] = array('Aprovada'=>0,'Pendente'=>0,'Cancelada'=>0,'nome'=> (isset($n['nomeUsuario']) && $n['nomeUsuario']) ? $n['nomeUsuario'] : 'Sem vendedor');
+			if($s == 1) $calc[$vid]['Aprovada'] += $n['valor_venda'];
+			elseif($s == -1) $calc[$vid]['Cancelada'] += $n['valor_venda'];
+			else $calc[$vid]['Pendente'] += $n['valor_venda'];
+		};
+
+		if(isset($this->negociacoes) && is_array($this->negociacoes)){
+			foreach($this->negociacoes as $n){
+				// note: $n['aprovada'] was converted to text above, so it's safe to use
+				$processRow($n);
+			}
+		}
+		if(isset($this->negociacoesTroca) && is_array($this->negociacoesTroca)){
+			foreach($this->negociacoesTroca as $n){
+				$processRow($n);
+			}
+		}
+
+		// transformar resumoVendedores em formato id=>dados para fácil comparação
+		$dbResumo = array();
+		if(isset($this->resumoVendedores) && is_array($this->resumoVendedores)){
+			foreach($this->resumoVendedores as $r){
+				$vid = (isset($r['id_vendedor']) && $r['id_vendedor']) ? $r['id_vendedor'] : '0';
+				if(!isset($dbResumo[$vid])) $dbResumo[$vid] = array('Aprovada'=>0,'Pendente'=>0,'Cancelada'=>0,'nome'=>($r['nomeUsuario'] ? $r['nomeUsuario'] : 'Sem vendedor'));
+				if($r['aprovada'] == 1) $dbResumo[$vid]['Aprovada'] += $r['soma'];
+				elseif($r['aprovada'] == -1) $dbResumo[$vid]['Cancelada'] += $r['soma'];
+				else $dbResumo[$vid]['Pendente'] += $r['soma'];
+			}
+		}
+
+		echo "<div style='margin-top:20px;padding:12px;border:1px dashed #CCC;background:#FFF;'>";
+		echo "<h3>Verificação de resumo (visível na tela)</h3>";
+		echo "<table style='width:100%;border-collapse:collapse;'><tr><th style='text-align:left'>Vendedor</th><th>Campo</th><th>Grid</th><th>DB resumo</th><th>Diferença</th></tr>";
+
+		$allVids = array_unique(array_merge(array_keys($calc), array_keys($dbResumo)));
+		foreach($allVids as $vid){
+			$g = isset($calc[$vid]) ? $calc[$vid] : array('Aprovada'=>0,'Pendente'=>0,'Cancelada'=>0,'nome'=>($dbResumo[$vid]['nome'] ?? 'Sem vendedor'));
+			$d = isset($dbResumo[$vid]) ? $dbResumo[$vid] : array('Aprovada'=>0,'Pendente'=>0,'Cancelada'=>0,'nome'=>($g['nome'] ?? 'Sem vendedor'));
+			foreach(array('Aprovada','Pendente','Cancelada') as $c){
+				$diff = $g[$c] - $d[$c];
+				echo "<tr><td>".htmlspecialchars($g['nome'])."</td><td>$c</td><td style='text-align:right'>R$ ".number_format($g[$c],2,',','.')."</td><td style='text-align:right'>R$ ".number_format($d[$c],2,',','.')."</td><td style='text-align:right'>R$ ".number_format($diff,2,',','.')."</td></tr>";
+			}
+		}
+
+		echo "</table></div>";
+
+	}
+	?>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del-compra/id/" + id;
+		
+		}
+	
+	}
+	
+	$("#data_inicial").mask("99/99/9999");
+	$('#data_inicial').focus(function(){
+		$(this).calendario({
+			target:'#data_inicial'
+		});
+	});
+	
+	$("#data_final").mask("99/99/9999");
+	$('#data_final').focus(function(){
+		$(this).calendario({
+			target:'#data_final'
+		});
+	});
+	
+	
+	function enviaPeriodo(valor){
+		
+		if(valor != "0"){
+		
+			var arrData = valor.split("_");
+			var datafinal = arrData[0]+"/"+arrData[1]+"/"+arrData[2];
+			var dataInicial = "01/"+arrData[1]+"/"+arrData[2];
+			
+			$("#data_inicial").val(dataInicial);
+			$("#data_final").val(datafinal);
+		
+		}
+	
+	}
+
+</script>

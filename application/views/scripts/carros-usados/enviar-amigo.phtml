@@ -1,0 +1,209 @@
+<html>
+	<head>
+		<title>ENVIAR PARA UM AMIGO</title>
+<style>
+	table{
+		#border:solid 1px;
+		width:500px;
+	}
+	
+	label{
+		font:12px Arial, Helvetica, sans-serif;
+		color:#666666;
+	}
+	
+	input[type=text]{
+		font:12px Arial, Helvetica, sans-serif;
+		color:#666666;
+		height:30px;
+		width:99%;
+		border:solid 2px #CD0000;
+	}
+	
+	textarea{
+		font:12px Arial, Helvetica, sans-serif;
+		color:#666666;
+		height:100px;
+		width:99.5%;
+		border:solid 2px #CD0000;
+	}
+	
+	.header-bot {
+		display:inline-block;
+		background:url(/arquivos_site/images/header-but.jpg) repeat-x #9e0202;
+		font-size:12px;
+		font-weight:bold;
+		font-family:Arial, Helvetica, sans-serif;
+		color:#fff;
+		#line-height:12px;
+		text-decoration:none;
+		border:1px solid #880707;
+		padding:10px 2px 12px 0px;
+		border-radius:3px;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+	}	
+
+	.header-bot:hover{
+		background:#353535;
+		border-color:#242424;
+	}
+	
+	.header-close {
+		display:inline-block;
+		background-color:#005500;
+		font-size:12px;
+		font-weight:bold;
+		font-family:Arial, Helvetica, sans-serif;
+		color:#fff;
+		#line-height:12px;
+		text-decoration:none;
+		border:1px solid green;
+		padding:10px 2px 12px 0px;
+		border-radius:3px;
+		-moz-border-radius:3px;
+		-webkit-border-radius:3px;
+	}	
+
+	.header-close:hover{
+		background:#353535;
+		border-color:#242424;
+	}
+	
+	.sucess{
+		color:#005500;
+		background-color: #AAFFAA;
+		border:1px solid #005500;
+	}
+
+	.erro{
+		font-size:12px;
+		color:#FF0000;
+		background-color: #FFCCCC;
+		border:1px solid #FF0000;
+		font-family:Arial, Helvetica, sans-serif;
+	}
+	
+</style>
+<script src="/arquivos_site/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+</head>
+<center>
+<?php
+	if($this->corpo == ""){
+?>
+<div>
+	<form action="/carros-usados/enviar-amigo" method="post" name="enviar_amigo" id="enviar_amigo">
+		<table>
+			<tr><td><label><b>NOME DO AMIGO</b></label><br><input type="text" id="nome_amigo" name="nome_amigo"></td><td><label><b>E-MAIL DO AMIGO</b></label><br><input type="text" id="email_amigo" name="email_amigo"></td></tr>
+			<tr><td><label><b>NOME DO REMETENTE</b></label><br><input type="text" id="nome_remetente" name="nome_remetente"></td><td><label><b>E-MAIL DO REMETENTE</b></label><br><input type="text" id="email_remetente" name="email_remetente"></td></tr>
+			<tr><td colspan="2"><label><b>COMENT&Aacute;RIO</b></label><br><textarea name="comentario"></textarea><br><input type="hidden" name="link" value="http://meucar.b1t.com.br/carros-usados/veiculo/id/<?php echo $this->idCarro; ?>" title="Enviar link do ve&iacute;culo"><span style="font-size:12px; color:#333333; font-family:Arial, Helvetica, sans-serif;">Ser&aacute; enviado junto com o coment&aacute;rio o link do an&uacute;ncio do ve&iacute;culo.<span></td></tr>
+			<tr><td colspan="2"><div class="msg" id="msg" name="msg"></div></td></tr>
+			<tr><td colspan="2"><center><a href="#" onclick="validaCampo();" class="header-bot" style="width:100px; margin-top:20px;"><center>ENVIAR</center></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a href="javascript:window.close();" class="header-bot" style="width:100px;"><center>CANCELAR</center></a></center></td></tr>
+		</table>
+	</form>
+</div>
+</center>
+</html>
+
+<?php
+}elseif($this->corpo == "sucesso"){
+?>
+	<div style="margin-top:100px; border: outset 1px green; background-color:#AAFFAA; font-family:Arial, Helvetica, sans-serif; color:#005500;">
+		<br>
+		Mensagem enviada com sucesso!<br><br>
+		Obrigado.<br><br>
+		<a href="javascript:window.close();" class="header-close" style="width:100px;"><center>Fechar</center></a><br><br>
+	</div>
+<?php
+}elseif($this->corpo == "erro"){
+?>
+	<div style="margin-top:100px; border: outset 1px green; background-color:#AAFFAA; font-family:Arial, Helvetica, sans-serif; color:#005500;">
+		<br>
+		Erro ao enviar mensagem, porfavor tente novamente!<br><br>
+		<a href="javascript:window.close();" class="header-close" style="width:100px;"><center>Fechar</center></a><br><br>
+	</div>
+<?php
+}
+?>
+
+<script type="text/javascript">
+	
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+
+	
+	
+	if($("#nome_amigo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome do amigo deve ser preenchido.";
+	
+	}
+	
+	alert(msg);
+	
+	if($("#email_amigo").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo e-mail do amigo deve ser preenchido.";
+	
+	}
+	
+	if($("#nome_remetente").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo nome do remetente deve ser preenchido.";
+	
+	}
+	
+	if($("#email_remetente").val() == ""){
+		
+		erro = true;
+		
+		msg += "<br>O campo e-mail do remetente deve ser preenchido.";
+	
+	}
+	
+	
+
+	if(erro){
+		
+		
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+$(function(){
+	
+	if($("#msg").html().length > 0){
+			
+		if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+		
+			$("#msg").addClass('sucess');
+		
+		}else{
+		
+			$("#msg").addClass('erro');
+		
+		}
+	
+	}
+
+})
+</script>

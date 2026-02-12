@@ -1,0 +1,37 @@
+<style>
+
+	table{
+		width:100%;
+		border:solid 1px;
+		background-color:#FFFF99;
+	}
+	
+	table tr td{
+		margin-left:25px;
+	}
+
+</style>
+
+<div id="promissoria">
+	<table>
+		<tr><td><input type="text" style="width:30%; margin-left:10px;" id="numPromi" value="Nº <?php echo $this->numProm;?>"></td><td align="right"><div style="margin-right:10px;"><?php echo $this->dataVenc;?></div></td></tr>
+		<tr><td></td><td align="right">Valor <input type="text" style="width:30%; margin-right:10px;" id="valProm" value="<?php echo $this->valorProm;?>"></td></tr>
+		<tr><td colspan="2"><div style="margin-left:10px;"><?php echo $this->dataVencExtenso;?></div></td></tr>
+		<tr><td><div style="margin-left:10px;"><?php echo $this->emitente;?></div></td><td align="center"><?php echo $this->assinatura;?></td></tr>
+	<table>
+</div>
+
+<script type="text/javascript" src="/js/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/js/functions.js"></script>
+<script>
+	
+	$(function(){
+	
+		var valor = moeda2float($("#valProm").val());
+		$("#valProm").val(float2moeda(valor));
+
+		window.print();
+		
+	})
+
+</script>

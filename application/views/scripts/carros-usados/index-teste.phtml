@@ -1,0 +1,693 @@
+<script type="text/javascript">
+
+			
+
+			jQuery(document).ready(function ($) {
+				
+				$("#home").attr("class", "current");
+
+				var _CaptionTransitions = [
+				//CLIP|LR
+				{$Duration: 900, $Clip: 3, $Easing: $JssorEasing$.$EaseInOutCubic },
+				//CLIP|TB
+				{$Duration: 900, $Clip: 12, $Easing: $JssorEasing$.$EaseInOutCubic },
+
+				//ZMF|10
+				{$Duration: 600, $Zoom: 11, $Easing: { $Zoom: $JssorEasing$.$EaseInExpo, $Opacity: $JssorEasing$.$EaseLinear }, $Opacity: 2 },
+
+				//ZML|R
+				{$Duration: 600, $Zoom: 11, $FlyDirection: 2, $Easing: { $Left: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic }, $ScaleHorizontal: 0.6, $Opacity: 2 },
+				//ZML|B
+				{$Duration: 600, $Zoom: 11, $FlyDirection: 8, $Easing: { $Top: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic }, $ScaleVertical: 0.6, $Opacity: 2 },
+
+				//ZMS|B
+				{$Duration: 700, $Zoom: 1, $FlyDirection: 8, $Easing: { $Top: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic }, $ScaleVertical: 0.6, $Opacity: 2 },
+
+				//RTT|10
+				{$Duration: 700, $Zoom: 11, $Rotate: 1, $Easing: { $Zoom: $JssorEasing$.$EaseInExpo, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInExpo }, $Opacity: 2, $Round: { $Rotate: 0.8} },
+
+				//RTTL|R
+				{$Duration: 700, $Zoom: 11, $Rotate: 1, $FlyDirection: 2, $Easing: { $Left: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInCubic }, $ScaleHorizontal: 0.6, $Opacity: 2, $Round: { $Rotate: 0.8} },
+				//RTTL|B
+				{$Duration: 700, $Zoom: 11, $Rotate: 1, $FlyDirection: 8, $Easing: { $Top: $JssorEasing$.$EaseInCubic, $Zoom: $JssorEasing$.$EaseInCubic, $Opacity: $JssorEasing$.$EaseLinear, $Rotate: $JssorEasing$.$EaseInCubic }, $ScaleVertical: 0.6, $Opacity: 2, $Round: { $Rotate: 0.8} },
+
+				//RTTS|R
+				{$Duration: 700, $Zoom: 1, $Rotate: 1, $FlyDirection: 2, $Easing: { $Left: $JssorEasing$.$EaseInQuad, $Zoom: $JssorEasing$.$EaseInQuad, $Rotate: $JssorEasing$.$EaseInQuad, $Opacity: $JssorEasing$.$EaseOutQuad }, $ScaleHorizontal: 0.6, $Opacity: 2, $Round: { $Rotate: 1.2} },
+				//RTTS|B
+				{$Duration: 700, $Zoom: 1, $Rotate: 1, $FlyDirection: 8, $Easing: { $Top: $JssorEasing$.$EaseInQuad, $Zoom: $JssorEasing$.$EaseInQuad, $Rotate: $JssorEasing$.$EaseInQuad, $Opacity: $JssorEasing$.$EaseOutQuad }, $ScaleVertical: 0.6, $Opacity: 2, $Round: { $Rotate: 1.2} },
+
+				//R|IB
+				{$Duration: 900, $FlyDirection: 2, $Easing: { $Left: $JssorEasing$.$EaseInOutBack }, $ScaleHorizontal: 0.6, $Opacity: 2 },
+				//B|IB
+				{$Duration: 900, $FlyDirection: 8, $Easing: { $Top: $JssorEasing$.$EaseInOutBack }, $ScaleVertical: 0.6, $Opacity: 2 },
+
+				];
+
+				var options = {
+					$AutoPlay: true,                                    //[Optional] Whether to auto play, to enable slideshow, this option must be set to true, default value is false
+					$AutoPlaySteps: 1,                                  //[Optional] Steps to go for each navigation request (this options applys only when slideshow disabled), the default value is 1
+					$AutoPlayInterval: 4000,                            //[Optional] Interval (in milliseconds) to go for next slide since the previous stopped if the slider is auto playing, default value is 3000
+					$PauseOnHover: 0,                               //[Optional] Whether to pause when mouse over if a slider is auto playing, 0 no pause, 1 pause for desktop, 2 pause for touch device, 3 pause for desktop and touch device, default value is 3
+
+					$ArrowKeyNavigation: true,   			            //[Optional] Allows keyboard (arrow key) navigation or not, default value is false
+					$SlideDuration: 500,                                //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
+					$MinDragOffsetToSlide: 20,                          //[Optional] Minimum drag offset to trigger slide , default value is 20
+					//$SlideWidth: 600,                                 //[Optional] Width of every slide in pixels, default value is width of 'slides' container
+					//$SlideHeight: 300,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
+					$SlideSpacing: 0, 					                //[Optional] Space between each slide in pixels, default value is 0
+					$DisplayPieces: 1,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
+					$ParkingPosition: 0,                                //[Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
+					$UISearchMode: 1,                                   //[Optional] The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, direction navigator container, thumbnail navigator container etc).
+					$PlayOrientation: 1,                                //[Optional] Orientation to play slide (for auto play, navigation), 1 horizental, 2 vertical, default value is 1
+					$DragOrientation: 3,                                //[Optional] Orientation to drag slide, 0 no drag, 1 horizental, 2 vertical, 3 either, default value is 1 (Note that the $DragOrientation should be the same as $PlayOrientation when $DisplayPieces is greater than 1, or parking position is not 0)
+
+					$CaptionSliderOptions: {                            //[Optional] Options which specifies how to animate caption
+						$Class: $JssorCaptionSlider$,                   //[Required] Class to create instance to animate caption
+						$CaptionTransitions: _CaptionTransitions,       //[Required] An array of caption transitions to play caption, see caption transition section at jssor slideshow transition builder
+						$PlayInMode: 1,                                 //[Optional] 0 None (no play), 1 Chain (goes after main slide), 3 Chain Flatten (goes after main slide and flatten all caption animations), default value is 1
+						$PlayOutMode: 3                                 //[Optional] 0 None (no play), 1 Chain (goes before main slide), 3 Chain Flatten (goes before main slide and flatten all caption animations), default value is 1
+					},
+
+					$NavigatorOptions: {                                //[Optional] Options to specify and enable navigator or not
+						$Class: $JssorNavigator$,                       //[Required] Class to create navigator instance
+						$ChanceToShow: 2,                               //[Required] 0 Never, 1 Mouse Over, 2 Always
+						$AutoCenter: 0,                                 //[Optional] Auto center navigator in parent container, 0 None, 1 Horizontal, 2 Vertical, 3 Both, default value is 0
+						$Steps: 1,                                      //[Optional] Steps to go for each navigation request, default value is 1
+						$Lanes: 1,                                      //[Optional] Specify lanes to arrange items, default value is 1
+						$SpacingX: 10,                                   //[Optional] Horizontal space between each item in pixel, default value is 0
+						$SpacingY: 10,                                   //[Optional] Vertical space between each item in pixel, default value is 0
+						$Orientation: 1                                 //[Optional] The orientation of the navigator, 1 horizontal, 2 vertical, default value is 1
+					},
+
+					$DirectionNavigatorOptions: {
+						$Class: $JssorDirectionNavigator$,              //[Requried] Class to create direction navigator instance
+						$ChanceToShow: 1,                               //[Required] 0 Never, 1 Mouse Over, 2 Always
+						$Steps: 1                                       //[Optional] Steps to go for each navigation request, default value is 1
+					}
+				};
+				var jssor_slider1 = new $JssorSlider$("slider1_container", options);
+				//responsive code begin
+				//you can remove responsive code if you don't want the slider scales while window resizes
+				function ScaleSlider() {
+					var parentWidth = jssor_slider1.$Elmt.parentNode.clientWidth;
+					if (parentWidth)
+						jssor_slider1.$SetScaleWidth(Math.min(parentWidth, 600));
+					else
+						window.setTimeout(ScaleSlider, 30);
+				}
+
+				ScaleSlider();
+
+				if (!navigator.userAgent.match(/(iPhone|iPod|iPad|BlackBerry|IEMobile)/)) {
+					
+					$(window).bind('resize', ScaleSlider);
+				
+				}
+				//responsive code end
+ 
+			});
+		
+		</script>
+		
+		<script type="text/javascript" src="https://apis.google.com/js/platform.js">{lang: 'pt-BR'}</script>
+
+<div style="border: solid 0px; width:100%;">
+	<div style="float:left;">
+		<form id="busca" method="post" action="/carros-usados/busca-veiculos">
+			
+				<div style="width:300px; border:solid 0px #DDDDDD; float:left; z-index:10; margin-bottom:7px;">
+					<table class="table-busca-rapida" style="text-align:right;">
+						<tr>
+							<td colspan="2" style=" text-align:center; background-color: EEEEEE; height:40px; font-size:17px; color:#CC0000; border-bottom: solid 1px #DDDDDD;">
+								<h4 style="display:none;">Busca Veículos</h4>
+								Busca Veículos
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" style="text-align:center; height:30px;">
+								<input type="checkbox" id="novo" checked="checked" onclick="novoUsado();" /><label id="lbn_segmento_0km" style="margin-left:0px;">Carros 0KM</label>
+								<h3 style="display:none;">Carros 0KM</h3>
+							&nbsp;&nbsp;&nbsp;&nbsp;<input type="hidden" name="novo_usado" id="novo_usado" value="">
+								<input type="checkbox" id="usado" checked="checked" onclick="novoUsado();"  value="1" /><label id="lbn_segmento_usado" style="margin-left:0px;">Carros Usados</label>
+								<h3 style="display:none;">Carros Usados</h3>
+							</td>
+						</tr>
+						
+						<tr>
+							<td colspan="2" style="text-align:center;">
+								<img id="button_carro" alt="Carro" src="/arquivos_site/images/button_carro.gif" class="cursor_pointer" width="30px" height="30px" onclick="buscaMarca();" />
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<img id="button_moto" alt="Moto" src="/arquivos_site/images/button_moto.gif" class="cursor_pointer" width="30px" height="30px" onclick="buscaMarca(1);" />
+							</td>
+						</tr>
+						
+						<tr>
+							<td style="height:50px;">
+								<label style="margin-left:5px;">Marca</label>
+							</td>
+							<td style="text-align:left;">
+								<select id="marca" name="marca" style="width:205px; margin-left:5px; height:30px; border: solid 1px #DDDDDD; color:#777777;" onChange="buscaModelo(this.value)">
+									<option value="">Selecione</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="height:50px;">
+								<label style="margin-left:5px;">Modelo</label>
+							</td>
+							<td style="text-align:left;">
+								<select id="modelos" name="modelo" style="width:205px; margin-left:5px; height:30px; border: solid 1px #DDDDDD; color:#777777;" onChange="buscaCidade(this.value)">
+									<option value="">Selecione</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="height:50px;">
+								<label style="margin-left:5px;">Ano</label>
+							</td>
+							<td style="text-align:left;">
+								<select id="ano_inicial" name="ano_inicial" style="width:80px; margin-left:5px; height:30px; border: solid 1px #DDDDDD; color:#777777;">
+									<option value="">De</option>
+									<?php
+										for($i=@date("Y"); $i > @date("Y")-50; $i--){
+											
+											echo "<option value='".$i."'>".$i."</option>";
+											
+										}
+									?>
+								</select>
+								<select id="ano_final" name="ano_final" style="width:80px; margin-left:5px; height:30px; border: solid 1px #DDDDDD; color:#777777;">
+									<option>Até</option>
+									<?php
+										for($i=@date("Y"); $i > @date("Y")-50; $i--){
+											
+											echo "<option value='".$i."'>".$i."</option>";
+											
+										}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td style="height:50px;">
+								<label style="margin-left:5px;">Preço</label>
+							</td>
+							<td style="text-align:left;">
+								<input id="preco_inicial" name="preco_inicial" type="text" style="width:80px; margin-left:5px; height:25px; border: solid 1px #DDDDDD; color:#777777;" />
+								<input id="preco_final" name="preco_final" type="text" style="width:80px; margin-left:5px; height:25px; border: solid 1px #DDDDDD; color:#777777;" />
+							</td>
+						</tr>
+						<tr>
+							<td style="height:50px;">
+								<label style="margin-left:5px;">Cidade</label>
+							</td>
+							<td style="text-align:left;">
+								<select id="cidade" name="cidade" style="width:205px; margin-left:5px; height:30px; border: solid 1px #DDDDDD; color:#777777;">
+									<option value="">Selecione</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"  style="text-align:center; height:30px;">
+								<button class="bnt" value="Buscar" style="width:80px; height:30px;" onclick="$('#busca').submit();"><span class="gb_g">Buscar</span></button>
+								<input type="hidden" id="segmento" name="segmento" value="carro" />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"  style="text-align:center; height:30px;">
+								<a class="link_vermelho" href="/carros-usados/busca-avancada">Busca Detalhada</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			
+			</form>
+	</div>
+	<div style="float:left;">
+		<div style="width:240px; margin-left:7px; margin-bottom:15px; float:left;">
+				<form id="busca_rapida" method="post" action="/carros-usados/busca-veiculos">
+					<table class="table-busca-rapida" >
+						<tr>
+							<td style="height:40px; font-size:17px; color:#CC0000; border-bottom: solid 1px #DDDDDD;">
+								<h4 style="display:none;">Busca R&aacute;pida</h4>
+								Busca R&aacute;pida
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:left; font-size:13px; height:80px; border: solid 0px;">
+								<table width="102%;">
+									<tr>
+										<td>
+											<label style="margin-left:5px;">Modelo</label><br/>
+											<input type="text" name="str_veiculo" style="margin-left:5px; width:94%; height:25px; border: solid 1px #DDDDDD; color:#777777;" /><br/>
+										</td>
+										<td width="60px;">
+											<label style="margin-left:5px;">&nbsp;</label><br/>
+											<button class="bnt" value="Buscar" style="margin-left:-7px;" onclick="$('#busca_rapida').submit();"><span class="gb_g">Buscar</span></button>
+										</td>
+									</tr>
+								</table>
+								<label style="margin-left:8px;  font-size:10px;">Exemplo: Corsa</label><br/>
+							</td>
+						</tr>
+						<tr>
+							<td style="font-size:11px; height:40px; border-top: solid 1px #DDDDDD; color:#CC0000;">
+								<h2>+<?php echo $this->qtdAnuncios[0]['qtd_anuncios']+500; ?> Ve&iacute;culos Anunciados</h2>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<table class="table-busca-rapida" style="margin-top:13px;">
+					<tr>
+						<td style="border-bottom: solid 1px #DDDDDD; height:30px; font-size:17px; color:#CC0000;">
+							<h5 style="display:none;">Tabela Fipe</h5>
+							Tabela Fipe
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size:12px; text-align:left; font-weight:normal; height:30px;">
+							Faça uma busca e saiba quanto vale o seu veiculo, é rápido e fácil!
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="font-size:12px; height:30px;">
+							<a class="link_vermelho" href="/carros-usados/avaliar-carro">Avalie seu carro</a>
+						</td>
+					</tr>
+				</table>
+				<table class="table-busca-rapida" style="margin-top:13px;">
+					<tr>
+						<td style="font-size:14px; color:#CC0000; border-bottom: solid 1px #DDDDDD;">
+							<h3 style="display:block; font-size:13px;">Simulador de Financiamentos</h3>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size:12px; text-align:left; font-weight:normal; height:90px;">
+							Faça uma busca dos veículos disponíveis para venda informando o valor da entrada que deseja investir e o valor das parcelas mensais<br/>É simples e rápido!
+						</td>
+					</tr>
+					
+					<tr>
+						<td style="font-size:12px; height:24px;">
+							<a class="link_vermelho" href="/carros-usados/simulador" >Simulador</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+	
+	</div>
+	<div style="float:left;">
+		<div class="esquerda">
+			
+				<div id="slider1_container" style="position: relative; width:440px; height:300px;">
+					<!--
+					<div title="loading" style="position: absolute; top: 0px; left: 0px;">
+						<div style="opacity:0.7; position: absolute; display: block;background-color: #000000; top: 0px; left: 0px;width: 100%;height:100%;"></div>
+						<div style="position: absolute; display: block; background: url(../img/loading.gif) no-repeat center center;top: 0px; left: 0px;width: 100%;height:100%;"></div>
+						
+					</div>
+					-->
+					<div title="slides" style="cursor: move; position: absolute; width: 440px; height: 300px; overflow: hidden; border: solid 2px #CCCCCC;">
+						<?php
+	
+						$arrVeiculosUsadosIndex = $this->arrVeiculos;
+						$arrVeiculosNovosIndex = $this->arrVeiculosNovos;
+						
+						for($u = 0; $u <=4; $u++){
+						
+							if($arrVeiculosUsadosIndex[$u]['descricao_site']){
+								
+								$arrVeiculosUsadosIndex[$u]['modelo'] = $arrVeiculosUsadosIndex[$u]['descricao_site'];
+							
+							}
+						
+						?>
+							
+							<div>
+								<img style="width:440px;" title="<?php echo $arrVeiculosUsadosIndex[$u]['modelo']; ?>" src="/<?php echo $arrVeiculosUsadosIndex[$u]['path']; ?>" alt="<?php echo $arrVeiculosUsadosIndex[$u]['modelo']; ?>" />
+								<div title="caption" class="captionOrange"  style="position:absolute; left:5px; top: 5px; width:430px; height:30px;"> 
+								<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['cidade']); ?>/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['modelo']); ?>/id/<?php echo $arrVeiculosUsadosIndex[$u]['id']; ?>" style="text-decoration:none; color:#FFFFFF;"><?php echo ucfirst($arrVeiculosUsadosIndex[$u]['segmento'])." - ".ucwords(strtolower(substr($arrVeiculosUsadosIndex[$u]['modelo'],0,20)))." em ".$arrVeiculosUsadosIndex[$u]['cidade']; ?></a>
+								</div>
+							</div>
+							
+						<?php
+						}
+						?>
+						
+						<?php
+						for($u = 0; $u <=3; $u++){
+						
+							if($arrVeiculosNovosIndex[$u]['descricao_site']){
+								
+								$arrVeiculosNovosIndex[$u]['modelo'] = $arrVeiculosNovosIndex[$u]['descricao_site'];
+							
+							}
+						
+						?>
+							
+							<div>
+								<img style="width:440px;" title="<?php echo $arrVeiculosNovosIndex[$u]['modelo']; ?>" src="/<?php echo $arrVeiculosNovosIndex[$u]['path']; ?>" alt="<?php echo $arrVeiculosNovosIndex[$u]['modelo']; ?>" />
+								<div title="caption" class="captionOrange"  style="position:absolute; left:5px; top: 5px; width:430px; height:30px;"> 
+								<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosNovosIndex[$u]['cidade']); ?>/<?php echo str_replace(" ","-",$arrVeiculosNovosIndex[$u]['modelo']); ?>/id/<?php echo $arrVeiculosNovosIndex[$u]['id']; ?>" style="text-decoration:none; color:#FFFFFF;"><?php echo ucfirst($arrVeiculosUsadosIndex[$u]['segmento'])." - ".ucwords(strtolower(substr($arrVeiculosNovosIndex[$u]['modelo'],0,20)))." em ".$arrVeiculosNovosIndex[$u]['cidade']; ?></a>
+								</div>
+							</div>
+							
+						<?php
+						}
+						?>
+						
+					</div>
+
+					<div title="navigator" class="slider1-N" style="position: absolute; bottom: 16px; right: 10px;">
+						<div title="prototype" style="POSITION: absolute; WIDTH: 12px; HEIGHT: 12px;"></div>
+					</div>
+ 
+					<span title="arrowleft" class="jssord02l" style="width: 55px; height: 55px; top: 123px; left: 8px;"></span>
+
+					<span title="arrowright" class="jssord02r" style="width: 55px; height: 55px; top: 123px; right: 8px"> </span>
+
+				</div>
+				
+				<table class="table-busca-rapida" style="margin-top:11px; width:101%;">
+					<tr>
+						<td colspan="3" style="height:10px; border:solid 0px; font-size:14px; color:#CC0000; border-bottom: solid 1px #DDDDDD;">
+							<h3 style="height:5px;">&Uacute;ltimos Carros Anunciados</h3>
+						</td>
+					</tr>
+					<tr>
+						<td style="font-size:12px; text-align:left; font-weight:bold; border-right: solid 1px #DDDDDD;">
+							<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrAnunciosTres[0]['cidade']); ?>/<?php echo str_replace(" ","-",str_replace("/"," ",$this->arrAnunciosTres[0]['modelo'])); ?>/id/<?php echo $this->arrAnunciosTres[0]['id']; ?>"><img width="140px" height="109px" src="/<?php echo $this->arrAnunciosTres[0]['path']; ?>" alt="<?php echo strtoupper(substr($this->arrAnunciosTres[0]['descricao_site'],0,20)); ?>"><?php echo strtoupper(substr($this->arrAnunciosTres[0]['descricao_site'],0,20)); ?></a>
+						</td>
+						<td style="font-size:12px; text-align:left; font-weight:bold; border-right: solid 1px #DDDDDD;">
+							<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrAnunciosTres[1]['cidade']); ?>/<?php echo str_replace(" ","-",str_replace("/"," ",$this->arrAnunciosTres[1]['modelo'])); ?>/id/<?php echo $this->arrAnunciosTres[1]['id']; ?>"><img width="140px" height="109px" src="/<?php echo $this->arrAnunciosTres[1]['path']; ?>" alt="<?php echo strtoupper(substr($this->arrAnunciosTres[1]['descricao_site'],0,20)); ?>"><?php echo strtoupper(substr($this->arrAnunciosTres[1]['descricao_site'],0,20)); ?></a>
+						</td>
+						<td style="font-size:12px; text-align:left; font-weight:bold; color:#CC0000;">
+							<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$this->arrAnunciosTres[2]['cidade']); ?>/<?php echo str_replace(" ","-",str_replace("/"," ",$this->arrAnunciosTres[2]['modelo'])); ?>/id/<?php echo $this->arrAnunciosTres[2]['id']; ?>"><img width="140px" height="109px" src="/<?php echo $this->arrAnunciosTres[2]['path']; ?>" alt="<?php echo strtoupper(substr($this->arrAnunciosTres[2]['descricao_site'],0,20)); ?>"><?php echo strtoupper(substr($this->arrAnunciosTres[2]['descricao_site'],0,20)); ?></a>
+						</td>
+					</tr>
+				</table>
+				
+			</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div style="border: solid 0px; width:100%;">
+	<div style="float:left;">
+		<div style="border:solid 0px; width:295px;">
+				<div class="g-plus" data-action="share" data-width="280" style="margin-top:5px; align:left;"></div>
+
+				<iframe src="//www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2FMeuCarSite%3Ffref%3Dts&amp;width&amp;height=290&amp;colorscheme=light&amp;show_faces=true&amp;header=true&amp;stream=false&amp;show_border=false&amp;appId=126347824234407" scrolling="no" frameborder="0" style="border:solid 1px #CCCCCC; overflow:hidden; height:280px; margin-left:0px;" allowTransparency="true"></iframe>
+				<?php
+					$maximo = rand(0, count($this->arrPropagandasR) - 1);
+
+					echo "<a target='new' href='" . $this->arrPropagandasR[$maximo]['link'] . "'><img style='width:290px; height:500px; margin-left:0px;' alt='An&uacute;ncio' src='/" . $this->arrPropagandasR[$maximo]['path'] . "'/></a>";
+				?>
+		</div>
+		<div style="float:left;">
+		
+			<div id="outros_veiculos" style="width:292px; height:400px; border: solid 1px #CCCCCC; background-color:#F9F9F9; overflow:auto;">
+				<div id="label_outros_veiculos" style="width:94%; border-bottom: solid 1px #CCCCCC; padding: 8px; font-weight:bold;">Outros Ve&iacute;culos</div>
+				<table id="table_outros_veiculos" style="width:100%;">
+				<?php
+					for($u = 15; $u < count($arrVeiculosUsadosIndex); $u++){
+					
+						if($arrVeiculosUsadosIndex[$u]['descricao_site']){
+								
+							$arrVeiculosUsadosIndex[$u]['modelo'] = $arrVeiculosUsadosIndex[$u]['descricao_site'];
+							
+						}
+					
+						$arrModelo = explode(" ", $arrVeiculosUsadosIndex[$u]['modelo']);
+					
+						$arrVeiculosUsadosIndex[$u]['modelo'] = $arrModelo[0]." ".$arrModelo[1];
+						
+						if($u < 24){
+							
+							$path = $arrVeiculosUsadosIndex[$u]['path'];
+						
+						}else{
+							
+							$path = "arquivos_site/images/logo-meu-car.png";
+						
+						}
+					
+				?>
+					
+					<tr style="text-align:left;">
+							<td style="width:50px; border-bottom: solid 1px #CCCCCC; padding: 0px; font-weight:bold;">
+								<input type="hidden" id="src_<?php echo $arrVeiculosUsadosIndex[$u]['id']; ?>" value="/<?php echo $arrVeiculosUsadosIndex[$u]['path']; ?>"  />
+								<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['modelo'])); ?>/id/<?php echo $arrVeiculosUsadosIndex[$u]['id']; ?>"  style="text-decoration:none;">
+									<img id="imagem_<?php echo $arrVeiculosUsadosIndex[$u]['id']; ?>" style="width:50px; border: solid 2px #CC0000;" title="<?php echo $arrVeiculosUsadosIndex[$u]['modelo']; ?>" src="/<?php echo $path; ?>" alt="<?php echo $arrVeiculosUsadosIndex[$u]['modelo']; ?>" />
+								</a>
+							</td>
+							<td style="border-bottom: solid 1px #CCCCCC; border-right: solid 1px #CCCCCC; padding: 2px; font-size:12px;">
+								<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosUsadosIndex[$u]['modelo'])); ?>/id/<?php echo $arrVeiculosUsadosIndex[$u]['id']; ?>"  style="text-decoration:none; color:#666666;">
+									<?php echo $arrVeiculosUsadosIndex[$u]['modelo']; ?> - 
+									<?php echo $arrVeiculosUsadosIndex[$u]['ano_fabricacao']."/".$arrVeiculosUsadosIndex[$u]['ano_modelo']; ?>
+									<br/>
+									R$ <?php echo money_format("%i",$arrVeiculosUsadosIndex[$u]['valor_venda']); ?>
+									<br/>
+									<?php echo $arrVeiculosUsadosIndex[$u]['cidade']; ?>
+								</a>
+							</td>
+					</tr>
+					
+				<?php
+					}
+				?>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div style="float:left;">
+		<div style="width:695px; border:solid 1px #DDDDDD; background-color:#FCFCFC; text-align:left;  margin-bottom:7px; margin-top:0px; clear:both; margin-right:-4px; float:right;">
+				
+				<?php
+				for($i = 5; $i < 15; $i++){
+				
+					if($arrVeiculosUsadosIndex[$i]['descricao_site']){
+					
+						$arrVeiculosUsadosIndex[$i]['modelo'] = $arrVeiculosUsadosIndex[$i]['descricao_site'];
+					
+					}
+					
+					
+					$arrVeiculosUsadosIndex[$i]['modelo'] = $arrVeiculosUsadosIndex[$i]['segmento']." - ".$arrVeiculosUsadosIndex[$i]['modelo'];
+					
+					if($arrVeiculosUsadosIndex[$i]['exibir_valor_site'] == 1){
+					
+						//$valor = "R$ ".money_format("%i",$arrVeiculosUsadosIndex[$i]['valor_venda']);
+						$valor = "R$ ".$arrVeiculosUsadosIndex[$i]['valor_venda'];
+					
+					}else{
+						
+						$valor = "Consulte-nos";
+					
+					}
+					
+					
+				
+					?>
+
+					<div class="carros_index">
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosUsadosIndex[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosUsadosIndex[$i]['id']; ?>"  style="text-decoration:none;">
+							<img style="width:150px;  height:110px;" src="/<?php echo $arrVeiculosUsadosIndex[$i]['path'] ?>" alt="<?php echo $arrVeiculosUsadosIndex[$i]['modelo'] ?>" />
+						</a >
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosUsadosIndex[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosUsadosIndex[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosUsadosIndex[$i]['id']; ?>" style="text-decoration:none;">	
+							<span class="texto_carros"><?php echo ucwords(strtolower(substr($arrVeiculosUsadosIndex[$i]['modelo'],0,20))); ?></span><br/>
+							<span class="texto_carros"><?php echo ucwords(strtolower($arrVeiculosUsadosIndex[$i]['combustivel'])); ?></span><br/>
+							<span class="texto_carros"><?php echo $arrVeiculosUsadosIndex[$i]['ano_fabricacao']." / ". $arrVeiculosUsadosIndex[$i]['ano_modelo']; ?></span><br/>
+							<span class="texto_carros"><?php echo $valor; ?></span><br/>
+						</a>
+					</div>
+
+				<?php
+				}
+				?>
+				
+				<?php
+				for($i = 4; $i < 10; $i++){
+				
+					if($arrVeiculosNovosIndex[$i]['descricao_site']){
+					
+						$arrVeiculosNovosIndex[$i]['modelo'] = $arrVeiculosNovosIndex[$i]['descricao_site'];
+					
+					}
+					
+					$arrVeiculosNovosIndex[$i]['modelo'] = $arrVeiculosNovosIndex[$i]['segmento']." - ".$arrVeiculosNovosIndex[$i]['modelo'];
+					
+					if($arrVeiculosNovosIndex[$i]['exibir_valor_site'] == 1){
+					
+						//$valor = "R$ ".money_format("%i",$arrVeiculosNovosIndex[$i]['valor_venda']);
+						$valor = "R$ ".$arrVeiculosNovosIndex[$i]['valor_venda'];
+					
+					}else{
+						
+						$valor = "Consulte-nos";
+					
+					}
+					
+					
+				
+					?>
+
+					<div class="carros_index">
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosNovosIndex[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosNovosIndex[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosNovosIndex[$i]['id']; ?>"  style="text-decoration:none;">
+							<img style="width:150px; height:110px;" src="/<?php echo $arrVeiculosNovosIndex[$i]['path'] ?>" alt="<?php echo $arrVeiculosNovosIndex[$i]['modelo'] ?>" />
+						</a >
+						<a href="/carros-usados/veiculo/<?php echo str_replace(" ","-",$arrVeiculosNovosIndex[$i]['cidade']); ?>/<?php echo str_replace("---","-",str_replace(" ","-",$arrVeiculosNovosIndex[$i]['modelo'])); ?>/id/<?php echo $arrVeiculosNovosIndex[$i]['id']; ?>" style="text-decoration:none;">	
+							<span class="texto_carros"><?php echo ucwords(strtolower(substr($arrVeiculosNovosIndex[$i]['modelo'],0,20))); ?></span><br/>
+							<span class="texto_carros"><?php echo ucwords(strtolower($arrVeiculosNovosIndex[$i]['combustivel'])); ?></span><br/>
+							<span class="texto_carros"><?php echo $arrVeiculosNovosIndex[$i]['ano_fabricacao']." / ". $arrVeiculosNovosIndex[$i]['ano_modelo']; ?></span><br/>
+							<span class="texto_carros"><?php echo $valor; ?></span><br/>
+						</a>
+					</div>
+
+				<?php
+				}
+				?>
+		</div>
+		<div style="width:100%; height:293px; border: solid 1px #CCCCCC;clear:both; background-color:#F9F9F9; overflow:auto;">
+			<div id="lojas" style="width:97%; border-bottom: solid 1px #CCCCCC; padding: 8px; font-weight:bold;">Lojas</div>
+			<table>
+				<?php
+			
+				$a = 0;
+				$countTr = 0;
+				
+				while($a <= count($this->arrEmpresas)){
+				
+					if($this->arrEmpresas[$a]['nome_fantasia']){
+					
+						if($countTr == 0){
+						
+							echo "<tr>";
+						
+						}
+						
+						if($this->arrEmpresas[$a]['path']){
+					
+					?>
+					
+							
+							<td>
+							<a style="text-decoration:none; color:#666666;" href="busca-veiculos/<?php echo $this->arrEmpresas[$a]['cidade']; ?>/<?php echo str_replace(" ","-",$this->arrEmpresas[$a]['nome_fantasia']); ?>/id_empresa/<?php echo $this->arrEmpresas[$a]['id']; ?>">
+								<img width="125px" height="60px" style="border:solid 2px #CC0000;" src="/<?php echo $this->arrEmpresas[$a]['path']; ?>" />
+							</a>
+							</td>
+							
+					
+					<?php
+						
+						
+						
+						}else{
+
+					?>
+							
+								<td>
+									<a style="text-decoration:none; color:#666666;" href="busca-veiculos/<?php echo $this->arrEmpresas[$a]['cidade']; ?>/<?php echo str_replace(" ","-",$this->arrEmpresas[$a]['nome_fantasia']); ?>/id_empresa/<?php echo $this->arrEmpresas[$a]['id']; ?>">
+										<div style="background-color:#CCCCCC; border:solid 2px #CC0000; width:125px; height:60px;" src="/<?php echo $this->arrEmpresas[$a]['path']; ?>" >
+											<div style="height:30px; margin-top: 15px;"><?php echo $this->arrEmpresas[$a]['nome_fantasia']; ?></div>
+										</div>
+									</a>
+								</td>
+							
+					<?php	
+
+						}
+							
+						$countTr++;
+						
+						if($countTr == 5){
+						
+							echo "</tr>";
+							$countTr = 0;
+							
+						}
+					
+					
+					
+					}
+					
+					$a++;
+				
+				}
+				?>
+			</table>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<div style="border: solid 0px; width:100%;">
+	
+	<div style="clear:both;"></div>
+</div>
+<br/>
+<script type="text/javascript">
+   
+	function novoUsado(){
+	
+		$("#novo_usado").val("");
+	
+		if($("#novo").is(":checked") == true && $("#usado").is(":checked") == false){
+		
+			$("#novo_usado").val(2);
+		
+		}
+		
+		if($("#novo").is(":checked") == false && $("#usado").is(":checked") == true){
+		
+			$("#novo_usado").val(1);
+		
+		}
+	
+	}
+   
+   
+      (function(i, s, o, g, r, a, m) {
+         i['GoogleAnalyticsObject'] = r;
+         i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+         }, i[r].l = 1 * new Date();
+         a = s.createElement(o),
+                 m = s.getElementsByTagName(o)[0];
+         a.async = 1;
+         a.src = g;
+         m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+      ga('create', 'UA-41555898-1', 'sistemameucar.com.br');
+      ga('send', 'pageview');
+
+      $(".link-2").css("text-transform", "uppercase");
+	  
+	var jaFoi = false;
+	  
+	$("#outros_veiculos").scroll(function(){
+	
+		if(!jaFoi){
+	
+			if ($(this).scrollTop() > 50){
+
+				$("#table_outros_veiculos > tbody > tr > td").each(function(){
+				
+					var srcs = $(this).children().val();
+					$(this).children().next().children().attr("src",srcs);
+
+				});
+				
+				jaFoi = true;
+
+			}
+		
+		}
+	});
+	  buscaMarca();
+
+   </script>
+
+</section>

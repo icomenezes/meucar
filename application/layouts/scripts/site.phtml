@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:og="http://opengraphprotocol.org/schema/">
+   <?php 
+		
+		$ts = @date('ymdhis'); 
+		$arrEndereco = explode("/",$_SERVER ['REQUEST_URI']);
+		
+		if($this->veiculo['descricao_site']){
+	
+			$this->veiculo['modelo'] = $this->veiculo['descricao_site'];
+	
+		}
+	
+		$this->veiculo['modelo'] = $this->veiculo['modelo'];
+		
+		
+		if($arrEndereco[2] == "veiculo"){
+		
+			$tagImage = '<meta property="og:image" content="https://sistemameucar.com.br/'.$this->veiculo['capa'].'">';
+			$title = strtoupper($this->veiculo['modelo'].'-'.$this->veiculo['cidade']).' | Meu Car ';
+			$description = $this->veiculo['modelo'].' - '.$this->veiculo['cidade'].' - '.$this->veiculo['marca'].' - '.$this->veiculo['ano_modelo'].' - '.$this->veiculo['combustivel'].' - '.$this->veiculo['cor'].' - O site Meu Car tem as melhores ofertas de carros para compra ou venda em Jundiaí e região!';
+			$keywords = str_replace("-",",",$this->veiculo['modelo']).", ".$this->veiculo['cidade'].", ".$this->veiculo['combustivel'].", ".$this->veiculo['marca'].", ".$this->veiculo['ano_modelo'].", ";
+			$urls = $arrEndereco[1]."/".$arrEndereco[2]."/".str_replace(" ","-",$this->veiculo['cidade'])."/".str_replace(" ","-",$this->veiculo['modelo'])."/id/".$this->veiculo['id'];
+		
+		}elseif($arrEndereco[2] == "busca-veiculos" && $this->arrEmpresa){
+		
+			$title = $this->arrEmpresa[0]['nome_fantasia']." - ".$this->arrEmpresa[0]['cidade'];
+			$tagImage = '<meta property="og:image" content="https://sistemameucar.com.br/'.$this->arrEmpresa[0]['path'].'">';
+			$description = $this->arrEmpresa[0]['nome_fantasia']." - ".$this->arrEmpresa[0]['cidade']." clique aqui e confira o estoque de carros da ".$this->arrEmpresa[0]['nome_fantasia']." ".$this->arrEmpresa[0]['cidade'];
+			$keywords = $this->arrEmpresa[0]['nome_fantasia'].", ".$this->arrEmpresa[0]['cidade'].", ";
+			$urls = $arrEndereco[1]."/".$arrEndereco[2]."/".str_replace(" ","-",$this->arrEmpresa[0]['cidade'])."/".str_replace(" ","-",$this->arrEmpresa[0]['nome_fantasia'])."/id_empresa/".$this->arrEmpresa[0]['id'];
+
+		}elseif($this->title){
+		
+			$title = $this->title;
+		
+		}else{
+			
+			$tagImage = '<meta property="og:image" content="https://sistemameucar.com.br/arquivos_site/images/Logo_Car.png" />';
+			$title = 'MEU CAR - Carros e Carros Usados Jundiaí';
+			$description = 'O site Meu Car tem as melhores ofertas de carros para compra ou venda em Jundiaí e região, nossos classificados são um verdadeiro Feirão de Carros!';
+		
+		}
+		
+		
+		
+   
+   ?>
+   <head>
+       
+	  <title><?php echo $title; ?></title>
+      <meta name="title" content="<?php echo $title; ?>" />
+      <meta name="url" content="www.sistemameucar.com.br" />
+	  <meta name="viewport" content="width=1000">
+      <meta name="description" content="<?php echo $description; ?>" />
+      <meta name="keywords" content="<?php echo $keywords; ?>carros usados, veículos, carro, classificados, automoveis, venda de carros, semi novos" />
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	  <meta property="og:title" content="<?php  echo $title; ?>" />
+	  <meta property="og:site_name" content="Meucar" />
+	  <meta property="og:description" content="<?php echo $description; ?>" />
+	  <?php echo $tagImage; ?>
+	  <meta property="og:image:type" content="image/jpeg">
+	  <meta property="og:image:width" content="800">
+      <meta property="og:image:height" content="600">
+      <meta name="autor" content="Guilherme de Oliveira Rosa" />
+      <meta name="company" content="Meu Car Ltda." />
+      <meta name="revisit-after" content="7" />
+	  <!--<meta name="google-site-verification" content="iXql07q1E0agF6-iui1KeB_CKITOPilgjSFSSpWxTOY" />-->
+	<meta name="google-site-verification" content="IR_9utUEG1eaGYMtaOOYn2sF9jnpCRVM8QGJxsvGI5Q" />
+	 
+	 
+	  
+      <link rev="made" href="mailto:guilherme@sistemameucar.com.br" />
+      <link rel="stylesheet" href="/arquivos_site/css/style.css?ts=<?php echo $ts; ?>" type="text/css" media="screen">
+      <link rel="icon" type="image/png" href="http://www.selectveiculos.com.br/images/icon_64.png" />
+	  <link rel="shortcut icon" href="http://www.selectveiculos.com.br/images/icon_64.png"/>
+	  <link rel="canonical" href="https://sistemameucar.com.br/<?php echo $urls; ?>" />
+	  <link rel="sitemap" href="/sitemap.xml?ts=<?php echo $ts; ?>" type="text/xml">
+	  
+      <script src="/arquivos_site/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+      <script src="/arquivos_site/js/layout.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script src="/arquivos_site/js/js_slide/jssor.core.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script src="/arquivos_site/js/js_slide/jssor.slider.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script src="/arquivos_site/js/js_slide/jssor.utils.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script src="/arquivos_site/js/mytooltip.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+	  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBySr7gxlgQpBz-GCoFc2xIGE8c-VVqyeM&sensor=false"></script>
+	
+<script type="text/javascript">
+	
+	
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-54367885-1', 'auto');
+	  ga('require', 'displayfeatures');
+	  ga('send', 'pageview');
+
+	
+	var tipo = "carro";
+	
+	function buscaPropaganda() {
+
+        var arrDados = new Array();
+
+        var resp = $.ajax({
+        url: "/carros-usados/ajax/fn/busca_propaganda",
+        async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          arrDados = resp.split("|");
+
+
+
+          $("#propaganda_link").attr("href", arrDados[1]);
+          $("#propaganda_path").attr("src", "/" + arrDados[0]);
+		  
+		//alert(arrDados[0]);
+
+		}
+		
+	function buscaMarca(segmento){
+	
+		if(segmento == 1){
+			
+			$("#button_moto").css("border", "inset 2px #EE0000");
+			$("#button_carro").css("border", "outset 2px #CCC");
+			$("#lbn_segmento_usado").html("Motos Usadas");
+			$("#lbn_segmento_0km").html("Motos 0KM");
+			tipo = "moto";
+		
+		}else{
+		
+			$("#button_carro").css("border", "inset 2px #EE0000");
+			$("#button_moto").css("border", "outset 2px #CCC");
+			$("#lbn_segmento_usado").html("Carros Usados");
+			$("#lbn_segmento_0km").html("Carros 0KM");
+			tipo = "carro";
+
+		}
+
+		$("#segmento").val(tipo);
+
+        var resp = $.ajax({
+            url: "/modelos/ajax/fn/busca_marca/segmento/"+tipo,
+            async: false,
+            type: 'POST',
+            dataType: 'text'
+        }).responseText;
+
+        $("#marca").html(resp);
+        $("#marca_usado").html(resp);
+		
+	
+		var resp0 = $.ajax({
+					url:"/empresas/ajax/fn/busca_cidade/id_modelo/nada",
+					async: false,
+					type: 'POST',
+					dataType: 'text'
+			}).responseText;
+
+			$("#cidade").html(resp0);
+			$("#cidade_usado").html(resp0);
+			
+		
+		//alert(resp0);
+
+    }
+	
+	function buscaModelo(strMarca) {
+
+        var resp = $.ajax({
+            url: "/modelos/ajax/fn/busca_modelo/marca/"+strMarca+"/segmento/"+tipo,
+            async: false,
+            type: 'POST',
+            //data: ({'f':f}),
+            dataType: 'text'
+        }).responseText;
+
+		$("#modelo").html(resp);
+		$("#modelos").html(resp);
+		$("#modelo_usado").html(resp);
+		
+		//alert(resp);
+      
+    }
+	
+	function buscaCidade(idModelo) {
+
+        var resp = $.ajax({
+             url: "/empresas/ajax/fn/busca_cidade/id_modelo/" + idModelo,
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+        }).responseText;
+
+        $("#cidade").html(resp);
+        $("#cidade_usado").html(resp);
+
+    }
+	
+</script>
+   
+   </head>
+   <body onload="buscaPropaganda(); buscaTodasCidades();">
+		<div class="usuario">
+			<div class="usuario_centro" >
+				<h1 class="display_none" >MeuCar</h1><img class="logo_img_pequeno" alt="Meucar.com.br - Portal carros de Jundia&iacute; e Regi&atilde;o" src="/arquivos_site/images/meucar_braco.png" onclick="window.location.href='/'" />
+				<div><h2 style="font-weight: normal; margin-left:117px; margin-top:0px; align:left; position:absolute;font-size: 15px; color:#FFF;">Classificados de Ve&iacute;culos</h2></div>
+				<div id="links-top">
+					<a href="/">Home</a>|
+					<a href="/carros-usados/avaliar-carro">Avalie seu carro</a>|
+					<a href="/carros-usados/busca-lojas">Lojas de Carros</a>|
+					<a href="/carros-usados/busca-avancada"> Busca Detalhada</a>|
+					<a href="/index/adm">&Aacute;rea do revendedor</a>|
+					<a href="/carros-usados/anuncio-gratis">Anuncie seu carro gr&aacute;tis</a>|
+					<a href="http://www.vendedorouoferecedor.com.br/empregojundiai.html">Trabalhe conosco</a>
+				</div>
+				
+			</div>
+			
+		</div>
+		<div class="top">
+			<div class="top_centro" >
+				<img class="logo_img" alt="Meucar.com.br - Portal carros de Jundiaí e Região" src="/arquivos_site/images/logo-meu-car.png" onclick="window.location.href='/'"/>
+			
+				<a id="propaganda_link" target="new" href=""><img id="propaganda_path" src="" /></a>
+			</div>
+		</div>
+		<div class="menu">
+			<div class="menu_centro" >
+				<div id="menu_bnt">
+					<ul>
+						<li><a id="home" href="/">Home</a></li>
+						<li><a id="avaliarCarro" href="/carros-usados/avaliar-carro"> Avalie seu carro</a></li>
+						<li><a id="buscaLojas" href="/carros-usados/busca-lojas"> Lojas de Carros</a></li>
+						<li><a id="buscaAvancada" href="/carros-usados/busca-avancada"> Busca Detalhada</a></li>
+						<li><a href="/index/adm"> &Aacute;rea do revendedor</a></li>
+						<li><a id="anuncioGratis" href="/carros-usados/anuncio-gratis"> Anuncie seu carro gr&aacute;tis</a></li>
+						<li><a href="http://www.vendedorouoferecedor.com.br/empregojundiai.html"> Trabalhe conosco</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="principal">
+                  <!-- A TAG </header> se encontra nos phtmls -->
+
+                  <!--==============================content================================-->
+
+			<?php echo $this->layout()->content; ?>
+
+                  <!--==============================footer=================================-->
+  
+		</div>
+		<div class="rodape" align="center">
+			<div class="rodape_centro">
+				<table>
+					<tr>
+						<td rowspan="2" class="font20px">Em breve Meu Car Mobile</td><td><img src="/arquivos_site/images/tablet.png" alt="Meucar-Tablet-Android-Mobile"></td><td><img src="/arquivos_site/images/celular.png" alt="Meucar-Celular-Android-Mobile"></td>
+					</tr>
+					<tr>
+						<td class="font14px">MeuCar Tablet's</td><td class="font14px">MeuCar Smartphone's</td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<hr width="90%"  />
+		
+			<div class="rodape_centro">
+				<table class="mapa_rodape">
+					<tr>
+						<td class="topico_mapa">INSTITUCIONAL</td><td>ATENDIMENTO</td><td>MAPA DO SITE</td>
+					</tr>
+					<tr>
+						<td><a href="#">Quem somos</a></td><td><a href="/carros-usados/contato">Fale conosco</a></td><td><a href="/">Home</a></td>
+					</tr>
+					<tr>
+						<td><a href="/carros-usados/termos-uso">Termos de uso</a></td><td><a href="#">Como comprar</a></td><td><a href="/carros-usados/avaliar-carro">Avalie seu carro</a></td>
+					</tr>
+					<tr>
+						<td><a href="http://www.vendedorouoferecedor.com.br/empregojundiai.html">Trabalhe conosco</a></td><td><a href="#">Como vender</a></td><td><a href="/carros-usados/busca-lojas">Buscar lojas</a></td>
+					</tr>
+					<tr>
+						<td><a href="#"></a></td><td><a href="#">Como vender (lojista)</a></td><td><a href="https://sistemameucar.com.br/index/adm">&Aacute;rea do revendedor</a></td>
+					</tr>
+					<tr>
+						<td><a href="#"></a></td><td><a href="#"></a></td><td><a href="/carros-usados/anuncio-gratis">Anuncie gr&aacute;tis</a></td>
+					</tr>
+					<tr>
+						<td><a href="#"></a></td><td><a href="#"></a></td><td><a href="http://www.vendedorouoferecedor.com.br/empregojundiai.html">Trabalhe conosco</a></td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<hr width="90%"  />
+			<div class="rodape_centro_baixo">
+			
+				A Meu Car Ltda e o presente site não realizam qualquer intermediação na negociação entre usuários, seja com relação a compra, troca ou qualquer outro tipo de negociação. As vendas e entregas aos usuários e/ou terceiros de produtos anunciados no site são de inteira responsabilidade do anunciante. As informação veiculadas nos anúncios desse site são de inteira responsabilidade do anunciante, não podendo o usuário reponsabilizar o site pela veracidade e/ou autenticidade das mesmas, nem pelos danos diretos ou indiretos causados a terceiros.
+				O usuário reconhece como sendo de sua exclusiva responsabilidade os riscos assumidos nas negociações que vier efetuar com outros usuários do site. Estoque e preços sujeito a conferência e confirmação do anunciante. Os dados do veículo, acessórios e preço são informações meramente sugestivas, com base em levantamento periódicos de pesquisa. O preço efetivamente praticado e os demais dados de veículo deverão ser confirmados na concessionária. A Meu Car Ltda se reserva o direito de possíveis erros de digitação.
+		
+			</div>
+			<br /><br />
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:og="http://opengraphprotocol.org/schema/">
+   <?php $ts = @date('ymdhis'); ?>
+   <head>
+      <title>_| Carros e Carros Usados Jundiaí - MEU CAR |_</title>
+      <meta name="title" content="Meu Car" />
+      <meta name="url" content="www.sistemameucar.com.br" />
+      <meta name="description" content="O site Meu Car tem as melhores ofertas de carros para compra ou venda em Jundiaí e região, nossos classificados são um verdadeiro Feirão de Carros!" />
+      <meta name="keywords" content="carros usados, veículos, carro, classificados, automoveis, venda de carros, semi novos, Jundiai" />
+      <meta charset="utf-8">
+      <meta name="autor" content="Guilherme de Oliveira Rosa" />
+      <meta name="company" content="Meu Car Ltda." />
+      <meta name="revisit-after" content="7" />
+      <link rev="made" href="mailto:guilherme@sistemameucar.com.br" />
+      <meta property="og:image" content="https://sistemameucar.com.br/arquivos_site/images/Logo_Car.png" />
+      <link rel="stylesheet" href="/arquivos_site/css/reset.css?ts=<?php echo $ts; ?>" type="text/css" media="screen">
+      <link rel="stylesheet" href="/arquivos_site/css/style.css?ts=<?php echo $ts; ?>" type="text/css" media="screen">
+      <link rel="stylesheet" href="/arquivos_site/css/grid.css?ts=<?php echo $ts; ?>" type="text/css" media="screen">
+      <link rel="icon" href="arquivos_site/images/icone.png" type="image/x-icon">
+      <link rel="shortcut icon" href="arquivos_site/images/icone.png" type="image/x-icon"/>
+	  
+	  <link rel="sitemap" href="/sitemap.xml?ts=<?php echo $ts; ?>" type="text/xml">
+	  
+      <script src="/arquivos_site/js/jquery-1.6.3.min.js" type="text/javascript"></script>
+      <script src="/arquivos_site/js/mask.js" type="text/javascript"></script>
+      <script src="/arquivos_site/js/superfish.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script src="/arquivos_site/js/script.js?ts=<?php echo $ts; ?>" type="text/javascript"></script>
+      <script type="text/javascript" src="/arquivos_site/js/FF-cash.js?ts=<?php echo $ts; ?>" ></script>
+      <script type="text/javascript" src="/arquivos_site/js/jquery.jqtransform.js?ts=<?php echo $ts; ?>" ></script>
+      <script type="text/javascript" src="/js/functions.js" ></script>
+
+      <script type="text/javascript">
+         $(document).ready(function() {
+            $('#search-form-1').jqTransform({imgPath: '../images/'});
+            $('#search-form-2').jqTransform({imgPath: '../images/'});
+            //When page loads...
+            $(".tab_content").hide(); //Hide all content
+            $("ul.tabs li:first").addClass("active").show(); //Activate first tab
+            $(".tab_content:first").show(); //Show first tab content
+
+            //On Click Event
+            $("ul.tabs li").click(function() {
+
+               $("ul.tabs li").removeClass("active"); //Remove any "active" class
+               $(this).addClass("active"); //Add "active" class to selected tab
+               $(".tab_content").hide(); //Hide all tab content
+
+               var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+               $(activeTab).fadeIn(); //Fade in the active ID content
+               return false;
+            });
+
+            $(".tab_content-1").hide(); //Hide all content
+            $("ul.tabs-1 li:first").addClass("active").show(); //Activate first tab
+            $(".tab_content-1:first").show(); //Show first tab content
+
+            //On Click Event
+            $("ul.tabs-1 li").click(function() {
+
+               $("ul.tabs-1 li").removeClass("active"); //Remove any "active" class
+               $(this).addClass("active"); //Add "active" class to selected tab
+               $(".tab_content-1").hide(); //Hide all tab content
+
+               var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+               $(activeTab).fadeIn(); //Fade in the active ID content
+               return false;
+            });
+         });
+      </script>  
+      <!--[if lt IE 8]>
+      <div style=' clear: both; text-align:center; position: relative;'>
+          <a href="http://www.microsoft.com/windows/internet-explorer/default.aspx?ocid=ie6_countdown_bannercode"><img src="http://storage.ie6countdown.com/assets/100/images/banners/warning_bar_0000_us.jpg" border="0"  alt="" /></a>
+      </div>
+      <![endif]-->
+      <!--[if lt IE 9]>
+                  <script type="text/javascript" src="js/html5.js"></script>
+          <link rel="stylesheet" href="css/ie.css" type="text/css" media="screen">
+          <![endif]-->
+      <style>
+         #buttom_busca{
+            background-color:#CD0000;
+            color:#FFFFFF;
+            font:bold 13px Arial, Helvetica, sans-serif;
+            width:120px;
+            height:32px;
+         }
+      </style>
+
+   </head>
+   <body id="page1">
+	<div class="window" id="telefone_empresa_promocao" style="display:none;">
+		<a href="#" style="text-decoration:none;" class="fechar"><img src="/arquivos_site/images/close_red.png"/></a>
+		<table style="width:100%; height:100%; margin-top:10px;">
+			<tr>
+				<td style="height:30px; font-size:25px; border:solid 0px; color:red; vertical-align:middle;">Telefones:</td>
+				<td style="border:solid 0px;">
+	
+					<?php echo $this->veiculo['tel1'];?><br>
+					<?php echo $this->veiculo['tel2'];?>
+					
+				<td>
+			</tr>
+			<tr>
+				<td style="font-size:12px; border:solid 0px;" colspan="2"><center><div style="border-radius:5px; background-color:#CCCCCC; color:red; width:350px; margin-bottom:15px; margin-top:25px; padding:5px;"><span><b>Ao entrar em contato com a loja, informe ter visto o an&uacute;ncio no Meu Car e pergunte ao vendedor sobre o brinde que o site Meu Car tem para voc&ecirc;!</b></span></div></center></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2"><center><img style="width:150px;" src="/arquivos_site/images/Logo_Car.png"/></center></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="window" id="endereco_empresa_promocao" style="display:none;">
+		<a href="#" style="text-decoration:none;" class="fechar"><img src="/arquivos_site/images/close_red.png"/></a>
+		<table style="width:100%; height:100%; margin-top:10px;">
+			<tr>
+				<td style="height:30px; font-size:25px; border:solid 0px; color:red; vertical-align:middle;">Endere&ccedil;o:</td>
+			</tr>
+			<tr>
+				<td style="border:solid 0px;">
+					<?php echo $this->veiculo['endereco'];?> - <?php echo $this->veiculo['cidade'];?> - <?php echo $this->veiculo['estado'];?>
+				<td>
+			</tr>
+			<tr>
+				<td style="font-size:12px; border:solid 0px;" colspan="2"><center><div style="border-radius:5px; background-color:#CCCCCC; color:red; width:350px; margin-bottom:15px; margin-top:25px; padding:5px;"><span><b>Ao entrar em contato com a loja, informe ter visto o an&uacute;ncio no Meu Car e pergunte ao vendedor sobre o brinde que o site Meu Car tem para voc&ecirc;!</b></span></div></center></td>
+			</tr>
+			<tr>
+				<td colspan="2"><center><img style="width:150px;" src="/arquivos_site/images/Logo_Car.png"/></center></td>
+			</tr>
+		</table>
+	</div>
+	
+   <div id="mascara"></div>
+      <div class="main-bg">
+         <div class="top-line">
+            <div class="main">
+               <div class="container_12">
+                  <div class="wrapper">
+                     <div class="grid_12">
+                        <ul class="top-menu">
+
+                           <!--<li><a href="#">Selling</a></li>
+                           <li class="third"><a href="#">Finance</a></li>
+                           <li class="four"><a href="#">Insurance</a></li>
+                           <li class="five"><a href="#">News and Reviews</a></li>
+                           <li><a href="#">Support</a></li>-->
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="main">
+            <!--==============================header=================================-->
+            <header>
+               <div class="wrapper indent-bot">
+					<div class="right-box">
+						<a id="propaganda_link" target="new" href=""><img id="propaganda_path" src=""/></a>
+					</div>
+                  <h1><a href="/carros-usados">Meu Car</a></h1>
+                                  <!--<a style="margin-left:13px; margin-top:20px;"><img src="/arquivos_site/images/Logo_Car.png"/></a>-->
+               </div>
+               <div class="container_12">
+                  <div class="menu-indent">
+                     <div class="grid_12">
+                        <nav>
+                           <ul class="menu">
+                              <li class="first"><a id="home"href="/carros-usados"><span></span>Home</a></li>
+                              <li><a href="/carros-usados/avaliar-carro"><span></span>Avalie seu Carro</a></li>
+                              <li><a id="buscaLojas" href="/carros-usados/busca-lojas"><span></span>Buscar Lojas</a>
+                                 <!--<ul>
+                                     <li><a href="#">Calculate payments</a>
+                                         <ul>
+                                             <li><a href="#">Week</a></li>
+                                             <li><a href="#">Month</a></li>
+                                             <li><a href="#">Year</a></li>
+                                         </ul>
+                                     </li>
+                                     <li><a href="#">Compare vehicles</a></li>
+                                     <li class="last"><a href="#">What's my car worth?</a></li>
+                                                                                 
+                                 </ul>  -->
+                              </li>
+                              <li><a href="<?php echo URL ?>index/adm"><span></span>&Aacute;rea do Revendedor</a></li>
+                              <li><a href="/carros-usados/anuncio-gratis"><span></span>Anuncie Gr&aacute;tis</a></li><!--/carros-usados/anuncio-gratis-->
+                              <li class="last"><a  target="new" href="http://www.vendedorouoferecedor.com.br/empregojundiai.html"><span></span>Trabalhe Conosco</a></li>
+							  <!--<img id="curtir_face" src="/arquivos_site/images/joinha.png" style="width:30px; margin-top:6px; margin-left:6px;">-->
+						   </ul>
+                           <div class="clear"></div>
+                        </nav>
+                     </div>
+
+
+                  </div>
+                  <div class="clear"></div>
+
+                  <div class="box-cadastra" id="box_cadastra">
+                     <div style="margin-left:5px; margin-top:11px; float:left;">
+                        <a style="color:#FFFFFF;" href="/carros-usados/cadastro-ofertas">CADASTRE-SE E RECEBA NOSSAS OFERTAS</a>
+                     </div>
+                     <div style="margin-right:5px; margin-top:5px; float:right;">
+                        <a class="button-6 fleft" style="margin-right:20px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;" href="/carros-usados/busca-avancada">Busca Detalhada</a>
+						<iframe src="//www.facebook.com/plugins/like.php?href=https://www.facebook.com/MeuCarSite&amp;width=450&amp;height=35&amp;colorscheme=dark&amp;layout=standard&amp;action=like&amp;show_faces=false&amp;send=false&amp;appId=566753576702752" scrolling="no" frameborder="0" style="margin-top:3px; border:none; overflow:hidden; width:400px; height:30px;" allowTransparency="true"></iframe>
+                        <a href="javascript: void(0);" title="Compartilhar no Facebook" onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo URL ?>carros-usados', 'ventanacompartir', 'toolbar=0, status=0, width=650, height=450')"><img src="/arquivos_site/images/botao_facebook.png" border="0" width="30" height="30"/></a>
+                        <a target="_blank" href="http://twitter.com/home?status=.:MeuCar:. <?php echo $this->veiculo['marca']; ?> - <?php echo $this->veiculo['modelo']; ?>, está em: <?php echo URL ?>carros-usados.'" class="btwitter" title="Compartilhar em Twitter" ><img width="30" height="30" src="/arquivos_site/images/botao-twitter60x60.png"/></a>
+                        <a href="javascript: void(0);" title="Compartilhar no Google+" onclick="window.open('https://plus.google.com/share?url=<?php echo URL ?>carros-usados', 'ventanacompartir', 'toolbar=0, status=0, width=650, height=450')"><img src="/arquivos_site/images/g_plus.png" border="0" width="30" height="30"/></a>
+                     </div>
+                  </div>
+                  <div class="clear"></div>
+                  <div class="grid_3 inh" id="menu_busca">
+
+                     <form method="post" id="busca_string" action="/carros-usados/busca-veiculos">
+                        <div class="box-2" style="margin-bottom:5px;">
+                           <center><h3 class="light"><b>Busca R&aacute;pida&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b></h3></center>
+                           <div class="box-2-container">
+                              <b>Modelo</b>
+                              <input type="text" id="str_veiculo" name="str_veiculo" style="width:100%; height:22px;"/><br>Exemplo: Celta
+                           </div>
+                           <center><h3 class="light"><input type="submit"  id="buttom_busca"  value="Buscar Carros"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3></center>
+
+                        </div>
+                     </form>
+                     <ul class="tabs">
+                        <li class="firs"><a href="#tab1">Usados</a></li>
+                        <li class="last"><a href="#tab2">0KM</a></li>
+                     </ul>
+                     <div class="tab_container">
+                        <div id="tab1" class="tab_content">
+                           <div class="tab-container-padding">
+                              <form method="post" id="busca_usado" enctype="application/x-www-form-urlencoded" action="/carros-usados/busca-veiculos">
+                                 <fieldset>
+
+                                    <span class="name-input">Fabricante:</span>
+                                    <select style="width:180px; height:25px; color:#777777;" name="marca" id="marca_usado" onchange="buscaModelo(this.value);">
+                                       <option value="">Selecione</option>
+                                    </select>
+                                    <div class="clear"></div>
+
+                                    <br>
+
+                                    <span class="name-input1">Modelo:</span>
+                                    <select style="width:180px; height:25px; color:#777777;" name="modelo" id="modelo_usado" onchange="buscaCidade(this.value);">
+                                       <option value="">Selecione</option>
+                                    </select>
+                                    <div class="clear"></div>
+
+                                    <br>
+
+                                    <span class="name-input1">Cidade:</span>
+                                    <select style="width:180px; height:25px; color:#777777;" name="cidade" id="cidade_usado">
+                                       <option value="">Qualquer</option>
+                                    </select>
+                                    <div class="clear"></div>
+
+                                    <br>
+                                    <div class="mini-blok">
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Min Ano:</span>
+                                          <select style="width:85px; height:25px; color:#777777;" name="minimo_ano" id="minimo_ano_usado">
+                                             <option value="">Qualquer</option>
+                                             <?php
+                                             for ($i = @date('Y') + 1; $i >= @date('Y') - 33; $i--) {
+
+                                                echo " <option value='" . $i . "'>" . $i . "</option>";
+                                             }
+                                             ?>
+                                          </select>
+                                          <div class="clear"></div>
+                                       </div>
+                                       <br>
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Min Pre&ccedil;o:</span>
+                                          <input style="width:81px; height:20px; color:#777777;" type="text" style="width:93%;" name="minimo_preco" id="minimo_preco" onkeyup="validaMoedaBR(this.id);"/>
+                                          <div class="clear"></div>
+                                       </div>
+                                    </div>
+                                    <div class="mini-blok1">
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Max Ano:</span>
+                                          <select style="width:85px; height:25px; color:#777777;" name="maximo_ano" id="maximo_ano_usado">
+                                             <option value="">Qualquer</option>
+<?php
+for ($i = @date('Y') + 1; $i >= @date('Y') - 33; $i--) {
+
+   echo " <option value='" . $i . "'>" . $i . "</option>";
+}
+?>
+                                          </select>
+                                          <div class="clear"></div>
+                                       </div>
+                                       <br>
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Max Pre&ccedil;o:</span>
+                                          <input style="width:81px; height:20px; color:#777777;" type="text" style="width:95%;" name="maximo_preco" id="maximo_preco" onkeyup="validaMoedaBR(this.id);"/>
+                                          <div class="clear"></div>
+                                       </div>
+                                    </div>
+                                    <!--<div class="clear"></div>
+<div class="rowElem select">
+<span class="name-input1">Combust&iacute;vel:</span>
+<select name="select">
+<option value="">Any</option>
+<option value="opt1">...</option>
+</select>
+<div class="clear"></div>
+</div>-->
+                                    <!--<div class="clear"></div>-->
+                                    
+                                       <div class="box-form-button">
+                                          <input type="hidden" name="novo_usado" id="novo_usado" value="1"/>
+                                          <center><a class="button-form" style="width:148px;" href="#"  onClick="document.getElementById('busca_usado').submit()">Buscar Carros</a></center>
+                                          <br>
+                                          <a class="link-form1" href="/carros-usados/busca-avancada">Busca Detalhada</a>
+                                       </div> 
+                                    
+                                 </fieldset>      
+                              </form>
+                           </div>
+                        </div>
+
+                        <div id="tab2" class="tab_content">
+                           <div class="tab-container-padding">
+                              <form method="post" id="busca_novo" enctype="application/x-www-form-urlencoded" action="/carros-usados/busca-veiculos">
+                                 <fieldset>
+                                    <div class="rowElem select red">
+                                       <span class="name-input">Fabricante:</span>
+                                       <select style="width:180px; height:25px; color:#777777;" name="marca" id="marca_novo" onchange="buscaModeloNovo(this.value);">
+                                          <option value="">Selecione</option>
+
+                                       </select>
+                                       <div class="clear"></div>
+                                    </div>
+                                    <br>
+                                    <div class="rowElem select red">
+                                       <span class="name-input1">Modelo:</span>
+                                       <select style="width:180px; height:25px; color:#777777;" name="modelo" id="modelo_novo" onchange="buscaCidade(this.value);">
+                                          <option value="">Selecione</option>
+                                       </select>
+                                       <div class="clear"></div>
+                                    </div>
+                                    <br>
+                                    <div class="rowElem select red">
+                                       <span class="name-input1">Cidade:</span>
+                                       <select style="width:180px; height:25px; color:#777777;" name="cidade" id="cidade_novo">
+
+                                       </select>
+                                       <div class="clear"></div>
+                                    </div>
+                                    <br>
+                                    <div class="mini-blok">
+                                       <div class="rowElem select2 red">
+                                          <span class="name-input1">Min Ano:</span>
+                                          <select style="width:85px; height:25px; color:#777777;" name="minimo_ano" id="minimo_ano_novo">
+                                             <option value="">Qualquer</option>
+<?php
+for ($i = @date('Y') + 1; $i >= @date('Y') - 33; $i--) {
+
+   echo " <option value='" . $i . "'>" . $i . "</option>";
+}
+?>
+                                          </select>
+                                          <div class="clear"></div>
+                                       </div>
+                                       <br>
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Min Pre&ccedil;o:</span>
+                                          <input  type="text" style="width:81px; height:20px; color:#777777;" name="minimo_preco" id="minimo_preco_novo" onkeyup="validaMoedaBR(this.id);"/>
+                                          <div class="clear"></div>
+                                       </div>
+                                    </div>
+                                    <div class="mini-blok1">
+                                       <div class="rowElem select2 red">
+                                          <span class="name-input1">Max Ano:</span>
+                                          <select style="width:85px; height:25px; color:#777777;" name="maximo_ano" id="maximo_ano_novo">
+                                             <option value="">Qualquer</option>
+<?php
+for ($i = @date('Y') + 1; $i >= @date('Y') - 33; $i--) {
+
+   echo " <option value='" . $i . "'>" . $i . "</option>";
+}
+?>
+                                          </select>
+                                          <div class="clear"></div>
+                                       </div>
+                                       <br>
+                                       <div class="rowElem select2">
+                                          <span class="name-input1">Max Pre&ccedil;o:</span>
+                                          <input type="text" style="width:81px; height:20px; color:#777777;" name="maximo_preco" id="maximo_preco_novo" onkeyup="validaMoedaBR(this.id);"/>
+                                          <div class="clear"></div>
+                                       </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <!--<div class="rowElem select red">
+                                        <span class="name-input1">Combust&iacute;vel:</span>
+                                        <select name="select">
+                                            <option value="">Any</option>
+                                            <option value="opt1">...</option>
+                                        </select>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="clear"></div>-->
+                                    <center>
+                                       <div class="box-form-button red">
+                                          <input type="hidden" name="novo_usado" value="2"/>
+                                          <a class="button-form" style="width:148px;" href="#"  onClick="document.getElementById('busca_novo').submit()">Buscar Carros</a>
+                                          <br>
+                                          <a class="link-form1" href="/carros-usados/busca-avancada">Busca Detalhada</a>
+                                       </div>
+                                    </center>
+                                 </fieldset>      
+                              </form>
+                           </div>
+                        </div> 
+
+                     </div>
+
+                  </div>
+
+                  <!-- A TAG </header> se encontra nos phtmls -->
+
+                  <!--==============================content================================-->
+
+<?php echo $this->layout()->content; ?>
+
+                  <!--==============================footer=================================-->
+                  <footer>
+                     <div class="container_12">
+                        <div class="wrapper">
+                           <div class="grid_12">
+                              <div class="footer-menu">
+                                 <div class="wrapper">
+                                    <span class="footer-link">
+                                       &nbsp;&nbsp;&nbsp;&nbsp;<a href="/carros-usados/contato" target="_blanck" class="decor">Fale Conosco</a>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;<a href="/carros-usados/termos-uso" target="_blanck" class="decor">Termos de Uso</a>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;<a href="/carros-usados/contato" target="_blanck" class="decor">Publicidade</a>
+                                    </span>
+                                    <div class="footer-link-box">
+                                       <span class="footer-link">Portal de Revenda Mobile &nbsp;&copy; 2013 - <?php echo @date("Y"); ?>&nbsp; Meu Car - Todos os direitos reservados.&nbsp; </span>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="aligncenter">
+                                 <span class="footer-link">A Meu Car Ltda e o presente site não realizam qualquer intermediação na negociação entre usuários, seja com relação a compra, troca ou qualquer outro tipo de negociação.
+                                    As vendas e entregas aos usuários e/ou terceiros de produtos anunciados no site são de inteira responsabilidade do anunciante. As informação veiculadas nos anúncios desse site são de inteira responsabilidade do anunciante,
+                                    não podendo o usuário reponsabilizar o site pela veracidade e/ou autenticidade das mesmas, nem pelos danos diretos ou indiretos causados a terceiros.<br>
+                                    O usuário reconhece como sendo de sua exclusiva responsabilidade os riscos assumidos nas negociações que vier efetuar com outros usuários do site. Estoque e preços sujeito a conferência e confirmação do anunciante. Os dados do veículo, acessórios e preço são informações meramente sugestivas,
+                                    com base em levantamento periódicos de pesquisa. O preço efetivamente praticado e os demais dados de veículo deverão ser confirmados na concessionária. A Meu Car Ltda se reserva o direito de possíveis erros de digitação.</span>
+                              </div>  
+                           </div>
+                        </div>
+                     </div>
+                  </footer>
+               </div>
+         </div>
+
+         <div id="msd">
+
+         </div>
+   </body>
+</html>
+
+<script type="text/javascript">
+
+       function buscaPropaganda() {
+
+          var arrDados = new Array();
+
+          var resp = $.ajax({
+             url: "/carros-usados/ajax/fn/busca_propaganda",
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          arrDados = resp.split("|");
+
+
+
+          $("#propaganda_link").attr("href", arrDados[1]);
+          $("#propaganda_path").attr("src", "/" + arrDados[0]);
+		  
+		//alert(arrDados[0]);
+
+       }
+
+       function buscaCidade(idModelo) {
+
+          var resp = $.ajax({
+             url: "/empresas/ajax/fn/busca_cidade/id_modelo/" + idModelo,
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          $("#cidade_usado").html(resp);
+          $("#cidade_novo").html(resp);
+
+       }
+
+       function buscaModelo(strMarca) {
+
+          var resp = $.ajax({
+             url: "/modelos/ajax/fn/busca_modelo/marca/" + strMarca,
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+         $("#modelo_usado").html(resp);
+       // $("body").html(resp);
+		 
+		//alert(resp);
+
+       }
+
+       function buscaModeloNovo(strMarca) {
+
+          var resp = $.ajax({
+             url: "/modelos/ajax/fn/busca_modelo/marca/" + strMarca + "/estado/2",
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          $("#modelo_novo").html(resp);
+
+       }
+
+       $(document).ready(function() {
+
+          var resp = $.ajax({
+             url: "/modelos/ajax/fn/busca_marca",
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          $("#marca_usado").html(resp);
+          $("#marca_novo").html(resp);
+
+
+          var resp = $.ajax({
+             url: "/empresas/ajax/fn/busca_cidade/id_modelo/nada",
+             async: false,
+             type: 'POST',
+             //data: ({'f':f}),
+             dataType: 'text'
+          }).responseText;
+
+          $("#cidade_usado").html(resp);
+          $("#cidade_novo").html(resp);
+
+          buscaPropaganda();
+		  
+       });
+
+</script>

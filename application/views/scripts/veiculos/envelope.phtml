@@ -1,0 +1,183 @@
+<style media="print">
+
+	#veiculo{
+		border: solid 1px;
+		width:100%;
+		font-family:verdana;
+	}
+
+	#veiculo tr td{
+		#border: solid 1px;
+		height:30px;
+	}
+	
+	#veiculo tr th{
+		border: solid 1px;
+		height:30px;
+	}
+	
+	#dados_veiculos b{
+		margin-left:4px;
+		background-color:#CCCCCC;
+	}
+	
+	#dados_veiculos{
+		background-color:#CCCCCC;
+		height:30px;
+	}
+	
+	#preenchimento{
+		border-bottom:solid 1px;
+	}
+	
+	#div_checkbox{
+		border:solid 1px;
+		height:25px;
+		width:25px;
+	}
+
+</style>
+
+<style>
+
+	#veiculo{
+		border: solid 1px;
+		width:100%;
+		font-family:verdana;
+	}
+
+	#veiculo tr td{
+		#border: solid 1px;
+		height:30px;
+	}
+	
+	#veiculo tr th{
+		#border: solid 1px;
+		height:30px;
+	}
+	
+	#dados_veiculos b{
+		margin-left:4px;
+		background-color:#CCCCCC;
+	}
+	
+	#dados_veiculos{
+		background-color:#CCCCCC;
+		height:30px;
+		border: solid 1px;
+	}
+	
+	#preenchimento{
+		border-bottom:solid 1px;
+	}
+	
+	#div_checkbox{
+		border:solid 1px;
+		height:25px;
+		width:25px;
+	}
+
+</style>
+
+<?php
+
+	if($this->negociacao['data_abertura']){
+	
+	
+		$arrTemp = explode(" ",$this->negociacao['data_abertura']);
+		
+		$hora = $arrTemp[1];
+		
+		$data = implode("/",array_reverse(explode("-",$arrTemp[0])));
+	
+		$this->negociacao['data_abertura'] = $data." ".$hora;
+	
+	
+	}
+
+?>
+
+<table id="veiculo">
+<tr>
+	<th colspan="6" style="font-size:20px;">ENVELOPE DO VE&Iacute;CULO</th>
+<tr>
+<tr>
+	<td colspan="6" id="dados_veiculos"><b>DADOS DO VE&Iacute;CULO</b></td>
+<tr>
+<tr>
+	<td align="right"><b>Ve&iacute;culo:</b></td><td colspan="5"><?php echo $this->veiculo['descricao_site'];?></td>
+<tr>
+<tr>
+	<td align="right"><b>Cor:</b></td><td><?php echo $this->veiculo['cor'];?></td><td align="right"><b>Ano Fab./Mod.:</b></td><td><?php echo $this->veiculo['ano_fabricacao']."/".$this->veiculo['ano_modelo'];?></td><td align="right"><b>Renavam:</b></td><td><?php echo $this->veiculo['renavam'];?></td>
+<tr>
+<tr>
+	<td align="right"><b>Placa:</b></td><td><?php echo $this->veiculo['placa'];?></td><td align="right"><b>Combust&iacute;vel:</b></td><td><?php echo $this->veiculo['combustivel'];?></td><td align="right"><b>KM:</b></td><td><?php echo $this->veiculo['km'];?></td>
+<tr>
+<tr>
+	<td align="right"><b>Motor:</b></td><td><?php echo $this->veiculo['motor'];?></td><td align="right"><b>Chassi:</b></td><td><?php echo $this->veiculo['chassi'];?></td>
+<tr>
+</table>
+<table id="veiculo">
+<tr>
+	<td colspan="6" id="dados_veiculos"><b>DADOS DA ENTRADA</b></td>
+<tr>
+<tr>
+	<td align="right"><b>Negocia&ccedil;&atilde;o:</b></td><td colspan="3" id="preenchimento"><?php echo $this->negociacao['id_negociacao']." - ".$this->origem; ?></td><td align="right"><b>Data:</b></td><td id="preenchimento" width="150px"><?php echo $this->negociacao['data_abertura']; ?></td>
+<tr>
+<tr>
+	<td align="right"><b>Cliente:</b></td><td colspan="3" id="preenchimento"><?php echo $this->negociacao['nome']; ?></td><td align="right"><b>Celular:</b></td><td id="preenchimento"><?php echo $this->negociacao['cel']; ?></td>
+<tr>
+<tr>
+	<td align="right"><b>Endere&ccedil;o:</b></td><td colspan="3" id="preenchimento"><?php echo $this->negociacao['endereco']; ?></td><td align="right"><b>CEP:</b></td><td id="preenchimento"><?php echo $this->negociacao['cep']; ?></td>
+<tr>
+<tr>
+	<td align="right"><b>Bairro/Cid./UF.:</b></td><td colspan="3" id="preenchimento"><?php echo $this->negociacao['bairro']." ".$this->negociacao['cidade']." ".$this->negociacao['estado'] ; ?></td><td align="right"><b>Fone Res.:</b></td><td id="preenchimento"><?php echo $this->negociacao['tel1']; ?></td>
+<tr>
+<tr>
+	<td align="right"><b>E-mail:</b></td><td colspan="3" id="preenchimento"><?php echo $this->negociacao['email']; ?></td><td align="right"><b>Fone 2:</b></td><td id="preenchimento"><?php echo $this->negociacao['tel2']; ?></td>
+<tr>
+
+<tr>
+	<td colspan="6" id="dados_veiculos"><b>DADOS DA SA&Iacute;DA</b></td>
+<tr>
+<tr>
+	<td align="right"><b>Negocia&ccedil;&atilde;o:</b></td><td colspan="3" id="preenchimento"></td><td align="right"><b>Data:</b></td><td id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"><b>Cliente:</b></td><td colspan="3" id="preenchimento"></td><td align="right"><b>Celular:</b></td><td id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"><b>Endere&ccedil;o:</b></td><td colspan="3" id="preenchimento"></td><td align="right"><b>CEP:</b></td><td id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"><b>Bairro/Cid./UF.:</b></td><td colspan="3" id="preenchimento"></td><td align="right"><b>Fone Res.:</b></td><td id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"><b>E-mail:</b></td><td colspan="3" id="preenchimento"></td><td align="right"><b>Fone Com:</b></td><td id="preenchimento"></td>
+<tr>
+
+<tr>
+	<td colspan="6" id="dados_veiculos"><b>OBSERVA&Ccedil;&Otilde;ES</b></td>
+<tr>
+<tr>
+	<td align="right"><b>Cópia Recibo?:</b></td><td><div id="div_checkbox"></div></td><td align="right"><b>Decalque do Chassi?:</b></td><td><div id="div_checkbox"></div></td><td align="right"><b>Decalque do Motor?:</b></td><td><div id="div_checkbox"></div></td>
+<tr>
+<tr>
+	<td align="right"><b>Observa&ccedil;&otilde;es:</b></td><td colspan="5" id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"></td><td colspan="5" id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"></td><td colspan="5" id="preenchimento"></td>
+<tr>
+<tr>
+	<td align="right"></td><td colspan="5" id="preenchimento"></td>
+<tr>
+</table>
+
+<script>
+
+	window.print();
+	
+</script>

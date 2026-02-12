@@ -1,0 +1,440 @@
+<style>
+	.text{
+		margin-left:-4px;
+	}
+</style>
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="add-revisoes" class="form" method="post">
+	
+	<div class="inline">
+		<label class="label">Fornecedor</label>
+		<select class="text" id="id_fornecedor" name="id_fornecedor" >
+			<option value="">Selecione</option>
+		</select>
+	</div>
+	
+<div id="despesa" style="width:98.1%;">
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Data</th>
+				<th>Despesa</th>
+				<th>Placa - Modelo</th>
+				<th>NF</th>
+				<th>Dias Garantia</th>
+				<th>Valor</th>
+				<th>A&ccedil;&otilde;es</th>
+			</tr>
+		</thead>
+		
+		<tbody id="despesas_negociacao">
+			<tr id="despesas_negociacao_line_0">
+				<td style="width:11%;">
+					<span style="font-size:11px;">&nbsp;</span>
+					<input type="text" id="Ddata_0" name="Ddata_0" class="text" value="" />
+				</td>
+				<td>
+					<span style="font-size:11px;">&nbsp;</span>
+					<input type="text" id="Ddescricao_0" name="Ddescricao_0" class="text" value="" />
+				</td>
+				<td style="width:25%;">
+					<span id="status_0" style="font-size:11px; color:red;">&nbsp;</span>
+					<input type="text" id="findplaca_0" name="findplaca_0" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value, this.id)" autocomplete="off" value="" />
+					<input type="hidden" id="idveiculo_0" name="idveiculo_0" value=""/>
+					<input type="hidden" id="vendido_0" name="vendido_0" value = ""/>
+					<div id="resVeiculos_0" class="autocomplete"><ul></ul></div>
+				</td>
+				<td style="width:10%;">
+					<span style="font-size:11px;">&nbsp;</span>
+					<input type="text" id="Dnf_0" name="Dnf_0" class="text" value="" />
+				</td>
+				<td style="width:12%;">
+				<span style="font-size:11px;">&nbsp;</span>
+					<input type="text" id="Dgarantia_0" name="Dgarantia_0" class="text" value="" />
+				</td>
+				<td style="width:9%;">
+					<span style="font-size:11px;">&nbsp;</span>
+					<input type="text" id="Dvalor_0" name="Dvalor_0" autocomplete="off" class="text" value="" onkeyup="calculaValordespesas(this.value, this.id); validaMoedaBR(this.id);" />
+				</td>
+				<td style="width:11%;">
+					<input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adddespesa()">
+				</td>
+			</tr>
+			
+			
+		</tbody>
+	</table>
+	
+	<div id="total_despesas" class="inline" style="width:18.1%;" valign="bottom">
+		<label style="font-size:20px;">Total: R$ <span id="total" style="font-size:20px;"> </span></label>
+	</div>
+
+</div>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<div class="inline" style="clear:both; margin-top:10px;">
+	<input type="button" class="btn-small btn-add" value="Cadastrar" onclick="validaCampo();" />
+</div>
+	
+</form>
+
+<script type="text/javascript">
+
+
+
+
+	function validaCampo(){
+
+		var msg = "";
+		var erro = false;
+		
+		var data = true;
+		var descricao = true;
+		var findplaca = true;
+		var valor = true;
+		
+		if($("#id_fornecedor").val() == ""){
+			
+			erro = true;
+			
+			msg += "<br>O campo Fornecedor deve ser selecionado.";
+		
+		}
+		
+		$("#despesas_negociacao input").each(function (){
+		
+			if($(this).attr('id').substr(0,5) == "Ddata"){
+		
+				if($(this).val() == ""){
+		
+					erro = true;
+				
+					if(data){
+				
+						msg += "<br>Os campos 'Data' devem ser preenchidos.";
+						data = false;
+						
+					}
+					
+				}
+				
+			}
+			
+			if($(this).attr('id').substr(0,10) == "Ddescricao"){
+		
+				if($(this).val() == ""){
+		
+					erro = true;
+				
+					if(descricao){
+					
+						msg += "<br>Os campos 'Despesa' devem ser preenchidos.";
+						descricao = false;
+						
+					}
+					
+				}
+				
+			}
+			
+			if($(this).attr('id').substr(0,9) == "findplaca"){
+		
+				if($(this).val() == ""){
+		
+					erro = true;
+				
+					if(findplaca){
+				
+						msg += "<br>Os campos 'Placa - Modelo' devem ser preenchidos.";
+						findplaca = false;
+						
+					}
+					
+				}
+				
+			}
+			
+			if($(this).attr('id').substr(0,6) == "Dvalor"){
+		
+				if($(this).val() == ""){
+		
+					erro = true;
+				
+					if(valor){
+				
+						msg += "<br>Os campos 'Valor' devem ser preenchidos.";
+						valor = false;
+					
+					}
+					
+				}
+				
+			}
+			
+			if($(this).attr('id').substr(0,9) == "findplaca"){
+		
+				if($(this).css("background-color") == "rgb(255, 192, 203)"){
+		
+					erro = true;
+				
+					if(findplaca){
+				
+						msg += "<br>Os campos 'Placa - Modelo' em vermelho indicam que o ve&iacute;culo indicado n&atilde;o existe.";
+						findplaca = false;
+						
+					}
+					
+				}
+				
+			}
+	
+		});
+
+		if(erro){
+			
+			msg = msg.substr(4);
+			$("#msg").removeClass('sucess');
+			$("#msg").addClass('erro');
+			$("#msg").html(msg);
+		
+		}else{
+			
+			$("form").submit();
+		
+		}
+
+	}
+
+	$(function(){
+		
+		if($("#msg").html().length > 0){
+				
+			if($("#msg").attr("class") == "msg" && $("#msg").html().substr(0 ,4) != "Erro"){
+			
+				$("#msg").addClass('sucess');
+			
+			}else{
+			
+				$("#msg").addClass('erro');
+			
+			}
+		
+		}
+
+	})
+	
+	
+	function findVeiculo(f,id){
+	
+		var numId = new Array();
+	
+		numId = id.split("_");
+	
+		$("#resVeiculos_"+numId[1]).css("display","block");
+
+		var resp = $.ajax({
+			url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModeloRevisao',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f,'d':numId[1]}),
+      		dataType: 'text'
+		}).responseText;
+
+		$("#resVeiculos_"+numId[1]+" ul").html(resp);
+		
+		if(resp == ""){
+			
+			$("#"+id).css("background-color", "pink");
+			$("#"+id).css("border-color", "red");
+		
+		}else{
+			
+			$("#"+id).css("background-color","#FFFFCC");
+			$("#"+id).css("border-color", "#AAA");
+		
+		}
+
+	}
+
+	
+	function populaCamposVeiculo(f,d){
+	
+		var arrDados = new Array();
+		var arrDadosValor = new Array();
+		var modelo = "";
+		var placa = "";
+	
+		var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+		}).responseText;
+	
+		$("#resVeiculos_"+d).css("display","none");
+	
+		arrDados = resp.split("|");
+	
+		for(i=0;i < arrDados.length;i++){
+		
+			arrDadosValor = arrDados[i].split(":");
+			
+			if(arrDadosValor[0] == "modelo"){
+			
+				modelo = arrDadosValor[1];
+			
+			}
+			
+			if(arrDadosValor[0] == "placa"){
+			
+				placa = arrDadosValor[1];
+			
+			}
+			
+			if(arrDadosValor[0] == "id"){
+			
+				idVeiculo = arrDadosValor[1];
+			
+			}
+			
+			if(arrDadosValor[0] == "vendido"){
+			
+				vendido = arrDadosValor[1];
+			
+			}
+		
+		}
+		
+		$("#findplaca_"+d).val(placa+" - "+modelo);
+		$("#idveiculo_"+d).val(idVeiculo);
+		
+		if(vendido == 1){
+		
+			$("#status_"+d).html("Vendido");
+			$("#vendido_"+d).val("1");
+		
+		}else{
+		
+			$("#status_"+d).html("&nbsp;");
+			$("#vendido_"+d).val("0");
+		
+		}
+
+	}
+	
+	
+	
+	var despesasAdd = 0;
+
+	function adddespesa(){
+
+		despesasAdd++;
+
+		var revisao = "<tr id='despesas_negociacao_line_"+despesasAdd+"'>"+
+				"<td style='width:11%;'>"+
+					"<span style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='Ddata_"+despesasAdd+"' name='Ddata_"+despesasAdd+"' class='text' value='' />"+
+				"</td>"+
+				"<td>"+
+					"<span style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='Ddescricao_"+despesasAdd+"' name='Ddescricao_"+despesasAdd+"' class='text' value='' />"+
+				"</td>"+
+				"<td style='width:25%;'>"+
+					"<span id='status_"+despesasAdd+"' style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='findplaca_"+despesasAdd+"' name='findplaca_"+despesasAdd+"' class='text' style='background-color:#FFFFCC;' onkeyup='findVeiculo(this.value, this.id)' autocomplete='off' value='' />"+
+					"<input type='hidden' id='idveiculo_"+despesasAdd+"' name='idveiculo_"+despesasAdd+"' value=''/>"+
+					"<input type='hidden' id='vendido_"+despesasAdd+"' name='vendido_"+despesasAdd+"' value=''/>"+
+					"<div id='resVeiculos_"+despesasAdd+"' class='autocomplete'><ul></ul></div>"+
+				"</td>"+
+				"<td style='width:10%;'>"+
+					"<span style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='Dnf_"+despesasAdd+"' name='Dnf_"+despesasAdd+"' class='text' value='' />"+
+				"</td>"+
+				"<td style='width:12%;'>"+
+					"<span style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='Dgarantia_"+despesasAdd+"' name='Dgarantia_"+despesasAdd+"' class='text' value='' />"+
+				"</td>"+
+				"<td style='width:9%;'>"+
+					"<span style='font-size:11px; color:red;'>&nbsp;</span>"+
+					"<input type='text' id='Dvalor_"+despesasAdd+"' name='Dvalor_"+despesasAdd+"' autocomplete='off' class='text' value='' onkeyup='calculaValordespesas(this.value, this.id); validaMoedaBR(this.id);' />"+
+				"</td>"+
+				"<td>"+
+					"<input type='button' id='btn_deleta_"+despesasAdd+"' name='btn_deleta_"+despesasAdd+"' class='btn-mini btn-del' value='Delete' onclick='deletaDespesa(this.id)'>"+
+				"</td>"+
+			"</tr>";
+			
+		$("#despesas_negociacao").append(revisao);
+		
+
+		
+		$("#Ddata_"+despesasAdd).mask("99/99/9999");
+		$('#Ddata_'+despesasAdd).focus(function(){
+			$(this).calendario({
+				target:this
+			});
+		});
+		
+		calculaValordespesas();
+
+	}
+	
+	function deletaDespesa(id){
+	
+		$("#"+id).parent().parent().remove();
+		
+		calculaValordespesas();
+	
+	}
+	
+	function calculaValordespesas(){
+
+		//valor = moeda2float(valor);
+
+		var total = 0;
+	
+		$("#despesas_negociacao tr td input").each(function(){
+	
+			if($(this).attr('id').substring(0,6) == 'Dvalor'){
+		
+				total += moeda2float($(this).val())
+		
+			}
+	
+		});
+	
+		$("#total").html(float2moeda(total));
+	
+		return total;
+
+	}
+	
+	
+	$("#Ddata_0").mask("99/99/9999");
+	$("#Ddata_0").focus(function(){
+		$(this).calendario({
+			target:this
+		});
+	});
+	
+	function buscaFornecedores(id){
+
+		$.ajax({                   
+			type: "POST",
+			url:"/fornecedores/ajax",
+			dataType:"html",
+			data:{idempresa:id},                       
+			success:function(retorno){
+				
+				$("#id_fornecedor").html(retorno);
+			
+			}
+		})
+
+}
+	
+	
+	buscaFornecedores(<?php echo $_SESSION['sessionUser']['id_empresa'];?>);
+	
+</script>

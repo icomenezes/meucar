@@ -1,0 +1,66 @@
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" id="marca" name="marca" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" id="modelo" name="modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" id="ano_modelo" name="ano_modelo" class="text" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>modelos/add'" />
+	</div>
+
+</form>
+
+<table class = 'table'>
+
+<thead><tr><th>Marca</th><th>Modelo</th><th>Ano</th><th>Preço</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th>A&ccedil;&otilde;es</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->modelos as $m){
+	
+		$dataTmp = explode(" ",$m['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$m['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$m['hora_alteracao'] = $m['hora_alteracao'] . " " . $dataTmp[1];
+?>		
+		<tr>
+		<td><?php echo $m['marca']?></td>
+		<td><?php echo $m['modelo']?></td>
+		<td><?php echo $m['ano_modelo']?></td>
+		<td>R$ <?php echo money_format("%i",$m['preco'])?></td>
+		<td><?php echo $m['nome']." - ".$m['hora_alteracao']; ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $m['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Modelo: <?php echo $m['modelo']?>', <?php echo $m['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir o "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

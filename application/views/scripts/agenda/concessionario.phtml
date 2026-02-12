@@ -1,0 +1,153 @@
+<div class="inline" id="negociacoes" name="negociacoes" style="width:99.5%; height:350px; overflow:auto; border: solid 2px #ccc;"> 
+	<label class="label" style="margin-left: 10px;">Buscando negociações, aguarde...</label>
+</div>
+
+<script type="text/javascript">
+
+	function getNegociacoes(){
+
+		var dataInicial = $("#data_inicial_negociacoes").val();
+		var dataFinal = $("#data_final_negociacoes").val();
+		var placa = $("#placa_negociacoes").val();
+		var strModelo = $("#str_modelo_negociacoes").val();
+
+		$("#negociacoes").html("<label class='label' style='margin-left: 10px;'>Buscando negociações, aguarde...</label>");
+		
+		if(dataInicial && dataFinal){
+
+			$.ajax({                   
+				type: "POST",
+				url: '/agenda/ajax/fn/getNegociacoesConcessionario/agenda/1',
+				async: true,
+				dataType:"text",
+				data: ({'dataInicial':dataInicial, 'dataFinal':dataFinal, 'placa':placa, 'str_modelo':strModelo}),
+				
+				success:function(resp){
+
+					$("#negociacoes").html(resp);
+
+					$("#data_inicial_negociacoes").mask("99/99/9999");
+					$("#data_final_negociacoes").mask("99/99/9999");	
+					
+					$('#data_inicial_negociacoes').focus(function(){
+					
+						$(this).calendario({
+							target:'#data_inicial_negociacoes'
+						});
+					});
+
+					$('#data_final_negociacoes').focus(function(){
+						$(this).calendario({
+							target:'#data_final_negociacoes'
+						});
+					});
+
+					$("#mes_negociacoes").parent().css("min-width","17%");
+					$("#data_inicial_negociacoes").parent().css("min-width","8%");
+					$("#data_final_negociacoes").parent().css("min-width","8%");
+					$("#placa_negociacoes").parent().css("min-width","7%");	
+					$("#str_modelo_negociacoes").parent().css("min-width","16%");
+					$("#placa_negociacoes").mask("aaa-9*99");				
+					$("#placa_negociacoes").css("text-transform", "uppercase");
+		
+				}
+			});
+
+		}else{
+
+			$.ajax({                   
+				type: "POST",
+				url: '/agenda/ajax/fn/getNegociacoesConcessionario/agenda/1',
+				async: true,
+				dataType:"text",
+				data: ({'placa':placa, 'str_modelo':strModelo}),
+				success:function(resp){
+
+					$("#negociacoes").html(resp);
+		
+					$("#data_inicial_negociacoes").mask("99/99/9999");
+					$("#data_final_negociacoes").mask("99/99/9999");	
+		
+					$('#data_inicial_negociacoes').focus(function(){
+					
+						$(this).calendario({
+							target:'#data_inicial_negociacoes'
+						});
+					});
+
+					$('#data_final_negociacoes').focus(function(){
+						$(this).calendario({
+							target:'#data_final_negociacoes'
+						});
+					});
+					
+					$("#mes_negociacoes").parent().css("min-width","17%");
+					$("#data_inicial_negociacoes").parent().css("min-width","8%");
+					$("#data_final_negociacoes").parent().css("min-width","8%");
+					$("#placa_negociacoes").parent().css("min-width","7%");	
+					$("#str_modelo_negociacoes").parent().css("min-width","16%");
+					$("#placa_negociacoes").mask("aaa-9*99");				
+					$("#placa_negociacoes").css("text-transform", "uppercase");
+
+				}
+			});
+
+		}
+		
+	}
+
+	function aprova(id, idCheckbox, idVeiculo){
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>negociacoes/ajax/fn/aprova_negociacao',
+			async: false,
+			type: 'POST',
+			data: ({'id_negociacao': id, 'id_veiculo':idVeiculo}),
+			dataType: 'text'
+		}).responseText;
+
+		if(resp == "sucesso"){
+			
+			$("#"+idCheckbox).parent().parent().css("background-color","#AAFFAA");
+			$("#"+idCheckbox).attr("onclick","reprova("+id+",this.id, "+idVeiculo+")");
+		
+		}else{
+			
+			$("#"+idCheckbox).attr("checked",false);
+			alert("Houve um erro inesperado, por favor tente novamente.");
+		
+		}
+		
+	}
+
+	function reprova(id, idCheckbox, idVeiculo){
+
+		var resp = $.ajax({
+		url: '<?php echo URL ?>negociacoes/ajax/fn/reprova_negociacao',
+			async: false,
+			type: 'POST',
+			data: ({'id_negociacao': id, 'id_veiculo':idVeiculo}),
+			dataType: 'text'
+		}).responseText;
+
+		if(resp == "sucesso"){
+			
+			$("#"+idCheckbox).parent().parent().css("background-color","#FFAAAA");
+			$("#"+idCheckbox).attr("onclick","aprova("+id+", this.id, "+idVeiculo+")");
+		
+		}else{
+			
+			$("#"+idCheckbox).attr("checked",true);
+			alert("Houve um erro inesperado, por favor tente novamente.");
+			
+			alert(resp);
+		
+		}
+		
+	}
+
+	$(document).ready(function(){
+		getNegociacoes();
+	});
+
+</script>

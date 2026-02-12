@@ -1,0 +1,29 @@
+<table class = 'table'>
+
+<thead><tr><th>Perfil</th><th>Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->perfis as $perfil){
+?>		
+		<tr><td><?php echo $perfil['perfil']?></td><td><a href="edt-perfil/id/<?php echo $perfil['id']?>">Editar</a> <a onclick="return confirmaDelete('perfil: <?php echo $perfil['perfil']?>')" href="delete-perfil/id/<?php echo $perfil['id']?>">Deletar</a></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg){
+	
+		decisao = confirm("Deseja realmente excluir o "+msg+" ?");
+		
+		return decisao;
+	
+	}
+
+</script>

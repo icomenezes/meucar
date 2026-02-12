@@ -1,0 +1,302 @@
+<form id="form" name="form" enctype="application/x-www-form-urlencoded" action="<?php echo URL ?>garantias/edt/id/<?php echo $this->id ?>" class="form" method="post">
+
+<div id="venda" style="width:98.1%;display:none">
+
+	<div class="inline">
+		<label class="label">Buscar pelo Modelo ou Placa</label>
+		<input type="text" id="find_placa" name="find_placa" class="text" style="background-color:#FFFFCC;" onkeyup="findVeiculo(this.value)" autocomplete="off" value="" />
+		<div id="resVeiculos" class="autocomplete"><ul></ul></div>
+	</div>
+	
+	<div class="inline" style="clear:both;">
+		<label class="label">Placa</label>
+		<input type="text" readonly="readonly" id="placa" name="placa" class="text" value="<?php echo $this->veiculo['placa'];?>" />
+		<input type="hidden" id="id_veiculo" name="id_veiculo" value="<?php echo $this->veiculo['id'];?>">
+	</div>
+
+	<div class="inline">
+		<label class="label">Marca</label>
+		<input type="text" readonly="readonly" id="marca" name="marca" class="text" value="<?php echo $this->veiculo['marca'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Modelo</label>
+		<input type="text" readonly="readonly" id="modelo" name="modelo" class="text" value="<?php echo $this->veiculo['modelo'];?>" />
+	</div>
+
+	<div class="inline">
+		<label class="label">Ano</label>
+		<input type="text" readonly="readonly" id="ano_modelo" name="ano_modelo" class="text" value="<?php echo $this->veiculo['ano_modelo'];?>"/>
+	</div>
+
+	<div class="inline">
+		<label class="label">Cor</label>
+		<input type="text" readonly="readonly" id="cor" name="cor" class="text" value="<?php echo $this->veiculo['cor'];?>" />
+	</div>
+	
+	<?php 
+	
+		$data = explode(" ",$this->veiculo['data_concretizacao']);
+		$datas = explode("-",$data[0]);
+		$dataFinal = $datas[2]."/".$datas[1]."/".$datas[0];
+		
+	?>
+	
+	<div class="inline">
+		<label class="label">Data da Venda</label>
+		<input type="text" readonly="readonly" id="data_concretizacao"  class="text" value="<?php echo $dataFinal;?>" />
+	</div>
+
+</div>
+
+<table class="table">
+	<tr id="subAbas">
+		<td class="selecionado"><a href="#" onclick="ativaSubAba('entrada', this)" />Entrada</a></td>
+		<td><a href="#" onclick="ativaSubAba('saida', this)" />Sa&iacute;da</a></td>
+	</tr>
+</table>
+
+<?php
+
+	if($this->garantia['data_entrada']){
+	
+		$dataTmp = explode("-",$this->garantia['data_entrada']);
+		$this->garantia['data_entrada'] = implode("/",array_reverse($dataTmp));				
+	
+	}
+	
+	if($this->garantia['data_saida']){
+
+		$dataTmp = explode("-",$this->garantia['data_saida']);
+		$this->garantia['data_saida'] = implode("/",array_reverse($dataTmp));
+		
+	}
+	
+	if($this->garantia['data_cancelamento']){
+
+		$dataTmp = explode("-",$this->garantia['data_cancelamento']);
+		$this->garantia['data_cancelamento'] = implode("/",array_reverse($dataTmp));
+		
+	}
+
+
+?>
+
+<div id="entrada" style="width:98.1%;display:table;heught:auto">
+
+	<div class="inline" style="display:table;height:auto">
+		<label class="label">Descri&ccedil;&atilde;o Defeito</label>
+		<textarea id="descricao_defeito" name="descricao_defeito" class="text"><?php echo $this->garantia['descricao_defeito'];?></textarea>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Km Entrada</label>
+		<input type="text" id="km_entrada" name="km_entrada" class="text" value="<?php echo $this->garantia['km_entrada'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Entrada</label>
+		<input type="text" id="data_entrada" name="data_entrada" class="text" value="<?php echo $this->garantia['data_entrada'];?>" />
+	</div>
+
+</div>
+
+<div id="saida" style="width:98.1%;display:none">
+	
+	<div class="inline">
+		<label class="label">Km Sa&iacute;da</label>
+		<input type="text" id="km_saida" name="km_saida" class="text" value="<?php echo $this->garantia['km_saida'];?>" />
+	</div>
+	
+		<div class="inline">
+		<label>Fornecedores</label>
+		<select name="id_fornecedor" id="id_fornecedor" class="text req" title="Fornecedores">
+		    <option value="NULL">Sem Fornecedor</option>			
+			<?php
+				
+				foreach($this->fornecedores as $fornecedor){
+					
+					if($this->garantia['id_fornecedor'] == $fornecedor['id']){
+					
+						echo "<option selected=\"selected\" value=\"" . $fornecedor['id'] . "\" label = \"" . $fornecedor['razao_social'] ."\">  ". $fornecedor['razao_social'] ." </option>";
+					
+					
+					}else{
+					
+						echo "<option value=\"" . $fornecedor['id'] . "\" label = \"" . $fornecedor['razao_social'] ."\">  ". $fornecedor['razao_social'] ." </option>";
+					
+					}
+					
+				}
+			
+			?>
+			
+		</select>
+	</div>
+	
+	<div class="inline" style="display:table;height:auto">
+		<label class="label">Solu&ccedil;&atilde;o</label>
+		<textarea id="solucao" name="solucao" class="text"><?php echo $this->garantia['solucao'];?></textarea>
+	</div>
+	
+	<div class="inline">
+		<label class="label">Custo</label>
+		<input type="text" id="custo" name="custo" class="text" value="<?php echo $this->garantia['custo'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Sa&iacute;da</label>
+		<input type="text" id="data_saida" name="data_saida" class="text" value="<?php echo $this->garantia['data_saida'];?>" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">Data Cancelamento</label>
+		<input type="text" id="data_cancelamento" name="data_cancelamento" class="text" value="<?php echo $this->garantia['data_cancelamento'];?>" />
+	</div>
+
+</div>
+
+<div class="inline" style="clear:both; display:table;">
+	<input type="button" class="btn-small btn-add" value="Salvar" onclick="validaCampo()"/>
+</div>
+
+<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+
+<script type="text/javascript">
+
+function ativaSubAba(destino, c){
+
+	$("#subAbas td").each(function(){
+		
+		$(this).removeClass('selecionado');
+		
+	});
+	
+	$(c).parent().addClass('selecionado');
+	
+	var divAbas = new Array('entrada', 'saida');
+
+	for(x in divAbas){
+		
+		$("#"+divAbas[x]).css('display','none');
+	
+	}
+	
+	$("#"+destino).css('display','inline');
+	
+	$("#venda").css('display','inline');
+	
+	//calculaResumo();
+
+}
+
+$("#venda").css('display','inline');
+
+function findVeiculo(f){
+
+	$("#resVeiculos").css("display","block");
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getByPlacaModelo/vendido/1',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	$("#resVeiculos ul").html(resp);
+
+}
+
+function populaCamposVeiculo(f){
+
+	var resp = $.ajax({
+		url: '<?php echo URL ?>veiculos/ajax/fn/getById',
+      		async: false,
+      		type: 'POST',
+      		data: ({'f':f}),
+      		dataType: 'text'
+   	}).responseText;
+
+	var arrDados = resp.split("|");
+	
+	var camposVeiculos = $("#venda div").children().each(function(){
+	
+		for(x = 0; x<arrDados.length; x++){
+
+			var arrPartes = arrDados[x].split(":");
+	
+			if(arrPartes[0] == $(this).attr('id')){
+			
+				$(this).val(arrPartes[1]);
+				
+				if(arrPartes[0] == 'valor_venda'){
+				
+					arrPartes[1] = arrPartes[1].replace(".",",");
+					
+					$(this).val(arrPartes[1]);
+					$("#valor_base_calculo").val(arrPartes[1]);
+				
+				}
+			
+			}else{
+		
+				if(arrPartes[0] == "id" && $(this).attr('id') == "id_veiculo"){
+					
+					$(this).val(arrPartes[1]);
+					
+				}
+	
+			}
+		
+		
+		}
+	
+	});
+	
+	var data = new Array();
+	var datas = new Array();
+	
+	data = $("#data_concretizacao").val().split(" ");
+	datas = data[0].split("-");
+	$("#data_concretizacao").val(datas[2]+"/"+datas[1]+"/"+datas[0]);
+
+}
+
+function esconde(f){
+	
+	$(f).css("display","none");
+	
+}
+
+function validaCampo(){
+
+	var msg = "";
+	var erro = false;
+	
+	if($("#id_veiculo").val() == ""){
+
+		erro = true;
+		
+		msg += "<br>O Ve&iacute;culo n&atilde;o cadastrado.";
+		
+	}
+
+	if(erro){
+		
+		msg = msg.substr(4);
+		$("#msg").removeClass('sucess');
+		$("#msg").addClass('erro');
+		$("#msg").html(msg);
+	
+	}else{
+		
+		$("form").submit();
+	
+	}
+
+}
+
+</script>
+
+</form>

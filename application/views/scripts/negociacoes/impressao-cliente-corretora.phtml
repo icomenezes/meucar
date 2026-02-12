@@ -1,0 +1,298 @@
+<style rel="stylesheet" type="text/css" media="print">
+
+
+body{
+	background-image:url(/arquivos_site/images/logo_meucar_transparente.png);
+	background-repeat: no-repeat;
+	background-size: 600px;
+	background-position:center center;
+}
+	
+*{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+table{
+	width:700px;
+	border: solid 1px;
+}
+
+.espaco{
+	width:15px;
+	border: solid 0px;
+}
+
+table tr td{
+	border-top: solid 1px;
+	border-right: solid 1px;
+}
+
+.titulo{
+	margin-top:7px;
+	font-weight:bold;
+}
+
+.campo{
+	font-weight:bold;
+}
+
+</style>
+
+<?php
+
+	$dados = $this->arrCliente;
+	$dados2 = $this->arrVeiculo;
+	
+	//echo "01234"{4};
+	
+	foreach($dados as $key=>$dado){
+		
+		if($dado{4} == "-" && $dado{7} == "-" && strlen($dado) == 10){
+			
+			if($dado == "0000-00-00"){
+				
+				$dados[$key] = "";
+			
+			}else{
+			
+				$dados[$key] = implode("/",array_reverse(explode("-", $dado)));
+				
+			}
+		
+		}
+	
+	}
+	
+	//var_export($dados);
+	
+	if($dados['estado_civil'] == 0){
+		
+		$dados['estado_civil'] = "Solteiro";
+	
+	}elseif($dados['estado_civil'] == 1){
+		
+		$dados['estado_civil'] = "Casado";
+		
+	}elseif($dados['estado_civil'] == 2){
+		
+		$dados['estado_civil'] = "Divorciado";
+		
+	}elseif($dados['estado_civil'] == 3){
+		
+		$dados['estado_civil'] = "Viuvo";
+		
+	}else{
+		
+		$dados['estado_civil'] = "";
+	
+	}
+
+	
+	if($dados['tipo_residencia'] == 0){
+		
+		$dados['tipo_residencia'] = "Propria";
+	
+	}elseif($dados['tipo_residencia'] == 1){
+		
+		$dados['tipo_residencia'] = "Alugada";
+		
+	}elseif($dados['tipo_residencia'] == 2){
+		
+		$dados['tipo_residencia'] = "Financiada";
+
+	}else{
+		
+		$dados['tipo_residencia'] = "";
+	
+	}
+
+?>
+
+<center><div style="font-size: 20px;">MeuCar</div></center>
+
+<div class="titulo">DADOS VEÍCULO</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+
+	<tr>
+		<td colspan="15"style="border-top:0px;"><span class="campo">Marca:</span><br/><span class="dado"><?php echo ($dados2['marca'])?$dados2['marca']:"<br/>"; ?></span></td>
+		<td colspan="20"style="border-top:0px;"><span class="campo">Modelo:</span><br/><span class="dado"><?php echo ($dados2['modelo'])?$dados2['modelo']:"<br/>"; ?></span></td>
+		<td colspan="8"style="border-top:0px;"><span class="campo">Placa:</span><br/><span class="dado"><?php echo ($dados2['placa'])?$dados2['placa']:"<br/>"; ?></span></td>
+		<td colspan="15"style="border-top:0px; border-right:0px;"><span class="campo">Chassi:</span><br/><span class="dado"><?php echo ($dados2['chassi'])?$dados2['chassi']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="8"><span class="campo">Renavam:</span><br/><span class="dado"><?php echo ($dados2['renavam'])?$dados2['renavam']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Ano Fabricação:</span><br/><span class="dado"><?php echo ($dados2['ano_fabricacao'])?$dados2['ano_fabricacao']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Ano Modelo:</span><br/><span class="dado"><?php echo ($dados2['ano_modelo'])?$dados2['ano_modelo']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Combustivel:</span><br/><span class="dado"><?php echo ($dados2['combustivel'])?$dados2['combustivel']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Cor:</span><br/><span class="dado"><?php echo ($dados2['cor'])?$dados2['cor']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-right:0px;"><span class="campo">Km:</span><br/><span class="dado"><?php echo ($dados2['km'])?$dados2['km']:"<br/>"; ?></span></td>
+	</tr>
+</table>
+
+
+<div class="titulo">DADOS PESSOAIS</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+	
+	<tr>
+		<td colspan="15"style="border-top:0px;"><span class="campo">Nome:</span><br/><span class="dado"><?php echo ($dados['nome'])?$dados['nome']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px;"><span class="campo">CPF:</span><br/><span class="dado"><?php echo ($dados['cpf'])?$dados['cpf']:"<br/>"; ?></span></td>
+		<td colspan="6" style="border-top:0px;"><span class="campo">RG:</span><br/><span class="dado"><?php echo ($dados['rg'])?$dados['rg']:"<br/>"; ?></span></td>
+		<td colspan="5" style="border-top:0px;"><span class="campo">Naturalidade:</span><br/><span class="dado"><?php echo ($dados['naturalidade'])?$dados['naturalidade']:"<br/>"; ?></span></td>
+		<td colspan="6" style="border-right:0px; border-top:0px;"><span class="campo">Orgão Expedidor:</span><br/><span class="dado"><?php echo ($dados['orgao_expedidor'])?$dados['orgao_expedidor']:"<br/>"; ?></span></td>
+	</tr>
+	
+	<tr>
+		<td colspan="8"><span class="campo">Data Expedição:</span><br/><span class="dado"><?php echo ($dados['data_expedicao'])?$dados['data_expedicao']:"<br/>"; ?></span></td>
+		<td	colspan="5"><span class="campo">Nacionalidade:</span><br/><span class="dado"><?php echo ($dados['nacionalidade'])?$dados['nacionalidade']:"<br/>"; ?></span></td>
+		<td colspan="10"><span class="campo">Endereco:</span><br/><span class="dado"><?php echo ($dados['endereco'])?$dados['endereco']:"<br/>"; ?></span></td>
+		<td colspan="3"><span class="campo">Número:</span><br/><span class="dado"><?php echo($dados['numero_endereco'])?$dados['numero_endereco']:"<br/>"; ?></span></td>
+		<td colspan="4"><span class="campo">CEP:</span><br/><span class="dado"><?php echo ($dados['cep'])?$dados['cep']:"<br/>"; ?></span></td>
+		<td colspan="10" style="border-right:0px;"><span class="campo">Complemento:</span><br/><span class="dado"><?php echo ($dados['complemento'])?$dados['complemento']:"<br/>"; ?></span></td>
+	</tr>
+
+	<tr>
+		<td colspan="12"><span class="campo">Bairro:</span><br/><span class="dado"><?php echo($dados['bairro'])?$dados['bairro']:"<br/>"; ?></span></td>
+		<td colspan="12"><span class="campo">Cidade:</span><br/><span class="dado"><?php echo ($dados['cidade'])?$dados['cidade']:"<br/>"; ?></span></td>
+		<td colspan="3"><span class="campo">Estado:</span><br/><span class="dado"><?php echo ($dados['estado'])?$dados['estado']:"<br/>"; ?></span></td>
+		<td colspan="13" style="border-right:0px;"><span class="campo">E-mail:</span><br/><span class="dado"><?php echo ($dados['email'])?$dados['email']:"<br/>"; ?></span></td>
+	</tr>
+	
+	<tr>
+		<td colspan="7"><span class="campo">Telefone 1:</span><br/><span class="dado"><?php echo ($dados['tel1'])?$dados['tel1']:"<br/>"; ?></span></td>
+		<td colspan="7" ><span class="campo">Celular:</span><br/><span class="dado"><?php echo ($dados['tel2'])?$dados['tel2']:"<br/>"; ?></span></td>
+		<td colspan="7"><span class="campo">Telefone 2:</span><br/><span class="dado"><?php echo ($dados['tel3'])?$dados['tel3']:"<br/>"; ?></span></td>
+		<td colspan="7"><span class="campo">Nextel:</span><br/><span class="dado"><?php echo ($dados['nextel'])?$dados['nextel']:"<br/>"; ?></span></td>
+		<td colspan="7"><span class="campo">Data de Nascimento:</span><br/><span class="dado"><?php echo ($dados['nascimento'])?$dados['nascimento']:"<br/>"; ?></span></td>
+		<td colspan="5"  style="border-right:0px;"><span class="campo">Sexo:</span><br/><span class="dado"><?php echo ($dados['sexo'] == 0)?"Masculino":"Feminino"; ?></span></td>
+	<tr>
+		<td colspan="7"><span class="campo">Estado Civil:</span><br/><span class="dado"><?php echo ($dados['estado_civil'])?$dados['estado_civil']:"<br/>"; ?></span></td>
+		<td colspan="7"><span class="campo">CNH:</span><br/><span class="dado"><?php echo ($dados['cnh'])?$dados['cnh']:"<br/>"; ?></span></td>
+		<td colspan="7"><span class="campo">Escolaridade:</span><br/><span class="dado"><?php echo ($dados['escolaridade'])?$dados['escolaridade']."º Grau":"<br/>"; ?></span></td>
+		<td colspan="6"><span class="campo">Nº Dependentes:</span><br/><span class="dado"><?php echo ($dados['n_dependentes'])?$dados['n_dependentes']:"<br/>"; ?></span></td>
+		<td colspan="6"><span class="campo">Valor do Aluguel:</span><br/><span class="dado"><?php echo ($dados['valor_aluguel'])?$dados['valor_aluguel']:"<br/>"; ?></span></td>
+		<td colspan="7" style="border-right:0px;"><span class="campo">Tipo Residência:</span><br/><span class="dado"><?php echo ($dados['tipo_residencia'])?$dados['tipo_residencia']:"<br/>"; ?></span></td>
+	</tr>
+
+	<tr>
+		<td colspan="9"><span class="campo">Valor do Financiado:</span><br/><span class="dado"><?php echo ($dados['valor_aluguel'])?$dados['valor_aluguel']:"<br/>"; ?></span></td>
+		<td colspan="8"><span class="campo">Tempo de Residencia:</span><br/><span class="dado"><?php echo ($dados['tempo_residencia'])?$dados['tempo_residencia']:"<br/>"; ?></span></td>
+		<td colspan="11"><span class="campo">Nome do Pai:</span><br/><span class="dado"><?php echo ($dados['nome_pai'])?$dados['nome_pai']:"<br/>"; ?></span></td>
+		<td colspan="12" style="border-right:0px;"><span class="campo">Nome da Mãe:</span><br/><span class="dado"><?php echo ($dados['nome_mae'])?$dados['nome_mae']:"<br/>"; ?></span></td>
+	</tr>
+	
+	<tr>
+		<td colspan="13" class="residencia_anterior"><span class="campo">Endereço Anterior:</span><br/><span class="dado"><?php echo ($dados['endereco_anterior'])?$dados['endereco_anterior']:"<br/>"; ?></span></td>
+		<td colspan="3" class="residencia_anterior"><span class="campo">Número:</span><br/><span class="dado"><?php echo($dados['numero_endereco_anterior'])?$dados['numero_endereco_anterior']:"<br/>"; ?></span></td>
+		<td colspan="12" class="residencia_anterior"><span class="campo">Bairro Anterior:</span><br/><span class="dado"><?php echo($dados['bairro_anterior'])?$dados['bairro_anterior']:"<br/>"; ?></span></td>
+		<td colspan="12" class="residencia_anterior" style="border-right:0px;"><span class="campo">Complemento Anterior:</span><br/><span class="dado"><?php echo ($dados['complemento_anterior'])?$dados['complemento_anterior']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="15" class="residencia_anterior"><span class="campo">Cidade Anterior:</span><br/><span class="dado"><?php echo ($dados['cidade_anterior'])?$dados['cidade_anterior']:"<br/>"; ?></span></td>
+		<td colspan="7" class="residencia_anterior"><span class="campo">Estado Anterior:</span><br/><span class="dado"><?php echo ($dados['estado_anterior'])?$dados['estado_anterior']:"<br/>"; ?></span></td>
+		<td colspan="8" class="residencia_anterior"><span class="campo">CEP Anterior:</span><br/><span class="dado"><?php echo ($dados['cep_anterior'])?$dados['cep_anterior']:"<br/>"; ?></span></td>
+		<td colspan="10" class="residencia_anterior" style="border-right:0px;"><span class="campo">Tempo Residencia Anterior:</span><br/><span class="dado"><?php echo ($dados['tempo_residencia_anterior'])?$dados['tempo_residencia_anterior']:"<br/>"; ?></span></td>
+	</tr>
+
+</table>
+<div class="titulo">ATIVIDADE EXERCIDA</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+	
+	<tr>
+		<td colspan="15" style="border-top:0px;"><span class="campo">Empresa em que Trabalha:</span><br/><span class="dado"><?php echo ($dados['nome_empresa'])?$dados['nome_empresa']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px;"><span class="campo">CNPJ:</span><br/><span class="dado"><?php echo ($dados['cnpj_empresa'])?$dados['cnpj_empresa']:"<br/>"; ?></span></td>
+		<td colspan="13" style="border-top:0px;"><span class="campo">Endereço:</span><br/><span class="dado"><?php echo ($dados['endereco_empresa'])?$dados['endereco_empresa']:"<br/>"; ?></span></td>
+		<td colspan="4" style="border-right:0px; border-top:0px;"><span class="campo">Número:</span><br/><span class="dado"><?php echo ($dados['numero_endereco_empresa'])?$dados['numero_endereco_empresa']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="12"><span class="campo">Bairro:</span><br/><span class="dado"><?php echo($dados['bairro_empresa'])?$dados['bairro_empresa']:"<br/>"; ?></span></td>
+		<td colspan="9"><span class="campo">Cidade:</span><br/><span class="dado"><?php echo ($dados['cidade_empresa'])?$dados['cidade_empresa']:"<br/>"; ?></span></td>
+		<td colspan="3"><span class="campo">Estado:</span><br/><span class="dado"><?php echo ($dados['estado_empresa'])?$dados['estado_empresa']:"<br/>"; ?></span></td>
+		<td colspan="4"><span class="campo">CEP:</span><br/><span class="dado"><?php echo ($dados['cep_empresa'])?$dados['cep_empresa']:"<br/>"; ?></span></td>
+		<td colspan="6"><span class="campo">Telefone:</span><br/><span class="dado"><?php echo ($dados['tel_empresa'])?$dados['tel_empresa']:"<br/>"; ?></span></td>
+		<td colspan="6" style="border-right:0px;"><span class="campo">Data Admissão:</span><br/><span class="dado"><?php echo ($dados['data_admissao'])?$dados['data_admissao']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="11"><span class="campo">Ramo de Atividade:</span><br/><span class="dado"><?php echo ($dados['ramo_atividade'])?$dados['ramo_atividade']:"<br/>"; ?></span></td>
+		<td colspan="11"><span class="campo">Cargo:</span><br/><span class="dado"><?php echo ($dados['cargo'])?$dados['cargo']:"<br/>"; ?></span></td>
+		<td colspan="4"><span class="campo">Salario:</span><br/><span class="dado"><?php echo ($dados['salario'])?$dados['salario']:"<br/>"; ?></span></td>
+		<td colspan="6"><span class="campo">Outras Rendas:</span><br/><span class="dado"><?php echo ($dados['outras_rendas'])?$dados['outras_rendas']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-right:0px;"><span class="campo">Nº Carteira de Trabalho:</span><br/><span class="dado"><?php echo ($dados['numero_carteira'])?$dados['numero_carteira']:"<br/>"; ?></span></td>
+	</tr>
+</table>
+
+<div class="titulo">DADOS DO CÔNJUGE</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+	
+	<tr>
+		<td colspan="17" style="border-top:0px;"><span class="campo">Nome do Cônjuge:</span><br/><span class="dado"><?php echo ($dados['nome_conjuge'])?$dados['nome_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px;"><span class="campo">CPF:</span><br/><span class="dado"><?php echo ($dados['cpf_conjuge'])?$dados['cpf_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px;"><span class="campo">RG:</span><br/><span class="dado"><?php echo ($dados['rg_conjuge'])?$dados['rg_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="7" style="border-top:0px; border-right:0px;"><span class="campo">Data de Nascimento:</span><br/><span class="dado"><?php echo ($dados['nascimento_conjuge'])?$dados['nascimento_conjuge']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="15" class="atividade_anterior"><span class="campo">Empresa:</span><br/><span class="dado"><?php echo ($dados['empresa_conjuge'])?$dados['empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="12" class="atividade_anterior"><span class="campo">Endereço:</span><br/><span class="dado"><?php echo ($dados['endereco_empresa_conjuge'])?$dados['endereco_empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="3"><span class="campo">Número:</span><br/><span class="dado"><?php echo($dados['numero_endereco_empresa_conjuge'])?$dados['numero_endereco_empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="10" style="border-right:0px;"><span class="campo">Bairro:</span><br/><span class="dado"><?php echo($dados['bairro_empresa_conjuge'])?$dados['bairro_empresa_conjuge']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="10" class="atividade_anterior"><span class="campo">Cidade:</span><br/><span class="dado"><?php echo ($dados['cidade_empresa_conjuge'])?$dados['cidade_empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="3" class="atividade_anterior"><span class="campo">Estado:</span><br/><span class="dado"><?php echo ($dados['estado_empresa_conjuge'])?$dados['estado_empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="7" class="atividade_anterior"><span class="campo">Telefone Empresa:</span><br/><span class="dado"><?php echo ($dados['tel_empresa_conjuge'])?$dados['tel_empresa_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="9" class="atividade_anterior"><span class="campo">Cargo:</span><br/><span class="dado"><?php echo ($dados['cargo_conjuge'])?$dados['cargo_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="4" class="atividade_anterior"><span class="campo">Renda:</span><br/><span class="dado"><?php echo ($dados['renda_conjuge'])?$dados['renda_conjuge']:"<br/>"; ?></span></td>
+		<td colspan="7" class="atividade_anterior" style="border-right:0px;"><span class="campo">Data de Admissão:</span><br/><span class="dado"><?php echo ($dados['data_admissao_conjuge'])?$dados['data_admissao_conjuge']:"<br/>"; ?></span></td>
+	</tr>
+	
+</table>
+
+<div class="titulo">REFERÊNCIAS BANCÁRIAS</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+	
+	<tr>
+		<td colspan="10" style="border-top:0px;"><span class="campo">Banco:</span><br/><span class="dado"><?php echo ($dados['banco'])?$dados['banco']:"<br/>"; ?></span></td>
+		<td colspan="4" style="border-top:0px;"><span class="campo">Agencia:</span><br/><span class="dado"><?php echo ($dados['agencia'])?$dados['agencia']:"<br/>"; ?></span></td>
+		<td colspan="6" style="border-top:0px;"><span class="campo">Conta Corrente:</span><br/><span class="dado"><?php echo ($dados['cc'])?$dados['cc']:"<br/>"; ?></span></td>
+		<td colspan="5" style="border-top:0px;"><span class="campo">Cliente Desde:</span><br/><span class="dado"><?php echo ($dados['cliente_desde'])?$dados['cliente_desde']:"<br/>"; ?></span></td>
+		<td colspan="6" style="border-top:0px;"><span class="campo">Cheque Especial:</span><br/><span class="dado"><?php echo ($dados['cheque'])?"Sim":"Não"; ?></span></td>
+		<td colspan="9" style="border-top:0px; border-right:0px;"><span class="campo">Cartões de Crédito. Qual?:</span><br/><span class="dado"><?php echo ($dados['nome_cartao'])?$dados['nome_cartao']:"<br/>"; ?></span></td>
+	</tr>
+</table>
+<div class="titulo">REFERÊNCIAS PESSOAIS</div>
+<table>
+	<tr>
+		<td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td><td class="espaco"></td>
+	</tr>
+	
+	<tr>
+		<td colspan="12" style="border-top:0px;"><span class="campo">Referencia 1:</span><br/><span class="dado"><?php echo ($dados['ref1_nome'])?$dados['ref1_nome']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px;"><span class="campo">Telefone Referencia 1:</span><br/><span class="dado"><?php echo ($dados['ref1_tel'])?$dados['ref1_tel']:"<br/>"; ?></span></td>
+		<td colspan="12" style="border-top:0px;"><span class="campo">Referencia 2:</span><br/><span class="dado"><?php echo ($dados['ref2_nome'])?$dados['ref2_nome']:"<br/>"; ?></span></td>
+		<td colspan="8" style="border-top:0px; border-right:0px;"><span class="campo">Telefone Referencia 2:</span><br/><span class="dado"><?php echo ($dados['ref2_tel'])?$dados['ref2_tel']:"<br/>"; ?></span></td>
+	</tr>
+	<tr>
+		<td colspan="40" style="border-right:0px;"><span class="campo">Observações:</span><br/><span class="dado"><?php echo ($dados['obs'])?$dados['obs']:"<br/>"; ?></span></td>
+	</tr>
+</table>
+
+<script>
+	
+	window.print();
+	
+</script>

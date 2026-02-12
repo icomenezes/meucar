@@ -1,0 +1,63 @@
+<form class="form" action="lista" method="post">
+
+	<div class="inline">
+		<label class="label">Nome</label>
+		<input type="text" id="nome" name="nome" class="text" value="" />
+	</div>
+	
+	<div class="inline">
+		<label class="label">CNPJ</label>
+		<input type="text" id="cnpj" name="cnpj" class="text" value="" />
+	</div>
+	
+	<div class="inline" style="clear:both">
+		<input type="submit" class="btn-small btn-find" value="Pesquisar" />
+		<input type="button" class="btn-mini btn-include" value="Adicionar" onclick="javascript:window.location.href='<?php echo URL ?>financeiras/add'" />
+	</div>
+
+</form>
+
+<table class = "table">
+
+<thead><tr><th>Tipo</th><th>Nome</th><th>CNPJ</th><th>Taxa / Comiss&atilde;o</th><th>Ativa</th><th>Observa&ccedil;&otilde;es</th><th>&Uacute;ltima Altera&ccedil;&atilde;o</th><th style="width:145px;">Ações</th></tr></thead>
+
+<tbody>
+
+<?php
+
+	foreach($this->financeiras as $e){
+	
+		$dataTmp = explode(" ",$e['hora_alteracao']);
+		$dataTmp2 = explode("-",$dataTmp[0]);
+		$e['hora_alteracao'] = implode("/",array_reverse($dataTmp2));
+		$e['hora_alteracao'] = $e['hora_alteracao'] . " " . $dataTmp[1];
+?>		
+		<tr>
+		<td><?php echo ($e['tipo'] == '0') ? "Financeira" : "Despachante"; ?></td>
+		<td><?php echo $e['nome']?></td>
+		<td><?php echo $e['cnpj']?></td>
+		<td><?php echo $e['imposto']?></td>
+		<td><?php echo ($e['ativo'] == "1") ? "Sim" : "N&atilde;o"; ?></td>
+		<td><?php echo nl2br($e['obs'])?></td>
+		<td><?php echo $e['nome_alterou']." - ".$e['hora_alteracao']; ?></td>
+		<td><input type="button" class="btn-small btn-edt" value="Editar" onclick="javascript:window.location.href='edt/id/<?php echo $e['id']?>'" /> <input type="button" class="btn-small btn-del" value="Delete" onclick="confirmaDelete('Empresa: <?php echo $e['nome']?>', <?php echo $e['id']?>)" /></td> </tr>
+<?php	
+	}
+?>
+
+</tbody>
+</table>
+
+<script type="text/javascript">
+
+	function confirmaDelete(msg, id){
+	
+		if(confirm("Deseja realmente excluir a "+msg+" ?")){
+		
+			window.location.href = "del/id/" + id;
+		
+		}
+	
+	}
+
+</script>

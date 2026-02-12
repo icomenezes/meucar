@@ -1,0 +1,129 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <link rel="stylesheet" href="demos.css" type="text/css" media="screen" />
+    
+    <script src="../libraries/RGraph.common.core.js" ></script>
+    <script src="../libraries/RGraph.common.dynamic.js" ></script>
+    <script src="../libraries/RGraph.common.tooltips.js" ></script>
+    <script src="../libraries/RGraph.pie.js" ></script>
+    
+    <title>RGraph demo: 3D Donut chart</title>
+    
+    
+    <meta name="description" content="A 3D donut chart" />
+
+    <meta name="robots" content="noindex, nofollow" />
+
+</head>
+<body>
+
+    
+
+    <h1>3D Donut chart</h1>
+
+    <canvas id="cvs" width="600" height="350" style="float: right">[No canvas support]</canvas>
+
+    
+    <p>
+        This is an example of a 3D Pie chart effect used in conjunction with the
+        donut variant. The Pie chart 3D effect is achieved by stretching the
+        canvas in the horizntal direction (using a transformation) and then drawing
+        the chart as usual.
+    </p>
+    
+    <p>
+        The chart uses the (now default) list style of showing labels - so they're
+        listed vertically on each appropriate side of the Pie chart and then sticks
+        are added pointing to the relevant segment.
+    </p>
+    
+    <p>
+        The 3D effect for the Pi chart is achieved by drawing the horizontally
+        stretched Pie chart multiple times - each time adjusting the Pie chart
+        up by a pixel.
+    </p>
+    
+    <p>
+        The shadow that you see here is just added to the bottom donut chart -
+        therefore adding to the 3D effect.
+    </p>
+    
+    <p>
+        <b>Note:</b>
+        The roundrobin effect doesn't currently work correctly with 3D presentation.
+    </p>
+
+    <script>
+        var pie = new RGraph.Pie({
+            id: 'cvs',
+            data: [4,8,6,3,5,2,5],
+            options: {
+                colorsStroke: 'rgba(0,0,0,0)',
+                shadow: true,
+                shadowOffsetx: 0,
+                shadowOffsety: 5,
+                shadowColor: '#aaa',
+                radius: 100,
+                variant: 'donut3d',
+                labels: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
+                tooltips: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
+                labelsSticksLength: 15,
+                labelsSticksLinewidth: 2,
+                textAccessible: false
+            }
+        }).draw();
+    </script>
+
+
+
+
+
+
+    <p></p>
+
+    This goes in the documents header:
+    <pre class="code">
+&lt;script src="RGraph.common.core.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.dynamic.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.common.tooltips.js"&gt;&lt;/script&gt;
+&lt;script src="RGraph.pie.js"&gt;&lt;/script&gt;
+</pre>
+    
+    Put this where you want the chart to show up:
+    <pre class="code">
+&lt;canvas id="cvs" width="600" height="350" style="float: right"&gt;
+    [No canvas support]
+&lt;/canvas&gt;
+</pre>
+
+    This is the code that generates the chart:
+    <pre class="code">
+&lt;script&gt;
+    new RGraph.Pie({
+        id: 'cvs',
+        data: [4,8,6,3,5,2,5],
+        options: {
+            colorsStroke: 'rgba(0,0,0,0)',
+            shadow: true,
+            shadowOffsetx: 0,
+            shadowOffsety: 5,
+            shadowColor: '#aaa',
+            radius: 100,
+            variant: 'donut3d',
+            labels: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
+            tooltips: ['Mavis','Kevin','Luis','June','Olga','Luis','Pete','Bridget'],
+            labelsSticksLength: 15,
+            labelsSticksLinewidth: 2,
+            textAccessible: false
+        }
+    }).draw();
+&lt;/script&gt;
+</pre>
+
+    <p>        
+
+    </p>
+    
+</body>
+</html>
