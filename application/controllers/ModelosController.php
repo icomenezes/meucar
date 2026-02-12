@@ -361,80 +361,121 @@ class ModelosController extends Zend_Controller_Action
 
 		}elseif($this->_getParam('fn') == 'fipe_marcas'){
 
-			// $this->_getParam('marca')
-		
-			$arrMarcas = self::curl_post_json("http://gds.tecnologia.ws/atualiza-fipe/".$this->_getParam('tipo')."/get-marcas.php", []);
+			$tabelaRef = $this->getTabelaReferenciaFipe();
+			$tipoFipe = $this->getTipoVeiculoFipe($this->_getParam('tipo'));
 
-			$marcas =  '<option disabled="disabled" selected="selected" value="">Selecione</option>';
+			$arrMarcas = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarMarcas', [
+				'codigoTabelaReferencia' => $tabelaRef,
+				'codigoTipoVeiculo' => $tipoFipe
+			]);
 
+			$marcas = '<option disabled="disabled" selected="selected" value="">Selecione</option>';
+
+			// Marcas preferenciais no topo
+			$preferidas = [];
 			if($this->_getParam('tipo') == "carros") {
-
-				$marcas .= '<option value="13">CITROËN</option>';
-				$marcas .= '<option value="21">FIAT</option>';
-				$marcas .= '<option value="22">FORD</option>';
-				$marcas .= '<option value="23">GM - CHEVROLET</option>';
-				$marcas .= '<option value="25">HONDA</option>';
-				$marcas .= '<option value="26">HYUNDAI</option>';
-				$marcas .= '<option value="41">MITSUBISHI</option>';
-				$marcas .= '<option value="44">PEUGEOT</option>';
-				$marcas .= '<option value="48">RENAULT</option>';
-				$marcas .= '<option value="56">TOYOTA</option>';
-				$marcas .= '<option value="59">VW - VOLKSWAGEN</option>';
-
+				$preferidas = [13, 21, 22, 23, 25, 26, 41, 44, 48, 56, 59];
 			}elseif($this->_getParam('tipo') == "motos") {
-
-				$marcas .= "<option value='67'>BMW</option>";
-				$marcas .= "<option value='145'>DAFRA</option>";
-				$marcas .= "<option value='74'>DUCATI</option>";
-				$marcas .= "<option value='77'>HARLEY-DAVIDSON</option>";
-				$marcas .= "<option value='80'>HONDA</option>";
-				$marcas .= "<option value='85'>KAWASAKI</option>";
-				$marcas .= "<option value='99'>SUZUKI</option>";
-				$marcas .= "<option value='101'>YAMAHA</option>";
-
+				$preferidas = [67, 145, 74, 77, 80, 85, 99, 101];
 			}
 
-			$marcas .= '<option disabled="disabled" value=""></option>';
+			if ($arrMarcas) {
+				foreach ($preferidas as $prefId) {
+					foreach ($arrMarcas as $value) {
+						if ((int)$value['Value'] == $prefId) {
+							$marcas .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
+							break;
+						}
+					}
+				}
 
-			foreach ($arrMarcas as $value) {
-				$marcas .= '<option value="'.$value['id'].'">'.$value['nome'].'</option>';
+				$marcas .= '<option disabled="disabled" value=""></option>';
+
+				foreach ($arrMarcas as $value) {
+					if (!in_array((int)$value['Value'], $preferidas)) {
+						$marcas .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
+					}
+				}
 			}
 
 			echo $marcas;
 
 		}elseif($this->_getParam('fn') == 'fipe_modelos'){
 
+			$tabelaRef = $this->getTabelaReferenciaFipe();
+			$tipoFipe = $this->getTipoVeiculoFipe($this->_getParam('tipo'));
 
-			// $this->_getParam('marca')
-
-			$arrModelos = self::curl_post_json("http://gds.tecnologia.ws/atualiza-fipe/".$this->_getParam('tipo')."/get-modelos.php", ['marca_id' => $this->_getParam('marca_id')]);
+			$resultado = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarModelos', [
+				'codigoTabelaReferencia' => $tabelaRef,
+				'codigoTipoVeiculo' => $tipoFipe,
+				'codigoMarca' => $this->_getParam('marca_id')
+			]);
 
 			$modelos = '<option disabled="disabled" selected="selected" value="">Selecione</option>';
 
-			foreach ($arrModelos as $value) {
-				$modelos .= '<option value="'.$value['id'].'">'.$value['nome'].'</option>';
+			if ($resultado && isset($resultado['Modelos'])) {
+				foreach ($resultado['Modelos'] as $value) {
+					$modelos .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
+				}
 			}
 
 			echo $modelos;
 
 		}elseif($this->_getParam('fn') == 'fipe_anos'){
 
-			$arrAnos = self::curl_post_json("http://gds.tecnologia.ws/atualiza-fipe/".$this->_getParam('tipo')."/get-anos.php", ['marca_id' => $this->_getParam('marca_id'), 'modelo_id' => $this->_getParam('modelo_id')]);
+			$tabelaRef = $this->getTabelaReferenciaFipe();
+			$tipoFipe = $this->getTipoVeiculoFipe($this->_getParam('tipo'));
+
+			$arrAnos = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarAnoModelo', [
+				'codigoTabelaReferencia' => $tabelaRef,
+				'codigoTipoVeiculo' => $tipoFipe,
+				'codigoMarca' => $this->_getParam('marca_id'),
+				'codigoModelo' => $this->_getParam('modelo_id')
+			]);
 
 			$anos = '<option disabled="disabled" selected="selected" value="">Selecione</option>';
 
-			foreach ($arrAnos as $value) {
-				$anos .= '<option value="'.$value['codigo'].'">'.str_replace('32000', 'Zero', $value['nome']).'</option>';
+			if ($arrAnos) {
+				foreach ($arrAnos as $value) {
+					$nome = str_replace('32000', 'Zero', $value['Label']);
+					$anos .= '<option value="'.$value['Value'].'">'.$nome.'</option>';
+				}
 			}
 
 			echo $anos;
 
 		}elseif($this->_getParam('fn') == 'fipe_precos'){
 
-			$arrFipe = self::curl_post_json("http://gds.tecnologia.ws/atualiza-fipe/".$this->_getParam('tipo')."/get-precos.php", ['marca_id' => $this->_getParam('marca_id'), 'modelo_id' => $this->_getParam('modelo_id'), 'codigo_ano' => $this->_getParam('codigo_ano')]);
+			$tabelaRef = $this->getTabelaReferenciaFipe();
+			$tipoFipe = $this->getTipoVeiculoFipe($this->_getParam('tipo'));
 
-			//echo $arrFipe[0]['valor'];
-			echo json_encode($arrFipe[0]);
+			// codigo_ano vem no formato "2024-1" (ano-tipoCombustivel)
+			$codigoAno = $this->_getParam('codigo_ano');
+			$partes = explode('-', $codigoAno);
+			$anoModelo = $partes[0];
+			$tipoCombustivel = isset($partes[1]) ? $partes[1] : 1;
+
+			$arrFipe = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarValorComTodosParametros', [
+				'codigoTabelaReferencia' => $tabelaRef,
+				'codigoTipoVeiculo' => $tipoFipe,
+				'codigoMarca' => $this->_getParam('marca_id'),
+				'codigoModelo' => $this->_getParam('modelo_id'),
+				'anoModelo' => $anoModelo,
+				'codigoTipoCombustivel' => $tipoCombustivel,
+				'tipoConsulta' => 'tradicional'
+			]);
+
+			if ($arrFipe) {
+				$resultado = [
+					'valor' => $arrFipe['Valor'],
+					'codigo_fipe' => $arrFipe['CodigoFipe'],
+					'combustivel' => $arrFipe['Combustivel'],
+					'ano_modelo' => $arrFipe['AnoModelo']
+				];
+				echo json_encode($resultado);
+			} else {
+				echo json_encode(null);
+			}
 
 		}elseif($this->_getParam('fn') == 'get_modelo'){
 
@@ -499,10 +540,7 @@ class ModelosController extends Zend_Controller_Action
 
 		}elseif($this->_getParam('fn') == 'get_valor_fipe'){
 
-			$arrFipe = self::curl_post_json("http://gds.tecnologia.ws/atualiza-fipe/".$this->_getParam('tipo')."s/get-valor.php", ['cod_fipe' => $this->_getParam('cod_fipe'), 'codigo_ano' => $this->_getParam('codigo_ano')]);
-
-			echo json_encode($arrFipe[0]);
-           // $this->getValorFipeLocal();
+			$this->getValorFipeLocal();
 
 		}
 
@@ -681,6 +719,63 @@ class ModelosController extends Zend_Controller_Action
 		return json_decode($res, true);
 	}
 
+	private function fipeApiPost($url, $params)
+	{
+		$postData = http_build_query($params, '', '&');
+
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_POST => true,
+			CURLOPT_POSTFIELDS => $postData,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTPHEADER => [
+				'Accept: application/json, text/javascript, */*; q=0.01',
+				'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4',
+				'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
+				'Host: veiculos.fipe.org.br',
+				'Origin: https://veiculos.fipe.org.br',
+				'Referer: https://veiculos.fipe.org.br/',
+				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+			],
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FOLLOWLOCATION => true
+		]);
+
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) {
+			curl_close($ch);
+			return null;
+		}
+		curl_close($ch);
+		return json_decode($response, true);
+	}
+
+	private function getTabelaReferenciaFipe()
+	{
+		if (isset($_SESSION['fipe_tabela_ref']) && isset($_SESSION['fipe_tabela_ref_time'])
+			&& (time() - $_SESSION['fipe_tabela_ref_time']) < 3600) {
+			return $_SESSION['fipe_tabela_ref'];
+		}
+
+		$tabelas = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarTabelaDeReferencia', []);
+
+		if (!$tabelas || empty($tabelas)) {
+			return null;
+		}
+
+		$_SESSION['fipe_tabela_ref'] = $tabelas[0]['Codigo'];
+		$_SESSION['fipe_tabela_ref_time'] = time();
+
+		return $tabelas[0]['Codigo'];
+	}
+
+	private function getTipoVeiculoFipe($tipo)
+	{
+		$map = ['carros' => 1, 'motos' => 2, 'caminhoes' => 3];
+		return isset($map[$tipo]) ? $map[$tipo] : 1;
+	}
 
 }
 
