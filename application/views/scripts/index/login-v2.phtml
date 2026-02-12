@@ -38,13 +38,19 @@ if(!$_GET['erro']){
 					</div>
 					<div class="invalid-feedback msg">Usuário e Senha devem ser informados.</div>
 					<br>
+					<?php if ($this->recaptchaEnabled): ?>
 					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="6LdfehsbAAAAAFxJ4uaYetFPi5btiTCztXQK6mAj"></div>
+						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
 					</center>
 					<br>
 					<div class="d-grid gap-2 disabled">
 					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
 					</div>
+					<?php else: ?>
+					<div class="d-grid gap-2">
+					  	<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Entrar</button>
+					</div>
+					<?php endif; ?>
 				</form>
 					<br>
 					<div class="d-grid gap-2">

@@ -37,13 +37,19 @@ if(!$this->mensagem){
 					</div>
 					<div class="invalid-feedback msg">O login e e-mail deve ser informado.</div>
 					<br>
+					<?php if ($this->recaptchaEnabled): ?>
 					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-sitekey="6LdfehsbAAAAAFxJ4uaYetFPi5btiTCztXQK6mAj"></div>
+						<div class="g-recaptcha" data-callback="enableBtn" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
 					</center>
 					<br>
 					<div class="d-grid gap-2 disabled">
 					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
 					</div>
+					<?php else: ?>
+					<div class="d-grid gap-2">
+					  	<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Entrar</button>
+					</div>
+					<?php endif; ?>
 				</form>
 				</div>
 			</div>
@@ -53,7 +59,7 @@ if(!$this->mensagem){
 </div>
 
 <script type="text/javascript">
-	
+
 
 	function enableBtn(){
 		$("#entrarButton").removeAttr("disabled");
@@ -74,7 +80,7 @@ if(!$this->mensagem){
 		}else{
 			$("#user").addClass("is-valid");
 		}
-		
+
 		if($("#email").val() == ""){
 			erro = true;
 			$("#email").addClass("is-invalid");
@@ -88,7 +94,7 @@ if(!$this->mensagem){
 			$("#entrarButton").html("Aguarde...");
 			$("#esqueci_senha").submit();
 		}
-	
+
 	});
 
 </script>

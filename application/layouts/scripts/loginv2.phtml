@@ -14,7 +14,9 @@ $ts = @date('ymdhis');
 	<title>Meu Car</title>
 		<link rel="stylesheet" href="/css/loginv2/bootstrap.css" type="text/css" media="screen" />
 		<script type="text/javascript" src="/js/jquery-3.4.2.min.js"></script>
+		<?php if ($this->recaptchaEnabled): ?>
 		<script src='https://www.google.com/recaptcha/api.js' async defer></script>
+		<?php endif; ?>
 	</head>
 	<body>
 

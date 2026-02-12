@@ -81,10 +81,12 @@ if($this->form){
 					    </div>
 					</div>
 					<br>
+					<?php if ($this->recaptchaEnabled): ?>
 					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="6LdfehsbAAAAAFxJ4uaYetFPi5btiTCztXQK6mAj"></div>
+						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
 					</center>
 					<br>
+					<?php endif; ?>
 					<input type="hidden" name="not-secret" value="<?php echo $_GET['u']; ?>">
 					<div class="d-grid gap-2 disabled">
 					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="salvarButton">Salvar</button>
@@ -98,8 +100,8 @@ if($this->form){
 </div>
 
 <script type="text/javascript">
-	
-	var captcha = false;
+
+	var captcha = <?php echo $this->recaptchaEnabled ? 'false' : 'true'; ?>;
 
 	function recaptchaExpired(){
 		enableBtn();

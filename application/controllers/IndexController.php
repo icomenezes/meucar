@@ -12,6 +12,38 @@ class IndexController extends Zend_Controller_Action {
       $this->view->titulo = "Login";
 
       Zend_Session::start();
+
+      $config = $this->getInvokeArg('bootstrap')->getOptions();
+      $this->view->recaptchaEnabled = isset($config['recaptcha']['enabled']) ? (bool)$config['recaptcha']['enabled'] : true;
+      $this->view->recaptchaSitekey = isset($config['recaptcha']['sitekey']) ? $config['recaptcha']['sitekey'] : '';
+   }
+
+   private function isRecaptchaEnabled() {
+      $config = $this->getInvokeArg('bootstrap')->getOptions();
+      return isset($config['recaptcha']['enabled']) ? (bool)$config['recaptcha']['enabled'] : true;
+   }
+
+   private function getRecaptchaSecretKey() {
+      $config = $this->getInvokeArg('bootstrap')->getOptions();
+      return isset($config['recaptcha']['secretkey']) ? $config['recaptcha']['secretkey'] : '';
+   }
+
+   private function verificaRecaptcha() {
+      if (!$this->isRecaptchaEnabled()) {
+         return true;
+      }
+
+      $captcha = $this->_getParam('g-recaptcha-response');
+      if (!$captcha) {
+         return false;
+      }
+
+      $secretKey = $this->getRecaptchaSecretKey();
+      $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) . '&response=' . urlencode($captcha);
+      $response = file_get_contents($url);
+      $responseKeys = json_decode($response, true);
+
+      return !empty($responseKeys["success"]);
    }
 
 
@@ -196,23 +228,7 @@ class IndexController extends Zend_Controller_Action {
 
    		if ($this->getRequest()->isPost()) {
 
-	   		if($this->_getParam('g-recaptcha-response')) {
-	          	$captcha = $this->_getParam('g-recaptcha-response');
-	        }
-	        if(!$captcha){
-	          echo '<h2>Por favor, check o captcha!</h2>';
-	          exit;
-	        }
-
-	        $secretKey = "6LdfehsbAAAAALhbk02L_g27HOjlPgfOAsdY1bNN";
-
-	        $ip = $_SERVER['REMOTE_ADDR'];
-	        // post request to server
-	        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-	        $response = file_get_contents($url);
-	        $responseKeys = json_decode($response,true);
-	        // should return JSON with success as true
-	        if($responseKeys["success"]) {
+	        if($this->verificaRecaptcha()) {
 
 			   	$layout = $this->_helper->layout();
 			   	$layout->setLayout('layout');
@@ -1376,21 +1392,7 @@ class IndexController extends Zend_Controller_Action {
       		$senha2 = $this->_getParam('senha2');
       		$notSecret = $this->_getParam('not-secret');
 
-      		if($this->_getParam('g-recaptcha-response')) {
-	          	$captcha = $this->_getParam('g-recaptcha-response');
-	        }
-	        if(!$captcha){
-	          echo '<h2>Por favor, check o captcha!</h2>';
-	          exit;
-	        }
-
-	        $secretKey = "6LdfehsbAAAAALhbk02L_g27HOjlPgfOAsdY1bNN";
-
-	        $ip = $_SERVER['REMOTE_ADDR'];
-	        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-	        $response = file_get_contents($url);
-	        $responseKeys = json_decode($response,true);
-	        if($responseKeys["success"]) {
+	        if($this->verificaRecaptcha()) {
 
 	        	if(isset($_SESSION['id_usuario']) && isset($_SESSION['id_empresa']) && isset($_SESSION['email'])){
 
@@ -1483,22 +1485,7 @@ class IndexController extends Zend_Controller_Action {
 	      		$email = $this->_getParam('email');
 	      		$user = $this->_getParam('user');
 
-	      		if($this->_getParam('g-recaptcha-response')) {
-		          	$captcha = $this->_getParam('g-recaptcha-response');
-		        }
-		        if(!$captcha){
-		          echo '<h2>Por favor, check o captcha!</h2>';
-		          exit;
-		        }
-
-		        $secretKey = "6LdfehsbAAAAALhbk02L_g27HOjlPgfOAsdY1bNN";
-
-		        $ip = $_SERVER['REMOTE_ADDR'];
-		        // post request to server
-		        $url = 'https://www.google.com/recaptcha/api/siteverify?secret=' . urlencode($secretKey) .  '&response=' . urlencode($captcha);
-		        $response = file_get_contents($url);
-		        $responseKeys = json_decode($response,true);
-		        if($responseKeys["success"]) {
+	      		if($this->verificaRecaptcha()) {
 
 		        	$usuarios = new Application_Model_DbTable_Usuarios();
 					$arrUsuario = $usuarios->getUsuarioByLoginEmail($email, $user);
