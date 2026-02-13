@@ -105,17 +105,7 @@ class ErrorController extends Zend_Controller_Action
 
         try {
             $options = $this->getInvokeArg('bootstrap')->getOptions();
-
-            $emailDestino = isset($options['erro']['email']) ? $options['erro']['email'] : '';
-            $smtpServer = isset($options['erro']['smtp']['server']) ? $options['erro']['smtp']['server'] : '';
-            $smtpUser = isset($options['erro']['smtp']['username']) ? $options['erro']['smtp']['username'] : '';
-            $smtpPass = isset($options['erro']['smtp']['password']) ? $options['erro']['smtp']['password'] : '';
-            $smtpPort = isset($options['erro']['smtp']['port']) ? $options['erro']['smtp']['port'] : '587';
-
-            if (!$emailDestino || !$smtpServer) {
-                echo json_encode(['success' => false, 'msg' => 'Configuração de email não encontrada']);
-                return;
-            }
+            $emailDestino = isset($options['erro']['email']) ? $options['erro']['email'] : 'gesiel.diniz@gmail.com';
 
             $corpo = '<html><body style="font-family: Arial, sans-serif;">';
             $corpo .= '<h2 style="color: #dc3545;">Erro no Sistema Meu Car</h2>';
@@ -138,27 +128,46 @@ class ErrorController extends Zend_Controller_Action
             $corpo .= '<pre style="background: #f8f9fa; padding: 10px; border: 1px solid #dee2e6; font-size: 11px; word-wrap: break-word; white-space: pre-wrap;">' . htmlspecialchars($errorData['trace']) . '</pre>';
             $corpo .= '</body></html>';
 
-            $config = array(
-                'auth' => 'login',
-                'username' => $smtpUser,
-                'password' => $smtpPass,
-                'port' => $smtpPort
-            );
+            $assunto = '[ERRO] Meu Car - ' . substr($errorData['message'], 0, 80);
 
-            $transport = new Zend_Mail_Transport_Smtp($smtpServer, $config);
+            $result = $this->enviaMailerCentralizado($emailDestino, $assunto, $corpo);
 
-            $mail = new Zend_Mail('UTF-8');
-            $mail->setBodyHtml($corpo);
-            $mail->setFrom($smtpUser, 'Meu Car - Sistema');
-            $mail->addTo($emailDestino);
-            $mail->setSubject('[ERRO] Meu Car - ' . substr($errorData['message'], 0, 80));
-            $mail->send($transport);
-
-            echo json_encode(['success' => true, 'msg' => 'Erro reportado com sucesso!']);
+            if ($result) {
+                echo json_encode(['success' => true, 'msg' => 'Erro reportado com sucesso!']);
+            } else {
+                echo json_encode(['success' => false, 'msg' => 'Falha ao enviar pelo serviço centralizado']);
+            }
 
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'msg' => 'Falha ao enviar: ' . $e->getMessage()]);
         }
+    }
+
+    private function enviaMailerCentralizado($destinatario, $assunto, $corpo)
+    {
+        $url  = 'https://meucar.com.br/controllers/envia-email-lojistas.php';
+        $data = [
+            'hash' => md5(@date("Y-m-d H:i") . "envia_centralizado"),
+            'destinatario' => $destinatario,
+            'assunto' => $assunto,
+            'corpo' => $corpo,
+            'emailResp' => 'sistemameucar@sistemameucar.com.br',
+            'nomeSite' => 'Meu Car - Sistema',
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $response = curl_exec($ch);
+        $success = !curl_errno($ch) && $response !== false;
+        curl_close($ch);
+
+        return $success;
     }
 
     public function getLog()
