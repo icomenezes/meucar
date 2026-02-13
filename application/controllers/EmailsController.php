@@ -489,7 +489,7 @@ class EmailsController extends Zend_Controller_Action
 	// 	$mail->setBodyHtml($corpo);
 	// 	$mail->setFrom('sistemameucar@sistemameucar.com.br');
 	// 	$mail->addTo($para);
-	// 	//$mail->addBcc('gesiel.diniz@gmail.com');
+	// 	//$mail->addBcc('icomenezes@hotmail.com');
 	// 	$mail->setSubject($assunto);
 	   
 

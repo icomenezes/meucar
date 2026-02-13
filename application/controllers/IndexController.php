@@ -1280,7 +1280,7 @@ class IndexController extends Zend_Controller_Action {
 			$mail->setBodyHtml($corpo);
 			$mail->setFrom('sistemameucar@sistemameucar.com.br');
 			$mail->addTo('guilherme@selectveiculos.com.br');
-			//$mail->addBcc('gesiel.diniz@gmail.com');
+			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 			
 		   
@@ -1357,7 +1357,7 @@ class IndexController extends Zend_Controller_Action {
 			$mail->setBodyHtml($corpo);
 			$mail->setFrom('sistemameucar@sistemameucar.com.br');
 			$mail->addTo('guilherme@selectveiculos.com.br');
-			//$mail->addBcc('gesiel.diniz@gmail.com');
+			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 			
 		   
@@ -1585,7 +1585,7 @@ class IndexController extends Zend_Controller_Action {
 			$mail->setBodyHtml($corpo);
 			$mail->setFrom('administrador@sistemameucar.provisorio.ws');
 			$mail->addTo($email);
-			//$mail->addBcc('gesiel.diniz@gmail.com');
+			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 
 			try{

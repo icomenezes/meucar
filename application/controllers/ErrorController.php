@@ -105,7 +105,7 @@ class ErrorController extends Zend_Controller_Action
 
         try {
             $options = $this->getInvokeArg('bootstrap')->getOptions();
-            $emailDestino = isset($options['erro']['email']) ? $options['erro']['email'] : 'gesiel.diniz@gmail.com';
+            $emailDestino = isset($options['erro']['email']) ? $options['erro']['email'] : 'icomenezes@hotmail.com';
 
             $corpo = '<html><body style="font-family: Arial, sans-serif;">';
             $corpo .= '<h2 style="color: #dc3545;">Erro no Sistema Meu Car</h2>';

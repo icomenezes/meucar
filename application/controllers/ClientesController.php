@@ -2648,8 +2648,8 @@ class ClientesController extends Zend_Controller_Action
 		$mail->setBodyHtml($corpo);
 		$mail->setFrom('sistemameucar@sistemameucar.com.br');
 		$mail->addTo($para);
-		//$mail->addBcc('gesiel.diniz@gmail.com');
-		//$mail->addTo('gesiel.diniz@gmail.com');
+		//$mail->addBcc('icomenezes@hotmail.com');
+		//$mail->addTo('icomenezes@hotmail.com');
 		$mail->setSubject($assunto);
 	   
 

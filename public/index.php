@@ -21,7 +21,7 @@ $application = new Zend_Application(
 define('URL', 'https://meucar.trsystem.com.br/');
 //define('URL', 'http://meucar.local/');
 //define('URL', 'http://meucarsistemapro1.hospedagemdesites.ws/');
-//define('EMAIL_DESTINO','gesiel.diniz@gmail.com');
+//define('EMAIL_DESTINO','icomenezes@hotmail.com');
 //define('EMAIL_DESTINO','rogerio@b1t.com.br');
 define('SUPERVISOR',9);
 define('AVALIADOR',8);
