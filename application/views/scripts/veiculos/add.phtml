@@ -1461,6 +1461,14 @@ function validaCampos(){
 		msg += "<br>Na aba Dados Gerais o campo ano modelo deve ser selecionado.";
 	
 	}
+
+	if($("#id_modelo").val() == "" || $("#id_modelo").val() == "0"){
+
+		erro = true;
+
+		msg += "<br>Na aba Dados Gerais aguarde a consulta FIPE ser concluída antes de salvar.";
+
+	}
 	
 	if($("#placa").val() == ""){
 		

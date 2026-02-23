@@ -4539,7 +4539,7 @@ class VeiculosController extends Zend_Controller_Action
 		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos);
 		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']);
 		$arrPendencias = $dbPendencias->getPendencias($idVeiculos);
-		$arrModelo = $dbModelo->fetchAll("id = ".$id);
+		$arrModelo = $id ? $dbModelo->fetchAll("id = ".$id) : [];
 
 		// if(strpos($arrModelo[0]['modelo'], "Gasolina") !== false) {
 		// 	$arrModelo[0]['codigo'] = $arrModelo[0]['ano_modelo'].'-1';
@@ -8227,7 +8227,12 @@ class VeiculosController extends Zend_Controller_Action
 			if(!$_POST['id_empresa']){
 				$_POST['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			}
-		
+
+			if (empty($_POST['id_modelo']) || $_POST['id_modelo'] == '0') {
+				$this->view->mensagem = 'Erro: Modelo FIPE não identificado. Selecione o modelo, ano e aguarde a consulta FIPE ser concluída antes de salvar.';
+				return;
+			}
+
 			$dadosVeiculos['id_modelo'] = $_POST['id_modelo'];
 			$dadosVeiculos['descricao_site'] = $_POST['descricao_site'];
 			$dadosVeiculos['placa'] = $_POST['placa'];
