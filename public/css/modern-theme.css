@@ -1,0 +1,423 @@
+/* ============================================================
+   MEUCAR - Modern Theme Override
+   Sobrescreve o style.css sem alterar HTML/PHP
+   ============================================================ */
+
+:root {
+    --primary:     #c0392b;
+    --primary-dk:  #96281b;
+    --primary-lt:  #e74c3c;
+    --sidebar-bg:  #2c3e50;
+    --sidebar-txt: #bdc3c7;
+    --sidebar-hvr: #1a252f;
+    --header-bg:   #c0392b;
+    --content-bg:  #f4f6f8;
+    --white:       #ffffff;
+    --border:      #dde1e7;
+    --text:        #34495e;
+    --text-muted:  #7f8c8d;
+    --success:     #27ae60;
+    --danger:      #e74c3c;
+    --warning:     #f39c12;
+    --radius:      6px;
+    --shadow:      0 1px 4px rgba(0,0,0,.12);
+}
+
+/* ── Reset base ── */
+body {
+    background: var(--content-bg) !important;
+    font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-size: 13px !important;
+    color: var(--text) !important;
+}
+
+a { color: var(--primary); }
+a:hover { color: var(--primary-dk); text-decoration: none; }
+
+/* ── Header ── */
+#header {
+    background: var(--header-bg) !important;
+    background-image: none !important;
+    height: 48px !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    display: flex;
+    align-items: center;
+}
+#header h1 { display: none !important; }
+#header h2 {
+    color: #fff !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin: 0 0 0 16px !important;
+    letter-spacing: .5px;
+}
+#header h2::before {
+    content: '🚗 ';
+}
+#header h3 {
+    color: rgba(255,255,255,.85) !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    margin: 0 16px 0 0 !important;
+}
+#header h3 a { color: rgba(255,255,255,.7) !important; }
+#header h3 a:hover { color: #fff !important; }
+
+/* ── Sidebar ── */
+#sidebar {
+    width: 185px !important;
+    background: var(--sidebar-bg) !important;
+    min-height: 100vh;
+    box-shadow: 2px 0 6px rgba(0,0,0,.15);
+}
+
+body {
+    background: var(--content-bg) url(none) !important;
+}
+
+/* nav botões principais */
+#nav a.nav-1 {
+    background: none !important;
+    background-image: none !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    border-bottom: 1px solid rgba(255,255,255,.06) !important;
+    font-weight: 600 !important;
+    color: var(--sidebar-txt) !important;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    transition: background .15s, color .15s;
+}
+#nav a.nav-1 span {
+    margin: 0 !important;
+    display: inline !important;
+    color: inherit !important;
+}
+#nav a.nav-1:hover,
+#nav a.nav-1:active {
+    background: var(--primary) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+/* nav submenus */
+#nav li ul {
+    background: rgba(0,0,0,.18);
+    margin-bottom: 0 !important;
+}
+#nav li ul li a {
+    display: block !important;
+    padding: 7px 14px 7px 22px !important;
+    color: var(--sidebar-txt) !important;
+    font-size: 12px !important;
+    border-left: 3px solid transparent;
+    transition: background .12s, border-color .12s;
+}
+#nav li ul li a:hover {
+    background: rgba(192,57,43,.35) !important;
+    color: #fff !important;
+    border-left-color: var(--primary-lt) !important;
+    text-decoration: none !important;
+}
+#nav li ul li a img {
+    opacity: .5;
+    float: right;
+    margin-top: 2px;
+}
+#nav li ul li a:hover img { opacity: .8; }
+
+/* sidebar novidades box */
+#sidebar > center > div {
+    border: none !important;
+    background: rgba(0,0,0,.2) !important;
+    margin: 10px 8px !important;
+    border-radius: var(--radius) !important;
+    font-size: 11px !important;
+    color: var(--sidebar-txt) !important;
+}
+#sidebar > center > div > div:first-child {
+    background: rgba(192,57,43,.6) !important;
+    color: #fff !important;
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+}
+#sidebar > center > div > div:last-child {
+    color: rgba(255,255,255,.6) !important;
+    font-size: 11px !important;
+    padding: 6px 8px !important;
+}
+
+/* ── Content wrap ── */
+#content-wrap {
+    padding-left: 185px !important;
+    background: none !important;
+    background-image: none !important;
+}
+
+#main-title {
+    background: var(--primary) !important;
+    color: #fff !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    padding: 10px 16px !important;
+    letter-spacing: .3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.15);
+}
+#main-title label {
+    color: rgba(255,255,255,.6) !important;
+    font-size: 11px !important;
+}
+
+#content {
+    padding: 16px !important;
+    padding-bottom: 80px !important;
+    background: var(--content-bg) !important;
+}
+#content h2 {
+    color: var(--primary) !important;
+    font-size: 15px !important;
+    border-bottom: 2px solid var(--primary) !important;
+    padding-bottom: 6px !important;
+    margin: 18px 0 14px !important;
+}
+
+/* ── Formulários ── */
+.form div.inline {
+    height: auto !important;
+    margin-bottom: 10px !important;
+    margin-left: 8px !important;
+}
+.form label, .form .label {
+    font-size: 12px !important;
+    color: var(--text-muted) !important;
+    font-weight: 600 !important;
+    margin-bottom: 3px !important;
+    display: block !important;
+}
+.form .text,
+.form .textarea,
+input.text,
+textarea.text {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+    color: var(--text) !important;
+    background: #fff !important;
+    transition: border-color .15s, box-shadow .15s;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.06);
+}
+.form .text:focus,
+.form .textarea:focus,
+input.text:focus,
+textarea.text:focus {
+    border-color: var(--primary) !important;
+    background: #fff !important;
+    box-shadow: 0 0 0 3px rgba(192,57,43,.12) !important;
+    outline: none;
+}
+.form .select,
+select.select {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 6px 8px !important;
+    font-size: 13px !important;
+    color: var(--text) !important;
+    background: #fff !important;
+    background-image: none !important;
+    cursor: pointer;
+}
+.form .select:focus, select.select:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(192,57,43,.12) !important;
+}
+.form .req {
+    border-color: var(--danger) !important;
+    background: #fff8f8 !important;
+}
+
+/* mensagens de sucesso/erro */
+.msg { border-radius: var(--radius) !important; padding: 10px 14px !important; font-size: 13px !important; }
+.sucess { background: #eafaf1 !important; color: #1e8449 !important; border: 1px solid #a9dfbf !important; }
+.erro   { background: #fdedec !important; color: #c0392b !important; border: 1px solid #f1948a !important; }
+
+/* ── Botões ── */
+.btn-small, .btn-big, .btn-mini,
+.btn-small-imp, .btn-small-xls {
+    background: #fff !important;
+    background-image: none !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    color: var(--text) !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 5px 12px !important;
+    height: auto !important;
+    cursor: pointer !important;
+    box-shadow: var(--shadow) !important;
+    transition: background .12s, border-color .12s, color .12s;
+}
+.btn-small:hover, .btn-big:hover, .btn-mini:hover,
+.btn-small-imp:hover, .btn-small-xls:hover {
+    background: #f0f0f0 !important;
+    background-position: unset !important;
+    border-color: #bbb !important;
+    color: #111 !important;
+    text-decoration: none !important;
+}
+.btn-small:active, .btn-big:active, .btn-mini:active {
+    background: #e5e5e5 !important;
+    background-position: unset !important;
+}
+
+/* botão pesquisar – azul */
+.btn-find {
+    background: #2980b9 !important;
+    border-color: #2471a3 !important;
+    color: #fff !important;
+}
+.btn-find:hover { background: #2471a3 !important; color: #fff !important; }
+
+/* botão incluir/adicionar – verde */
+.btn-include, .btn-add {
+    background: var(--success) !important;
+    border-color: #229954 !important;
+    color: #fff !important;
+}
+.btn-include:hover, .btn-add:hover {
+    background: #229954 !important;
+    color: #fff !important;
+}
+
+/* botão deletar – vermelho */
+.btn-del {
+    background: var(--danger) !important;
+    border-color: #c0392b !important;
+    color: #fff !important;
+}
+.btn-del:hover { background: #c0392b !important; color: #fff !important; }
+
+/* botões de ação nas tabelas (Editar / X Deletar) */
+.btn-editar, .btn-ver, .btn-deletar, .btn-imprimir {
+    background: none !important;
+    background-image: none !important;
+    width: auto !important;
+    height: auto !important;
+    float: none !important;
+    display: inline-block !important;
+    padding: 3px 8px !important;
+    border-radius: 4px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    border: 1px solid !important;
+    margin-right: 3px !important;
+    cursor: pointer;
+    text-decoration: none !important;
+    color: #fff !important;
+}
+.btn-editar  { background: #2980b9 !important; border-color: #2471a3 !important; }
+.btn-ver     { background: #27ae60 !important; border-color: #229954 !important; }
+.btn-deletar { background: #e74c3c !important; border-color: #c0392b !important; }
+.btn-imprimir{ background: #7f8c8d !important; border-color: #636e72 !important; }
+.btn-editar:hover   { background: #2471a3 !important; }
+.btn-ver:hover      { background: #229954 !important; }
+.btn-deletar:hover  { background: #c0392b !important; }
+.btn-imprimir:hover { background: #636e72 !important; }
+
+/* ── Tabelas ── */
+.table {
+    border: none !important;
+    border-radius: var(--radius) !important;
+    overflow: hidden !important;
+    box-shadow: var(--shadow) !important;
+    background: #fff !important;
+    margin-bottom: 20px !important;
+}
+.table tr th {
+    background: var(--primary) !important;
+    color: #fff !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 9px 8px !important;
+    text-align: left !important;
+    border: none !important;
+    white-space: nowrap;
+}
+.table tr td {
+    padding: 7px 8px !important;
+    border-right: none !important;
+    border-bottom: 1px solid #eef0f3 !important;
+    font-size: 12px !important;
+    color: var(--text) !important;
+    vertical-align: middle !important;
+}
+.table tr.zebra td {
+    background: #f9fafc !important;
+}
+.table tr:hover td {
+    background: #edf4ff !important;
+}
+.table tr th:first-child { border-radius: 0 !important; }
+
+/* seções dentro de tabelas */
+.table tr td[colspan] {
+    background: #f0f3f7 !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
+
+/* ── Paginação ── */
+#pagination span a {
+    border-radius: 4px !important;
+    border: 1px solid var(--border) !important;
+    padding: 3px 8px !important;
+    color: var(--primary) !important;
+}
+#pagination span a:hover {
+    border-color: var(--primary) !important;
+    background: var(--primary) !important;
+    color: #fff !important;
+}
+#pagination span a.active {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #fff !important;
+}
+
+/* ── Seção (.section) ── */
+.section {
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+}
+
+/* ── faixa_sessao ── */
+.faixa_sessao {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border-radius: var(--radius) var(--radius) 0 0 !important;
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    height: auto !important;
+    margin-bottom: 0 !important;
+}
+
+/* ── toolbar ── */
+.toolbar {
+    background: #fff !important;
+    background-image: none !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius) !important;
+    padding: 10px 14px !important;
+    margin: 0 0 14px 0 !important;
+    box-shadow: var(--shadow);
+}

@@ -29,8 +29,9 @@ $ts = @date('Ymdhis');
 	$file = "/css/jquery.click-calendario-1.0.css?ts=$ts";
 	$this->headLink()->appendStylesheet($file); 
 	$file = "/css/style.css?ts=$ts";
- 	
-	echo $this->headLink()->appendStylesheet($file); 
+	$this->headLink()->appendStylesheet($file);
+	$file = "/css/modern-theme.css?ts=$ts";
+	echo $this->headLink()->appendStylesheet($file);
 ?>
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>

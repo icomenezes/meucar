@@ -8229,7 +8229,7 @@ class VeiculosController extends Zend_Controller_Action
 			}
 
 			if (empty($_POST['id_modelo']) || $_POST['id_modelo'] == '0') {
-				$this->view->mensagem = 'Erro: Modelo FIPE não identificado. Selecione o modelo, ano e aguarde a consulta FIPE ser concluída antes de salvar.';
+				$this->view->mensagem = 'Erro: Modelo FIPE não identificado. Selecione o modelo, ano e aguarde a consulta FIPE ser concluida antes de salvar.';
 				return;
 			}
 
