@@ -23,16 +23,23 @@
     --shadow:      0 1px 4px rgba(0,0,0,.12);
 }
 
+/* ── Google Font ── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 /* ── Reset base ── */
 body {
     background: var(--content-bg) !important;
-    font-family: 'Segoe UI', Arial, sans-serif !important;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif !important;
     font-size: 13px !important;
     color: var(--text) !important;
 }
 
 a { color: var(--primary); }
 a:hover { color: var(--primary-dk); text-decoration: none; }
+
+input, select, textarea, button, label, th, td {
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif !important;
+}
 
 /* ── Header ── */
 #header {
@@ -123,11 +130,8 @@ body {
     text-decoration: none !important;
 }
 #nav li ul li a img {
-    opacity: .5;
-    float: right;
-    margin-top: 2px;
+    display: none !important;
 }
-#nav li ul li a:hover img { opacity: .8; }
 
 /* sidebar novidades box */
 #sidebar > center > div {
@@ -253,13 +257,19 @@ select.select {
     border: 1px solid var(--border) !important;
     border-radius: var(--radius) !important;
     color: var(--text) !important;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif !important;
     font-size: 12px !important;
     font-weight: 600 !important;
-    padding: 5px 12px !important;
+    padding: 6px 16px !important;
     height: auto !important;
     cursor: pointer !important;
     box-shadow: var(--shadow) !important;
     transition: background .12s, border-color .12s, color .12s;
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+    display: inline-block !important;
+    line-height: 1.5 !important;
+    vertical-align: middle !important;
 }
 .btn-small:hover, .btn-big:hover, .btn-mini:hover,
 .btn-small-imp:hover, .btn-small-xls:hover {
