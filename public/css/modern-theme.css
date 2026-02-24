@@ -21,7 +21,123 @@
     --warning:     #f39c12;
     --radius:      6px;
     --shadow:      0 1px 4px rgba(0,0,0,.12);
+    /* elementos de conteúdo (sobrescritos no dark) */
+    --card-bg:     #ffffff;
+    --input-bg:    #ffffff;
+    --table-row:   #f9fafc;
+    --table-hover: #edf4ff;
 }
+
+/* ══════════════════════════════════════════
+   DARK MODE — ativado via body.dark-mode
+   ══════════════════════════════════════════ */
+body.dark-mode {
+    --content-bg:  #1a1d23;
+    --sidebar-bg:  #111318;
+    --sidebar-txt: #9aa0ac;
+    --header-bg:   #96281b;
+    --border:      #2e3340;
+    --text:        #d1d5db;
+    --text-muted:  #6b7280;
+    --card-bg:     #22262f;
+    --input-bg:    #1e2229;
+    --table-row:   #1e2229;
+    --table-hover: #272c38;
+    --shadow:      0 1px 4px rgba(0,0,0,.4);
+    --white:       #22262f;
+}
+
+body.dark-mode { background: var(--content-bg) !important; color: var(--text) !important; }
+body.dark-mode a { color: #e87c73; }
+
+/* header dark */
+body.dark-mode #header { background: var(--header-bg) !important; }
+
+/* sidebar dark */
+body.dark-mode #sidebar { background: var(--sidebar-bg) !important; }
+body.dark-mode #nav li ul { background: rgba(0,0,0,.35); }
+body.dark-mode #nav li ul li a { color: var(--sidebar-txt) !important; }
+body.dark-mode #nav li ul li a:hover { background: rgba(192,57,43,.4) !important; color: #fff !important; }
+
+/* content dark */
+body.dark-mode #content { background: var(--content-bg) !important; }
+body.dark-mode #content h2 { color: #e87c73 !important; border-bottom-color: #96281b !important; }
+
+/* forms dark */
+body.dark-mode .form .text,
+body.dark-mode .form .textarea,
+body.dark-mode input.text,
+body.dark-mode textarea.text {
+    background: var(--input-bg) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+body.dark-mode .form .select,
+body.dark-mode select.select,
+body.dark-mode select {
+    background: var(--input-bg) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+}
+body.dark-mode .form label,
+body.dark-mode .form .label { color: var(--text-muted) !important; }
+
+/* tabelas dark */
+body.dark-mode .table { background: var(--card-bg) !important; box-shadow: var(--shadow) !important; }
+body.dark-mode .table tr th { background: #7b1f16 !important; }
+body.dark-mode .table tr td { border-bottom-color: var(--border) !important; color: var(--text) !important; }
+body.dark-mode .table tr.zebra td { background: var(--table-row) !important; }
+body.dark-mode .table tr:hover td { background: var(--table-hover) !important; }
+body.dark-mode .table tr td[colspan] { background: #1c2030 !important; color: #e87c73 !important; }
+
+/* botões dark */
+body.dark-mode .btn-small,
+body.dark-mode .btn-big,
+body.dark-mode .btn-mini {
+    background: #2e3340 !important;
+    border-color: #3d4454 !important;
+    color: #d1d5db !important;
+}
+body.dark-mode .btn-small:hover,
+body.dark-mode .btn-big:hover,
+body.dark-mode .btn-mini:hover {
+    background: #383e50 !important;
+    color: #fff !important;
+}
+
+/* mensagens dark */
+body.dark-mode .sucess { background: #1a3a28 !important; color: #6fcf97 !important; border-color: #27643a !important; }
+body.dark-mode .erro   { background: #3a1a1a !important; color: #e87c73 !important; border-color: #7b2020 !important; }
+
+/* toolbar dark */
+body.dark-mode .toolbar { background: var(--card-bg) !important; border-color: var(--border) !important; }
+
+/* boxFind dark */
+body.dark-mode #boxFind select,
+body.dark-mode #boxFind input { background: var(--input-bg) !important; color: var(--text) !important; border-color: var(--border) !important; }
+
+/* ── Botão toggle dark mode ── */
+#dark-toggle {
+    margin-left: auto;
+    margin-right: 12px;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px;
+    color: #fff;
+    font-size: 11px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 4px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background .2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+#dark-toggle:hover { background: rgba(255,255,255,.25); }
+#dark-toggle .toggle-icon { font-size: 14px; line-height: 1; }
 
 /* ── Google Font ── */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
