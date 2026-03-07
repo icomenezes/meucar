@@ -3302,24 +3302,28 @@ class VeiculosController extends Zend_Controller_Action
 			$dadosVeiculos['obs_interna'] = $_POST['obs_interna'];
 			$dadosVeiculos['obs_site'] = $_POST['obs_site'];
 			$dadosVeiculos['id_usuario_alteracao'] = $_SESSION['sessionUser']['id'];
-			$dadosVeiculos['hora_alteracao'] = @date("Y-m-d H:i:s");
-			$dadosVeiculos['exibir_valor_site'] = $_POST['exibir_valor_site'];
-			$dadosVeiculos['exibir_km'] = $_POST['exibir_km_1']+$_POST['exibir_km_2'];
-			$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
+		$dadosVeiculos['hora_alteracao'] = @date("Y-m-d H:i:s");
+		$dadosVeiculos['exibir_valor_site'] = $_POST['exibir_valor_site'];
+		$dadosVeiculos['exibir_km'] = $_POST['exibir_km_1']+$_POST['exibir_km_2'];
+		$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
+		
+		// Valida data_termino_revisao antes de processar
+		if(!empty($_POST['data_termino_revisao']) && $_POST['data_termino_revisao'] != "0000-00-00"){
 			$dadosVeiculos['data_termino_revisao'] = $_POST['data_termino_revisao'];
 			$dadosVeiculos['data_termino_revisao'] = explode("/",$dadosVeiculos['data_termino_revisao']);
 			$dadosVeiculos['data_termino_revisao'] = array_reverse($dadosVeiculos['data_termino_revisao']);
 			$dadosVeiculos['data_termino_revisao'] = implode("-",$dadosVeiculos['data_termino_revisao']);
-			
-			if(!$_POST['ativo']){
-			
-				$dadosVeiculos['ativo'] = 0;
-			
-			}else{
-			
-				$dadosVeiculos['ativo'] = $_POST['ativo'];
-				
-			}
+		}else{
+			$dadosVeiculos['data_termino_revisao'] = NULL;
+		}
+		
+		if(!$_POST['ativo']){
+		
+			$dadosVeiculos['ativo'] = 0;
+		
+		}else{
+		
+			$dadosVeiculos['ativo'] = $_POST['ativo'];			}
 			
 			if($_POST['origem'] == "0"){
 			
@@ -3777,9 +3781,14 @@ class VeiculosController extends Zend_Controller_Action
 		$arrModelo[0]['preco'] = number_format($arrModelo[0]['preco'],2,',','.');
 		$this->view->fipe = $arrModelo[0];
 		
-		$arrVeiculo[0]['data_termino_revisao'] = explode("-",$arrVeiculo[0]['data_termino_revisao']);
-		$arrVeiculo[0]['data_termino_revisao'] = array_reverse($arrVeiculo[0]['data_termino_revisao']);
-		$arrVeiculo[0]['data_termino_revisao'] = implode("/",$arrVeiculo[0]['data_termino_revisao']);
+		// Valida data_termino_revisao antes de processar
+		if(!empty($arrVeiculo[0]['data_termino_revisao']) && $arrVeiculo[0]['data_termino_revisao'] != "0000-00-00"){
+			$arrVeiculo[0]['data_termino_revisao'] = explode("-",$arrVeiculo[0]['data_termino_revisao']);
+			$arrVeiculo[0]['data_termino_revisao'] = array_reverse($arrVeiculo[0]['data_termino_revisao']);
+			$arrVeiculo[0]['data_termino_revisao'] = implode("/",$arrVeiculo[0]['data_termino_revisao']);
+		}else{
+			$arrVeiculo[0]['data_termino_revisao'] = "";
+		}
 		
 		$this->view->veiculo = $arrVeiculo[0];
 		$this->view->opcionais = $arrOpcionaisVeiculos;
@@ -3869,10 +3878,16 @@ class VeiculosController extends Zend_Controller_Action
 			$dadosVeiculos['exibir_valor_site'] = $_POST['exibir_valor_site'];
 			$dadosVeiculos['exibir_km'] = $_POST['exibir_km_1']+$_POST['exibir_km_2'];
 			$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
-			$dadosVeiculos['data_termino_revisao'] = $_POST['data_termino_revisao'];
-			$dadosVeiculos['data_termino_revisao'] = explode("/",$dadosVeiculos['data_termino_revisao']);
-			$dadosVeiculos['data_termino_revisao'] = array_reverse($dadosVeiculos['data_termino_revisao']);
-			$dadosVeiculos['data_termino_revisao'] = implode("-",$dadosVeiculos['data_termino_revisao']);
+			
+			// Valida data_termino_revisao antes de processar
+			if(!empty($_POST['data_termino_revisao']) && $_POST['data_termino_revisao'] != "0000-00-00"){
+				$dadosVeiculos['data_termino_revisao'] = $_POST['data_termino_revisao'];
+				$dadosVeiculos['data_termino_revisao'] = explode("/",$dadosVeiculos['data_termino_revisao']);
+				$dadosVeiculos['data_termino_revisao'] = array_reverse($dadosVeiculos['data_termino_revisao']);
+				$dadosVeiculos['data_termino_revisao'] = implode("-",$dadosVeiculos['data_termino_revisao']);
+			}else{
+				$dadosVeiculos['data_termino_revisao'] = NULL;
+			}
 
 			if($_POST['data_inicio_preparacao']){
 
@@ -4528,7 +4543,20 @@ class VeiculosController extends Zend_Controller_Action
 		
 		}
 
+		// Valida se ID do veículo foi fornecido
+		if(empty($idVeiculos)){
+			$this->view->erro = "ID do veículo não fornecido";
+			return;
+		}
+
 		$arrVeiculo = $dbVeiculos->getVeiculoSelecionadoCompleto($idVeiculos);
+		
+		// Valida se veículo foi encontrado
+		if(empty($arrVeiculo)){
+			$this->view->erro = "Veículo não encontrado";
+			return;
+		}
+		
 		$id= $arrVeiculo[0]['id_modelo'];
 
 	
@@ -4539,7 +4567,8 @@ class VeiculosController extends Zend_Controller_Action
 		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos);
 		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']);
 		$arrPendencias = $dbPendencias->getPendencias($idVeiculos);
-		$arrModelo = $id ? $dbModelo->fetchAll("id = ".$id) : [];
+		// $arrModelo = $dbModelo->fetchAll("id = ".$id);
+        $arrModelo = $id ? $dbModelo->fetchAll("id = ".$id) : [];
 
 		// if(strpos($arrModelo[0]['modelo'], "Gasolina") !== false) {
 		// 	$arrModelo[0]['codigo'] = $arrModelo[0]['ano_modelo'].'-1';
@@ -4638,24 +4667,28 @@ class VeiculosController extends Zend_Controller_Action
 			$dadosVeiculos['valor_venda'] = $_POST['valor_venda'];
 			$dadosVeiculos['valor_venda'] = str_replace(".","",$dadosVeiculos['valor_venda']);
 			$dadosVeiculos['valor_venda'] = str_replace(",",".",$dadosVeiculos['valor_venda']);	
-			$dadosVeiculos['id_empresa'] = $_POST['id_empresa'];
-			//$dadosVeiculos['temp_troca'] = $_POST['temp_troca'];
-			$dadosVeiculos['obs_interna'] = $_POST['obs_interna'];
-			$dadosVeiculos['video'] = $_POST['video'];
-			$dadosVeiculos['obs_site'] = $_POST['obs_site'];
-			$dadosVeiculos['id_usuario_alteracao'] = $_SESSION['sessionUser']['id'];
-			$dadosVeiculos['hora_alteracao'] = @date("Y-m-d H:i:s");
-			$dadosVeiculos['exibir_valor_site'] = $_POST['exibir_valor_site'];
-			$dadosVeiculos['exibir_km'] = $_POST['exibir_km_1']+$_POST['exibir_km_2'];
-			$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
+		$dadosVeiculos['id_empresa'] = $_POST['id_empresa'];
+		//$dadosVeiculos['temp_troca'] = $_POST['temp_troca'];
+		$dadosVeiculos['obs_interna'] = $_POST['obs_interna'];
+		$dadosVeiculos['video'] = $_POST['video'];
+		$dadosVeiculos['obs_site'] = $_POST['obs_site'];
+		$dadosVeiculos['id_usuario_alteracao'] = $_SESSION['sessionUser']['id'];
+		$dadosVeiculos['hora_alteracao'] = @date("Y-m-d H:i:s");
+		$dadosVeiculos['exibir_valor_site'] = $_POST['exibir_valor_site'];
+		$dadosVeiculos['exibir_km'] = $_POST['exibir_km_1']+$_POST['exibir_km_2'];
+		$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
+		
+		// Valida data_termino_revisao antes de processar
+		if(!empty($_POST['data_termino_revisao']) && $_POST['data_termino_revisao'] != "0000-00-00"){
 			$dadosVeiculos['data_termino_revisao'] = $_POST['data_termino_revisao'];
 			$dadosVeiculos['data_termino_revisao'] = explode("/",$dadosVeiculos['data_termino_revisao']);
 			$dadosVeiculos['data_termino_revisao'] = array_reverse($dadosVeiculos['data_termino_revisao']);
 			$dadosVeiculos['data_termino_revisao'] = implode("-",$dadosVeiculos['data_termino_revisao']);
+		}else{
+			$dadosVeiculos['data_termino_revisao'] = NULL;
+		}
 
-			if($_POST['data_inicio_preparacao']){
-
-				$arrVeiculoTemp = current($dbVeiculos->getVeiculoSelecionadoCompleto($_POST['id']));
+		if($_POST['data_inicio_preparacao']){				$arrVeiculoTemp = current($dbVeiculos->getVeiculoSelecionadoCompleto($_POST['id']));
 
 				$dadosVeiculos['data_inicio_preparacao'] = implode("-",array_reverse(explode("/",$_POST['data_inicio_preparacao'])));
 
@@ -5307,7 +5340,20 @@ class VeiculosController extends Zend_Controller_Action
 		
 		}
 
+		// Valida se ID do veículo foi fornecido
+		if(empty($idVeiculos)){
+			$this->view->erro = "ID do veículo não fornecido";
+			return;
+		}
+
 		$arrVeiculo = $dbVeiculos->getVeiculoSelecionadoCompleto($idVeiculos);
+		
+		// Valida se veículo foi encontrado
+		if(empty($arrVeiculo)){
+			$this->view->erro = "Veículo não encontrado";
+			return;
+		}
+		
 		$id= $arrVeiculo[0]['id_modelo'];
 
 	
@@ -8228,11 +8274,11 @@ class VeiculosController extends Zend_Controller_Action
 				$_POST['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			}
 
-			if (empty($_POST['id_modelo']) || $_POST['id_modelo'] == '0') {
+            if (empty($_POST['id_modelo']) || $_POST['id_modelo'] == '0') {
 				$this->view->mensagem = 'Erro: Modelo FIPE não identificado. Selecione o modelo, ano e aguarde a consulta FIPE ser concluida antes de salvar.';
 				return;
 			}
-
+		
 			$dadosVeiculos['id_modelo'] = $_POST['id_modelo'];
 			$dadosVeiculos['descricao_site'] = $_POST['descricao_site'];
 			$dadosVeiculos['placa'] = $_POST['placa'];
