@@ -556,52 +556,20 @@ class NegociacoesController extends Zend_Controller_Action {
          unset($dadosNegociacao['comissao_supervisor_real']);
          unset($dadosNegociacao['multas']);
 
-         if ($dadosNegociacao['data_abertura'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_abertura']);
+         $camposDatas = array('data_abertura', 'data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo');
+         foreach ($camposDatas as $campoData) {
+            if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
+               unset($dadosNegociacao[$campoData]);
+               continue;
+            }
+            $dataTmp = explode(" ", $dadosNegociacao[$campoData]);
             $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_abertura'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_abertura'] = $dadosNegociacao['data_abertura'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_concretizacao'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_concretizacao']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_concretizacao'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_concretizacao'] = $dadosNegociacao['data_concretizacao'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_cancelamento'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_cancelamento']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_cancelamento'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_cancelamento'] = $dadosNegociacao['data_cancelamento'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_entrega_veiculo'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_entrega_veiculo']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_entrega_veiculo'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_entrega_veiculo'] = $dadosNegociacao['data_entrega_veiculo'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_termino_garantia'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_termino_garantia']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_termino_garantia'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_termino_garantia'] = $dadosNegociacao['data_termino_garantia'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_recebimento_veiculo'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_recebimento_veiculo']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_recebimento_veiculo'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_recebimento_veiculo'] = $dadosNegociacao['data_recebimento_veiculo'] . " " . $dataTmp[1];
+            if ($dataTmp2[0] == '00' || (isset($dataTmp2[2]) && $dataTmp2[2] == '0000')) {
+               unset($dadosNegociacao[$campoData]);
+            } else {
+               $dadosNegociacao[$campoData] = implode("-", array_reverse($dataTmp2));
+               $dadosNegociacao[$campoData] = $dadosNegociacao[$campoData] . " " . $dataTmp[1];
+            }
          }
 		 
 		 $dadosNegociacao['compra'] = 1;
@@ -1045,52 +1013,20 @@ class NegociacoesController extends Zend_Controller_Action {
             }
          }
 
-         if ($dadosNegociacao['data_abertura'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_abertura']);
+         $camposDatas = array('data_abertura', 'data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo');
+         foreach ($camposDatas as $campoData) {
+            if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
+               unset($dadosNegociacao[$campoData]);
+               continue;
+            }
+            $dataTmp = explode(" ", $dadosNegociacao[$campoData]);
             $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_abertura'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_abertura'] = $dadosNegociacao['data_abertura'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_concretizacao'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_concretizacao']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_concretizacao'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_concretizacao'] = $dadosNegociacao['data_concretizacao'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_cancelamento'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_cancelamento']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_cancelamento'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_cancelamento'] = $dadosNegociacao['data_cancelamento'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_entrega_veiculo'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_entrega_veiculo']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_entrega_veiculo'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_entrega_veiculo'] = $dadosNegociacao['data_entrega_veiculo'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_termino_garantia'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_termino_garantia']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_termino_garantia'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_termino_garantia'] = $dadosNegociacao['data_termino_garantia'] . " " . $dataTmp[1];
-         }
-
-         if ($dadosNegociacao['data_recebimento_veiculo'] != "") {
-
-            $dataTmp = explode(" ", $dadosNegociacao['data_recebimento_veiculo']);
-            $dataTmp2 = explode("/", $dataTmp[0]);
-            $dadosNegociacao['data_recebimento_veiculo'] = implode("-", array_reverse($dataTmp2));
-            $dadosNegociacao['data_recebimento_veiculo'] = $dadosNegociacao['data_recebimento_veiculo'] . " " . $dataTmp[1];
+            if ($dataTmp2[0] == '00' || (isset($dataTmp2[2]) && $dataTmp2[2] == '0000')) {
+               unset($dadosNegociacao[$campoData]);
+            } else {
+               $dadosNegociacao[$campoData] = implode("-", array_reverse($dataTmp2));
+               $dadosNegociacao[$campoData] = $dadosNegociacao[$campoData] . " " . $dataTmp[1];
+            }
          }
 
 		 $dadosNegociacao['comissao_vendedor_real'] = str_replace(".", "", $dadosNegociacao['comissao_vendedor_real']);
