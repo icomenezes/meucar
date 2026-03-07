@@ -1582,7 +1582,7 @@ class NegociacoesController extends Zend_Controller_Action {
 				$arrIcarros = $this->getEstoqueIcarros();
 				$arrVeiculos = $dbVeiculos->getVeiculoEstoque($_POST['id_veiculo']);
 				
-				//if($arrIcarros){
+				if($arrIcarros){
             foreach($arrIcarros as $key=>$arrI){
 				
 					if(strtolower(substr($arrVeiculos[0]['placa'],0,3).substr($arrVeiculos[0]['placa'],4)) == strtolower($arrI['placa'])){
@@ -1609,8 +1609,8 @@ class NegociacoesController extends Zend_Controller_Action {
 				
 				}
 
-         //}
-			
+         }
+
 			}
 			
 			if($arrEmpresa[0]['login_webmotors'] && $arrEmpresa[0]['senha_webmotors'] && $arrEstoqueWeb){
