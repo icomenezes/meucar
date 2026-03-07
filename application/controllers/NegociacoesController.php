@@ -533,8 +533,22 @@ class NegociacoesController extends Zend_Controller_Action {
          unset($dadosNegociacao['comissao_supervisor_real']);
          unset($dadosNegociacao['multas']);
 
-         $camposDatas = array('data_abertura', 'data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo');
-         foreach ($camposDatas as $campoData) {
+         foreach (array('data_concretizacao', 'data_cancelamento') as $campoData) {
+            if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
+               $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
+               continue;
+            }
+            $dataTmp = explode(" ", $dadosNegociacao[$campoData]);
+            $dataTmp2 = explode("/", $dataTmp[0]);
+            if ($dataTmp2[0] == '00' || (isset($dataTmp2[2]) && $dataTmp2[2] == '0000')) {
+               $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
+            } else {
+               $dadosNegociacao[$campoData] = implode("-", array_reverse($dataTmp2));
+               $dadosNegociacao[$campoData] = $dadosNegociacao[$campoData] . " " . $dataTmp[1];
+            }
+         }
+
+         foreach (array('data_abertura', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                unset($dadosNegociacao[$campoData]);
                continue;
@@ -990,8 +1004,22 @@ class NegociacoesController extends Zend_Controller_Action {
             }
          }
 
-         $camposDatas = array('data_abertura', 'data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo');
-         foreach ($camposDatas as $campoData) {
+         foreach (array('data_concretizacao', 'data_cancelamento') as $campoData) {
+            if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
+               $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
+               continue;
+            }
+            $dataTmp = explode(" ", $dadosNegociacao[$campoData]);
+            $dataTmp2 = explode("/", $dataTmp[0]);
+            if ($dataTmp2[0] == '00' || (isset($dataTmp2[2]) && $dataTmp2[2] == '0000')) {
+               $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
+            } else {
+               $dadosNegociacao[$campoData] = implode("-", array_reverse($dataTmp2));
+               $dadosNegociacao[$campoData] = $dadosNegociacao[$campoData] . " " . $dataTmp[1];
+            }
+         }
+
+         foreach (array('data_abertura', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                unset($dadosNegociacao[$campoData]);
                continue;
