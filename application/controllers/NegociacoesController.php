@@ -111,13 +111,13 @@ class NegociacoesController extends Zend_Controller_Action {
             $arrDados['id_financeira'] = $_POST['id_financeira'];
          }
 
-         $arrDados['data_abertura'] = $_POST['data_abertura'];
-         $arrDados['data_concretizacao'] = $_POST['data_concretizacao'];
-         $arrDados['data_cancelamento'] = $_POST['data_cancelamento'];
-         $arrDados['data_entrega_veiculo'] = $_POST['data_entrega_veiculo'];
+         if ($_POST['data_abertura'] != '') $arrDados['data_abertura'] = $_POST['data_abertura'];
+         if ($_POST['data_concretizacao'] != '') $arrDados['data_concretizacao'] = $_POST['data_concretizacao'];
+         if ($_POST['data_cancelamento'] != '') $arrDados['data_cancelamento'] = $_POST['data_cancelamento'];
+         if ($_POST['data_entrega_veiculo'] != '') $arrDados['data_entrega_veiculo'] = $_POST['data_entrega_veiculo'];
          $arrDados['km_entrega_veiculo'] = $_POST['km_entrega_veiculo'];
-         $arrDados['data_termino_garantia'] = $_POST['data_termino_garantia'];
-         $arrDados['data_recebimento_veiculo'] = $_POST['data_recebimento_veiculo'];
+         if ($_POST['data_termino_garantia'] != '') $arrDados['data_termino_garantia'] = $_POST['data_termino_garantia'];
+         if ($_POST['data_recebimento_veiculo'] != '') $arrDados['data_recebimento_veiculo'] = $_POST['data_recebimento_veiculo'];
          $arrDados['km_recebimento_veiculo'] = $_POST['km_recebimento_veiculo'];
          $arrDados['valor_base_calculo'] = $_POST['valor_base_calculo'];
          $arrDados['comissao_vendedor'] = $_POST['comissao_vendedor_real'];
