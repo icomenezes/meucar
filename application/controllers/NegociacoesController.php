@@ -1141,9 +1141,20 @@ class NegociacoesController extends Zend_Controller_Action {
          if ($dadosNegociacao['id_financeira'] == "") {
 
             unset($dadosNegociacao['id_financeira']);
-			
+
          }
-		 
+
+         $camposNumericos = array('tac', 'coeficiente_financeira', 'valor_despachante', 'valor_base_calculo', 'valor_financiado', 'retorno_financeira', 'numero_prestacoes', 'valor_prestacoes');
+         foreach ($camposNumericos as $campo) {
+            if (isset($dadosNegociacao[$campo]) && $dadosNegociacao[$campo] === '') {
+               $dadosNegociacao[$campo] = null;
+            }
+         }
+
+         if (isset($dadosNegociacao['id_despachante']) && $dadosNegociacao['id_despachante'] === '') {
+            $dadosNegociacao['id_despachante'] = null;
+         }
+
 		 unset($dadosNegociacao['origem']);
 
          $idNegociacao = $dbNegociacoes->insert($dadosNegociacao);
