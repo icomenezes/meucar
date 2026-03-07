@@ -1080,7 +1080,7 @@ class NegociacoesController extends Zend_Controller_Action {
 
          }
 
-         foreach (array('tac', 'coeficiente_financeira', 'valor_despachante', 'valor_base_calculo', 'valor_financiado', 'retorno_financeira', 'numero_prestacoes', 'valor_prestacoes', 'comissao_vendedor', 'comissao_gerente', 'comissao_supervisor', 'imposto_financeira') as $campo) {
+         foreach (array('tac', 'coeficiente_financeira', 'valor_despachante', 'valor_base_calculo', 'valor_financiado', 'retorno_financeira', 'numero_prestacoes', 'valor_prestacoes', 'comissao_vendedor', 'comissao_gerente', 'comissao_supervisor', 'imposto_financeira', 'custos_transferencia', 'valor_venda') as $campo) {
             if (isset($dadosNegociacao[$campo]) && $dadosNegociacao[$campo] === '') {
                $dadosNegociacao[$campo] = 0;
             }
