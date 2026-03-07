@@ -1196,7 +1196,8 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 			'host'     => HOST,
 			'username' => USER,
 			'password' => PASS,
-			'dbname'   => DB
+			'dbname'   => DB,
+			'driver_options' => array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode=''")
 		));
 
 		return $db;
