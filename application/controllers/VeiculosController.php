@@ -866,8 +866,9 @@ class VeiculosController extends Zend_Controller_Action
 			if($veiculo['data_termino_revisao'] == null || $veiculo['data_termino_revisao'] == "0000-00-00"){
 			
 				$dataTerminoRevisao = "Em Revis&atilde;o";
-				$veiculo['data_termino_revisao'] = "0000-00-00";
-			
+                if ($veiculo['data_termino_revisao'] == "0000-00-00"){ 
+                    $veiculo['data_termino_revisao'] = NULL; 
+                }  
 			}else{
 			
 				$dataTerminoRevisao = implode("/",array_reverse(explode("-",$veiculo['data_termino_revisao'])));
@@ -3888,6 +3889,10 @@ class VeiculosController extends Zend_Controller_Action
 			}else{
 				$dadosVeiculos['data_termino_revisao'] = NULL;
 			}
+            
+            if ($dadosVeiculos['data_termino_revisao'] == "0000-00-00"){ 
+                $dadosVeiculos['data_termino_revisao'] = NULL; 
+            }
 
 			if($_POST['data_inicio_preparacao']){
 
@@ -4679,7 +4684,7 @@ class VeiculosController extends Zend_Controller_Action
 		$dadosVeiculos['exibir_site_estoque'] = $_POST['exibir_site_estoque_1']+$_POST['exibir_site_estoque_2'];
 		
 		// Valida data_termino_revisao antes de processar
-		if(!empty($_POST['data_termino_revisao']) && $_POST['data_termino_revisao'] != "0000-00-00"){
+		if(!empty($_POST['data_termino_revisao'])){
 			$dadosVeiculos['data_termino_revisao'] = $_POST['data_termino_revisao'];
 			$dadosVeiculos['data_termino_revisao'] = explode("/",$dadosVeiculos['data_termino_revisao']);
 			$dadosVeiculos['data_termino_revisao'] = array_reverse($dadosVeiculos['data_termino_revisao']);
@@ -4687,8 +4692,13 @@ class VeiculosController extends Zend_Controller_Action
 		}else{
 			$dadosVeiculos['data_termino_revisao'] = NULL;
 		}
+        if ($_POST['data_termino_revisao'] == "0000-00-00"){
+            $dadosVeiculos['data_termino_revisao'] = NULL;
+        }
+        
 
-		if($_POST['data_inicio_preparacao']){				$arrVeiculoTemp = current($dbVeiculos->getVeiculoSelecionadoCompleto($_POST['id']));
+		if($_POST['data_inicio_preparacao']){				
+                $arrVeiculoTemp = current($dbVeiculos->getVeiculoSelecionadoCompleto($_POST['id']));
 
 				$dadosVeiculos['data_inicio_preparacao'] = implode("-",array_reverse(explode("/",$_POST['data_inicio_preparacao'])));
 
