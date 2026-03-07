@@ -1388,7 +1388,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_abertura']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_abertura'] = null;
+               unset($arrDados['data_abertura']);
             } else {
                $arrDados['data_abertura'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_abertura'] = $arrDados['data_abertura'] . " " . $dataTmp[1];
@@ -1400,7 +1400,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_concretizacao']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_concretizacao'] = null;
+               unset($arrDados['data_concretizacao']);
             } else {
                $arrDados['data_concretizacao'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_concretizacao'] = $arrDados['data_concretizacao'] . " " . $dataTmp[1];
@@ -1412,7 +1412,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_cancelamento']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_cancelamento'] = null;
+               unset($arrDados['data_cancelamento']);
             } else {
                $arrDados['data_cancelamento'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_cancelamento'] = $arrDados['data_cancelamento'] . " " . $dataTmp[1];
@@ -1424,7 +1424,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_entrega_veiculo']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_entrega_veiculo'] = null;
+               unset($arrDados['data_entrega_veiculo']);
             } else {
                $arrDados['data_entrega_veiculo'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_entrega_veiculo'] = $arrDados['data_entrega_veiculo'] . " " . $dataTmp[1];
@@ -1436,7 +1436,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_termino_garantia']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_termino_garantia'] = null;
+               unset($arrDados['data_termino_garantia']);
             } else {
                $arrDados['data_termino_garantia'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_termino_garantia'] = $arrDados['data_termino_garantia'] . " " . $dataTmp[1];
@@ -1448,7 +1448,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $dataTmp = explode(" ", $arrDados['data_recebimento_veiculo']);
             $dataTmp2 = explode("/", $dataTmp[0]);
             if ($dataTmp2[0] == '00' || $dataTmp2[2] == '0000') {
-               $arrDados['data_recebimento_veiculo'] = null;
+               unset($arrDados['data_recebimento_veiculo']);
             } else {
                $arrDados['data_recebimento_veiculo'] = implode("-", array_reverse($dataTmp2));
                $arrDados['data_recebimento_veiculo'] = $arrDados['data_recebimento_veiculo'] . " " . $dataTmp[1];
