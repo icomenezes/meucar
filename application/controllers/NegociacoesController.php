@@ -533,7 +533,7 @@ class NegociacoesController extends Zend_Controller_Action {
          unset($dadosNegociacao['comissao_supervisor_real']);
          unset($dadosNegociacao['multas']);
 
-         foreach (array('data_concretizacao', 'data_cancelamento') as $campoData) {
+         foreach (array('data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
                continue;
@@ -548,7 +548,7 @@ class NegociacoesController extends Zend_Controller_Action {
             }
          }
 
-         foreach (array('data_abertura', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
+         foreach (array('data_abertura') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                unset($dadosNegociacao[$campoData]);
                continue;
@@ -1004,7 +1004,7 @@ class NegociacoesController extends Zend_Controller_Action {
             }
          }
 
-         foreach (array('data_concretizacao', 'data_cancelamento') as $campoData) {
+         foreach (array('data_concretizacao', 'data_cancelamento', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                $dadosNegociacao[$campoData] = '0000-00-00 00:00:00';
                continue;
@@ -1019,7 +1019,7 @@ class NegociacoesController extends Zend_Controller_Action {
             }
          }
 
-         foreach (array('data_abertura', 'data_entrega_veiculo', 'data_termino_garantia', 'data_recebimento_veiculo') as $campoData) {
+         foreach (array('data_abertura') as $campoData) {
             if (!isset($dadosNegociacao[$campoData]) || $dadosNegociacao[$campoData] == '') {
                unset($dadosNegociacao[$campoData]);
                continue;
