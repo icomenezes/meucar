@@ -1364,7 +1364,7 @@ class NegociacoesController extends Zend_Controller_Action {
             $arrDados['aprovada'] = $_POST['aprovada'];
          }
          if(isset($_POST['id_despachante'])){
-            $arrDados['id_despachante'] = $_POST['id_despachante'];
+            $arrDados['id_despachante'] = $_POST['id_despachante'] !== '' ? $_POST['id_despachante'] : null;
          }
          if(isset($_POST['forma_pagamento_despachante'])){
             $arrDados['forma_pagamento_despachante'] = $_POST['forma_pagamento_despachante'];
