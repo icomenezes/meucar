@@ -2691,8 +2691,8 @@ function getIdModelo(retorno) {
 			id_ano_modelo: id_ano_modelo,
 			fn:"get_modelo"
 		},
-        success:function(id){
-			$("#id_modelo").val(id);
+        success:function(response){
+			$("#id_modelo").val(response.id);
         }
 	});
 }
