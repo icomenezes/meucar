@@ -530,12 +530,7 @@ class ModelosController extends Zend_Controller_Action
 				);
 
 				$dbModelos->edt($arrModelos['id'], $dados);
-                echo json_encode([
-                    'id' => $arrModelos['id'],
-                    'preco' => 'R$ ' . number_format($arr['valor'], 2, ',', '.')
-                ]);
-
-				//echo json_encode($arrModelos['id']);
+				echo $arrModelos['id'];
 
 			}
 

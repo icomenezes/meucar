@@ -58,6 +58,28 @@ class ErrorController extends Zend_Controller_Action
 
         $this->view->request = $errors->request;
 
+        // Envia erro automaticamente para o Telegram
+        if ($errors->exception && $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_OTHER) {
+            try {
+                require_once 'Classes/TelegramAPI.php';
+
+                $msg  = "🚨 <b>ERRO - Sistema Meu Car</b>\n\n";
+                $msg .= "📅 <b>Data/Hora:</b> " . date('d/m/Y H:i:s') . "\n";
+                $msg .= "👤 <b>Usuário:</b> " . (isset($_SESSION['sessionUser']['nome']) ? $_SESSION['sessionUser']['nome'] : 'Não logado') . "\n";
+                $msg .= "🏢 <b>Empresa:</b> " . (isset($_SESSION['sessionUser']['nome_fantasia']) ? $_SESSION['sessionUser']['nome_fantasia'] : '') . "\n";
+                $msg .= "🔗 <b>URL:</b> " . $_SERVER['REQUEST_URI'] . "\n";
+                $msg .= "❌ <b>Mensagem:</b> " . $errors->exception->getMessage() . "\n";
+                $msg .= "📄 <b>Arquivo:</b> " . basename($errors->exception->getFile()) . ":" . $errors->exception->getLine() . "\n";
+
+                $traceLinhas = array_slice(explode("\n", $errors->exception->getTraceAsString()), 0, 8);
+                $msg .= "\n<b>Stack Trace:</b>\n<pre>" . implode("\n", $traceLinhas) . "</pre>";
+
+                TelegramAPI::send($msg, true);
+            } catch (Exception $e) {
+                error_log("TelegramAPI: " . $e->getMessage());
+            }
+        }
+
         // Passa dados do erro para a view (para o botão reportar)
         if ($errors->exception) {
             $this->view->errorData = base64_encode(json_encode([
@@ -104,70 +126,34 @@ class ErrorController extends Zend_Controller_Action
         }
 
         try {
-            $options = $this->getInvokeArg('bootstrap')->getOptions();
-            $emailDestino = isset($options['erro']['email']) ? $options['erro']['email'] : 'icomenezes@hotmail.com';
+            require_once 'Classes/TelegramAPI.php';
 
-            $corpo = '<html><body style="font-family: Arial, sans-serif;">';
-            $corpo .= '<h2 style="color: #dc3545;">Erro no Sistema Meu Car</h2>';
-            $corpo .= '<table border="0" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">';
-            $corpo .= '<tr style="background: #f8f9fa;"><td><strong>Data/Hora:</strong></td><td>' . htmlspecialchars($errorData['date']) . '</td></tr>';
-            $corpo .= '<tr><td><strong>Usuário:</strong></td><td>' . htmlspecialchars($errorData['user']) . '</td></tr>';
-            $corpo .= '<tr style="background: #f8f9fa;"><td><strong>Empresa:</strong></td><td>' . htmlspecialchars($errorData['empresa']) . '</td></tr>';
-            $corpo .= '<tr><td><strong>URL:</strong></td><td>' . htmlspecialchars($errorData['url']) . '</td></tr>';
-            $corpo .= '<tr style="background: #f8f9fa;"><td><strong>Mensagem:</strong></td><td style="color: #dc3545;">' . htmlspecialchars($errorData['message']) . '</td></tr>';
-            $corpo .= '<tr><td><strong>Arquivo:</strong></td><td>' . htmlspecialchars($errorData['file']) . ':' . $errorData['line'] . '</td></tr>';
+            $msg  = "🚨 <b>ERRO - Sistema Meu Car</b>\n\n";
+            $msg .= "📅 <b>Data/Hora:</b> " . $errorData['date'] . "\n";
+            $msg .= "👤 <b>Usuário:</b> " . $errorData['user'] . "\n";
+            $msg .= "🏢 <b>Empresa:</b> " . $errorData['empresa'] . "\n";
+            $msg .= "🔗 <b>URL:</b> " . $errorData['url'] . "\n";
+            $msg .= "❌ <b>Mensagem:</b> " . $errorData['message'] . "\n";
+            $msg .= "📄 <b>Arquivo:</b> " . basename($errorData['file']) . ":" . $errorData['line'] . "\n";
 
             if ($observacao) {
-                $corpo .= '<tr style="background: #fff3cd;"><td><strong>Observação do usuário:</strong></td><td>' . htmlspecialchars($observacao) . '</td></tr>';
+                $msg .= "💬 <b>Observação:</b> " . $observacao . "\n";
             }
 
-            $corpo .= '</table>';
-            $corpo .= '<h3>Parâmetros:</h3>';
-            $corpo .= '<pre style="background: #f8f9fa; padding: 10px; border: 1px solid #dee2e6; font-size: 12px;">' . htmlspecialchars(print_r($errorData['params'], true)) . '</pre>';
-            $corpo .= '<h3>Stack Trace:</h3>';
-            $corpo .= '<pre style="background: #f8f9fa; padding: 10px; border: 1px solid #dee2e6; font-size: 11px; word-wrap: break-word; white-space: pre-wrap;">' . htmlspecialchars($errorData['trace']) . '</pre>';
-            $corpo .= '</body></html>';
+            $traceLinhas = array_slice(explode("\n", $errorData['trace']), 0, 8);
+            $msg .= "\n<b>Stack Trace:</b>\n<pre>" . implode("\n", $traceLinhas) . "</pre>";
 
-            $assunto = '[ERRO] Meu Car - ' . substr($errorData['message'], 0, 80);
-
-            $result = $this->enviaMailerCentralizado($emailDestino, $assunto, $corpo);
+            $result = TelegramAPI::send($msg, false);
 
             if ($result) {
                 echo json_encode(['success' => true, 'msg' => 'Erro reportado com sucesso!']);
             } else {
-                echo json_encode(['success' => false, 'msg' => 'Falha ao enviar pelo serviço centralizado']);
+                echo json_encode(['success' => false, 'msg' => 'Falha ao enviar pelo Telegram']);
             }
 
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'msg' => 'Falha ao enviar: ' . $e->getMessage()]);
         }
-    }
-
-    private function enviaMailerCentralizado($destinatario, $assunto, $corpo)
-    {
-        $url  = 'https://meucar.com.br/controllers/envia-email-lojistas.php';
-        $data = [
-            'hash' => md5(@date("Y-m-d H:i") . "envia_centralizado"),
-            'destinatario' => $destinatario,
-            'assunto' => $assunto,
-            'corpo' => $corpo,
-            'emailResp' => 'sistemameucar@sistemameucar.com.br',
-            'nomeSite' => 'Meu Car - Sistema',
-        ];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-        $response = curl_exec($ch);
-        $success = !curl_errno($ch) && $response !== false;
-        curl_close($ch);
-
-        return $success;
     }
 
     public function getLog()
