@@ -189,6 +189,18 @@ class Application_Model_DbTable_DespesasVeiculos extends Zend_Db_Table_Abstract
 		
 	}
 	
+	public function getSomaDespesasPorEmpresa($id_empresa){
+
+		$db = $this->getAdapter();
+		$sql = "SELECT dv.id_veiculo, SUM(dv.valor) as valor_despesas
+				FROM despesas_veiculos dv
+				INNER JOIN veiculos v ON v.id = dv.id_veiculo
+				WHERE v.id_empresa = ? AND v.excluido = 0
+				GROUP BY dv.id_veiculo";
+		return $db->fetchAll($sql, array($id_empresa));
+
+	}
+
 	public function getLastId(){
  
 		$row = $this->select();

@@ -1230,9 +1230,9 @@ class ClientesController extends Zend_Controller_Action
 		$layout = $this->_helper->layout();
 	  	$layout->setLayout('no-layout');
 
-		if($this->_getParam('fn') == 'getByCpfNome'){
+		if(empty($_SESSION['sessionUser']['id_empresa'])) return;
 
-			if(empty($_SESSION['sessionUser']['id_empresa'])) return;
+		if($this->_getParam('fn') == 'getByCpfNome'){
 
 			$dbCliente = new Application_Model_DbTable_Clientes();
 
@@ -1323,8 +1323,6 @@ class ClientesController extends Zend_Controller_Action
 			}
 
 		}elseif($this->_getParam('fn') == 'verifica_cpf'){
-
-			if(empty($_SESSION['sessionUser']['id_empresa'])) return;
 
 			$dbCliente = new Application_Model_DbTable_Clientes();
 

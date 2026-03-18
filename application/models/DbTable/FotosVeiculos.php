@@ -122,6 +122,18 @@ class Application_Model_DbTable_FotosVeiculos extends Zend_Db_Table_Abstract
 		
 	}
 	
+	public function getNFotosPorEmpresa($id_empresa){
+
+		$db = $this->getAdapter();
+		$sql = "SELECT fv.id_veiculo, COUNT(*) as total
+				FROM fotos_veiculos fv
+				INNER JOIN veiculos v ON v.id = fv.id_veiculo
+				WHERE v.id_empresa = ? AND v.excluido = 0
+				GROUP BY fv.id_veiculo";
+		return $db->fetchAll($sql, array($id_empresa));
+
+	}
+
 	public function getModelosPorEmpresa($idEmpresa){
  
 		$row = $this->select();

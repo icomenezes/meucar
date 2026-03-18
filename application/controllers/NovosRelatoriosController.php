@@ -3007,20 +3007,41 @@ class NovosRelatoriosController extends Zend_Controller_Action
 	
 	
 	public function listaEstoqueGerencialAction(){
-	
+
 		$this->validaAcesso('relatorios');
-	
+
+		set_time_limit(30);
+
 		$dbVeiculo = new Application_Model_DbTable_Veiculos();
 		$dbOpcionaisVeiculos = new Application_Model_DbTable_OpcionaisVeiculos();
 		$dbDespesasVeiculos = new Application_Model_DbTable_DespesasVeiculos();
 		$dbFotosVeiculos = new Application_Model_DbTable_FotosVeiculos();
 		$dbCoresRelatorios = new Application_Model_DbTable_CoresRelatorios();
-		
+
 		$arr['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
-		
-		
+		$id_empresa = $_SESSION['sessionUser']['id_empresa'];
+
 		$arrCores = $dbCoresRelatorios->_get($arr);
-		
+
+		// Pré-carrega opcionais, despesas e fotos em uma query cada
+		$arrOpcionaisTodos = $dbOpcionaisVeiculos->getOpcionaisPorEmpresa($id_empresa);
+		$arrDespesasTodas  = $dbDespesasVeiculos->getSomaDespesasPorEmpresa($id_empresa);
+		$arrFotosTodas     = $dbFotosVeiculos->getNFotosPorEmpresa($id_empresa);
+
+		// Indexa por id_veiculo para acesso O(1)
+		$mapOpcionais = array();
+		foreach($arrOpcionaisTodos as $op){
+			$mapOpcionais[$op['id_veiculo']][] = $op['opcional'];
+		}
+		$mapDespesas = array();
+		foreach($arrDespesasTodas as $dep){
+			$mapDespesas[$dep['id_veiculo']] = $dep['valor_despesas'];
+		}
+		$mapFotos = array();
+		foreach($arrFotosTodas as $f){
+			$mapFotos[$f['id_veiculo']] = $f['total'];
+		}
+
 		$arr['vend'] = 1;
 		$arr['order'] = 'marca';
 		$arr['exibir_estoque'] = true;
@@ -3059,15 +3080,12 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				$count2++;
 			
 				$opcionais = "";
-			
-				$arrOpcionais = $dbOpcionaisVeiculos->getVeiculosOpcionais($veiculo['id']);
-				
-				foreach($arrOpcionais as $opcional){
-				
-					$tempOpcional = explode(")",$opcional['opcional']);
-		
-					$opcionais .= str_replace("(","",$tempOpcional[0])." ";
-				
+
+			if(isset($mapOpcionais[$veiculo['id']])){
+					foreach($mapOpcionais[$veiculo['id']] as $opcNome){
+						$tempOpcional = explode(")", $opcNome);
+						$opcionais .= str_replace("(", "", $tempOpcional[0])." ";
+					}
 				}
 				
 				if($count2%2 == 0){
@@ -3106,9 +3124,9 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				$dias_diferenca = ($segundos_diferenca /(60 * 60 * 24));
 				
 		
-				$revisao = $dbDespesasVeiculos->getSomaDespesas($veiculo['id']);
-				$lucroReal = $veiculo['valor_venda']-($revisao[0]['valor_despesas']+$veiculo['valor_aquisicao']);
-				$lucroPorcento = $lucroReal/($revisao[0]['valor_despesas']+$veiculo['valor_aquisicao'])*100;
+				$valorDespesa = isset($mapDespesas[$veiculo['id']]) ? $mapDespesas[$veiculo['id']] : 0;
+				$lucroReal = $veiculo['valor_venda'] - ($valorDespesa + $veiculo['valor_aquisicao']);
+				$lucroPorcento = ($valorDespesa + $veiculo['valor_aquisicao']) > 0 ? $lucroReal / ($valorDespesa + $veiculo['valor_aquisicao']) * 100 : 0;
 				
 				if($veiculo['data_termino_revisao'] == null || $veiculo['data_termino_revisao'] == "0000-00-00"){
 				
@@ -3137,13 +3155,7 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				
 				}
 				
-				$qtdFotos = $dbFotosVeiculos->getNFotos($veiculo['id']);
-				
-				if(!isset($qtdFotos[0]['total'])){
-				
-					$qtdFotos[0]['total'] = 0;
-				
-				}
+				$qtdFotosTotal = isset($mapFotos[$veiculo['id']]) ? $mapFotos[$veiculo['id']] : 0;
 				
 				if($dias_diferenca <= $arrCores[0]['verde_estoque']){
 				
@@ -3256,16 +3268,16 @@ class NovosRelatoriosController extends Zend_Controller_Action
 								<td id='km' ".$bgCor.">".$veiculo['km']."</td>
 								<td id='venda' ".$bgCor.">R$ ".money_format("%i",$veiculo['valor_venda'])."</td>
 								<td id='estoque' ".$statusEstoque.">".round($dias_diferenca,0)."</td>
-								<td id='custo' ".$bgCor.">R$ ".money_format("%i",$revisao[0]['valor_despesas']+$veiculo['valor_aquisicao'])."</td>
+								<td id='custo' ".$bgCor.">R$ ".money_format("%i",$valorDespesa+$veiculo['valor_aquisicao'])."</td>
 								<td id='compra' ".$bgCor.">R$ ".money_format("%i",$veiculo['valor_aquisicao'])."</td>
-								<td id='revisao' ".$bgCor.">R$ ".money_format("%i",$revisao[0]['valor_despesas'])."</td>
+								<td id='revisao' ".$bgCor.">R$ ".money_format("%i",$valorDespesa)."</td>
 								<td id='lucro' ".$statusLucro.">R$ ".money_format("%i",$lucroReal)."</td>
 								<td id='lucro_porcento' ".$statusLucro.">".round($lucroPorcento,2)."%</td>
 								<td id='Dcompra' ".$bgCor.">".implode("/",array_reverse(explode("-",$veiculo['data_aquisicao'])))."</td>
 								<td id='termino_revisao' ".$bgCor.">".$dataTerminoRevisao."</td>
 								<td id='em_revisao' ".$statusRevisao.">".$dias_diferenca_revisao."</td>
 								<td id='".$veiculo['cod_fipe']."_".$veiculo['codigo']."' class='fipe' ".$bgCor." style='background-color:#4876FF; color:#FFFFFF; width: 90px;'>Aguarde...</td>
-								<td id='fotos' ".$bgCor.">".$qtdFotos[0]['total']."</td>
+								<td id='fotos' ".$bgCor.">".$qtdFotosTotal."</td>
 								<td style='display: none;' class='cod_fipe'> ".$veiculo['cod_fipe']." </td>
 								<td style='display: none;' class='codigo_ano'> ".$veiculo['codigo']." </td>
 								<td style='display: none;' class='segmento'> ".$veiculo['segmento']." </td>
@@ -3274,9 +3286,9 @@ class NovosRelatoriosController extends Zend_Controller_Action
 							 
 				$somaVenda += $veiculo['valor_venda'];
 				$somaDiasEstoque += $dias_diferenca;
-				$somaCusto += $revisao[0]['valor_despesas']+$veiculo['valor_aquisicao'];
+				$somaCusto += $valorDespesa+$veiculo['valor_aquisicao'];
 				$somaCompra += $veiculo['valor_aquisicao'];
-				$somaRevisao += $revisao[0]['valor_despesas'];
+				$somaRevisao += $valorDespesa;
 				$somaLucro += $lucroReal;
 				$somaLucroPorcento += $lucroPorcento;
 				$somaFIPE += $veiculo['fipe'];

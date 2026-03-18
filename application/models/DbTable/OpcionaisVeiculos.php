@@ -108,6 +108,19 @@ class Application_Model_DbTable_OpcionaisVeiculos extends Zend_Db_Table_Abstract
 		
 	}
 	
+	public function getOpcionaisPorEmpresa($id_empresa){
+
+		$db = $this->getAdapter();
+		$sql = "SELECT vo.id_veiculo, o.opcional
+				FROM veiculos_opcionais vo
+				INNER JOIN opcionais o ON o.id = vo.id_opcional
+				INNER JOIN veiculos v ON v.id = vo.id_veiculo
+				WHERE v.id_empresa = ? AND v.excluido = 0
+				ORDER BY o.opcional ASC";
+		return $db->fetchAll($sql, array($id_empresa));
+
+	}
+
 	public function getVeiculosOpcionaisIcarros($id_veiculo){
  
 		$row = $this->select();

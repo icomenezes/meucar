@@ -315,24 +315,45 @@
 	});
 
 
+	var fipeXhrs = [];
+	var fipeQueue = [];
+	var fipeAtivos = 0;
+	var fipeMaxConcorrente = 3;
+
 	$(document).ready(() => {
 		$("#table_dados tr").each((ind, ele) => {
 			if($(ele).find(".cod_fipe").html() && $(ele).find(".codigo_ano").html()) {
-				console.log($(ele).find(".cod_fipe").html());
-				console.log($(ele).find(".codigo_ano").html());
-				console.log($(ele).find(".segmento").html());
-				getFipeGDS($(ele).find(".cod_fipe").html().trim(), $(ele).find(".codigo_ano").html().trim(), $(ele).find(".segmento").html().trim(), $(ele).find(".fipe").attr("id").trim());
+				fipeQueue.push({
+					cod_fipe: $(ele).find(".cod_fipe").html().trim(),
+					codigo_ano: $(ele).find(".codigo_ano").html().trim(),
+					segmento: $(ele).find(".segmento").html().trim(),
+					id_fipe: $(ele).find(".fipe").attr("id").trim()
+				});
 			}
 		});
+		processaFilaFipe();
 	});
 
+	$(window).on('beforeunload', function(){
+		$.each(fipeXhrs, function(i, xhr){ if(xhr) xhr.abort(); });
+		fipeQueue = [];
+	});
+
+	function processaFilaFipe(){
+		while(fipeAtivos < fipeMaxConcorrente && fipeQueue.length > 0){
+			var item = fipeQueue.shift();
+			getFipeGDS(item.cod_fipe, item.codigo_ano, item.segmento, item.id_fipe);
+		}
+	}
 
 	function getFipeGDS(cod_fipe, codigo_ano, segmento, id_fipe) {
-		$.ajax({
+		fipeAtivos++;
+		var xhr = $.ajax({
 			type: "POST",
 			url:"/modelos/ajax",
 			async: true,
 			dataType:"json",
+			timeout: 10000,
 			data:{
 				codigo_ano: codigo_ano,
 				cod_fipe: cod_fipe,
@@ -340,11 +361,14 @@
 				fn:"get_valor_fipe"
 			},
 			success:function(retorno){
-				$("#"+id_fipe).html(retorno.valor);
+				if(retorno && retorno.valor) $("#"+id_fipe).html(retorno.valor);
+			},
+			complete:function(){
+				fipeAtivos--;
+				processaFilaFipe();
 			}
 		});
-
-
+		fipeXhrs.push(xhr);
 	}
 
 </script>
