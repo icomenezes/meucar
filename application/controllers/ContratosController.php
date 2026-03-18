@@ -84,7 +84,7 @@ class ContratosController extends Zend_Controller_Action
 		$arrVeiculos = $dbVeiculos->_get($arr);
 
 
-		$arrVeiculoTroca = $dbVeiculos->getVeiculoTrocaNegociacao($_SESSION['sessionUser']['id_empresa'], $this->_getParam('id_negociacao'));
+		$arrVeiculoTroca = $dbVeiculos->getVeiculoTrocaNegociacao($this->_getParam('id_empresa'), $this->_getParam('id_negociacao'));
 		
 		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getVeiculosOpcionais($arrVeiculos[0]['id']);
 

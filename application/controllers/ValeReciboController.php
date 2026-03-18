@@ -63,10 +63,11 @@ class ValeReciboController extends Zend_Controller_Action
 			
 			
 		}elseif($this->_getParam('fn') == 'getClientes'){
-		
+
 			$dbClientes = new Application_Model_DbTable_Clientes();
 			$dbEmpresas = new Application_Model_DbTable_Empresas();
 			$empresaNome = $dbEmpresas->getEmpresa($_SESSION['sessionUser']['id_empresa']);
+			$arr['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			$arrClientes = $dbClientes->_get($arr);
 			
 			$options = "<option value='-1'>Selecione</option>";
@@ -363,9 +364,10 @@ class ValeReciboController extends Zend_Controller_Action
 			}
 		
 		}
-		
+
+		$arr['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 		$arrClientes = $dbClientes->_get($arr);
-		
+
 		//$arrClientes = $dbClientes->getClientes($_SESSION['sessionUser']['id_empresa']);
 		
 		//$arrClientes['valor'] = money_format("%i",$valor);

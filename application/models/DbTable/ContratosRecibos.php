@@ -27,10 +27,10 @@ class Application_Model_DbTable_ContratosRecibos extends Zend_Db_Table_Abstract
 			$row->where('cr.id = ' . $arr['id']);
 		}
 
-		if(isset($arr['id_root']) && $arr['id_root'] != ""){
-			
+		if(isset($arr['id_root']) && $arr['id_root'] != "" && isset($arr['id_empresa']) && $arr['id_empresa'] != ""){
+
 			$row->where("cr.id_empresa = ".$arr['id_empresa']." OR cr.id_empresa = ".$arr['id_root']);
-			
+
 		}elseif(isset($arr['id_empresa']) && $arr['id_empresa'] != ""){
 			
 			$row->where('cr.id_empresa = ' . $arr['id_empresa']);
