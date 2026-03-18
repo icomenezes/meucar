@@ -1232,6 +1232,8 @@ class ClientesController extends Zend_Controller_Action
 
 		if($this->_getParam('fn') == 'getByCpfNome'){
 
+			if(empty($_SESSION['sessionUser']['id_empresa'])) return;
+
 			$dbCliente = new Application_Model_DbTable_Clientes();
 
 			$arrC = $dbCliente->fetchAll("(cpf LIKE  '".$this->_getParam('f')."%' OR nome LIKE  '".$this->_getParam('f')."%') AND id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
@@ -1322,8 +1324,10 @@ class ClientesController extends Zend_Controller_Action
 
 		}elseif($this->_getParam('fn') == 'verifica_cpf'){
 
+			if(empty($_SESSION['sessionUser']['id_empresa'])) return;
+
 			$dbCliente = new Application_Model_DbTable_Clientes();
-				
+
 			$status = $dbCliente->getCpfExistente($this->_getParam('cpf'), $_SESSION['sessionUser']['id_empresa']);
 
 			if(isset($status[0]['id'])){
