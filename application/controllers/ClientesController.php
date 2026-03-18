@@ -1231,15 +1231,16 @@ class ClientesController extends Zend_Controller_Action
 	  	$layout->setLayout('no-layout');
 
 		if($this->_getParam('fn') == 'getByCpfNome'){
-			
+
 			$dbCliente = new Application_Model_DbTable_Clientes();
-			
+
 			$arrC = $dbCliente->fetchAll("(cpf LIKE  '".$this->_getParam('f')."%' OR nome LIKE  '".$this->_getParam('f')."%') AND id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
 
+			$callback = $this->_getParam('callback') ? $this->_getParam('callback') : 'populaCamposCliente';
+
 			foreach($arrC as $c){
-			
-				echo "<li> <a href=\"#\" onclick=\"populaCamposCliente(".$c['id'].");esconde($(this).parent().parent().parent())\">".$c['nome']." - ".$c['cpf']."</a></li>";
-			
+				$nomeEscapado = addslashes($c['nome']);
+				echo "<li> <a href=\"#\" onclick=\"".$callback."(".$c['id'].", '".$nomeEscapado."');esconde($(this).parent().parent().parent())\">".$c['nome']." - ".$c['cpf']."</a></li>";
 			}
 			
 		}elseif($this->_getParam('fn') == 'getById'){

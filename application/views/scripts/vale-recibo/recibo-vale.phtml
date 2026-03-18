@@ -1,14 +1,16 @@
 <form id="form" name="form" target="_blank" enctype="application/x-www-form-urlencoded" action="imprimir-recibo" class="form" method="post">
 	
 	<div class="inline" style="margin-bottom:15px;">
-		<label class="label">Recebi(emos)</label>
-		<select id="usuario" name="usuario" class="text req" style="width:65%" onfocus="getClientes();">
-			
-		
-		</select>
-		
+		<label class="label">Buscar pelo Nome ou CPF</label>
+		<input type="text" id="find_cliente" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" placeholder="Digite o nome ou CPF..." />
+		<div id="resClientes" class="autocomplete" style="display:none;"><ul></ul></div>
 		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>clientes/add')" />
-		
+	</div>
+
+	<div class="inline" style="margin-bottom:15px;">
+		<label class="label">Recebi(emos)</label>
+		<input type="text" id="nome_cliente" class="text" readonly="readonly" style="width:65%" />
+		<input type="hidden" id="usuario" name="usuario" value="" />
 		<span style="color:green; font-size:11px;">Selecione quem ir&aacute; efetuar o pagamento.</span>
 	</div>
 
@@ -45,22 +47,27 @@
 
 <script type="text/javascript">
 
-	function getClientes(){
-		
-		$.ajax({                   
-			type: "POST",
-			url:"/vale-recibo/ajax/fn/getClientes",
-			dataType:"html",
-			//data:{idempresa:id},                       
-			success:function(retorno){
-				
-				$("#usuario").html(retorno);
-				
-				//alert(retorno);
-			
-			}
-		})
+	function findCliente(f){
+		if(f.length < 2) {
+			$("#resClientes").hide();
+			return;
+		}
+		$("#resClientes").show();
+		var resp = $.ajax({
+			url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+			async: false,
+			type: 'POST',
+			data: {'f': f, 'callback': 'selecionaCliente'},
+			dataType: 'text'
+		}).responseText;
+		$("#resClientes ul").html(resp);
+	}
 
+	function selecionaCliente(id, nome){
+		$("#usuario").val(id);
+		$("#nome_cliente").val(nome);
+		$("#resClientes").hide();
+		$("#find_cliente").val('');
 	}
 
 	function geraRecibo(){
@@ -95,12 +102,12 @@ function validaCampo(){
 	var msg = "";
 	var erro = false;
 	
-	if($("#usuario").val() == -1){
-		
+	if($("#usuario").val() == "" || $("#usuario").val() == -1){
+
 		erro = true;
-		
+
 		msg += "<br>O campo recebi(emos) deve ser selecionado.";
-	
+
 	}
 	
 	if($("#valor").val() == ""){
@@ -165,8 +172,6 @@ $(function(){
 		});
 	});
 	
-	getClientes();
-
 })
 
 </script>
