@@ -1239,8 +1239,7 @@ class ClientesController extends Zend_Controller_Action
 			$callback = $this->_getParam('callback') ? $this->_getParam('callback') : 'populaCamposCliente';
 
 			foreach($arrC as $c){
-				$nomeEscapado = addslashes($c['nome']);
-				echo "<li> <a href=\"#\" onclick=\"".$callback."(".$c['id'].", '".$nomeEscapado."');esconde($(this).parent().parent().parent())\">".$c['nome']." - ".$c['cpf']."</a></li>";
+				echo "<li> <a href=\"#\" onclick=\"".$callback."(".$c['id'].");esconde($(this).parent().parent().parent())\">".$c['nome']." - ".$c['cpf']."</a></li>";
 			}
 			
 		}elseif($this->_getParam('fn') == 'getById'){

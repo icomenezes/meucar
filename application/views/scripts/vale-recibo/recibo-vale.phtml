@@ -63,11 +63,31 @@
 		$("#resClientes ul").html(resp);
 	}
 
-	function selecionaCliente(id, nome){
-		$("#usuario").val(id);
-		$("#nome_cliente").val(nome);
+	function selecionaCliente(id){
+		var resp = $.ajax({
+			url: '<?php echo URL ?>clientes/ajax/fn/getById',
+			async: false,
+			type: 'POST',
+			data: {'f': id},
+			dataType: 'text'
+		}).responseText;
+
+		var arrDados = resp.split("|");
+		for(var x = 0; x < arrDados.length; x++){
+			var arrPartes = arrDados[x].split(":");
+			if(arrPartes[0] == "nome"){
+				$("#nome_cliente").val(arrPartes[1]);
+			}
+			if(arrPartes[0] == "id"){
+				$("#usuario").val(arrPartes[1]);
+			}
+		}
 		$("#resClientes").hide();
 		$("#find_cliente").val('');
+	}
+
+	function esconde(el){
+		el.hide();
 	}
 
 	function geraRecibo(){
