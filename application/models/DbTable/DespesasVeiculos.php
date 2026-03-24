@@ -131,9 +131,18 @@ class Application_Model_DbTable_DespesasVeiculos extends Zend_Db_Table_Abstract
 	}
 	
 	public function getDespesa($id){
-		
+
 		return $this->fetchAll("id_veiculo = $id");
-	
+
+	}
+
+	public function getDespesasByVeiculos($ids){
+
+		if(empty($ids)) return array();
+		$idsLimpos = array_map('intval', $ids);
+		$inList = implode(',', $idsLimpos);
+		return $this->fetchAll("id_veiculo IN ($inList)");
+
 	}
 	
 	public function getOpcionais(){

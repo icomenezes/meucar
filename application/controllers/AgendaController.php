@@ -436,10 +436,30 @@ class AgendaController extends Zend_Controller_Action {
 			<tbody>";
 			
 
-         //var_export($arrNegociacoes);exit;	
+         //var_export($arrNegociacoes);exit;
+
+		// Batch: busca todas as despesas e recebimentos de uma vez (evita N+1 queries)
+		$idsVeiculos = array();
+		$idsNegociacoes = array();
+		foreach($arrNegociacoes as $neg){
+			if(isset($neg['id_veiculo'])) $idsVeiculos[] = $neg['id_veiculo'];
+			if(isset($neg['id'])) $idsNegociacoes[] = $neg['id'];
+		}
+
+		$arrAllDespesas = $dbDespesasVeiculos->getDespesasByVeiculos($idsVeiculos);
+		$despesasPorVeiculo = array();
+		foreach($arrAllDespesas as $desp){
+			$despesasPorVeiculo[$desp['id_veiculo']][] = $desp;
+		}
+
+		$arrAllRecebimentos = $dbRecebimentosNegociacoes->getRecebimentosByNegociacoes($idsNegociacoes);
+		$recebimentosPorNegociacao = array();
+		foreach($arrAllRecebimentos as $rec){
+			$recebimentosPorNegociacao[$rec['id_negociacao']][] = $rec;
+		}
 
 		$linha = true;
-		 
+
         foreach ($arrNegociacoes as $negociacao){
 
             $tempo = explode(" ", $negociacao['data_abertura']);
@@ -490,7 +510,7 @@ class AgendaController extends Zend_Controller_Action {
 				$cor = "#66CCFF";
 			}
 			
-			$arrDespesas = $dbDespesasVeiculos->getDespesa($negociacao['id_veiculo']);
+			$arrDespesas = isset($despesasPorVeiculo[$negociacao['id_veiculo']]) ? $despesasPorVeiculo[$negociacao['id_veiculo']] : array();
 			
 			$strDespesas = "";
 			$totalDespesas = 0;
@@ -513,7 +533,7 @@ class AgendaController extends Zend_Controller_Action {
 			
 			}
 			
-			$arrRecebimentos = $dbRecebimentosNegociacoes->getRecebimentos($negociacao['id']);
+			$arrRecebimentos = isset($recebimentosPorNegociacao[$negociacao['id']]) ? $recebimentosPorNegociacao[$negociacao['id']] : array();
 			
 			$forma = "";
 			
