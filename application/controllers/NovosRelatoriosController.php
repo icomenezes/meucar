@@ -3010,7 +3010,7 @@ class NovosRelatoriosController extends Zend_Controller_Action
 
 		$this->validaAcesso('relatorios');
 
-		set_time_limit(30);
+		set_time_limit(150);
 
 		$dbVeiculo = new Application_Model_DbTable_Veiculos();
 		$dbOpcionaisVeiculos = new Application_Model_DbTable_OpcionaisVeiculos();
