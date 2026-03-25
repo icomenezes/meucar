@@ -61,21 +61,40 @@ class Application_Model_DbTable_RecebimentosNegociacoes extends Zend_Db_Table_Ab
 	
 	
 	public function getRecebimentos($id){
-		
+
 		$row = $this->select();
 		$row->setIntegrityCheck(false);
 		$row->from(
 			array('rn'=>'recebimentos_negociacoes'),
 			array('*')
 		);
-		
+
 		$row->where('rn.id_negociacao = ' .$id);
-		
+
 		//echo $row->__toString();
 		$row->order('data');
 
 		return $row->query()->fetchAll();
-		
+
+	}
+
+	public function getRecebimentosByNegociacoes($ids){
+
+		if(empty($ids)) return array();
+		$idsLimpos = array_map('intval', $ids);
+		$inList = implode(',', $idsLimpos);
+
+		$row = $this->select();
+		$row->setIntegrityCheck(false);
+		$row->from(
+			array('rn'=>'recebimentos_negociacoes'),
+			array('*')
+		);
+		$row->where("rn.id_negociacao IN ($inList)");
+		$row->order('data');
+
+		return $row->query()->fetchAll();
+
 	}
 	
 	public function _get($arr){
