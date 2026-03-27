@@ -105,7 +105,7 @@ class Application_Model_DbTable_Clientes extends Zend_Db_Table_Abstract
 			
 			if(isset($arr['cpf'])){
 			
-				$row->where("c.cpf = '" . $arr['cnpj'] . "'");
+				$row->where("c.cpf = '" . $arr['cpf'] . "'");
 			
 			}
 			

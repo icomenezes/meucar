@@ -1236,7 +1236,13 @@ class ClientesController extends Zend_Controller_Action
 
 			$dbCliente = new Application_Model_DbTable_Clientes();
 
-			$arrC = $dbCliente->fetchAll("(cpf LIKE  '".$this->_getParam('f')."%' OR nome LIKE  '".$this->_getParam('f')."%') AND id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
+			$select = $dbCliente->select();
+		$select->setIntegrityCheck(false);
+		$select->from(array('c' => 'clientes'), array('*'));
+		$select->where("(cpf LIKE  '".$this->_getParam('f')."%' OR nome LIKE  '".$this->_getParam('f')."%')");
+		$select->where("id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
+		$select->limit(50);
+		$arrC = $select->query()->fetchAll();
 
 			$callback = $this->_getParam('callback') ? $this->_getParam('callback') : 'populaCamposCliente';
 
@@ -1245,10 +1251,13 @@ class ClientesController extends Zend_Controller_Action
 			}
 			
 		}elseif($this->_getParam('fn') == 'getById'){
-			
+
 			$dbCliente = new Application_Model_DbTable_Clientes();
-			
-			$arrC = $dbCliente->fetchAll("id = " . $this->_getParam('f'));
+
+			$select = $dbCliente->select();
+		$select->where("id = " . $this->_getParam('f'));
+		$select->limit(1);
+		$arrC = $select->query()->fetchAll();
 
 			foreach($arrC as $c){
 			
