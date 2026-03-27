@@ -308,7 +308,7 @@ body {
 /* ── Formulários ── */
 .form div.inline {
     height: auto !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 4px !important;
     margin-left: 8px !important;
 }
 .form label, .form .label {
