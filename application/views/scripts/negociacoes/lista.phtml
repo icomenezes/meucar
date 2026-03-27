@@ -194,7 +194,7 @@
 			}
 
 		}else{
-			if(count($this->negociacoes) > 0){
+			if(is_array($this->negociacoes) && count($this->negociacoes) > 0){
 				foreach($this->negociacoes as $n){
 
 					if($n['descricao_site']){
@@ -251,7 +251,7 @@
 		}
 	}else{
 
-		if(count($this->negociacoes) > 0){
+		if(is_array($this->negociacoes) && count($this->negociacoes) > 0){
 
 			foreach($this->negociacoes as $n){
 
