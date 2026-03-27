@@ -3,27 +3,11 @@ if(!$_GET['erro']){
 ?>
 
 <style type="text/css">
-	.show{
-		margin-top: 100px;
-	}
-
-	.bg-primary{
-		color: #FFF;
-	}
-	.disabled{
-		cursor:not-allowed;
-	}
+	.disabled { cursor: not-allowed; }
 </style>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-		<div class="col-lg-4 col-sm-0 col-0 show">
-			
-			<div class="card border-secondary mb-3">
-				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
-				<div class="card-body">
-				<form method="post" action="/index/logar-v2" id="login_v2">
+<div>
+	<form method="post" action="/index/logar-v2" id="login_v2">
 				    <div class="form-group">
 					  	<div class="form-floating mb-3">
 					    	<input type="email" class="form-control" id="user"  name="user" placeholder="Usuário">
@@ -56,12 +40,7 @@ if(!$_GET['erro']){
 					<div class="d-grid gap-2">
 					  	<a type="button" href="/index/esqueci-senha" class="btn btn-link">Esqueci a senha</a>
 					</div>
-				</div>
-			</div>
-
 		</div>
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-	</div>
 </div>
 
 <script type="text/javascript">

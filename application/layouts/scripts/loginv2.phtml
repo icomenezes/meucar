@@ -20,17 +20,107 @@ $ts = @date('ymdhis');
 		<script src='https://www.google.com/recaptcha/api.js' async defer></script>
 		<?php endif; ?>
 	</head>
+	<style>
+		* { box-sizing: border-box; margin: 0; padding: 0; }
+
+		body {
+			min-height: 100vh;
+			background: linear-gradient(135deg, #1a1a2e 0%, #8b0000 60%, #c0392b 100%);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Segoe UI', sans-serif;
+		}
+
+		.login-wrapper {
+			width: 100%;
+			max-width: 420px;
+			padding: 20px;
+		}
+
+		.login-box {
+			background: rgba(255,255,255,0.97);
+			border-radius: 16px;
+			padding: 40px 36px 32px;
+			box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+		}
+
+		.login-logo {
+			text-align: center;
+			margin-bottom: 28px;
+		}
+
+		.login-logo img {
+			width: 64px;
+			height: 64px;
+			object-fit: contain;
+			margin-bottom: 10px;
+		}
+
+		.login-logo h1 {
+			font-size: 26px;
+			font-weight: 700;
+			color: #8b0000;
+			letter-spacing: 1px;
+		}
+
+		.login-logo p {
+			font-size: 13px;
+			color: #888;
+			margin-top: 2px;
+		}
+
+		.btn-primary {
+			background: #8b0000 !important;
+			border-color: #8b0000 !important;
+			transition: background .2s, transform .1s;
+		}
+
+		.btn-primary:hover {
+			background: #a00000 !important;
+			transform: translateY(-1px);
+		}
+
+		.btn-primary:disabled {
+			background: #c0392b !important;
+			opacity: .7;
+		}
+
+		.form-control {
+			border-radius: 8px !important;
+			border: 1px solid #ddd !important;
+			font-size: 14px !important;
+		}
+
+		.form-control:focus {
+			border-color: #8b0000 !important;
+			box-shadow: 0 0 0 3px rgba(139,0,0,.12) !important;
+		}
+
+		.btn-link {
+			color: #8b0000 !important;
+			font-size: 13px;
+		}
+
+		.login-footer {
+			text-align: center;
+			margin-top: 24px;
+			font-size: 11px;
+			color: rgba(255,255,255,.5);
+		}
+	</style>
+
 	<body>
-
-		
-
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-		  <div class="container-fluid">
-		    <a class="navbar-brand" href="#">Meu Car</a>
-		   
-		  </div>
-		</nav>
-		<?php echo $this->layout()->content; ?>
-
+		<div class="login-wrapper">
+			<div class="login-box">
+				<div class="login-logo">
+					<img src="/images/icons/meucar.png" alt="Meu Car" />
+					<h1>Meu Car</h1>
+					<p>Sistema de Gestão de Veículos</p>
+				</div>
+				<?php echo $this->layout()->content; ?>
+			</div>
+		</div>
+		<div class="login-footer">© <?php echo date('Y'); ?> Meu Car — Todos os direitos reservados</div>
 	</body>
 </html>
