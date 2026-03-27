@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema em Manutenção - MeuCar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: rotate 3s linear infinite;
+        }
+
+        .icon::before {
+            content: "⚙";
+            font-size: 50px;
+            color: white;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .status-text {
+            color: #667eea;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: #f0f4ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .highlight p {
+            margin: 0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .new-url {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 16px;
+        }
+
+        .new-url:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .info-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-box li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .footer {
+            color: #999;
+            font-size: 13px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .pulse {
+            display: inline-block;
+            margin-left: 5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon"></div>
+
+        <h1>Sistema em Manutenção <span class="pulse">●</span></h1>
+        <p class="status-text">Estamos fazendo melhorias importantes!</p>
+
+        <p>
+            Nosso sistema está passando por uma atualização de infraestrutura para oferecer <strong>melhor performance</strong> e <strong>mais estabilidade</strong>.
+        </p>
+
+        <div class="highlight">
+            <p>
+                🎉 <strong>Ótima notícia!</strong> O sistema agora está em uma infraestrutura mais robusta e confiável!
+            </p>
+        </div>
+
+        <p>Acesse o sistema no novo endereço:</p>
+
+        <a href="https://meucar.trsystem.com.br" class="new-url">
+            Acessar Sistema Atualizado →
+        </a>
+
+        <div class="info-box">
+            <h3>📋 O que foi feito</h3>
+            <ul>
+                <li>Migração para servidor de alta performance</li>
+                <li>Backup completo dos seus dados</li>
+                <li>Otimizações de segurança</li>
+                <li>Melhor tempo de resposta</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Volta em breve! Obrigado pela paciência. 🚀
+        </div>
+    </div>
+
+    <!-- Redirecionamento automático após 10 segundos (opcional) -->
+    <script>
+        // Descomente a linha abaixo para redirecionar automaticamente
+        // setTimeout(() => { window.location.href = 'https://meucar.trsystem.com.br'; }, 10000);
+    </script>
+</body>
+</html>
