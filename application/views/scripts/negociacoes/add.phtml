@@ -24,100 +24,87 @@
 
 <div id="cliente" style="width:98.1%;">
 
-	<div class="inline">
-		<label class="label">Buscar pelo Nome ou CPF</label>
-		<input type="text" id="find_cpf" name="find_cpf" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" value="" />
-		<div id="resClientes" class="autocomplete"><ul></ul></div>
-		<a id="link_dados_cliente" target="_blanck"  style="display:none;" href="#">Acessar dados do cliente</a>
-		
+	<div style="display:flex; align-items:flex-end; gap:8px; margin-bottom:10px;">
+		<div>
+			<label class="label">Buscar pelo Nome ou CPF</label>
+			<input type="text" id="find_cpf" name="find_cpf" class="text" style="background-color:#FFFFCC;" autocomplete="off" onkeyup="findCliente(this.value)" value="" />
+			<div id="resClientes" class="autocomplete"><ul></ul></div>
+			<a id="link_dados_cliente" target="_blanck" style="display:none;" href="#">Acessar dados do cliente</a>
+		</div>
+		<div>
+			<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>clientes/add')" />
+		</div>
 	</div>
-	<br/>
-	<div class="inline" style="padding-top:5px;">
-		<input type="button" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>clientes/add')" />
-	</div>
-	
-	<div class="inline" style="clear:both;">
-		<label class="label">Origem</label>
-		<select id="origem" name="origem" class="select">
-			<option>Selecione</option>
-		</select>
-	</div>
-	
-	<div class="inline" style="clear:both;">
-		<label class="label">Nome</label>
-		<input type="text" readonly="readonly" id="nome" name="nome" class="text" value="" />
-		<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->id_empresa; ?>" />
-		<input type="hidden" id="id_cliente" name="id_cliente" value="" >
-	</div>
-	
-	<div class="inline">
-		<label class="label">CPF</label>
-		<input type="text" readonly="readonly" id="cpf" name="cpf" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">RG</label>
-		<input type="text" readonly="readonly" id="rg" name="rg" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Nacionalidade</label>
-		<input type="text" readonly="readonly" id="nacionalidade" name="nacionalidade" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Endere&ccedil;o</label>
-		<input type="text" readonly="readonly" id="endereco" name="endereco" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">N&uacute;mero</label>
-		<input type="text" readonly="readonly" id="numero_endereco" name="numero_endereco" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Bairro</label>
-		<input type="text" readonly="readonly" id="bairro" name="bairro" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Complemento</label>
-		<input type="text" readonly="readonly" id="complemento" name="complemento" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Cidade</label>
-		<input type="text" readonly="readonly" id="cidade" name="cidade" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Estado</label>
-		<input type="text" readonly="readonly" id="estado" name="estado" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">CEP</label>
-		<input type="text" readonly="readonly" id="cep" name="cep" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Telefone 1</label>
-		<input type="text" readonly="readonly" id="tel1" name="tel1" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Telefone 2</label>
-		<input type="text" readonly="readonly" id="tel2" name="tel2" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Telefone 3</label>
-		<input type="text" readonly="readonly" id="cel" name="cel" class="text" value="" />
-	</div>
-	
-	<div class="inline">
-		<label class="label">Email</label>
-		<input type="text" readonly="readonly" id="email" name="email" class="text" value="" />
+
+	<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px 16px; margin-bottom:8px;">
+		<div>
+			<label class="label">Origem</label>
+			<select id="origem" name="origem" class="select" style="width:100%;">
+				<option>Selecione</option>
+			</select>
+		</div>
+		<div>
+			<label class="label">Nome</label>
+			<input type="text" readonly="readonly" id="nome" name="nome" class="text" value="" style="width:100%;" />
+			<input type="hidden" id="id_empresa" name="id_empresa" value="<?php echo $this->id_empresa; ?>" />
+			<input type="hidden" id="id_cliente" name="id_cliente" value="" >
+		</div>
+		<div>
+			<label class="label">Nacionalidade</label>
+			<input type="text" readonly="readonly" id="nacionalidade" name="nacionalidade" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">CPF</label>
+			<input type="text" readonly="readonly" id="cpf" name="cpf" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">RG</label>
+			<input type="text" readonly="readonly" id="rg" name="rg" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Email</label>
+			<input type="text" readonly="readonly" id="email" name="email" class="text" value="" style="width:100%;" />
+		</div>
+		<div style="grid-column:span 2;">
+			<label class="label">Endere&ccedil;o</label>
+			<input type="text" readonly="readonly" id="endereco" name="endereco" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">N&uacute;mero</label>
+			<input type="text" readonly="readonly" id="numero_endereco" name="numero_endereco" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Bairro</label>
+			<input type="text" readonly="readonly" id="bairro" name="bairro" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Complemento</label>
+			<input type="text" readonly="readonly" id="complemento" name="complemento" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Cidade</label>
+			<input type="text" readonly="readonly" id="cidade" name="cidade" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Estado</label>
+			<input type="text" readonly="readonly" id="estado" name="estado" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">CEP</label>
+			<input type="text" readonly="readonly" id="cep" name="cep" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Telefone 1</label>
+			<input type="text" readonly="readonly" id="tel1" name="tel1" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Telefone 2</label>
+			<input type="text" readonly="readonly" id="tel2" name="tel2" class="text" value="" style="width:100%;" />
+		</div>
+		<div>
+			<label class="label">Telefone 3</label>
+			<input type="text" readonly="readonly" id="cel" name="cel" class="text" value="" style="width:100%;" />
+		</div>
 	</div>
 	
 	<div class="inline" style="clear:both; display:table; width:90%;margin-bottom: 10px;">
