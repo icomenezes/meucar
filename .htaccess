@@ -1,28 +1,8 @@
-RewriteEngine On
-RewriteBase /
-
-# === PROTEÇÃO MOD_SECURITY ===
-<IfModule mod_security2.c>
-  # Whitelist de IPs - não sofrem rate limiting
-  SecRule REMOTE_ADDR "@ipMatch 191.252.83.220 201.158.41.202" \
-    "id:900001,phase:1,pass,nolog,skipAfter:END_WHITELIST"
-
-  # Rate limit aumentado para 500 requisições
-  SecRule ip:ratelimit_count "@gt 500" \
-    "id:9001,phase:2,deny,status:429"
-
-  SecMarker END_WHITELIST
-</IfModule>
-
-# === BLOQUEIO DE SCRAPERS ===
-# (Descomente se necessário)
-# RewriteCond %{HTTP_USER_AGENT} ^-?$ [NC,OR]
-# RewriteCond %{HTTP_USER_AGENT} ^$
-# RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|webp|heic)$ [NC]
-# RewriteRule .* - [F,L]
 
 # === REGRAS DE REWRITE ===
 # Protege diretório public
+
+RewriteEngine on
 RewriteCond %{REQUEST_URI} !^/public/
 RewriteRule ^(.*)$ public/$1 [L]
 
