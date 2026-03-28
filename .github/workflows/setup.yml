@@ -4,10 +4,10 @@ on:
     branches:
       - main
     paths-ignore:
-      - '.htaccess'
-      - '/public/.htaccess'
-      - '/public/.user.ini'
-      - '/public/index.php'
+      # - '.htaccess'
+      # - '/public/.htaccess'
+      # - '/public/.user.ini'
+      # - '/public/index.php'
       - '/application/configs/application.ini'
       - 'tmp/**'
       - '**/.vscode'
