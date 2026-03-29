@@ -2791,10 +2791,11 @@ function adicionarRevioes(){
 	
 
 	revisao = "<td><input type='text' id=\"Ddata_0\" name='Ddata_0' class='text' value='' /></td>"+
-				"<td><input type=text' id='Ddescricao_0' name='Ddescricao_0' class='text' value='' /></td>"+
+				"<td><input type='text' id='Ddescricao_0' name='Ddescricao_0' class='text' value='' /></td>"+
 				"<td style='width:30%;'><select id='Dfornecedor_0' name='Dfornecedor_0' class='text' style='width:70%;' value='' onFocus='buscaFornecedores(<?php echo $_SESSION['sessionUser']['id_empresa'];?>,this.id)'>"+
 					"<option value=''>Selecione</option>"+
 					<?php
+					if(is_array($this->fornecedores)){
 					foreach($this->fornecedores as $fornecedor){
 					
 						/*if($fornecedor['id'] == $despesa['id_fornecedor']){
@@ -2810,6 +2811,7 @@ function adicionarRevioes(){
 					?>
 						"<option value='<?php echo $fornecedor['id']?>' <?php echo $sel?>><?php echo $fornecedor['razao_social']?></option>"+
 					<?php
+					}
 					}
 					?>
 						
