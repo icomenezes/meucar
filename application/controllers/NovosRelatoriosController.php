@@ -3526,8 +3526,8 @@ class NovosRelatoriosController extends Zend_Controller_Action
 		$strGrupo = "";
 		$subtotal = "";
 		$strGrupos = "";
-		$somaGrupos = "";
-		$panGrupos = "";
+		$somaGrupos = 0;
+		$panGrupos = 0;
 		$totalCount = 0;
 		$strTotal = "";
 		

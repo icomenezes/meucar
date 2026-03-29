@@ -28,11 +28,11 @@ jobs:
             -rptgoDOqi 
             --chown=www:www
             --exclude='.git'
-            --exclude='.htaccess'
-            --exclude='public/.htaccess'
-            --exclude='public/.user.ini'
-            --exclude='public/index.php'
-            --exclude='application/configs/application.ini'
+            # --exclude='.htaccess'
+            # --exclude='public/.htaccess'
+            # --exclude='public/.user.ini'
+            # --exclude='public/index.php'
+            # --exclude='application/configs/application.ini'
             --exclude='.github'
             --exclude='app/database'
             --exclude='app/config/'
