@@ -47,20 +47,28 @@
 
 <script type="text/javascript">
 
+	var timeoutFindCliente;
+
 	function findCliente(f){
-		if(f.length < 2) {
+		clearTimeout(timeoutFindCliente);
+
+		if(f.length < 3) {
 			$("#resClientes").hide();
+			$("#resClientes ul").html("");
 			return;
 		}
-		$("#resClientes").show();
-		var resp = $.ajax({
-			url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
-			async: false,
-			type: 'POST',
-			data: {'f': f, 'callback': 'selecionaCliente'},
-			dataType: 'text'
-		}).responseText;
-		$("#resClientes ul").html(resp);
+
+		timeoutFindCliente = setTimeout(function(){
+			$("#resClientes").show();
+			var resp = $.ajax({
+				url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+				async: false,
+				type: 'POST',
+				data: {'f': f, 'callback': 'selecionaCliente'},
+				dataType: 'text'
+			}).responseText;
+			$("#resClientes ul").html(resp);
+		}, 300);
 	}
 
 	function selecionaCliente(id){

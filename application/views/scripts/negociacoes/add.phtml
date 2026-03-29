@@ -1107,8 +1107,8 @@ function findCliente(f){
 	// Limpa timeout anterior
 	clearTimeout(timeoutFindCliente);
 
-	// Valida se tem pelo menos 2 caracteres
-	if(f.length < 2) {
+	// Valida se tem pelo menos 3 caracteres
+	if(f.length < 3) {
 		$("#resClientes").css("display","none");
 		$("#resClientes ul").html("");
 		return;
