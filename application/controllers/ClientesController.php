@@ -1239,7 +1239,8 @@ class ClientesController extends Zend_Controller_Action
 			$select = $dbCliente->select();
 		$select->setIntegrityCheck(false);
 		$select->from(array('c' => 'clientes'), array('*'));
-		$select->where("(cpf LIKE  '".$this->_getParam('f')."%' OR nome LIKE  '".$this->_getParam('f')."%')");
+		$f = preg_replace('/[^\w]/', '', $this->_getParam('f'));
+		$select->where("(REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), '/', '') LIKE  '".$f."%' OR nome LIKE  '".$f."%')");
 		$select->where("id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
 		$select->limit(50);
 		$arrC = $select->query()->fetchAll();

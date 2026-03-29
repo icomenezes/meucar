@@ -1601,19 +1601,34 @@ function esconde(f){
 	
 }
 
-function findCliente(f){
-	
-	$("#resClientes").css("display","block");
-	
-	var resp = $.ajax({
-		url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
-      		async: false,
-      		type: 'POST',
-      		data: ({'f':f}),
-      		dataType: 'text'
-   	}).responseText;
+var timeoutFindCliente;
 
-	$("#resClientes ul").html(resp);
+function findCliente(f){
+
+	// Limpa timeout anterior
+	clearTimeout(timeoutFindCliente);
+
+	// Valida se tem pelo menos 2 caracteres
+	if(f.length < 2) {
+		$("#resClientes").css("display","none");
+		$("#resClientes ul").html("");
+		return;
+	}
+
+	// Debounce: aguarda 300ms após parar de digitar
+	timeoutFindCliente = setTimeout(function(){
+		$("#resClientes").css("display","block");
+
+		var resp = $.ajax({
+			url: '<?php echo URL ?>clientes/ajax/fn/getByCpfNome',
+	      		async: false,
+	      		type: 'POST',
+	      		data: ({'f':f}),
+	      		dataType: 'text'
+	   	}).responseText;
+
+		$("#resClientes ul").html(resp);
+	}, 300);
 
 }
 
