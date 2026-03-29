@@ -1752,7 +1752,7 @@ class NegociacoesController extends Zend_Controller_Action {
 
          $arr['parcial'] = true;
          if($this->_getParam('nome')){
-            $arr['nome'] = $this->_getParam('nome');
+            $arr['nome'] = preg_replace('/[^\w]/', '', $this->_getParam('nome'));
          }
           if($this->_getParam('placa')){
             $arr['placa'] = $this->_getParam('placa');

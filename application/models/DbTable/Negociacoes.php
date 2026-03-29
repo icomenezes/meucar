@@ -671,15 +671,15 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 		if(isset($arr['parcial']) && $arr['parcial'] == true){
 
 			if(isset($arr['placa'])){
-				
+
 				$row->where("v.placa LIKE '" . $arr['placa'] . "%' OR v.renavam LIKE '".$arr['placa']."%'");
-			
+
 			}
-			
+
 			if(isset($arr['nome'])){
-			
-				$row->where("c.nome LIKE '".$arr['nome']."%' OR c.cpf LIKE '".$arr['nome']."%'");
-			
+
+				$row->where("c.nome LIKE '".$arr['nome']."%' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') LIKE '".$arr['nome']."%'");
+
 			}
 			
 		}else{
@@ -853,30 +853,30 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 		
 		
 		if(isset($arr['parcial']) && $arr['parcial'] == true){
-			
+
 			if(isset($arr['placa'])){
-				
+
 				$row->where("v.placa LIKE '" . $arr['placa'] . "%' OR v.renavam LIKE '".$arr['placa']."%'");
-			
+
 			}
-			
+
 			if(isset($arr['nome'])){
-			
-				$row->where("c.nome LIKE '".$arr['nome']."%' OR c.cpf LIKE '".$arr['nome']."%'");
-			
+
+				$row->where("c.nome LIKE '".$arr['nome']."%' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') LIKE '".$arr['nome']."%'");
+
 			}
-			
+
 		}else{
-			
+
 			if(isset($arr['placa'])){
-				
+
 				$row->where("v.placa = '" . $arr['placa'] . "' OR v.renavam = '".$arr['placa']."'");
-			
+
 			}
-			
+
 			if(isset($arr['nome'])){
-			
-				$row->where("c.nome = '".$arr['nome']."' OR c.cpf = '".$arr['nome']."' ");
+
+				$row->where("c.nome = '".$arr['nome']."' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') = '".$arr['nome']."' ");
 			
 			}
 			
@@ -1042,22 +1042,22 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 			}
 			
 			if(isset($arr['nome']) && $arr['nome'] != ""){
-			
-				$row->where("c.nome LIKE '".$arr['nome']."%' OR c.cpf LIKE '".$arr['nome']."%'");
-			
+
+				$row->where("c.nome LIKE '".$arr['nome']."%' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') LIKE '".$arr['nome']."%'");
+
 			}
-			
+
 		}else{
-			
+
 			if(isset($arr['placa']) && $arr['placa'] != ""){
-				
+
 				$row->where("v.placa = '" . $arr['placa'] . "' OR v.renavam = '".$arr['placa']."'");
-			
+
 			}
-			
+
 			if(isset($arr['nome']) && $arr['nome'] != ""){
-			
-				$row->where("c.nome = '".$arr['nome']."' OR c.cpf = '".$arr['nome']."' ");
+
+				$row->where("c.nome = '".$arr['nome']."' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') = '".$arr['nome']."' ");
 			
 			}
 			
@@ -1160,7 +1160,7 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 			}
 
 			if(isset($arr['nome']) && $arr['nome'] != ""){
-				$row->where("c.nome LIKE '".$arr['nome']."%' OR c.cpf LIKE '".$arr['nome']."%'");
+				$row->where("c.nome LIKE '".$arr['nome']."%' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') LIKE '".$arr['nome']."%'");
 			}
 
 		}else{
@@ -1170,7 +1170,7 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 			}
 
 			if(isset($arr['nome']) && $arr['nome'] != ""){
-				$row->where("c.nome = '".$arr['nome']."' OR c.cpf = '".$arr['nome']."' ");
+				$row->where("c.nome = '".$arr['nome']."' OR REPLACE(REPLACE(REPLACE(c.cpf, '.', ''), '-', ''), '/', '') = '".$arr['nome']."' ");
 			}
 
 		}
