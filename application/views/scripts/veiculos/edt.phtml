@@ -1519,7 +1519,7 @@ function calculaValores(){
 
 }
 
-if(<?php echo $this->termino;?> == 1){
+if(<?php echo isset($this->termino) && $this->termino ? $this->termino : 0;?> == 1){
 
 	$("#aba_foto").click();
 	$("#msg").html("Selecione a foto de capa e clique em salvar");
@@ -1528,7 +1528,7 @@ if(<?php echo $this->termino;?> == 1){
 
 function abreOpcoes(){
 
-	if(<?php echo $this->veiculo['pf_pj']?> == 0){
+	if(<?php echo isset($this->veiculo['pf_pj']) ? $this->veiculo['pf_pj'] : 0;?> == 0){
 
 		$("#pf").click();
 
@@ -1538,7 +1538,7 @@ function abreOpcoes(){
 	
 	}
 	
-	if(<?php echo $this->veiculo['gnv']?> == 0){
+	if(<?php echo isset($this->veiculo['gnv']) ? $this->veiculo['gnv'] : 0;?> == 0){
 	
 		$("#gnv_nao").click();
 	
@@ -1546,7 +1546,7 @@ function abreOpcoes(){
 	
 		$("#gnv_sim").click();
 		
-		if(<?php echo $this->veiculo['doc_gnv']?> == 0){
+		if(<?php echo isset($this->veiculo['doc_gnv']) ? $this->veiculo['doc_gnv'] : 0;?> == 0){
 		
 			$("#doc_gnv_0").click();
 		
@@ -1558,7 +1558,7 @@ function abreOpcoes(){
 	
 	}
 	
-	if(<?php echo $this->veiculo['quitado_leasing']?> == 0){
+	if(<?php echo isset($this->veiculo['quitado_leasing']) ? $this->veiculo['quitado_leasing'] : 0;?> == 0){
 		
 		$("#leasing_nao").click();
 		
