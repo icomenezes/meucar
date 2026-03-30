@@ -3,6 +3,11 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 
+    protected function _initTimezone()
+    {
+        date_default_timezone_set('America/Sao_Paulo');
+    }
+
     protected function _initDbSqlMode()
     {
         $this->bootstrap('db');
