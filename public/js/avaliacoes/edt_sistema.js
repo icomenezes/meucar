@@ -6,7 +6,7 @@ $(document).ready(function(){
 
         $.ajax({
 
-            url: "https://sistemameucar.com.br/apps/busca-avaliacao/app_avaliacoes/true",
+            url: "https://meucar.trsystem.com.br/apps/busca-avaliacao/app_avaliacoes/true",
             type: "POST",
             async: true,
             data: ({"id": getParamUrl('id')}),
@@ -35,19 +35,19 @@ $(document).ready(function(){
 
  ///////////////////////////RESOLVE FOTOS//////////////////////////////////
                 if(valor.doc_carro){
-                    $("#doc_carro").attr("src", "https://sistemameucar.com.br/"+valor.doc_carro);
+                    $("#doc_carro").attr("src", "https://meucar.trsystem.com.br/"+valor.doc_carro);
                 }
                 if(valor.foto_1){
-                    $("#foto_1").attr("src", "https://sistemameucar.com.br/"+valor.foto_1);
+                    $("#foto_1").attr("src", "https://meucar.trsystem.com.br/"+valor.foto_1);
                 }
                 if(valor.foto_2){
-                    $("#foto_2").attr("src", "https://sistemameucar.com.br/"+valor.foto_2);
+                    $("#foto_2").attr("src", "https://meucar.trsystem.com.br/"+valor.foto_2);
                 }
                 if(valor.foto_3){
-                    $("#foto_3").attr("src", "https://sistemameucar.com.br/"+valor.foto_3);
+                    $("#foto_3").attr("src", "https://meucar.trsystem.com.br/"+valor.foto_3);
                 }
                 if(valor.foto_4){
-                    $("#foto_4").attr("src", "https://sistemameucar.com.br/"+valor.foto_4);
+                    $("#foto_4").attr("src", "https://meucar.trsystem.com.br/"+valor.foto_4);
                 }
 
  ///////////////////////////FIM RESOLVE FOTOS////////////////////////////////
@@ -396,7 +396,7 @@ function previewFoto(id){
 
     if($("#"+id).attr("src") != "/images/avaliacoes/doc_carro.jpg" && $("#"+id).attr("src") != "/images/avaliacoes/foto.jpg" && $("#"+id).attr("src") != ""){
 
-        window.open("https://sistemameucar.com.br/avaliacoes/foto/path/"+$("#"+id).attr("src").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-"), '640px', '800px');
+        window.open("https://meucar.trsystem.com.br/avaliacoes/foto/path/"+$("#"+id).attr("src").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-").replace("/","-"), '640px', '800px');
 
         ///$("#preview").css("display", "block");
         ///$("#preview > img").attr("src",  $("#"+id).attr("src"));
@@ -431,7 +431,7 @@ function anviaAprovacao(val){
 
         $.ajax({
 
-            url: "https://sistemameucar.com.br/apps/aprova-avaliacao-sistema/app_avaliacoes/true",
+            url: "https://meucar.trsystem.com.br/apps/aprova-avaliacao-sistema/app_avaliacoes/true",
             type: "POST",
             async: true,
             data: ({"login": storage.getItem('login'), "senha": storage.getItem('senha'), "situacao": val, "id": $("#id_upload").val(), "observacoes_gerencia": $("#observacoes_gerencia").val()}),

@@ -141,7 +141,7 @@ jQuery.fn.calendario = function(options){
 					} else {
 						$(options.target).html(dia+'/'+mes+'/'+ano);
 					}
-			////Funciona só na tela https://sistemameucar.com.br/clientes/add-cliente-fluxo-auto-salvar/id/xxxxxxx //////
+			////Funciona só na tela https://meucar.trsystem.com.br/clientes/add-cliente-fluxo-auto-salvar/id/xxxxxxx //////
 					if(options.funcao){
 						agendaContato(false);
 					}

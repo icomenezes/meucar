@@ -527,7 +527,7 @@ function getParametros(){
 
     $.ajax({
 
-        url: "https://sistemameucar.com.br/avaliacoes/busca-parametros",
+        url: "https://meucar.trsystem.com.br/avaliacoes/busca-parametros",
         type: "POST",
         async: false,
         dataType: "TEXT",

@@ -22,7 +22,7 @@ $("#btn_logar").click(function(){
 
             $.ajax({
 
-                url: "https://sistemameucar.com.br/apps/login-avaliacar/app_avaliacoes/true",
+                url: "https://meucar.trsystem.com.br/apps/login-avaliacar/app_avaliacoes/true",
                 type: "POST",
                 async: false,
                 data: ({"login": login, "senha": senha}),
@@ -80,7 +80,7 @@ $(document).ready(function(){
 
         $.ajax({
 
-            url: "https://sistemameucar.com.br/apps/login-avaliacar/app_avaliacoes/true",
+            url: "https://meucar.trsystem.com.br/apps/login-avaliacar/app_avaliacoes/true",
             type: "POST",
             async: false,
             data: ({"login": storage.getItem('login'), "senha": storage.getItem('senha')}),

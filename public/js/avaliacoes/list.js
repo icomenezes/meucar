@@ -5,7 +5,7 @@ $(document).ready(function(){
 
     $.ajax({
 
-        url: "https://sistemameucar.com.br/apps/lista-avaliacoes/app_avaliacoes/true",
+        url: "https://meucar.trsystem.com.br/apps/lista-avaliacoes/app_avaliacoes/true",
         type: "POST",
         async: true,
         dataType: "TEXT",

@@ -15,7 +15,7 @@ $("#atualizaFIPE").click(function(){
     var strValuesParametros = "";
 
     var parametros = $.ajax({
-        url: "https://sistemameucar.com.br/apps/atualiza-parametros/app_avaliacoes/true",
+        url: "https://meucar.trsystem.com.br/apps/atualiza-parametros/app_avaliacoes/true",
         async: false,
         type: 'POST',
         dataType: 'json'
@@ -30,7 +30,7 @@ $("#atualizaFIPE").click(function(){
     strValuesParametros = strValuesParametros.substring(0, strValuesParametros.length-2);
 
     var modelos = $.ajax({
-        url: "https://sistemameucar.com.br/fipe/modelos-fipe/app/true",
+        url: "https://meucar.trsystem.com.br/fipe/modelos-fipe/app/true",
         async: false,
         type: 'POST',
         dataType: 'json'
@@ -43,7 +43,7 @@ $("#atualizaFIPE").click(function(){
     strModelos = strModelos.substring(0, strModelos.length-1)+";";
 
     var anoModelos = $.ajax({
-        url: "https://sistemameucar.com.br/fipe/anos-modelos-fipe/app/true",
+        url: "https://meucar.trsystem.com.br/fipe/anos-modelos-fipe/app/true",
         async: false,
         type: 'POST',
         dataType: 'json'

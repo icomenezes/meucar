@@ -36,7 +36,7 @@ function upload(idForm){
    // /*
     $.ajax({
 
-        url: "https://sistemameucar.com.br/apps/add-avaliacao",
+        url: "https://meucar.trsystem.com.br/apps/add-avaliacao",
         type: "POST",
         data: fd,
         async: true,
