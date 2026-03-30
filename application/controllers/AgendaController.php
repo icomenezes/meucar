@@ -613,8 +613,8 @@ class AgendaController extends Zend_Controller_Action {
 						<b>Placa</b>: " . $negociacao['placa'] . "<br>
 						<b>Modelo</b>: " . $negociacao['modelo']."<br>
 						<b>Ano</b>: ".$negociacao['ano_modelo']."<br>
-						<b>Valor</b>: ".money_format("%i",$negociacao['valor_venda'])."<br>
-						<b>Valor Aquisi&ccedil;&atilde;o</b>: ".money_format("%i",$negociacao['valor_aquisicao'])."
+						<b>Valor</b>: R$ ".number_format($negociacao['valor_venda'],2,',','.')."<br>
+						<b>Valor Aquisi&ccedil;&atilde;o</b>: R$ ".number_format($negociacao['valor_aquisicao'],2,',','.')."
 					</td>
 					
 					<td onclick=$url>
