@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(findstr:*)",
-      "Bash(grep -i \"window\\\\|javascript\\\\|$\\\\|val\\(\\)\")"
+      "Bash(grep -i \"window\\\\|javascript\\\\|$\\\\|val\\(\\)\")",
+      "Bash(grep -n \"foreach\\($this->\" c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)"
     ]
   }
 }
