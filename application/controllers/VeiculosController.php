@@ -3450,7 +3450,7 @@ class VeiculosController extends Zend_Controller_Action
 				}
 				
 				//CAPA
-				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos);
+				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos) ?: array();
 						
 				foreach($arrFotosVeiculo as $fotosVeiculos){
 						
@@ -3770,11 +3770,11 @@ class VeiculosController extends Zend_Controller_Action
 		$arrVeiculo = $dbVeiculos->getVeiculoSelecionadoCompleto($this->_getParam('id'));
 		$id= $arrVeiculo[0]['id_modelo'];
 		$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($this->_getParam('id'));
-		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais();
+		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais() ?: array();
 		$arrOpcionaisVeiculo = $dbOpcionaisVeiculos->getOpcionaisVeiculoSelecionado($this->_getParam('id'));
 		$arrAnexos = $dbAnexosVeiculos->getAnexo($this->_getParam('id'));
 		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($this->_getParam('id'));
-		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']);
+		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']) ?: array();
 		$arrPendencias = $dbPendencias->getPendencias($this->_getParam('id'));
 		$arrModelo = $dbModelo->fetchAll("id = ".$id);
 		
@@ -4178,7 +4178,7 @@ class VeiculosController extends Zend_Controller_Action
 				}
 				
 				//CAPA
-				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos);
+				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos) ?: array();
 					
 				foreach($arrFotosVeiculo as $fotosVeiculos){
 						
@@ -4565,13 +4565,13 @@ class VeiculosController extends Zend_Controller_Action
 		$id= $arrVeiculo[0]['id_modelo'];
 
 	
-		$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos);
-		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais();
-		$arrOpcionaisVeiculo = $dbOpcionaisVeiculos->getOpcionaisVeiculoSelecionado($idVeiculos);
-		$arrAnexos = $dbAnexosVeiculos->getAnexo($idVeiculos);
-		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos);
-		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']);
-		$arrPendencias = $dbPendencias->getPendencias($idVeiculos);
+		$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos) ?: array();
+		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais() ?: array();
+		$arrOpcionaisVeiculo = $dbOpcionaisVeiculos->getOpcionaisVeiculoSelecionado($idVeiculos) ?: array();
+		$arrAnexos = $dbAnexosVeiculos->getAnexo($idVeiculos) ?: array();
+		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos) ?: array();
+		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']) ?: array();
+		$arrPendencias = $dbPendencias->getPendencias($idVeiculos) ?: array();
 		// $arrModelo = $dbModelo->fetchAll("id = ".$id);
         $arrModelo = $id ? $dbModelo->fetchAll("id = ".$id) : [];
 
@@ -4980,7 +4980,7 @@ class VeiculosController extends Zend_Controller_Action
 				}
 				
 				//CAPA
-				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos);
+				$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos) ?: array();
 					
 				foreach($arrFotosVeiculo as $fotosVeiculos){
 						
@@ -5367,13 +5367,13 @@ class VeiculosController extends Zend_Controller_Action
 		$id= $arrVeiculo[0]['id_modelo'];
 
 	
-		$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos);
-		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais();
-		$arrOpcionaisVeiculo = $dbOpcionaisVeiculos->getOpcionaisVeiculoSelecionado($idVeiculos);
-		$arrAnexos = $dbAnexosVeiculos->getAnexo($idVeiculos);
-		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos);
-		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']);
-		$arrPendencias = $dbPendencias->getPendencias($idVeiculos);
+		$arrFotosVeiculo = $dbFotosVeiculos->getFotosVeiculoSelecionado($idVeiculos) ?: array();
+		$arrOpcionaisVeiculos = $dbOpcionaisVeiculos->getOpcionais() ?: array();
+		$arrOpcionaisVeiculo = $dbOpcionaisVeiculos->getOpcionaisVeiculoSelecionado($idVeiculos) ?: array();
+		$arrAnexos = $dbAnexosVeiculos->getAnexo($idVeiculos) ?: array();
+		$arrDespesasVeiculos = $dbDespesasVeiculos->getDespesas($idVeiculos) ?: array();
+		$arrFornecedores = $dbFornecedores->getFornecedoresPorEmpresa($_SESSION['sessionUser']['id_empresa']) ?: array();
+		$arrPendencias = $dbPendencias->getPendencias($idVeiculos) ?: array();
 		$arrModelo = $dbModelo->fetchAll("id = ".$id);
 		
 		
