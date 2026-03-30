@@ -3,7 +3,9 @@
     "allow": [
       "Bash(findstr:*)",
       "Bash(grep -i \"window\\\\|javascript\\\\|$\\\\|val\\(\\)\")",
-      "Bash(grep -n \"foreach\\($this->\" c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)"
+      "Bash(grep -n \"foreach\\($this->\" c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)",
+      "Bash(php -l c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)",
+      "Bash(grep -n \"^[[:space:]]*}[[:space:]]*$\" c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)"
     ]
   }
 }

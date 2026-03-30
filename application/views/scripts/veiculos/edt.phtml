@@ -725,7 +725,6 @@
 	$contId=0;
 	$capa="";
 
-	if(is_array($this->fotos)){
 	foreach($this->fotos as $chave=>$foto){
 		
 		if($foto['capa'] == 1 || $capa == "" && $this->fotos[$chave+1]['id'] == "" ){
@@ -750,7 +749,7 @@
 		$cont++;
 		
 	}
-	}
+
 
 
 	if($cont <= 9){
@@ -1065,7 +1064,7 @@
 	
 
 	<?php
-		if(is_array($this->anexos)){
+
 		foreach($this->anexos as $anexo){
 ?>	
 			<tr id="anexo_<?php echo $anexo['id'];?>">
@@ -1092,8 +1091,6 @@
 		<tbody id="table_anexo">
 			<tr id='anexo_line_0'><td></td><td></td><td><input type='button' id='btn_0' name='btn_0' class="btn-mini btn-include" value='Add' onclick='adicionarAnexo()'></td></tr>
 		</tbody>
-	}
-	}
 	</table>
 </div>
 
@@ -2899,7 +2896,6 @@ $('#data_inicio_preparacao').focus(function(){
 
 
 <?php
-	if(is_array($this->despesas)){
 	foreach($this->despesas as $despesa){
 
 		echo "$('#Ddata_".$despesa['id']."').mask('99/99/9999');
@@ -2909,7 +2905,6 @@ $('#data_inicio_preparacao').focus(function(){
 				  });
 		      });";
 
-	}
 	}
 ?>
 
