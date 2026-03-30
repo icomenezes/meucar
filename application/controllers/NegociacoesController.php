@@ -1542,7 +1542,7 @@ class NegociacoesController extends Zend_Controller_Action {
 				$arrIcarros = $this->getEstoqueIcarros();
 				$arrVeiculos = $dbVeiculos->getVeiculoEstoque($_POST['id_veiculo']);
 				
-				if($arrIcarros){
+				if(is_array($arrIcarros) && count($arrIcarros) > 0){
             foreach($arrIcarros as $key=>$arrI){
 				
 					if(strtolower(substr($arrVeiculos[0]['placa'],0,3).substr($arrVeiculos[0]['placa'],4)) == strtolower($arrI['placa'])){
