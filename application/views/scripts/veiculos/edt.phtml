@@ -705,8 +705,8 @@
 	?>
 
 
-	<?php 
-	if($this->fotos) {
+	<?php
+	if(is_array($this->fotos)) {
 	?>
 	<table class="table" style="clear:both;">
 	<thead>
@@ -1065,7 +1065,7 @@
 
 	<?php
 
-		foreach($this->anexos as $anexo){
+		if(is_array($this->anexos)){ foreach($this->anexos as $anexo){
 ?>	
 			<tr id="anexo_<?php echo $anexo['id'];?>">
 				<td><a href="/<?php echo $anexo['path'];?>"><?php echo $anexo['descricao'];?></a></td>
@@ -1074,8 +1074,9 @@
 <?php
 			
 		}
-	?>		
-	
+	}
+	?>
+
 		</tbody>
 	</table>
 
@@ -1114,11 +1115,11 @@
 	
 	$cont=1;
 	
-	foreach($this->opcionais as $opcionais){
+	if(is_array($this->opcionais)){ foreach($this->opcionais as $opcionais){
 	
 		$achou = true;
 	
-		foreach($this->opcionaisVeiculo as $opcional){
+		if(is_array($this->opcionaisVeiculo)){ foreach($this->opcionaisVeiculo as $opcional){
 		
 			if($opcionais['id'] == $opcional['id_opcional']){
 		
@@ -1164,6 +1165,8 @@
 		$cont++;
 		
 	}
+	}
+	}
 
 	echo $strOpcionais.="</tr></table>";
 
@@ -1200,8 +1203,8 @@
 		
 		<?php
 		}
-		
-		foreach($this->despesas as $despesa){
+
+		if(is_array($this->despesas)){ foreach($this->despesas as $despesa){
 		
 		$despesa['valor'] = str_replace(".",",",$despesa['valor']);	
 		
@@ -1213,7 +1216,7 @@
 				<td style="width:30%;"><select id="Dfornecedor_<?php echo $despesa['id'];?>" name="Dfornecedor_<?php echo $despesa['id'];?>" class="text" style="width:70%;" value="" onFocus="buscaFornecedores(<?php echo $_SESSION['sessionUser']['id_empresa'];?>,this.id)">
 						<option value="">Selecione</option>
 					<?php
-					foreach($this->fornecedores as $fornecedor){
+					if(is_array($this->fornecedores)){ foreach($this->fornecedores as $fornecedor){
 					
 						if($fornecedor['id'] == $despesa['id_fornecedor']){
 						
@@ -1229,8 +1232,9 @@
 						<option value="<?php echo $fornecedor['id']?>" <?php echo $sel?>><?php echo $fornecedor['razao_social']?></option>
 					<?php
 					}
+					}
 					?>
-						
+
 				</select>
 					<!----<img src="/images/plus.png" style="margin-left:10px;" onclick="javascript:window.open('<?php echo URL ?>fornecedores/add')" />---->
 					<input type="button" id="btnn" class="btn-mini btn-include" value="Add" onclick="javascript:window.open('<?php echo URL ?>fornecedores/add')"/>
@@ -1241,10 +1245,11 @@
 				<td style="width:20%;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeleteDespesa(<?php echo $despesa['id'];?>);"/><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adddespesa();calculaValordespesas();"></td>
 			</tr>
 
-	<?php	
+	<?php
 		}
-	?>		
-		
+	}
+	?>
+
 		</tbody>
 	</table>
 		
@@ -1269,21 +1274,22 @@
 		</thead>
 		<tbody id="pendencia">
 			<?php
-			if(!$this->pendencias){
+			if(!is_array($this->pendencias) || count($this->pendencias) == 0){
 			?>
 				<tr id="pendencia_line_0">
 					<td></td><td></td><td><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="adicionarPendencia()"></td>
 				</tr>
 			<?php
 			}
-			foreach($this->pendencias as $pendencia){
+			if(is_array($this->pendencias)){ foreach($this->pendencias as $pendencia){
 			?>
 				<tr id="pendencia_line_0">
 					<td style="width:10%;"><input type="text" id="Pdata_<?php echo $pendencia['id'];?>" name="Pdata_<?php echo $pendencia['id'];?>" class="text" value="<?php echo implode("/",array_reverse(explode("-",$pendencia['data'])));?>" onload="mascaraData();"/></td>
 					<td><input type="text" id="Pdescricao_<?php echo $pendencia['id'];?>" name="Pdescricao_<?php echo $pendencia['id'];?>" class="text" value="<?php echo $pendencia['descricao'];?>" /></td>
 					<td style="width:20%;"><input type="button" class="btn-small btn-del" id="deleta" value="Deletar" onclick="confirmaDeletePendencia(<?php echo $pendencia['id'];?>);"/><input type="button" id="btn_0" name="btn_0" class="btn-mini btn-include" value="Add" onclick="addPendencia()"></td>
 				</tr>
-			<?php	
+			<?php
+			}
 			}
 			?>
 		</tbody>
@@ -2896,7 +2902,7 @@ $('#data_inicio_preparacao').focus(function(){
 
 
 <?php
-	foreach($this->despesas as $despesa){
+	if(is_array($this->despesas)){ foreach($this->despesas as $despesa){
 
 		echo "$('#Ddata_".$despesa['id']."').mask('99/99/9999');
 			  $('#Ddata_".$despesa['id']."').focus(function(){
@@ -2905,6 +2911,7 @@ $('#data_inicio_preparacao').focus(function(){
 				  });
 		      });";
 
+	}
 	}
 ?>
 
