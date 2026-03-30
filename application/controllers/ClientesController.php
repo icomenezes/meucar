@@ -2423,7 +2423,12 @@ class ClientesController extends Zend_Controller_Action
 		}
 
 		$this->view->clientes = $arrClientes;
-	
+
+		if(!empty($_SESSION['mensagem_clientes'])){
+			$this->view->mensagem = $_SESSION['mensagem_clientes'];
+			unset($_SESSION['mensagem_clientes']);
+		}
+
 	}
 
 	/*
@@ -2445,13 +2450,25 @@ class ClientesController extends Zend_Controller_Action
 	public function delAction(){
 
 		$this->validaAcesso('gerenciar_clientes');
-	
+
+		$id = (int) $this->_getParam('id');
+
 		$dbClientes = new Application_Model_DbTable_Clientes();
-		
-		$dbClientes->delete("id = " . $this->_getParam('id'));
-		
+
+		$totalNegociacoes = $dbClientes->getAdapter()->fetchOne(
+			"SELECT COUNT(*) FROM negociacoes WHERE id_cliente = ?", $id
+		);
+
+		if($totalNegociacoes > 0){
+			$_SESSION['mensagem_clientes'] = "Este cliente não pode ser excluído pois possui negociações vinculadas.";
+			$this->_helper->redirector->gotoUrl("clientes/lista");
+			return;
+		}
+
+		$dbClientes->delete("id = " . $id);
+
 		$this->_helper->redirector->gotoUrl("clientes/lista");
-	
+
 	}
 	
 	public function editarAction(){
