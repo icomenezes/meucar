@@ -1239,7 +1239,7 @@ class NegociacoesController extends Zend_Controller_Action {
          
 		 }
 
-         if(isset($_POST['id_vendedor'])){
+         if(isset($_POST['id_vendedor']) && !empty($_POST['id_vendedor'])){
             $arrDados['id_vendedor'] = $_POST['id_vendedor'];
          }
          if(isset($_POST['data_abertura'])){
