@@ -1575,7 +1575,7 @@ class IndexController extends Zend_Controller_Action {
 			$config = array(
 				'auth' => 'login',
 				'username' => 'administrador@sistemameucar.provisorio.ws',
-				'password' => 'Sistema01_Sistema01',
+				'password' => 'Icomenezes@2025',
 				'port' => '587'
 			);
 
