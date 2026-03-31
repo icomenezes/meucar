@@ -577,11 +577,16 @@ class NegociacoesController extends Zend_Controller_Action {
 
       unset($dadosNegociacao['origem']);
 
+      if (empty($dadosNegociacao['id_cliente'])) {
+         echo json_encode(array('erro' => 'Cliente não selecionado.'));
+         return;
+      }
+
       $idNegociacao = $dbNegociacoes->insert($dadosNegociacao);
-       
+
        if($dadosNegociacao['id_cliente'] && $_POST['origem']){
          $dbClientes = new Application_Model_DbTable_Clientes();
-         $dbClientes->edt($dadosNegociacao['id_cliente'], array('origem'=>$_POST['origem'])); 
+         $dbClientes->edt($dadosNegociacao['id_cliente'], array('origem'=>$_POST['origem']));
        }
 
 

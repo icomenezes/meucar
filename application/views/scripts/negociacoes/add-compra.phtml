@@ -753,12 +753,20 @@ function validaCampo(){
 	var msg = "";
 	var erro = false;
 
-	if($("#origem").val() == ""){
-		
+	if($("#id_cliente").val() == ""){
+
 		erro = true;
-		
+
+		msg += "<br>Na aba Cliente nenhum cliente foi selecionado.";
+
+	}
+
+	if($("#origem").val() == ""){
+
+		erro = true;
+
 		msg += "<br>Na aba Cliente o campo origem deve ser preenchido.";
-	
+
 	}
 	
 	if($("#valor_venda").val() == ""){
