@@ -3,59 +3,40 @@ if(!$this->mensagem){
 ?>
 
 <style type="text/css">
-	.show{
-		margin-top: 100px;
-	}
-
-	.bg-primary{
-		color: #FFF;
-	}
-	.disabled{
-		cursor:not-allowed;
-	}
+	.disabled { cursor: not-allowed; }
 </style>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-		<div class="col-lg-4 col-sm-0 col-0 show">
-			<div class="card border-secondary mb-3">
-				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
-				<div class="card-body">
-				<form method="post" action="/index/esqueci-senha" id="esqueci_senha">
-					<div class="form-group">
-					  	<div class="form-floating mb-3">
-					    	<input type="text" class="form-control" id="user"  name="user" placeholder="Login">
-					   	 	<label for="user">Login</label>
-					  	</div>
-					</div>
-				    <div class="form-group">
-					  	<div class="form-floating mb-3">
-					    	<input type="email" class="form-control" id="email"  name="email" placeholder="E-mail">
-					   	 	<label for="email">E-mail</label>
-					  	</div>
-					</div>
-					<div class="invalid-feedback msg">O login e e-mail deve ser informado.</div>
-					<br>
-					<?php if ($this->recaptchaEnabled): ?>
-					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
-					</center>
-					<br>
-					<div class="d-grid gap-2 disabled">
-					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
-					</div>
-					<?php else: ?>
-					<div class="d-grid gap-2">
-					  	<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Entrar</button>
-					</div>
-					<?php endif; ?>
-				</form>
-				</div>
-			</div>
+<p style="font-size:13px; color:#666; margin-bottom:20px;">Informe seu login e e-mail cadastrado para receber o link de redefinição.</p>
+
+<div>
+	<form method="post" action="/index/esqueci-senha" id="esqueci_senha">
+		<div class="form-floating mb-3">
+			<input type="text" class="form-control" id="user" name="user" placeholder="Login">
+			<label for="user">Login</label>
 		</div>
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-	</div>
+		<div class="form-floating mb-3">
+			<input type="email" class="form-control" id="email" name="email" placeholder="E-mail">
+			<label for="email">E-mail</label>
+		</div>
+		<div class="invalid-feedback msg">O login e e-mail devem ser informados.</div>
+		<br>
+		<?php if ($this->recaptchaEnabled): ?>
+		<center>
+			<div class="g-recaptcha" data-callback="enableBtn" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
+		</center>
+		<br>
+		<div class="d-grid gap-2 disabled">
+			<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Enviar</button>
+		</div>
+		<?php else: ?>
+		<div class="d-grid gap-2">
+			<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Enviar</button>
+		</div>
+		<?php endif; ?>
+		<div class="d-grid gap-2" style="margin-top:12px;">
+			<a href="/index/login-v2" class="btn btn-link" style="font-size:13px;">Voltar ao login</a>
+		</div>
+	</form>
 </div>
 
 <script type="text/javascript">
