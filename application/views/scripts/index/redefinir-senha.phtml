@@ -33,70 +33,42 @@ if($this->form){
 
 </style>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-		<div class="col-lg-4 col-sm-0 col-0 show">
-			<div class="card border-secondary mb-3">
-				<!-- <div class="card-header bg-primary "><strong>Login</strong></div> -->
-				<div class="card-body">
-				<form method="post" action="/index/redefinir-senha" id="salvar_senha">
-					<div class="form-group">
-					  	<div class="form-floating mb-3">
-					    	<input type="password" class="form-control" id="senha1"  name="senha1" placeholder="Nova senha" onkeyup="verificaSenha();">
-					   	 	<label for="senha1">Nova senha</label>
-					  	</div>
-					</div>
-				    <div class="form-group">
-					  	<div class="form-floating mb-3">
-					    	<input type="password" class="form-control" id="senha2"  name="senha2" placeholder="Repita nova senha" onkeyup="verificaSenha();">
-					   	 	<label for="senha2">Repita nova senha</label>
-					  	</div>
-					</div>
-					<div class="form-group">
-						<div class="form-check form-switch">
-					        <input class="form-check-input" type="checkbox" id="verSenha" >
-					        <label class="form-check-label" for="verSenha">Ver senha</label>
-					    </div>
-					</div>
-					<br>
-					<div class="row">
-						<div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="maiuscula">Letra maiúscula</div>
-					    </div>
-					    <div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="minuscula">Letra minúscula</div>
-					    </div>
-					    <div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="numero">Número</div>
-					    </div>
-					   	<div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="caracteres">Caracter especial</div>
-					    </div>
-					    <div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="minimo_caracteres">Mínimo 8 caracteres</div>
-					    </div>
-					     <div class="col-lg-6 col-sm-6 col-6">
-						 	<div class="form-check erro" id="iguais">Repetir senha</div>
-					    </div>
-					</div>
-					<br>
-					<?php if ($this->recaptchaEnabled): ?>
-					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
-					</center>
-					<br>
-					<?php endif; ?>
-					<input type="hidden" name="not-secret" value="<?php echo $_GET['u']; ?>">
-					<div class="d-grid gap-2 disabled">
-					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="salvarButton">Salvar</button>
-					</div>
-				</form>
-				</div>
-			</div>
+<div>
+	<form method="post" action="/index/redefinir-senha" id="salvar_senha">
+		<div class="form-floating mb-3">
+			<input type="password" class="form-control" id="senha1" name="senha1" placeholder="Nova senha" onkeyup="verificaSenha();">
+			<label for="senha1">Nova senha</label>
 		</div>
-		<div class="col-lg-4 col-sm-0 col-0"></div>
-	</div>
+		<div class="form-floating mb-3">
+			<input type="password" class="form-control" id="senha2" name="senha2" placeholder="Repita nova senha" onkeyup="verificaSenha();">
+			<label for="senha2">Repita nova senha</label>
+		</div>
+		<div class="form-check form-switch mb-3">
+			<input class="form-check-input" type="checkbox" id="verSenha">
+			<label class="form-check-label" for="verSenha">Ver senha</label>
+		</div>
+		<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; margin-bottom:16px; font-size:13px;">
+			<div class="erro" id="maiuscula">Letra maiúscula</div>
+			<div class="erro" id="minuscula">Letra minúscula</div>
+			<div class="erro" id="numero">Número</div>
+			<div class="erro" id="caracteres">Caracter especial</div>
+			<div class="erro" id="minimo_caracteres">Mínimo 8 caracteres</div>
+			<div class="erro" id="iguais">Senhas iguais</div>
+		</div>
+		<?php if ($this->recaptchaEnabled): ?>
+		<center>
+			<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
+		</center>
+		<br>
+		<?php endif; ?>
+		<input type="hidden" name="not-secret" value="<?php echo $_GET['u']; ?>">
+		<div class="d-grid gap-2">
+			<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="salvarButton">Salvar senha</button>
+		</div>
+		<div class="d-grid gap-2" style="margin-top:12px;">
+			<a href="/index/login-v2" class="btn btn-link" style="font-size:13px;">Voltar ao login</a>
+		</div>
+	</form>
 </div>
 
 <script type="text/javascript">
