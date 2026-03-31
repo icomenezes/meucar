@@ -1588,13 +1588,17 @@ class IndexController extends Zend_Controller_Action {
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 
+			require_once 'Classes/TelegramAPI.php';
+
 			try{
 				if($attach){
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
 				}
-				return $mail->send($transport);
+				$result = $mail->send($transport);
+				TelegramAPI::send("✅ <b>Email redefinição enviado</b>\nPara: <code>{$email}</code>\nLogin: <code>{$login}</code>\nSMTP: smtp.sistemameucar.provisorio.ws", true);
+				return $result;
 			}catch(Exception $e){
-				//echo $e->getMessage();
+				TelegramAPI::send("❌ <b>Falha ao enviar email redefinição</b>\nPara: <code>{$email}</code>\nLogin: <code>{$login}</code>\nErro: <code>" . $e->getMessage() . "</code>\nSMTP: smtp.sistemameucar.provisorio.ws", true);
 			}
 
 	}
