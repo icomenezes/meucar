@@ -222,6 +222,8 @@ class AgendaController extends Zend_Controller_Action {
       $layout = $this->_helper->layout();
       $layout->setLayout('no-layout');
 
+      if(empty($_SESSION['sessionUser']['id_empresa'])) return;
+
       $idUsuario = $_SESSION['sessionUser']['id'];
       $idPerfil = $_SESSION['sessionUser']['id_perfil'];
       $idEmpresa = $_SESSION['sessionUser']['id_empresa'];
