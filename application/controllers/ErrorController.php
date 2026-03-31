@@ -63,16 +63,16 @@ class ErrorController extends Zend_Controller_Action
             try {
                 require_once 'Classes/TelegramAPI.php';
 
-                $msg  = "🚨 <b>ERRO - Sistema Meu Car</b>\n\n";
-                $msg .= "📅 <b>Data/Hora:</b> " . date('d/m/Y H:i:s') . "\n";
-                $msg .= "👤 <b>Usuário:</b> " . (isset($_SESSION['sessionUser']['nome']) ? $_SESSION['sessionUser']['nome'] : 'Não logado') . "\n";
-                $msg .= "🏢 <b>Empresa:</b> " . (isset($_SESSION['sessionUser']['nome_fantasia']) ? $_SESSION['sessionUser']['nome_fantasia'] : '') . "\n";
-                $msg .= "🔗 <b>URL:</b> " . $_SERVER['REQUEST_URI'] . "\n";
-                $msg .= "❌ <b>Mensagem:</b> " . $errors->exception->getMessage() . "\n";
-                $msg .= "📄 <b>Arquivo:</b> " . basename($errors->exception->getFile()) . ":" . $errors->exception->getLine() . "\n";
+                $msg  = "🚨 ERRO - Sistema Meu Car</b>\n\n";
+                $msg .= "📅 Data/Hora: " . date('d/m/Y H:i:s') . "\n";
+                $msg .= "👤 Usuário: " . (isset($_SESSION['sessionUser']['nome']) ? $_SESSION['sessionUser']['nome'] : 'Não logado') . "\n";
+                $msg .= "🏢 Empresa: " . (isset($_SESSION['sessionUser']['nome_fantasia']) ? $_SESSION['sessionUser']['nome_fantasia'] : '') . "\n";
+                $msg .= "🔗 URL: " . $_SERVER['REQUEST_URI'] . "\n";
+                $msg .= "❌ Mensagem: " . $errors->exception->getMessage() . "\n";
+                $msg .= "📄 Arquivo: " . basename($errors->exception->getFile()) . ":" . $errors->exception->getLine() . "\n";
 
                 $traceLinhas = array_slice(explode("\n", $errors->exception->getTraceAsString()), 0, 8);
-                $msg .= "\n<b>Stack Trace:</b>\n<pre>" . implode("\n", $traceLinhas) . "</pre>";
+                $msg .= "\nStack Trace:\n" . implode("\n", $traceLinhas) . "";
 
                 TelegramAPI::send($msg, true);
             } catch (Exception $e) {
@@ -141,7 +141,7 @@ class ErrorController extends Zend_Controller_Action
             }
 
             $traceLinhas = array_slice(explode("\n", $errorData['trace']), 0, 8);
-            $msg .= "\n<b>Stack Trace:</b>\n<pre>" . implode("\n", $traceLinhas) . "</pre>";
+            $msg .= "\n<b>Stack Trace:</b>\n" . implode("\n", $traceLinhas) . "</pre>";
 
             $result = TelegramAPI::send($msg, false);
 
