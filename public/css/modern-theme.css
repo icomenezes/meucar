@@ -87,7 +87,7 @@ body.dark-mode .table { background: var(--card-bg) !important; box-shadow: var(-
 body.dark-mode .table tr th { background: #7b1f16 !important; }
 body.dark-mode .table tr td { border-bottom-color: var(--border) !important; color: var(--text) !important; }
 body.dark-mode .table tr.zebra td { background: var(--table-row) !important; }
-body.dark-mode .table tr:hover td { background: var(--table-hover) !important; }
+/* body.dark-mode .table tr:hover td { background: var(--table-hover) !important; } */
 body.dark-mode .table tr td[colspan] { background: #1c2030 !important; color: #e87c73 !important; }
 
 /* botões dark */
