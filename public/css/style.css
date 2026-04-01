@@ -910,6 +910,20 @@ body {
 	color:#5555AA;
 }
 
+.table tr:hover{
+		background-color:#EEE;
+		
+	}
+
+	.table tr td:hover{
+		background-color:#DDD;
+		
+	}
+	
+	.table tr td{
+		font-size:11px;
+	}
+
 .table .selecionado{
 	font-weight:bold;
 	background-color:#DD4444;
