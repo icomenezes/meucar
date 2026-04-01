@@ -114,6 +114,11 @@ class NovosRelatoriosController extends Zend_Controller_Action
 
 		$layout = $this->_helper->layout();
 		$layout->setLayout('no-layout');
+
+		if(empty($_SESSION['sessionUser']['id_empresa'])){
+			echo json_encode(array('erro' => 'Sessão expirada. Por favor, faça login novamente.'));
+			return;
+		}
 	
 		if($this->_getParam('fn') == 'relatorio_fluxo_clientes'){
 			

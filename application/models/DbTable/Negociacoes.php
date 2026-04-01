@@ -94,7 +94,12 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 		);
 		
 		
-		$row->where('n.id_empresa = '.$_SESSION['sessionUser']['id_empresa']);
+		$idEmpresa = (int)$_SESSION['sessionUser']['id_empresa'];
+		if($idEmpresa > 0){
+			$row->where('n.id_empresa = '.$idEmpresa);
+		}else{
+			$row->where('1 = 0'); // sem sessão, retorna vazio em vez de quebrar
+		}
 		
 		
 		if(isset($arr['data_inicial']) && $arr['data_inicial'] != ""){
