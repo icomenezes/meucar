@@ -8,7 +8,8 @@
       "Bash(grep -n \"^[[:space:]]*}[[:space:]]*$\" c:/projetos/meucar/application/views/scripts/veiculos/edt.phtml)",
       "Bash(grep -n \"^[[:space:]]*}[[:space:]]*$\\\\|^[[:space:]]*} else {\" c:/projetos/meucar/application/controllers/VeiculosController.php)",
       "Bash(php -l c:projetosmeucarapplicationviewsscriptsveiculosedt.phtml)",
-      "Bash(php -l \"c:\\\\projetos\\\\meucar\\\\application\\\\views\\\\scripts\\\\veiculos\\\\edt.phtml\")"
+      "Bash(php -l \"c:\\\\projetos\\\\meucar\\\\application\\\\views\\\\scripts\\\\veiculos\\\\edt.phtml\")",
+      "Bash(node -e ':*)"
     ]
   }
 }

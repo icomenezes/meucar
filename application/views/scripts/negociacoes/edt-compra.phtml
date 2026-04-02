@@ -1,3 +1,20 @@
+<style>
+.btn-promissoria {
+	background: #2563eb;
+	color: #fff !important;
+	padding: 4px 12px;
+	border-radius: 5px;
+	font-size: 12px;
+	font-weight: 600;
+	text-decoration: none !important;
+	margin-top: 5px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+.btn-promissoria:hover {
+	background: #1d4ed8;
+}
+</style>
 <form id="form" name="form" enctype="application/x-www-form-urlencoded" action="/negociacoes/edt-compra" class="form" method="post">
 	
 <table class="table">
@@ -230,7 +247,7 @@
 						<option value="6" <?php echo($recebi['forma'] == 6)?"selected='selected'":""; ?>>Devolu&ccedil;&atilde;o ao Cliente</option>
 						<option value="7" <?php echo($recebi['forma'] == 7)?"selected='selected'":""; ?>>D&eacute;bitos do  Ve&iacute;culo de Troca</option>
 						<option value="8" <?php echo($recebi['forma'] == 8)?"selected='selected'":""; ?>>Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>
-				</select><br><a href="#" onClick="geraPromissoria(this);" <?php echo($recebi['forma'] == 4)?"style='display:block'":"style='display:none'";?>>Imprimir Promiss&oacute;ria</a></td>
+				</select><br><a href="#" onClick="geraPromissoria(this);" <?php echo($recebi['forma'] == 4)?"style='display:inline-block'":"style='display:none'";?> class="btn-promissoria">Imprimir Promiss&oacute;ria</a></td>
 				<td><input type="text" id="Rdata_<?php echo $recebi['id'];?>" name="Rdata_<?php echo $recebi['id'];?>" class="text" value="<?php echo implode("/",array_reverse(explode("-",$recebi['data'])));?>" /></td>
 				<td><input type="text" id="Rnumero_<?php echo $recebi['id'];?>" name="Rnumero_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['numero'];?>" /></td>
 				<td><input type="text" id="Rbanco_<?php echo $recebi['id'];?>" name="Rbanco_<?php echo $recebi['id'];?>" class="text" value="<?php echo $recebi['banco'];?>" /></td>
@@ -514,12 +531,12 @@ function promissoria(valor,obj){
 
 	if(valor == 4){
 
-		$(obj).next().next().css("display","block");
-	
+		$(obj).next().next().css("display","inline-block");
+
 	}else{
-	
+
 		$(obj).next().next().css("display","none");
-	
+
 	}
 
 }
@@ -627,7 +644,7 @@ function geraPromissoria(obj){
 	
 	}else{
 	
-		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria/data_promissoria/"+dataPromissoria+"/num_promissoria/"+numPromissoria+"/valor_promissoria/"+valPromissoria+"/nome/"+nomeCliente+"/cpf/"+cpfCliente+"/endereco/"+enderecoCliente+"/cidade/"+cidadeCliente+"/estado/"+estadoCliente+"/cep/"+cepCliente);
+		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria/data_promissoria/"+dataPromissoria+"/num_promissoria/"+numPromissoria+"/valor_promissoria/"+encodeURIComponent(valPromissoria)+"/nome/"+encodeURIComponent(nomeCliente)+"/cpf/"+encodeURIComponent(cpfCliente)+"/endereco/"+encodeURIComponent(enderecoCliente)+"/cidade/"+encodeURIComponent(cidadeCliente)+"/estado/"+encodeURIComponent(estadoCliente)+"/cep/"+encodeURIComponent(cepCliente));
 
 	}
 	
@@ -813,7 +830,7 @@ function adicionarPgto(){
 						"<option value=\"6\">Devolu&ccedil;&atilde;o ao Cliente</option>"+
 						"<option value=\"7\">D&eacute;bitos do  Ve&iacute;culo de Troca</option>"+
 						"<option value=\"8\">Quita&ccedil;&atilde;o de  Ve&iacute;culo de Troca</option>"+
-				"</select><br><a href=\"#\" onClick=\"geraPromissoria(this);\" style=\"display:none\">Imprimir Promiss&oacute;ria</a></td>"+
+				"</select><br><a href=\"#\" onClick=\"geraPromissoria(this);\" style=\"display:none\" class=\"btn-promissoria\">Imprimir Promiss&oacute;ria</a></td>"+
 				"<td><input type=\"text\" id=\"Rdata_0\" name=\"Rdata_0\" class=\"text\" value=\"\" /></td>"+
 				"<td><input type=\"text\" id=\"Rnumero_0\" name=\"Rnumero_0\" class=\"text\" value=\"\" /></td>"+
 				"<td><input type=\"text\" id=\"Rbanco_0\" name=\"Rbanco_0\" class=\"text\" value=\"\" /></td>"+
