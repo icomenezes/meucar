@@ -1576,11 +1576,10 @@ class IndexController extends Zend_Controller_Action {
 				'auth' => 'login',
 				'username' => 'administrador@sistemameucar.provisorio.ws',
 				'password' => 'Icomenezes@2025',
-				'ssl' => 'tls',
 				'port' => '587'
 			);
 
-			$transport = new Zend_Mail_Transport_Smtp('smtps.locaweb.com.br', $config);
+			$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.provisorio.ws', $config);
 
 			$mail = new Zend_Mail('UTF-8');
 			$mail->setBodyHtml($corpo);
