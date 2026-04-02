@@ -1579,7 +1579,7 @@ class IndexController extends Zend_Controller_Action {
 				'port' => '587'
 			);
 
-			$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.provisorio.ws', $config);
+			$transport = new Zend_Mail_Transport_Smtp('smtps.locaweb.com.br', $config);
 
 			$mail = new Zend_Mail('UTF-8');
 			$mail->setBodyHtml($corpo);
