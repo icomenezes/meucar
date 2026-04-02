@@ -433,7 +433,7 @@ function geraPromissoria(obj){
 	
 	}else{
 	
-		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria/data_promissoria/"+dataPromissoria+"/num_promissoria/"+numPromissoria+"/valor_promissoria/"+encodeURIComponent(valPromissoria)+"/nome/"+encodeURIComponent(nomeCliente)+"/cpf/"+encodeURIComponent(cpfCliente)+"/endereco/"+encodeURIComponent(enderecoCliente)+"/cidade/"+encodeURIComponent(cidadeCliente)+"/estado/"+encodeURIComponent(estadoCliente)+"/cep/"+encodeURIComponent(cepCliente));
+		window.open("<?php echo URL ?>negociacoes/imprimir-promissoria?data_promissoria="+dataPromissoria+"&num_promissoria="+numPromissoria+"&valor_promissoria="+encodeURIComponent(valPromissoria)+"&nome="+encodeURIComponent(nomeCliente)+"&cpf="+encodeURIComponent(cpfCliente)+"&endereco="+encodeURIComponent(enderecoCliente)+"&cidade="+encodeURIComponent(cidadeCliente)+"&estado="+encodeURIComponent(estadoCliente)+"&cep="+encodeURIComponent(cepCliente));
 
 	}
 }
