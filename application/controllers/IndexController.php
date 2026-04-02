@@ -1576,6 +1576,7 @@ class IndexController extends Zend_Controller_Action {
 				'auth' => 'login',
 				'username' => 'administrador@sistemameucar.provisorio.ws',
 				'password' => 'Icomenezes@2025',
+				'ssl' => 'tls',
 				'port' => '587'
 			);
 
