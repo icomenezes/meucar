@@ -298,7 +298,16 @@
 	</div>
 	
 </form>
-<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+<?php if($this->mensagem): ?>
+<div id="toast-msg" class="toast toast-<?php echo $this->tipoMensagem; ?>">
+    <?php echo ($this->tipoMensagem == 'sucesso') ? '&#10003; ' : '&#9888; '; ?>
+    <?php echo $this->mensagem; ?>
+</div>
+<script type="text/javascript">
+    setTimeout(function(){ document.getElementById('toast-msg').className += ' toast-show'; }, 100);
+    setTimeout(function(){ document.getElementById('toast-msg').className += ' toast-hide'; }, 4100);
+</script>
+<?php endif; ?>
 
 <script type="text/javascript">
 

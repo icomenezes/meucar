@@ -546,24 +546,37 @@ class UsuariosController extends Zend_Controller_Action
 			}
 			
 			
-			$idVendedor = $dbUsuario->insert($dados);
-			
+			try {
+				$idVendedor = $dbUsuario->insert($dados);
+			} catch (Exception $e) {
+				if (strpos($e->getMessage(), '1062') !== false) {
+					$this->view->mensagem     = "O login informado já está em uso. Escolha um login diferente.";
+					$this->view->tipoMensagem = "erro";
+				} else {
+					$this->view->mensagem     = "Erro ao cadastrar usuário. Tente novamente.";
+					$this->view->tipoMensagem = "erro";
+				}
+				$idVendedor = false;
+			}
+
 			if($idVendedor){
-			
+
 				if($dados['id_perfil'] == VENDEDOR || $dados['id_perfil'] == GERENTE || $dados['id_perfil'] == SUPERVISOR || $dados['id_perfil'] == CONCESSIONARIO){
-				
+
 					$dbVendedor = new Application_Model_DbTable_Vendedores();
-				
+
 					$dadosVendedor['id_usuario'] = $idVendedor;
-					
+
 					if($dbVendedor->insert($dadosVendedor)){
-					
-						$this->view->mensagem = "Usuário cadastrado com sucesso!.";
-					
+
+						$this->view->mensagem     = "Usuário cadastrado com sucesso!";
+						$this->view->tipoMensagem = "sucesso";
+
 					}else{
-					
-						$this->view->mensagem = "Erro ao cadastrar usuario!.";
-					
+
+						$this->view->mensagem     = "Erro ao cadastrar usuário. Tente novamente.";
+						$this->view->tipoMensagem = "erro";
+
 					}
 				
 				}else{
@@ -645,14 +658,18 @@ class UsuariosController extends Zend_Controller_Action
 	
 					}
 					
-					$this->view->mensagem = "Usuário cadastrado com sucesso!.";
-				
+					$this->view->mensagem     = "Usuário cadastrado com sucesso!";
+					$this->view->tipoMensagem = "sucesso";
+
 				}
-			
+
 			}else{
-			
-				$this->view->mensagem = "Erro ao cadastrar usuario!.";
-			
+
+				if(empty($this->view->mensagem)){
+					$this->view->mensagem     = "Erro ao cadastrar usuário. Tente novamente.";
+					$this->view->tipoMensagem = "erro";
+				}
+
 			}
 			
 		}
