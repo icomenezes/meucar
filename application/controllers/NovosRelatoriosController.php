@@ -3792,7 +3792,8 @@ class NovosRelatoriosController extends Zend_Controller_Action
 		if(isset($_POST['data_final']) && $_POST['data_final'] != ""){
 			$arrBusca['data_final_concretizacao'] = implode("-",array_reverse(explode("/",$_POST['data_final'])));
 		}else{
-			$arrBusca['data_final_concretizacao'] = @date("Y-m")."-".cal_days_in_month(CAL_GREGORIAN, @date("m") , @date("Y"));
+			// $arrBusca['data_final_concretizacao'] = @date("Y-m")."-".cal_days_in_month(CAL_GREGORIAN, @date("m") , @date("Y"));
+			$arrBusca['data_final_concretizacao'] = date('Y-m-t');
 
 		}
 		if(isset($_POST['id_vendedor']) && $_POST['id_vendedor'] != 0){

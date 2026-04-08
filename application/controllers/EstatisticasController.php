@@ -824,7 +824,7 @@ class EstatisticasController extends Zend_Controller_Action
 
 			}else{
 				$arr['data_inicial'] = @date("Y-m-01");
-				$arr['data_final'] = @date("Y")."-".@date("m")."-".cal_days_in_month(CAL_GREGORIAN, @date("m"), @date("Y"));
+				$arr['data_final'] = date('Y-m-t');
 			}
 
 			foreach ($arrUsuarios as $key => $arrUsuario) {
