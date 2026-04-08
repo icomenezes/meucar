@@ -708,6 +708,19 @@
 	<?php
 	if(is_array($this->fotos)) {
 	?>
+	<div class="inline" style="margin-bottom:15px;">
+		<label class="label">Adicionar novas fotos</label>
+		<input type="file" id="foto_multiple" name="foto[]" class="text" title="Fotos" multiple="multiple" />
+		Segure a tecla Ctrl para selecionar múltiplas fotos
+	</div>
+	<div class="inline" style="clear:both; margin-bottom:15px;">
+		<table>
+			<tr>
+				<td style="background-color:#999999; color:#FFFFFF; height:20px; vertical-align:middle;" colspan="9"><b id="texto_capa" style="display:none;">Selecione a foto de capa (Borda vermelha) e clique em salvar.</b></td>
+			</tr>
+			<tr id="images"></tr>
+		</table>
+	</div>
 	<table class="table" style="clear:both;">
 	<thead>
 		<tr>
