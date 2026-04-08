@@ -765,21 +765,7 @@
 
 
 
-	if($cont <= 9){
-
-		for($i=$cont; $i<=9;$i++){
-		
-			$fotosNovas .= "<tr>	
-								<td id='td_input_".$contId."' colspan='3'><input type='file' id='foto' name='foto[]' title='Fotos' onchange='converte(this,".$contId.");' /></td>
-							</tr>";
-		
-			$contId++;
-		
-		}
-	
-	}
-
-	echo $capa.$fotosRestantes.$fotosNovas;
+	echo $capa.$fotosRestantes;
 
 ?>
 		</tbody>
