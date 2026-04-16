@@ -469,6 +469,17 @@ class ModelosController extends Zend_Controller_Action
 					$nome = str_replace('32000', 'Zero', $value['Label']);
 					$anos .= '<option value="'.$value['Value'].'">'.$nome.'</option>';
 				}
+			} else {
+				// Fallback: busca anos do banco de dados local
+				$dbModelos = new Application_Model_DbTable_Modelos();
+				$modelo = $this->_getParam('modelo_id');
+				$marca  = $this->_getParam('marca_id');
+				$tipo   = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
+				$arrAnosDb = $dbModelos->getAnosDistintosPorModeloMarca($modelo, $marca, $tipo);
+				foreach ($arrAnosDb as $value) {
+					$label = $value['ano_modelo'] == '32000' ? 'Zero KM' : $value['ano_modelo'];
+					$anos .= '<option value="'.htmlspecialchars($value['ano_modelo']).'">'.htmlspecialchars($label).'</option>';
+				}
 			}
 
 			echo $anos;
