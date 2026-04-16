@@ -396,6 +396,26 @@ class ModelosController extends Zend_Controller_Action
 						$marcas .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
 					}
 				}
+			} else {
+				// Fallback: busca marcas do banco de dados local
+				$tipo = $this->_getParam('tipo');
+				$dbVeiculos = new Application_Model_DbTable_Veiculos();
+				if($tipo == 'motos') {
+					$arrMarcasDb = $dbVeiculos->getMarcasDistintasPorTipo('moto');
+					$preferidasNomes = ['BMW', 'DAFRA', 'DUCATI', 'HARLEY-DAVIDSON', 'HONDA', 'KAWASAKI', 'SUZUKI', 'YAMAHA'];
+				} else {
+					$arrMarcasDb = $dbVeiculos->getMarcasDistintasPorTipo('carro');
+					$preferidasNomes = ['Citroën', 'Fiat', 'Ford', 'GM - Chevrolet', 'Honda', 'Hyundai', 'Mitsubishi', 'Peugeot', 'Renault', 'Toyota', 'VW - VolksWagen'];
+				}
+				foreach ($preferidasNomes as $pref) {
+					$marcas .= '<option value="'.htmlspecialchars($pref).'">'.htmlspecialchars(strtoupper($pref)).'</option>';
+				}
+				$marcas .= '<option disabled="disabled" value=""></option>';
+				foreach ($arrMarcasDb as $value) {
+					if (!in_array($value['marca'], $preferidasNomes)) {
+						$marcas .= '<option value="'.htmlspecialchars($value['marca']).'">'.htmlspecialchars($value['marca']).'</option>';
+					}
+				}
 			}
 
 			echo $marcas;
@@ -416,6 +436,15 @@ class ModelosController extends Zend_Controller_Action
 			if ($resultado && isset($resultado['Modelos'])) {
 				foreach ($resultado['Modelos'] as $value) {
 					$modelos .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
+				}
+			} else {
+				// Fallback: busca modelos do banco de dados local
+				$dbModelos = new Application_Model_DbTable_Modelos();
+				$marca = $this->_getParam('marca_id');
+				$tipo = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
+				$arrModelos = $dbModelos->getModelosPorMarcaTipo($marca, $tipo);
+				foreach ($arrModelos as $value) {
+					$modelos .= '<option value="'.htmlspecialchars($value['modelo']).'">'.htmlspecialchars(mb_convert_encoding($value['modelo'], 'UTF-8', 'ISO-8859-1')).'</option>';
 				}
 			}
 
