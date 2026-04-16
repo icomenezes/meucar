@@ -1422,6 +1422,20 @@
 
 	porcento = 8;
 
+	function showToastFipe(msg) {
+		var el = document.getElementById("toast-fipe");
+		if (!el) {
+			el = document.createElement("div");
+			el.id = "toast-fipe";
+			el.className = "toast toast-erro";
+			document.body.appendChild(el);
+		}
+		el.innerHTML = msg;
+		el.className = "toast toast-erro toast-show";
+		clearTimeout(el._t);
+		el._t = setTimeout(function(){ el.className = "toast toast-erro toast-hide"; }, 5000);
+	}
+
 	var msgFoto;
 
 
@@ -3591,9 +3605,10 @@ function buscaAno(string){
         success:function(retorno){
 
 			$("#id_ano_modelo").html(retorno);
-
 			$("#id_ano_modelo").prop("disabled", false);
-
+			var fonteA = $("#id_ano_modelo option:first").data("fonte");
+			if(fonteA == "parallelum") showToastFipe("⚠️ FIPE indisponível. Usando API alternativa (Parallelum).");
+			if(fonteA == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Usando base de dados local.");
 		}
 
 	})
@@ -3633,9 +3648,10 @@ function buscaModelo(string){
         success:function(retorno){
 
 			$("#id_modelos").html(retorno);
-
 			$("#id_modelos").prop("disabled", false);
-
+			var fonteM = $("#id_modelos option:first").data("fonte");
+			if(fonteM == "parallelum") showToastFipe("⚠️ FIPE indisponível. Usando API alternativa (Parallelum).");
+			if(fonteM == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Usando base de dados local.");
 		}
 
 	})
@@ -3698,19 +3714,13 @@ function buscaMarcas(string){
 
         success:function(retorno){
 
-
-
 			$("#id_marca").html(retorno);
-
-
-
 			$("#id_marca").prop("disabled", false);
-
-
+			var fonte = $("#id_marca option:first").data("fonte");
+			if(fonte == "parallelum") showToastFipe("⚠️ FIPE indisponível. Usando API alternativa (Parallelum).");
+			if(fonte == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Usando base de dados local.");
 
 		}
-
-
 
 	})
 
@@ -3782,8 +3792,10 @@ function buscaFipe(string){
 
         success:function(retorno){
 
-            //$("#fipe").val(retorno.valor);
-
+			if(retorno && retorno.fonte && retorno.fonte != "fipe") {
+				if(retorno.fonte == "parallelum") showToastFipe("⚠️ FIPE indisponível. Preço via API alternativa (Parallelum).");
+				if(retorno.fonte == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Preço FIPE não disponível.");
+			}
 			if(retorno && retorno.id) {
 				$("#id_modelo").val(retorno.id);
 				if(retorno.preco) $("#fipe").val(retorno.preco);
