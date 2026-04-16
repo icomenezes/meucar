@@ -397,23 +397,29 @@ class ModelosController extends Zend_Controller_Action
 					}
 				}
 			} else {
-				// Fallback: busca marcas do banco de dados local
+				// Fallback: Parallelum (espelho FIPE)
 				$tipo = $this->_getParam('tipo');
-				$dbVeiculos = new Application_Model_DbTable_Veiculos();
-				if($tipo == 'motos') {
-					$arrMarcasDb = $dbVeiculos->getMarcasDistintasPorTipo('moto');
-					$preferidasNomes = ['BMW', 'DAFRA', 'DUCATI', 'HARLEY-DAVIDSON', 'HONDA', 'KAWASAKI', 'SUZUKI', 'YAMAHA'];
-				} else {
-					$arrMarcasDb = $dbVeiculos->getMarcasDistintasPorTipo('carro');
-					$preferidasNomes = ['Citroën', 'Fiat', 'Ford', 'GM - Chevrolet', 'Honda', 'Hyundai', 'Mitsubishi', 'Peugeot', 'Renault', 'Toyota', 'VW - VolksWagen'];
-				}
-				foreach ($preferidasNomes as $pref) {
-					$marcas .= '<option value="'.htmlspecialchars($pref).'">'.htmlspecialchars(strtoupper($pref)).'</option>';
-				}
-				$marcas .= '<option disabled="disabled" value=""></option>';
-				foreach ($arrMarcasDb as $value) {
-					if (!in_array($value['marca'], $preferidasNomes)) {
-						$marcas .= '<option value="'.htmlspecialchars($value['marca']).'">'.htmlspecialchars($value['marca']).'</option>';
+				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
+				$preferidasParallelum = $tipo == 'motos'
+					? [67, 145, 74, 77, 80, 85, 99, 101]
+					: [13, 21, 22, 23, 25, 26, 41, 44, 48, 56, 59];
+
+				$arrMarcasP = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands");
+
+				if ($arrMarcasP) {
+					foreach ($preferidasParallelum as $prefId) {
+						foreach ($arrMarcasP as $value) {
+							if ((int)$value['code'] == $prefId) {
+								$marcas .= '<option value="'.$value['code'].'">'.$value['name'].'</option>';
+								break;
+							}
+						}
+					}
+					$marcas .= '<option disabled="disabled" value=""></option>';
+					foreach ($arrMarcasP as $value) {
+						if (!in_array((int)$value['code'], $preferidasParallelum)) {
+							$marcas .= '<option value="'.$value['code'].'">'.$value['name'].'</option>';
+						}
 					}
 				}
 			}
@@ -438,13 +444,15 @@ class ModelosController extends Zend_Controller_Action
 					$modelos .= '<option value="'.$value['Value'].'">'.$value['Label'].'</option>';
 				}
 			} else {
-				// Fallback: busca modelos do banco de dados local
-				$dbModelos = new Application_Model_DbTable_Modelos();
-				$marca = $this->_getParam('marca_id');
-				$tipo = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
-				$arrModelos = $dbModelos->getModelosPorMarcaTipo($marca, $tipo);
-				foreach ($arrModelos as $value) {
-					$modelos .= '<option value="'.htmlspecialchars($value['modelo']).'">'.htmlspecialchars(mb_convert_encoding($value['modelo'], 'UTF-8', 'ISO-8859-1')).'</option>';
+				// Fallback: Parallelum
+				$tipo = $this->_getParam('tipo');
+				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
+				$marcaId = $this->_getParam('marca_id');
+				$arrModelosP = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models");
+				if ($arrModelosP) {
+					foreach ($arrModelosP as $value) {
+						$modelos .= '<option value="'.$value['code'].'">'.$value['name'].'</option>';
+					}
 				}
 			}
 
@@ -470,15 +478,17 @@ class ModelosController extends Zend_Controller_Action
 					$anos .= '<option value="'.$value['Value'].'">'.$nome.'</option>';
 				}
 			} else {
-				// Fallback: busca anos do banco de dados local
-				$dbModelos = new Application_Model_DbTable_Modelos();
-				$modelo = $this->_getParam('modelo_id');
-				$marca  = $this->_getParam('marca_id');
-				$tipo   = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
-				$arrAnosDb = $dbModelos->getAnosDistintosPorModeloMarca($modelo, $marca, $tipo);
-				foreach ($arrAnosDb as $value) {
-					$label = $value['ano_modelo'] == '32000' ? 'Zero KM' : $value['ano_modelo'];
-					$anos .= '<option value="'.htmlspecialchars($value['ano_modelo']).'">'.htmlspecialchars($label).'</option>';
+				// Fallback: Parallelum
+				$tipo = $this->_getParam('tipo');
+				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
+				$marcaId  = $this->_getParam('marca_id');
+				$modeloId = $this->_getParam('modelo_id');
+				$arrAnosP = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models/{$modeloId}/years");
+				if ($arrAnosP) {
+					foreach ($arrAnosP as $value) {
+						$nome = str_replace('32000', 'Zero', $value['name']);
+						$anos .= '<option value="'.$value['code'].'">'.$nome.'</option>';
+					}
 				}
 			}
 
@@ -515,51 +525,32 @@ class ModelosController extends Zend_Controller_Action
 				];
 				echo json_encode($resultado);
 			} else {
-				// Fallback: busca o modelo no banco e retorna sem preço FIPE
-				$dbModelos = new Application_Model_DbTable_Modelos();
-				$marca  = $this->_getParam('marca_id');
-				$modelo = $this->_getParam('modelo_id');
-				$ano    = $this->_getParam('codigo_ano');
-				$tipo   = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
+				// Fallback: Parallelum
+				$tipo = $this->_getParam('tipo');
+				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
+				$marcaId  = $this->_getParam('marca_id');
+				$modeloId = $this->_getParam('modelo_id');
+				$codigoAno = $this->_getParam('codigo_ano');
 
-				$arr = [
-					'marca'        => $marca,
-					'modelo'       => $modelo,
-					'ano_modelo'   => $ano,
-					'segmento'     => $tipo,
-					'cod_fipe'     => '',
-					'combustivel'  => '',
-					'id_empresa'   => $_SESSION['sessionUser']['id_empresa'],
-				];
+				$arrFipeP = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models/{$modeloId}/years/{$codigoAno}");
 
-				$arrModelo = $dbModelos->_getModeloExato($arr);
-
-				if (!$arrModelo) {
-					$dados = [
-						'id_empresa'           => $arr['id_empresa'],
-						'modelo'               => $modelo,
-						'marca'                => $marca,
-						'ano_modelo'           => $ano,
-						'codigo'               => '',
-						'preco'                => 0,
-						'id_usuario_alteracao' => $_SESSION['sessionUser']['id'],
-						'hora_alteracao'       => @date("Y-m-d H:i:s"),
-						'cod_fipe'             => '',
-						'segmento'             => $tipo
-					];
-					$dbModelos->add($dados);
-					$id = $dbModelos->getLastModelosId()['id'];
+				if ($arrFipeP && isset($arrFipeP['price'])) {
+					echo json_encode([
+						'valor'      => $arrFipeP['price'],
+						'codigo_fipe'=> isset($arrFipeP['codeFipe']) ? $arrFipeP['codeFipe'] : '',
+						'combustivel'=> isset($arrFipeP['fuel']) ? $arrFipeP['fuel'] : '',
+						'ano_modelo' => isset($arrFipeP['modelYear']) ? $arrFipeP['modelYear'] : $codigoAno,
+						'mes_referencia' => isset($arrFipeP['referenceMonth']) ? $arrFipeP['referenceMonth'] : ''
+					]);
 				} else {
-					$id = $arrModelo['id'];
+					echo json_encode([
+						'valor'      => '',
+						'codigo_fipe'=> '',
+						'combustivel'=> '',
+						'ano_modelo' => $codigoAno,
+						'id'         => 0
+					]);
 				}
-
-				echo json_encode([
-					'valor'      => '',
-					'codigo_fipe'=> '',
-					'combustivel'=> '',
-					'ano_modelo' => $ano,
-					'id'         => $id
-				]);
 			}
 
 		}elseif($this->_getParam('fn') == 'get_modelo'){
@@ -861,6 +852,23 @@ class ModelosController extends Zend_Controller_Action
 		}
 		curl_close($ch);
 		return json_decode($res, true);
+	}
+
+	private function parallelumApiGet($url)
+	{
+		$ch = curl_init();
+		curl_setopt_array($ch, [
+			CURLOPT_URL            => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_TIMEOUT        => 10,
+			CURLOPT_HTTPHEADER     => ['Accept: application/json'],
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_FOLLOWLOCATION => true
+		]);
+		$response = curl_exec($ch);
+		if (curl_errno($ch)) { curl_close($ch); return null; }
+		curl_close($ch);
+		return json_decode($response, true);
 	}
 
 	private function fipeApiPost($url, $params)
