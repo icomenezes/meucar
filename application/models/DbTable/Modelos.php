@@ -545,6 +545,24 @@ class Application_Model_DbTable_Modelos extends Zend_Db_Table_Abstract
 
 	}
 
+	public function getAnosDistintosPorModeloMarca($modelo, $marca, $tipo){
+
+		$db = $this->getAdapter();
+		$modelo = $db->quote('%' . $modelo . '%');
+		$marca   = $db->quote($marca);
+		$tipo    = $db->quote($tipo);
+
+		$sql = "SELECT DISTINCT ano_modelo FROM modelos_11
+				WHERE modelo LIKE {$modelo}
+				AND marca = {$marca}
+				AND segmento = {$tipo}
+				AND ano_modelo IS NOT NULL
+				ORDER BY ano_modelo DESC";
+
+		return $db->fetchAll($sql);
+
+	}
+
 	private function getConnDb(){
 
 		$db = new Zend_Db_Adapter_PDO_MYSQL(array(
