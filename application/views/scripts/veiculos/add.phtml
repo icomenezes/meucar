@@ -3782,11 +3782,14 @@ function buscaFipe(string){
 
         success:function(retorno){
 
-            
-
             //$("#fipe").val(retorno.valor);
 
-			getIdModelo(retorno);
+			if(retorno && retorno.id) {
+				$("#id_modelo").val(retorno.id);
+				if(retorno.preco) $("#fipe").val(retorno.preco);
+			} else {
+				getIdModelo(retorno);
+			}
 
 
 

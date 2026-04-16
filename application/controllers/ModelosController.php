@@ -515,7 +515,51 @@ class ModelosController extends Zend_Controller_Action
 				];
 				echo json_encode($resultado);
 			} else {
-				echo json_encode($arrFipe);
+				// Fallback: busca o modelo no banco e retorna sem preço FIPE
+				$dbModelos = new Application_Model_DbTable_Modelos();
+				$marca  = $this->_getParam('marca_id');
+				$modelo = $this->_getParam('modelo_id');
+				$ano    = $this->_getParam('codigo_ano');
+				$tipo   = $this->_getParam('tipo') == 'motos' ? 'moto' : 'carro';
+
+				$arr = [
+					'marca'        => $marca,
+					'modelo'       => $modelo,
+					'ano_modelo'   => $ano,
+					'segmento'     => $tipo,
+					'cod_fipe'     => '',
+					'combustivel'  => '',
+					'id_empresa'   => $_SESSION['sessionUser']['id_empresa'],
+				];
+
+				$arrModelo = $dbModelos->_getModeloExato($arr);
+
+				if (!$arrModelo) {
+					$dados = [
+						'id_empresa'           => $arr['id_empresa'],
+						'modelo'               => $modelo,
+						'marca'                => $marca,
+						'ano_modelo'           => $ano,
+						'codigo'               => '',
+						'preco'                => 0,
+						'id_usuario_alteracao' => $_SESSION['sessionUser']['id'],
+						'hora_alteracao'       => @date("Y-m-d H:i:s"),
+						'cod_fipe'             => '',
+						'segmento'             => $tipo
+					];
+					$dbModelos->add($dados);
+					$id = $dbModelos->getLastModelosId()['id'];
+				} else {
+					$id = $arrModelo['id'];
+				}
+
+				echo json_encode([
+					'valor'      => '',
+					'codigo_fipe'=> '',
+					'combustivel'=> '',
+					'ano_modelo' => $ano,
+					'id'         => $id
+				]);
 			}
 
 		}elseif($this->_getParam('fn') == 'get_modelo'){
