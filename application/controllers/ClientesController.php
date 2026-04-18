@@ -1292,11 +1292,13 @@ class ClientesController extends Zend_Controller_Action
 			$duploDados = explode("|-|",$this->_getParam('dados_cliente'));
 			
 			foreach($duploDados as $dados){
-				
+
 				$arrDados = explode("|",$dados);
-				
-				$arrDadosClientes[$arrDados[0]] = $arrDados[1];
-			
+
+				if(isset($arrDados[0]) && preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $arrDados[0])){
+					$arrDadosClientes[$arrDados[0]] = isset($arrDados[1]) ? $arrDados[1] : '';
+				}
+
 			}
 			
 			$arrDadosClientes['nome'] = trim($arrDadosClientes['nome']);

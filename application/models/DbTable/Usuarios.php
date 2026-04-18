@@ -297,15 +297,20 @@ class Application_Model_DbTable_Usuarios extends Zend_Db_Table_Abstract
 	
 	
 	public function getVendedores(){
- 
+
+		$idEmpresa = isset($_SESSION['sessionUser']['id_empresa']) ? (int)$_SESSION['sessionUser']['id_empresa'] : 0;
+		if(!$idEmpresa){
+			return array();
+		}
+
 		$row = $this->select();
 		$row->setIntegrityCheck(false);
 		$row->from(
 			array('u'=>'usuarios'),
 			array('*')
 		);
-		
-		$row->where("u.id_empresa = ".$_SESSION['sessionUser']['id_empresa']);
+
+		$row->where("u.id_empresa = ".$idEmpresa);
 		
 		$row->where("u.id_perfil = 3 OR u.id_perfil = 2  OR u.id_perfil = 9");
 		
