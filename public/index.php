@@ -18,7 +18,7 @@ $application = new Zend_Application(
     APPLICATION_ENV,
     APPLICATION_PATH . '/configs/application.ini'
 );
-define('URL', 'https://meucar.com.br/');
+define('URL', 'https://sistemameucar.com.br/');
 //define('URL', 'http://meucar.local/');
 //define('URL', 'http://meucarsistemapro1.hospedagemdesites.ws/');
 //define('EMAIL_DESTINO','icomenezes@hotmail.com');
