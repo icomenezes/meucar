@@ -255,6 +255,26 @@ class IndexController extends Zend_Controller_Action {
 			   		}
 			   	}
 
+			   	// Admin ou usuário de suporte selecionou empresa no login
+			   	$_suporteIds = [1048, 6];
+			   	if ($usuario[0]['id_perfil'] == ADMINISTRADOR || in_array($usuario[0]['id'], $_suporteIds)) {
+			   		$idEmpresaLogin = (int)$this->_getParam('id_empresa');
+			   		if ($idEmpresaLogin > 0) {
+			   			$dbEmpresasOverride = new Application_Model_DbTable_Empresas();
+			   			$empresaOverride = $dbEmpresasOverride->fetchAll("id = $idEmpresaLogin AND ativo = 1");
+			   			if ($empresaOverride) {
+			   				$usuario[0]['id_empresa']         = $idEmpresaLogin;
+			   				$usuario[0]['nome_fantasia']       = $empresaOverride[0]['nome_fantasia'] ? $empresaOverride[0]['nome_fantasia'] : $empresaOverride[0]['razao_social'];
+			   				$usuario[0]['empresa_email']       = $empresaOverride[0]['email'];
+			   				$usuario[0]['vend_nao_edit_valor'] = $empresaOverride[0]['vend_nao_edit_valor'];
+			   				// Suporte: entra como CONCESSIONARIO na empresa selecionada
+			   				if (in_array($usuario[0]['id'], $_suporteIds)) {
+			   					$usuario[0]['id_perfil'] = CONCESSIONARIO;
+			   				}
+			   			}
+			   		}
+			   	}
+
 			   	$sessionUser = new Zend_Session_Namespace('sessionUser');
 
 			   	$sessionUser->id = $usuario[0]['id'];
@@ -454,6 +474,55 @@ class IndexController extends Zend_Controller_Action {
 			$this->_helper->redirector->gotoUrl("/index/login-v2?erro=true");
 		}
 
+	}
+
+	public function verificarLoginAction() {
+
+		$layout = $this->_helper->layout();
+		$layout->setLayout('no-layout');
+		header('Content-Type: application/json; charset=utf-8');
+
+		if (!$this->getRequest()->isPost()) {
+			echo json_encode(['sucesso' => false]);
+			return;
+		}
+
+		$login = $this->_getParam('user');
+		$senha = $this->_getParam('senha');
+
+		if (!$login || !$senha) {
+			echo json_encode(['sucesso' => false]);
+			return;
+		}
+
+		$usuarios = new Application_Model_DbTable_Usuarios();
+		$usuario = $usuarios->getUsuarioByLoginSenha($login, $senha);
+
+		if (!$usuario) {
+			echo json_encode(['sucesso' => false]);
+			return;
+		}
+
+		$_suporteIds = [1048, 6];
+		$podeEscolherEmpresa = ($usuario[0]['id_perfil'] == ADMINISTRADOR) || in_array($usuario[0]['id'], $_suporteIds);
+
+		if (!$podeEscolherEmpresa) {
+			echo json_encode(['sucesso' => true, 'admin' => false]);
+			return;
+		}
+
+		$dbEmpresas = new Application_Model_DbTable_Empresas();
+		$arrEmpresas = $dbEmpresas->fetchAll("ativo = 1", "nome_fantasia ASC");
+
+		$empresas = [];
+		foreach ($arrEmpresas as $empresa) {
+			$empresas[] = [
+				'id'   => (int)$empresa['id'],
+				'nome' => $empresa['nome_fantasia'] ? $empresa['nome_fantasia'] : $empresa['razao_social'],
+			];
+		}
+
+		echo json_encode(['sucesso' => true, 'admin' => true, 'empresas' => $empresas]);
 	}
 
 	public function logarAction() {

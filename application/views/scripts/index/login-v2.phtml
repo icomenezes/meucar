@@ -8,43 +8,72 @@ if(!$_GET['erro']){
 
 <div>
 	<form method="post" action="/index/logar-v2" id="login_v2">
-				    <div class="form-group">
-					  	<div class="form-floating mb-3">
-					    	<input type="email" class="form-control" id="user"  name="user" placeholder="Usuário">
-					   	 	<label for="user">Usuário</label>
-					  	</div>
-					</div>
-				    <div class="form-group has-danger">
-						<div class="form-floating">
-						    <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
-						    <label for="senha">Senha</label>
-						</div>
-					</div>
-					<div class="invalid-feedback msg">Usuário e Senha devem ser informados.</div>
-					<br>
-					<?php if ($this->recaptchaEnabled): ?>
-					<center>
-						<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
-					</center>
-					<br>
-					<div class="d-grid gap-2 disabled">
-					  	<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
-					</div>
-					<?php else: ?>
-					<div class="d-grid gap-2">
-					  	<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Entrar</button>
-					</div>
-					<?php endif; ?>
-				</form>
-					<br>
-					<div class="d-grid gap-2">
-					  	<a type="button" href="/index/esqueci-senha" class="btn btn-link">Esqueci a senha</a>
-					</div>
+
+		<!-- Etapa 1: credenciais -->
+		<div id="step-credenciais">
+			<div class="form-group">
+				<div class="form-floating mb-3">
+					<input type="email" class="form-control" id="user" name="user" placeholder="Usuário">
+					<label for="user">Usuário</label>
+				</div>
+			</div>
+			<div class="form-group has-danger">
+				<div class="form-floating">
+					<input type="password" class="form-control" id="senha" name="senha" placeholder="Senha">
+					<label for="senha">Senha</label>
+				</div>
+			</div>
 		</div>
+
+		<!-- Etapa 2: seleção de empresa (somente admin) -->
+		<div id="step-empresa" style="display:none">
+			<div class="alert alert-info py-2 mb-3">
+				<small>Selecione a empresa para acessar:</small>
+			</div>
+			<div class="form-group">
+				<div class="form-floating mb-3">
+					<select class="form-select" id="empresa_select">
+						<option value="">Selecione...</option>
+					</select>
+					<label for="empresa_select">Empresa</label>
+				</div>
+			</div>
+			<div class="mb-2">
+				<a href="#" id="trocar-usuario" class="small text-muted">← Trocar usuário</a>
+			</div>
+		</div>
+
+		<input type="hidden" name="id_empresa" id="id_empresa_hidden" value="">
+
+		<div class="invalid-feedback msg">Usuário e Senha devem ser informados.</div>
+		<div class="invalid-feedback msg-empresa" style="display:none">Selecione uma empresa para continuar.</div>
+		<br>
+
+		<?php if ($this->recaptchaEnabled): ?>
+		<center>
+			<div class="g-recaptcha" data-callback="enableBtn" data-expired-callback="recaptchaExpired" data-sitekey="<?php echo $this->escape($this->recaptchaSitekey); ?>"></div>
+		</center>
+		<br>
+		<div class="d-grid gap-2 disabled">
+			<button class="btn btn-lg btn-primary" disabled="disabled" type="button" id="entrarButton">Entrar</button>
+		</div>
+		<?php else: ?>
+		<div class="d-grid gap-2">
+			<button class="btn btn-lg btn-primary" type="button" id="entrarButton">Entrar</button>
+		</div>
+		<?php endif; ?>
+
+	</form>
+	<br>
+	<div class="d-grid gap-2">
+		<a type="button" href="/index/esqueci-senha" class="btn btn-link">Esqueci a senha</a>
+	</div>
 </div>
 
 <script type="text/javascript">
-	
+
+	var _adminStep = false;
+
 	function enableBtn(){
 		$("#entrarButton").removeAttr("disabled");
 		$("#disabled").removeClass("disabled");
@@ -55,13 +84,40 @@ if(!$_GET['erro']){
 		$("#disabled").addClass("disabled");
 	}
 
+	$("#trocar-usuario").click(function(e){
+		e.preventDefault();
+		_adminStep = false;
+		$("#step-empresa").hide();
+		$("#step-credenciais").show();
+		$("#empresa_select").empty().append('<option value="">Selecione...</option>');
+		$("#id_empresa_hidden").val("");
+		$("#entrarButton").html("Entrar");
+		$(".msg-empresa").hide();
+	});
+
 	$("#entrarButton").click(function(){
 
+		if (_adminStep) {
+			// Etapa 2: confirmar empresa selecionada
+			$(".msg-empresa").hide();
+			var empresaId = $("#empresa_select").val();
+			if (!empresaId) {
+				$(".msg-empresa").css("display", "block");
+				return;
+			}
+			$("#id_empresa_hidden").val(empresaId);
+			$("#entrarButton").attr("disabled", true);
+			$("#entrarButton").html("Aguarde...");
+			$("#login_v2").submit();
+			return;
+		}
+
+		// Etapa 1: validar credenciais
 		$("#user").removeClass("is-invalid");
 		$("#senha").removeClass("is-invalid");
 		$(".msg").css("display","none");
 
-		let erro = false;
+		var erro = false;
 
 		if($("#user").val() == ""){
 			erro = true;
@@ -69,7 +125,7 @@ if(!$_GET['erro']){
 		}else{
 			$("#user").addClass("is-valid");
 		}
-		
+
 		if($("#senha").val() == ""){
 			erro = true;
 			$("#senha").addClass("is-invalid");
@@ -79,14 +135,51 @@ if(!$_GET['erro']){
 
 		if(erro){
 			$(".msg").css("display","block");
-		}else{
-			$("#entrarButton").attr("disabled", true);
-			$("#entrarButton").html("Aguarde...");
-			$("#login_v2").submit();
+			return;
 		}
-	
-	});
 
+		$("#entrarButton").attr("disabled", true);
+		$("#entrarButton").html("Verificando...");
+
+		$.ajax({
+			url: "/index/verificar-login",
+			method: "POST",
+			data: {
+				user: $("#user").val(),
+				senha: $("#senha").val()
+			},
+			dataType: "json",
+			success: function(resp) {
+				if (!resp.sucesso) {
+					window.location.href = "/index/login-v2?erro=true";
+					return;
+				}
+
+				if (!resp.admin) {
+					// Usuário normal: submete o formulário diretamente
+					$("#entrarButton").html("Aguarde...");
+					$("#login_v2").submit();
+					return;
+				}
+
+				// Admin: mostrar seleção de empresa
+				_adminStep = true;
+				var select = $("#empresa_select");
+				select.empty().append('<option value="">Selecione...</option>');
+				$.each(resp.empresas, function(i, emp) {
+					select.append('<option value="' + emp.id + '">' + emp.nome + '</option>');
+				});
+				$("#step-credenciais").hide();
+				$("#step-empresa").show();
+				$("#entrarButton").removeAttr("disabled");
+				$("#entrarButton").html("Confirmar empresa");
+			},
+			error: function() {
+				window.location.href = "/index/login-v2?erro=true";
+			}
+		});
+
+	});
 
 </script>
 
@@ -94,7 +187,7 @@ if(!$_GET['erro']){
 }else{
 	echo '<div class="alert alert-dismissible alert-danger">
 			<strong>Erro!</strong><br>
-			Usuário ou senha incorreto. Por favor, tente novamente aqui <a href="/index/login-v2">aqui</a>, caso o erro persista, tente redefinir a senha clicando <a href="/index/esqueci-senha">aqui</a>, ou entre em contato com o administrador do sistema.
+			Usuário ou senha incorreto. Por favor, tente novamente <a href="/index/login-v2">aqui</a>, caso o erro persista, tente redefinir a senha clicando <a href="/index/esqueci-senha">aqui</a>, ou entre em contato com o administrador do sistema.
 			</div>';
 }
 ?>
