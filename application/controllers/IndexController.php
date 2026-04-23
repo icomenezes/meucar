@@ -478,8 +478,8 @@ class IndexController extends Zend_Controller_Action {
 
 	public function verificarLoginAction() {
 
-		$layout = $this->_helper->layout();
-		$layout->setLayout('no-layout');
+		$this->_helper->viewRenderer->setNoRender(true);
+		$this->_helper->layout()->disableLayout();
 		header('Content-Type: application/json; charset=utf-8');
 
 		if (!$this->getRequest()->isPost()) {
