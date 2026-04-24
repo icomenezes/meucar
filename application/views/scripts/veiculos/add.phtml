@@ -92,7 +92,7 @@
 
 		<label class="label" >Fipe</label>
 
-		<input type="text" id="fipe" name="fipe" class="text" value="" readonly="readonly" />
+		<input type="text" id="fipe" name="fipe" class="text" value="" />
 
 	</div>
 
@@ -3794,7 +3794,7 @@ function buscaFipe(string){
 
 			if(retorno && retorno.fonte && retorno.fonte != "fipe") {
 				if(retorno.fonte == "parallelum") showToastFipe("⚠️ FIPE indisponível. Preço via API alternativa (Parallelum).");
-				if(retorno.fonte == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Preço FIPE não disponível.");
+				if(retorno.fonte == "local")      showToastFipe("⚠️ APIs externas indisponíveis. Digite o valor FIPE manualmente.");
 			}
 			if(retorno && retorno.id) {
 				$("#id_modelo").val(retorno.id);
