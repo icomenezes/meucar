@@ -8284,7 +8284,12 @@ class VeiculosController extends Zend_Controller_Action
 				$_POST['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			}
 
-			$dadosVeiculos['id_modelo'] = (!empty($_POST['id_modelo']) && $_POST['id_modelo'] != '0') ? $_POST['id_modelo'] : 0;
+			if (empty($_POST['id_modelo']) || $_POST['id_modelo'] == '0') {
+				$this->view->mensagem = 'Não foi possível identificar o modelo FIPE. Selecione a marca, modelo e ano novamente e aguarde a consulta carregar antes de salvar.';
+				return;
+			}
+
+			$dadosVeiculos['id_modelo'] = $_POST['id_modelo'];
 			$dadosVeiculos['descricao_site'] = $_POST['descricao_site'];
 			$dadosVeiculos['placa'] = $_POST['placa'];
 			$dadosVeiculos['renavam'] = $_POST['renavam'];
