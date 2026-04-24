@@ -623,7 +623,8 @@ class ModelosController extends Zend_Controller_Action
 				$dbModelos->add($dados);
 
 				$novoId = $dbModelos->getLastModelosId()['id'];
-				echo json_encode(['id' => $novoId, 'preco' => 'R$ ' . number_format($arr['valor'], 2, ',', '.')]);
+				$precoFormatado = is_numeric($arr['valor']) ? 'R$ ' . number_format((float)$arr['valor'], 2, ',', '.') : '';
+				echo json_encode(['id' => $novoId, 'preco' => $precoFormatado]);
 
 			}else{
 
@@ -635,7 +636,8 @@ class ModelosController extends Zend_Controller_Action
 				);
 
 				$dbModelos->edt($arrModelos['id'], $dados);
-				echo json_encode(['id' => $arrModelos['id'], 'preco' => 'R$ ' . number_format($arr['valor'], 2, ',', '.')]);
+				$precoFormatado = is_numeric($arr['valor']) ? 'R$ ' . number_format((float)$arr['valor'], 2, ',', '.') : '';
+				echo json_encode(['id' => $arrModelos['id'], 'preco' => $precoFormatado]);
 
 			}
 
