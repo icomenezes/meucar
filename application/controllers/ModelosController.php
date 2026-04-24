@@ -367,17 +367,23 @@ class ModelosController extends Zend_Controller_Action
 			$preferidasIds = $tipo == 'motos' ? [67,145,74,77,80,85,99,101] : [13,21,22,23,25,26,41,44,48,56,59];
 
 			$tabelaRef = $this->getTabelaReferenciaFipe();
-			$arrMarcas = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarMarcas', [
+			$arrMarcasRaw = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarMarcas', [
 				'codigoTabelaReferencia' => $tabelaRef,
 				'codigoTipoVeiculo'      => $tipoFipe
 			]);
 
 			$fonte = 'fipe';
+			$arrMarcas = [];
+
+			// Valida que a resposta é um array indexado com estrutura correta (Label+Value)
+			if (is_array($arrMarcasRaw) && !empty($arrMarcasRaw) && isset($arrMarcasRaw[0]['Label'])) {
+				$arrMarcas = $arrMarcasRaw;
+			}
 
 			if (!$arrMarcas) {
 				$fonte    = 'parallelum';
 				$raw      = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands");
-				if ($raw) {
+				if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
 					foreach ($raw as $v) { $arrMarcas[] = ['Value' => $v['code'], 'Label' => $v['name']]; }
 				}
 			}
@@ -438,12 +444,12 @@ class ModelosController extends Zend_Controller_Action
 			$fonte = 'fipe';
 			$lista = [];
 
-			if ($resultado && isset($resultado['Modelos'])) {
+			if ($resultado && isset($resultado['Modelos']) && is_array($resultado['Modelos']) && !empty($resultado['Modelos'])) {
 				foreach ($resultado['Modelos'] as $v) { $lista[] = ['Value' => $v['Value'], 'Label' => $v['Label']]; }
 			} else {
 				$fonte = 'parallelum';
 				$raw   = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models");
-				if ($raw) {
+				if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
 					foreach ($raw as $v) { $lista[] = ['Value' => $v['code'], 'Label' => $v['name']]; }
 				}
 			}
@@ -482,12 +488,12 @@ class ModelosController extends Zend_Controller_Action
 			$fonte = 'fipe';
 			$lista = [];
 
-			if ($arrAnos) {
+			if (is_array($arrAnos) && !empty($arrAnos) && isset($arrAnos[0]['Value'])) {
 				foreach ($arrAnos as $v) { $lista[] = ['Value' => $v['Value'], 'Label' => str_replace('32000','Zero',$v['Label'])]; }
 			} else {
 				$fonte = 'parallelum';
 				$raw   = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models/{$modeloId}/years");
-				if ($raw) {
+				if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
 					foreach ($raw as $v) { $lista[] = ['Value' => $v['code'], 'Label' => str_replace('32000','Zero',$v['name'])]; }
 				}
 			}
