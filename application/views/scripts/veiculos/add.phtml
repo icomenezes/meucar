@@ -3600,7 +3600,7 @@ function buscaAno(string){
 
         dataType:"html",
 
-        data:{modelo_id:string, marca_id:id_marca, tipo:segmento, fn:"fipe_anos"},
+        data:{modelo_id:string, modelo_nome:$("#id_modelos option:selected").text(), marca_id:id_marca, marca_nome:$("#id_marca option:selected").text(), tipo:segmento, fn:"fipe_anos"},
 
         success:function(retorno){
 
@@ -3643,7 +3643,7 @@ function buscaModelo(string){
 
         dataType:"html",
 
-        data:{marca_id:string, tipo:segmento, fn:"fipe_modelos"},
+        data:{marca_id:string, marca_nome:$("#id_marca option:selected").text(), tipo:segmento, fn:"fipe_modelos"},
 
         success:function(retorno){
 

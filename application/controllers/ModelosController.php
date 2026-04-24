@@ -431,6 +431,7 @@ class ModelosController extends Zend_Controller_Action
 
 			$tipo           = $this->_getParam('tipo');
 			$marcaId        = $this->_getParam('marca_id');
+			$marcaNome      = trim($this->_getParam('marca_nome'));
 			$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
 			$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
 
@@ -455,10 +456,12 @@ class ModelosController extends Zend_Controller_Action
 			}
 
 			if (!$lista) {
-				$fonte      = 'local';
-				$segmento   = $tipo == 'motos' ? 'moto' : 'carro';
-				$dbModelos  = new Application_Model_DbTable_Modelos();
-				$dbLista    = $dbModelos->getModelosPorMarcaTipo($marcaId, $segmento);
+				$fonte     = 'local';
+				$segmento  = $tipo == 'motos' ? 'moto' : 'carro';
+				$dbModelos = new Application_Model_DbTable_Modelos();
+				// Usa o nome da marca (enviado pelo JS) para buscar na base local
+				$buscaMarca = $marcaNome ?: $marcaId;
+				$dbLista    = $dbModelos->getModelosPorMarcaTipo($buscaMarca, $segmento);
 				foreach ($dbLista as $v) { $lista[] = ['Value' => $v['modelo'], 'Label' => mb_convert_encoding($v['modelo'], 'UTF-8', 'ISO-8859-1')]; }
 			}
 
@@ -473,7 +476,9 @@ class ModelosController extends Zend_Controller_Action
 
 			$tipo           = $this->_getParam('tipo');
 			$marcaId        = $this->_getParam('marca_id');
+			$marcaNome      = trim($this->_getParam('marca_nome'));
 			$modeloId       = $this->_getParam('modelo_id');
+			$modeloNome     = trim($this->_getParam('modelo_nome'));
 			$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
 			$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
 
@@ -502,7 +507,12 @@ class ModelosController extends Zend_Controller_Action
 				$fonte     = 'local';
 				$segmento  = $tipo == 'motos' ? 'moto' : 'carro';
 				$dbModelos = new Application_Model_DbTable_Modelos();
-				$dbAnos    = $dbModelos->getAnosDistintosPorModeloMarca($modeloId, $marcaId, $segmento);
+				// Usa os nomes (enviados pelo JS) para buscar na base local, pois IDs da FIPE/Parallelum não batem com a tabela local
+				$buscaMarca  = $marcaNome  ?: $marcaId;
+				// Usa apenas as 2 primeiras palavras do modelo para busca parcial (nome completo da FIPE é longo demais)
+				$nomeModeloPartes = explode(' ', trim($modeloNome ?: $modeloId));
+				$buscaModelo = implode(' ', array_slice($nomeModeloPartes, 0, 2));
+				$dbAnos      = $dbModelos->getAnosDistintosPorModeloMarca($buscaModelo, $buscaMarca, $segmento);
 				foreach ($dbAnos as $v) {
 					$lista[] = ['Value' => $v['ano_modelo'], 'Label' => $v['ano_modelo'] == '32000' ? 'Zero KM' : $v['ano_modelo']];
 				}

@@ -2596,7 +2596,7 @@ function buscaAno(string){
 		async: true,
         url:"/modelos/ajax",
         dataType:"html",
-        data:{modelo_id:string, marca_id:id_marca, tipo:segmento, fn:"fipe_anos"},
+        data:{modelo_id:string, modelo_nome:$("#id_modelos option:selected").text(), marca_id:id_marca, marca_nome:$("#id_marca option:selected").text(), tipo:segmento, fn:"fipe_anos"},
         success:function(retorno){
 			$("#id_ano_modelo").html(retorno);
 			$("#id_ano_modelo").prop("disabled", false);
@@ -2618,7 +2618,7 @@ function buscaModelo(string){
 		async: true,
         url:"/modelos/ajax",
         dataType:"html",
-        data:{marca_id:string, tipo:segmento, fn:"fipe_modelos"},
+        data:{marca_id:string, marca_nome:$("#id_marca option:selected").text(), tipo:segmento, fn:"fipe_modelos"},
         success:function(retorno){
 			$("#id_modelos").html(retorno);
 			$("#id_modelos").prop("disabled", false);
