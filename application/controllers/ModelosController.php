@@ -539,7 +539,7 @@ class ModelosController extends Zend_Controller_Action
 					'valor'          => $valorFormatado,
 					'codigo_fipe'    => $row['cod_fipe'],
 					'combustivel'    => $row['combustivel'],
-					'ano_modelo'     => $row['ano_label'],
+					'ano_modelo'     => $row['ano_modelo'],
 					'mes_referencia' => $row['mes_referencia'],
 				]);
 			} else {

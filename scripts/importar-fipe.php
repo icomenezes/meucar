@@ -4,6 +4,10 @@
  *
  * Uso:
  *   php importar-fipe.php /caminho/para/fipe.csv
+ *
+ * Comportamento: detecta automaticamente os segmentos presentes no CSV,
+ * apaga APENAS esses segmentos da tabela e insere os novos registros.
+ * Segmentos não presentes no arquivo não são afetados.
  */
 
 if (php_sapi_name() !== 'cli') {
@@ -28,6 +32,13 @@ if (!in_array($ext, array('csv', 'txt'))) {
     exit(1);
 }
 
+$segmentoMap = array(
+    'CAR'        => 'carros',
+    'TRUCK'      => 'caminhoes',
+    'MOTO'       => 'motos',
+    'MOTORCYCLE' => 'motos',
+);
+
 // Conexão direta PDO — sem dependência do ZF1
 $host   = 'localhost';
 $dbname = 'meucar';
@@ -49,26 +60,56 @@ try {
     exit(1);
 }
 
+// --- Primeira passagem: detecta segmentos presentes no arquivo ---
+echo "Detectando segmentos no arquivo...\n";
+
 $handle = fopen($csvPath, 'r');
 if (!$handle) {
     fwrite(STDERR, "Não foi possível abrir o arquivo.\n");
     exit(1);
 }
 
-$segmentoMap = array('CAR' => 'carros', 'TRUCK' => 'caminhoes', 'MOTO' => 'motos');
-$batchSize   = 500;
-$batch       = array();
-$total       = 0;
-$linhaAtual  = 0;
+fgetcsv($handle); // pula cabeçalho
+$segmentosEncontrados = array();
+
+while (($row = fgetcsv($handle)) !== false) {
+    if (count($row) < 1) continue;
+    $key = strtoupper(trim($row[0]));
+    $seg = isset($segmentoMap[$key]) ? $segmentoMap[$key] : 'carros';
+    $segmentosEncontrados[$seg] = true;
+}
+
+fclose($handle);
+
+if (empty($segmentosEncontrados)) {
+    fwrite(STDERR, "Nenhum registro válido encontrado no arquivo.\n");
+    exit(1);
+}
+
+$segmentosList = array_keys($segmentosEncontrados);
+echo "Segmentos detectados: " . implode(', ', $segmentosList) . "\n";
+
+// --- Segunda passagem: deleta segmentos do arquivo e importa ---
+$handle = fopen($csvPath, 'r');
+if (!$handle) {
+    fwrite(STDERR, "Não foi possível reabrir o arquivo.\n");
+    exit(1);
+}
 
 fgetcsv($handle); // pula cabeçalho
 
-echo "Iniciando importação...\n";
+$batchSize  = 500;
+$batch      = array();
+$total      = 0;
+$linhaAtual = 0;
 
 $pdo->beginTransaction();
 try {
-    $pdo->exec('TRUNCATE TABLE fipe');
-    echo "Tabela fipe limpa.\n";
+    // Apaga apenas os segmentos presentes no CSV
+    $inPlaceholders = implode(',', array_fill(0, count($segmentosList), '?'));
+    $pdo->prepare("DELETE FROM fipe WHERE segmento IN ({$inPlaceholders})")
+        ->execute($segmentosList);
+    echo "Registros anteriores dos segmentos removidos.\n";
 
     while (($row = fgetcsv($handle)) !== false) {
         $linhaAtual++;

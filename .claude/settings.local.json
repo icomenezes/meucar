@@ -9,7 +9,11 @@
       "Bash(grep -n \"^[[:space:]]*}[[:space:]]*$\\\\|^[[:space:]]*} else {\" c:/projetos/meucar/application/controllers/VeiculosController.php)",
       "Bash(php -l c:projetosmeucarapplicationviewsscriptsveiculosedt.phtml)",
       "Bash(php -l \"c:\\\\projetos\\\\meucar\\\\application\\\\views\\\\scripts\\\\veiculos\\\\edt.phtml\")",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(grep -v \"//\\\\|^\\\\s*//\")",
+      "Bash(grep -v \"^\\\\s*//\")",
+      "Bash(awk -F: '$1>=8254 && $1<=8500')",
+      "Bash(awk -F: '$1>=400 && $1<=595')"
     ]
   }
 }
