@@ -617,9 +617,13 @@ class ModelosController extends Zend_Controller_Action
 				$arr['cod_fipe'] = $_POST['codigo_fipe'];
 				$arr['codigo'] = $_POST['id_ano_modelo'];
 				$arr['combustivel'] = mb_substr(trim($_POST['combustivel']), 1, null, 'UTF-8');
-				// Se vier o código bruto "2024-5" (sem retorno da API), extrai só o ano
+				// Normaliza ano_modelo: string 'null', vazio ou código bruto "2024-5" → só o ano
 				$anoRaw = trim($_POST['ano_modelo_fipe']);
-				if (strpos($anoRaw, '-') !== false) {
+				if ($anoRaw === 'null' || $anoRaw === '') {
+					// Deriva do codigo (ex: "2025-5" → "2025")
+					$partes = explode('-', trim($_POST['id_ano_modelo']));
+					$anoRaw = $partes[0];
+				} elseif (strpos($anoRaw, '-') !== false) {
 					$partes = explode('-', $anoRaw);
 					$anoRaw = $partes[0];
 				}
