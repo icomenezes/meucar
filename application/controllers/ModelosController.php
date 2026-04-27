@@ -604,7 +604,13 @@ class ModelosController extends Zend_Controller_Action
 				$arr['cod_fipe'] = $_POST['codigo_fipe'];
 				$arr['codigo'] = $_POST['id_ano_modelo'];
 				$arr['combustivel'] = mb_substr(trim($_POST['combustivel']), 1, null, 'UTF-8');
-				$arr['ano_modelo_fipe'] = str_replace('32000', 'Zero', $_POST['ano_modelo_fipe']);
+				// Se vier o código bruto "2024-5" (sem retorno da API), extrai só o ano
+				$anoRaw = trim($_POST['ano_modelo_fipe']);
+				if (strpos($anoRaw, '-') !== false) {
+					$partes = explode('-', $anoRaw);
+					$anoRaw = $partes[0];
+				}
+				$arr['ano_modelo_fipe'] = str_replace('32000', 'Zero', $anoRaw);
 				$arr['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 
 				$arr['valor'] = str_replace("R$", "", $_POST['valor']);
