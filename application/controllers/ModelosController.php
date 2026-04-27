@@ -660,6 +660,7 @@ class ModelosController extends Zend_Controller_Action
 				$dados = array(
 					'preco' => $arr['valor'],
 					'codigo' => $arr['codigo'],
+					'ano_modelo' => $arr['ano_modelo_fipe'],
 					'id_usuario_alteracao' => $_SESSION['sessionUser']['id'],
 					'hora_alteracao' => @date("Y-m-d H:i:s"),
 				);
