@@ -54,10 +54,8 @@ class Application_Model_DbTable_Modelos extends Zend_Db_Table_Abstract
 			array('*')
 		);
 
-		$row->where("m.modelo LIKE '%" . $arr['combustivel'] . "%'");
-		$row->where("m.segmento = '".$arr['tipo']."'");
 		$row->where("m.cod_fipe = '".$arr['cod_fipe']."'");
-		$row->where("m.ano_modelo = '".$arr['ano_modelo_fipe']."'");
+		$row->where("m.codigo = '".$arr['codigo']."'");
 		$row->where("m.cod_fipe is not null");
 		$row->limit(1);
 
