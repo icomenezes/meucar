@@ -598,8 +598,21 @@ class ModelosController extends Zend_Controller_Action
 
 			if($this->getRequest()->isPost()){
 
-				$arr['tipo'] = $_POST['tipo'];
-				$arr['marca'] = $_POST['marca_fipe'];
+				// Normaliza segmento para evitar encoding corrompido (ex: "caminh??o")
+				$tipoRaw = strtolower(trim($_POST['tipo']));
+				if (strpos($tipoRaw, 'caminhao') !== false || strpos($tipoRaw, 'caminhão') !== false || strpos($tipoRaw, 'caminh') !== false) {
+					$arr['tipo'] = 'caminhao';
+				} elseif (strpos($tipoRaw, 'moto') !== false) {
+					$arr['tipo'] = 'moto';
+				} else {
+					$arr['tipo'] = 'carro';
+				}
+				// Normaliza marca para evitar double-encoding (ex: "CitroÃ«n" → "Citroën")
+				$marcaRaw = $_POST['marca_fipe'];
+				if (mb_detect_encoding($marcaRaw, ['UTF-8'], true) === false) {
+					$marcaRaw = mb_convert_encoding($marcaRaw, 'UTF-8', 'ISO-8859-1');
+				}
+				$arr['marca'] = $marcaRaw;
 				$arr['modelo'] = $_POST['modelo_fipe'];
 				$arr['cod_fipe'] = $_POST['codigo_fipe'];
 				$arr['codigo'] = $_POST['id_ano_modelo'];
