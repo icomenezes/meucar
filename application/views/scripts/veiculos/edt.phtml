@@ -2918,9 +2918,13 @@ $(document).ready(function() {
 	buscaMarcas($("#tipo").val());
 
 	$("#id_modelos").html("<option><?=$this->fipe['modelo'] ?></option>");
-	$("#id_ano_modelo").html("<option><?=$this->fipe['ano_modelo'] ?></option>");
+	$("#id_ano_modelo").html("<option value=\"<?=$this->fipe['codigo'] ?>\"><?=$this->fipe['ano_modelo'] ?></option>");
 
     $('#id_marca, #id_modelos, #id_ano_modelo').select2();
+
+	if ($("#id_ano_modelo").val()) {
+		buscaFipe($("#id_ano_modelo").val());
+	}
 
 });
 </script>

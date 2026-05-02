@@ -685,66 +685,38 @@ class ModelosController extends Zend_Controller_Action
 
 	private function getValorFipeAtualizado()
 	{
-		$cod_fipe = $this->_getParam('cod_fipe');
+		$cod_fipe   = $this->_getParam('cod_fipe');
 		$codigo_ano = $this->_getParam('codigo_ano');
-		$tipo = $this->_getParam('tipo');
+		$tipo       = $this->_getParam('tipo') ?: 'carros';
+		$segmento   = $tipo === 'motos' ? 'motos' : ($tipo === 'caminhoes' ? 'caminhoes' : 'carros');
 
 		if ($cod_fipe && $codigo_ano) {
-			// Monta o tipo para a BrasilAPI: carros, motos, caminhoes
-			$tipoApi = $tipo;
-			if (!$tipoApi) $tipoApi = 'carros';
+			$db  = Zend_Db_Table::getDefaultAdapter();
+			$row = $db->fetchRow(
+				'SELECT preco, cod_fipe, combustivel, ano_modelo, mes_referencia FROM fipe WHERE cod_fipe = ? AND codigo = ? AND segmento = ? LIMIT 1',
+				[$cod_fipe, $codigo_ano, $segmento]
+			);
 
-			// Extrai o ano do codigo_ano (formato "2024-1")
-			$partes = explode('-', $codigo_ano);
-			$anoModelo = $partes[0];
-
-			// BrasilAPI aceita consulta direta por codigo FIPE
-			$url = 'https://brasilapi.com.br/api/fipe/preco/v1/' . urlencode($cod_fipe);
-
-			$ch = curl_init($url);
-			curl_setopt_array($ch, [
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_TIMEOUT => 10,
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_HTTPHEADER => ['Accept: application/json']
-			]);
-			$response = curl_exec($ch);
-			$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-			curl_close($ch);
-
-			if ($httpCode == 200 && $response) {
-				$dados = json_decode($response, true);
-
-				if (is_array($dados)) {
-					// A API retorna array com todos os anos, filtrar pelo ano desejado
-					foreach ($dados as $item) {
-						if (isset($item['anoModelo']) && $item['anoModelo'] == $anoModelo) {
-							echo json_encode([
-								'valor' => $item['valor'],
-								'codigo_fipe' => $item['codigoFipe'],
-								'ano_modelo' => $item['anoModelo'],
-								'combustivel' => isset($item['combustivel']) ? $item['combustivel'] : ''
-							]);
-							return;
-						}
-					}
-
-					// Se não encontrou o ano exato, retorna o primeiro resultado
-					if (!empty($dados[0])) {
-						echo json_encode([
-							'valor' => $dados[0]['valor'],
-							'codigo_fipe' => $dados[0]['codigoFipe'],
-							'ano_modelo' => $dados[0]['anoModelo'],
-							'combustivel' => isset($dados[0]['combustivel']) ? $dados[0]['combustivel'] : ''
-						]);
-						return;
-					}
-				}
+			if ($row) {
+				$valorFormatado = ($row['preco'] !== null)
+					? 'R$ ' . number_format((float)$row['preco'], 2, ',', '.')
+					: '';
+				echo json_encode([
+					'valor'          => $valorFormatado,
+					'codigo_fipe'    => $row['cod_fipe'],
+					'ano_modelo'     => $row['ano_modelo'],
+					'combustivel'    => $row['combustivel'],
+					'mes_referencia' => $row['mes_referencia'],
+				]);
+				return;
 			}
 		}
 
-		// Fallback: busca na tabela local
-		$this->getValorFipeLocal();
+		echo json_encode([
+			'valor'       => 'Sem referência...',
+			'codigo_fipe' => $cod_fipe ?: '',
+			'ano_modelo'  => $codigo_ano ?: '',
+		]);
 	}
 
 	private function getValorFipeLocal()
