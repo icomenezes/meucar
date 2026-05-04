@@ -23,10 +23,10 @@ class Application_Model_DbTable_Financeiras extends Zend_Db_Table_Abstract
 			array('nome_alterou'=>'u.nome')
 		);
 		
-		if(isset($arr['id'])){
-		
-			$row->where('fd.id = ' . $arr['id']);
-		
+		if(!empty($arr['id'])){
+
+			$row->where('fd.id = ' . (int)$arr['id']);
+
 		}
 		
 		if(isset($arr['tipo'])){
