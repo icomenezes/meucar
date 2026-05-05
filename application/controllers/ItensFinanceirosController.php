@@ -46,14 +46,26 @@ class ItensFinanceirosController extends Zend_Controller_Action
 			
 			$dados['valor_padrao'] = str_replace(",", ".", $dados['valor_padrao']);
 			
-			if($dbItemFinanceiro->insert($dados)){
-   
-				$this->view->mensagem = "Item Financeiro cadastrado com sucesso!";
-			   
-			}else{
-			   
-				$this->view->mensagem = "Erro ao cadastrar Item Financeiro.";
-			   
+			try {
+
+				if($dbItemFinanceiro->insert($dados)){
+
+					$this->view->mensagem = "Item Financeiro cadastrado com sucesso!";
+
+				}else{
+
+					$this->view->mensagem = "Erro ao cadastrar Item Financeiro.";
+
+				}
+
+			} catch (Exception $e) {
+
+				if (strpos($e->getMessage(), '1062') !== false) {
+					$this->view->mensagem = "Já existe um item financeiro com este nome para sua empresa.";
+				} else {
+					$this->view->mensagem = "Erro ao cadastrar Item Financeiro.";
+				}
+
 			}
 			
 		}
