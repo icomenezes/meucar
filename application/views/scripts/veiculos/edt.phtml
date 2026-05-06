@@ -2655,6 +2655,21 @@ function buscaMarcas(string){
 }
 
 
+function atualizaValorFipe(string){
+	var segmento = $("#tipo").val();
+	var id_marca = $("#id_marca").val();
+	var id_modelos = $("#id_modelos").val();
+	$.ajax({
+		type: "POST",
+		url:"/modelos/ajax",
+		dataType:"json",
+		data:{codigo_ano: string, marca_id: id_marca, modelo_id: id_modelos, tipo: segmento, fn:"fipe_precos"},
+		success:function(retorno){
+			if(retorno && retorno.valor) $("#fipe").val(retorno.valor);
+		}
+	});
+}
+
 function buscaFipe(string){
 	segmento = $("#tipo").val();
 	id_marca = $("#id_marca").val();
@@ -2923,7 +2938,7 @@ $(document).ready(function() {
     $('#id_marca, #id_modelos, #id_ano_modelo').select2();
 
 	if ($("#id_ano_modelo").val()) {
-		buscaFipe($("#id_ano_modelo").val());
+		atualizaValorFipe($("#id_ano_modelo").val());
 	}
 
 });
