@@ -11,7 +11,7 @@ class Internas_MailConfig
     public static function getTransport($conta = self::CONTA_SISTEMA)
     {
         $config = self::getConfig($conta);
-        $ssl = getenv('SMTP_SSL') ?: 'ssl';
+        $ssl  = getenv('SMTP_SSL') ?: 'ssl';
         return new Zend_Mail_Transport_Smtp($config['host'], [
             'auth'     => 'login',
             'username' => $config['username'],
