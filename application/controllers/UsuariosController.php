@@ -1067,21 +1067,13 @@ class UsuariosController extends Zend_Controller_Action
 	
 	private function enviaEmailNovoLojista($para, $assunto, $body, $attach = false) {
 
-		$config = array(
-						'auth' => 'login',
-						'username' => 'sistemameucar@sistemameucar.com.br',
-						'password' => 'g010502g',
-						'port' => '587'
-					   );
- 
- 
-		$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+		$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 		$mail = new Zend_Mail('UTF-8');
 		$mail->setBodyHtml($body);
-		$mail->setFrom('sistemameucar@sistemameucar.com.br');
+		$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
 		$mail->addTo($para);
-		$mail->addBcc('guilherme@sistemameucar.com.br');
+		$mail->addBcc(Internas_MailConfig::getEmailBccLojista());
 		$mail->setSubject($assunto);
 		
 		

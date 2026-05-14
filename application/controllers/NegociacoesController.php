@@ -2011,18 +2011,11 @@ class NegociacoesController extends Zend_Controller_Action {
 						</html>";
 
 
-					$config = array(
-						'auth' => 'login',
-						'username' => 'sistemameucar@sistemameucar.com.br',
-						'password' => 'g010502g',
-						'port' => '587'
-					);
-
-					$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+					$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 					$mail = new Zend_Mail('UTF-8');
 					$mail->setBodyHtml($corpo);
-					$mail->setFrom('sistemameucar@sistemameucar.com.br');
+					$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
 					$mail->addTo($emailCorretora);
 					//$mail->addBcc('icomenezes@hotmail.com');
 					$mail->setSubject($assunto);

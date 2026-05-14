@@ -154,18 +154,11 @@ class CarrosUsadosController extends Zend_Controller_Action {
 				</body>
 			</html>";
 
-         $config = array(
-             'auth' => 'login',
-             'username' => 'contato@sistemameucar.com.br',
-             'password' => 'g010502g',
-             'port' => '587'
-         );
-
-         $transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+         $transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_CONTATO);
 
          $mail = new Zend_Mail("UTF-8");
-         $mail->setFrom('contato@sistemameucar.com.br');
-         $mail->addTo('contato@sistemameucar.com.br');
+         $mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_CONTATO));
+         $mail->addTo(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_CONTATO));
          $mail->setBodyHtml($corpo);
          $mail->setSubject($assunto);
 
@@ -1077,17 +1070,10 @@ class CarrosUsadosController extends Zend_Controller_Action {
 
    private function enviaEmailAmigo($para, $de, $assunto, $body, $attach = false) {
 
-      $config = array(
-          'auth' => 'login',
-          'username' => 'sistemameucar@sistemameucar.com.br',
-          'password' => 'g010502g',
-          'port' => '587'
-      );
-
-      $transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+      $transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
       $mail = new Zend_Mail();
-      $mail->setFrom('sistemameucar@sistemameucar.com.br');
+      $mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
       $mail->addTo($para);
       $mail->setBodyHtml($body);
       $mail->setSubject($assunto);
@@ -1109,21 +1095,14 @@ class CarrosUsadosController extends Zend_Controller_Action {
 
 	private function enviaEmailInteresse($emailCliente, $nomeCliente, $para, $assunto, $body, $attach = false){
 
-		$config = array(
-			'auth' => 'login',
-			'username' => 'proposta@sistemameucar.com.br',
-			'password' => 'g010502g',
-			'port' => '587'
-		);
-
-      $transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+      $transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_PROPOSTA);
 
       $mail = new Zend_Mail('UTF-8');
 	  $mail->setBodyHtml($body);
-      $mail->setFrom('proposta@sistemameucar.com.br');
+      $mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_PROPOSTA));
 	  $mail->setReplyTo($emailCliente, $nomeCliente);
       $mail->addTo($para);
-      $mail->addBcc('proposta@sistemameucar.com.br');
+      $mail->addBcc(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_PROPOSTA));
       $mail->setSubject($assunto);
 	   
 
@@ -1144,20 +1123,13 @@ class CarrosUsadosController extends Zend_Controller_Action {
 
    private function enviaEmailIrregularidade($emailCliente, $para, $assunto, $body, $attach = false) {
 
-      $config = array(
-          'auth' => 'login',
-          'username' => 'suporte@sistemameucar.com.br',
-          'password' => 'g010502g',
-          'port' => '587'
-      );
-
-      $transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+      $transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SUPORTE);
 
       $mail = new Zend_Mail("UTF-8");
-      $mail->setFrom('suporte@sistemameucar.com.br');
+      $mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SUPORTE));
       $mail->addTo($para);
 	  $mail->setReplyTo($emailCliente);
-      $mail->addCc('suporte@sistemameucar.com.br');
+      $mail->addCc(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SUPORTE));
       $mail->setBodyHtml($body);
       $mail->setSubject($assunto);
 

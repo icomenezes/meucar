@@ -393,17 +393,10 @@ class LojistasController extends Zend_Controller_Action {
 		
 	private function enviaEmailAmigo($para, $de, $assunto, $body, $attach = false){
 
-		$config = array(
-          'auth' => 'login',
-          'username' => 'sistemameucar@sistemameucar.com.br',
-          'password' => 'g010502g',
-          'port' => '587'
-		);
-
-		$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+		$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 		$mail = new Zend_Mail("UTF-8");
-		$mail->setFrom('sistemameucar@sistemameucar.com.br');
+		$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
 		$mail->addTo($para);
 		$mail->setBodyHtml($body);
 		$mail->setSubject($assunto);
@@ -429,17 +422,10 @@ class LojistasController extends Zend_Controller_Action {
 	
 	private function enviaEmailInteresse($para, $assunto, $body, $attach = false) {
 
-		$config = array(
-			'auth' => 'login',
-			'username' => 'proposta@sistemameucar.com.br',
-			'password' => 'g010502g',
-			'port' => '587'
-		);
-
-		$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+		$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_PROPOSTA);
 
 		$mail = new Zend_Mail("UTF-8");
-		$mail->setFrom('proposta@sistemameucar.com.br');
+		$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_PROPOSTA));
 		$mail->addTo($para);
 		//$mail->addBcc('proposta@sistemameucar.com.br');
 		$mail->setBodyHtml($body);

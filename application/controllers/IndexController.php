@@ -1246,34 +1246,23 @@ class IndexController extends Zend_Controller_Action {
          $arqType = $_FILES["file"]["type"];
          $para = "suporte@sistemameucar.com.br";
 
-         $smtp = "smtp.sistemameucar.com.br";
-         $conta = "sistemameucar@sistemameucar.com.br";
-         $senha = "g010502g";
-         $de = "sistemameucar@sistemameucar.com.br";
          $assunto = "Criticas / Sugestoes";
          $mensagem = "Contato realizado pelo sistema.<br /><br />
-			
+
 			<b>Nome:</b> " . $this->_getParam('nome') . "<br />
 			<b>E-mail:</b> " . $this->_getParam('email') . "<br /><br />
-			
-			
+
+
 			" . nl2br($this->_getParam('mensagem')) . "
-			
+
 			<br /><br />";
 
          try {
-            $config = array(
-                'auth' => 'login',
-                'username' => $conta,
-                'password' => $senha,
-                'port' => '587'
-            );
-
-            $mailTransport = new Zend_Mail_Transport_Smtp($smtp, $config);
+            $mailTransport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
             $mail = new Zend_Mail();
-            $mail->setFrom($de);
-            $mail->addTo($para);
+            $mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
+            $mail->addTo(Internas_MailConfig::getEmailSuporte());
             $mail->setBodyHtml($mensagem);
             $mail->setSubject($assunto);
             $mail->createAttachment(file_get_contents($arqTmp), $arqType, Zend_Mime::DISPOSITION_INLINE, Zend_Mime::ENCODING_BASE64, $arqName);
@@ -1336,19 +1325,12 @@ class IndexController extends Zend_Controller_Action {
 				</html>";
 
 
-			$config = array(
-				'auth' => 'login',
-				'username' => 'sistemameucar@sistemameucar.com.br',
-				'password' => 'g010502g',
-				'port' => '587'
-			);
-
-			$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+			$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 			$mail = new Zend_Mail('UTF-8');
 			$mail->setBodyHtml($corpo);
-			$mail->setFrom('sistemameucar@sistemameucar.com.br');
-			$mail->addTo('guilherme@selectveiculos.com.br');
+			$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
+			$mail->addTo(Internas_MailConfig::getEmailNotifLojista());
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 			
@@ -1413,19 +1395,12 @@ class IndexController extends Zend_Controller_Action {
 				</html>";
 			
 
-			$config = array(
-				'auth' => 'login',
-				'username' => 'sistemameucar@sistemameucar.com.br',
-				'password' => 'g010502g',
-				'port' => '587'
-			);
-
-			$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.com.br', $config);
+			$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 			$mail = new Zend_Mail('UTF-8');
 			$mail->setBodyHtml($corpo);
-			$mail->setFrom('sistemameucar@sistemameucar.com.br');
-			$mail->addTo('guilherme@selectveiculos.com.br');
+			$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_SISTEMA));
+			$mail->addTo(Internas_MailConfig::getEmailNotifLojista());
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
 			
@@ -1641,18 +1616,11 @@ class IndexController extends Zend_Controller_Action {
 				</html>";
 			
 
-			$config = array(
-				'auth' => 'login',
-				'username' => 'administrador@sistemameucar.provisorio.ws',
-				'password' => 'Icomenezes@2025',
-				'port' => '587'
-			);
-
-			$transport = new Zend_Mail_Transport_Smtp('smtp.sistemameucar.provisorio.ws', $config);
+			$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_ADMIN);
 
 			$mail = new Zend_Mail('UTF-8');
 			$mail->setBodyHtml($corpo);
-			$mail->setFrom('administrador@sistemameucar.provisorio.ws');
+			$mail->setFrom(Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_ADMIN));
 			$mail->addTo($email);
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);

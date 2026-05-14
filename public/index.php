@@ -1,5 +1,21 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+
+// Carrega variáveis do .env (sem dependência externa)
+$_envFile = realpath(dirname(__FILE__) . '/../.env');
+if ($_envFile && is_readable($_envFile)) {
+    foreach (file($_envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $_line) {
+        if (strpos(trim($_line), '#') === 0) continue;
+        if (strpos($_line, '=') === false) continue;
+        [$_key, $_val] = explode('=', $_line, 2);
+        $_key = trim($_key);
+        $_val = trim($_val);
+        if ($_key !== '' && getenv($_key) === false) {
+            putenv("$_key=$_val");
+        }
+    }
+    unset($_envFile, $_line, $_key, $_val);
+}
 // Define path to application directory
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
