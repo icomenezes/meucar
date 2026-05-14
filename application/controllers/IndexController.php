@@ -1631,15 +1631,20 @@ class IndexController extends Zend_Controller_Action {
 
 			TelegramAPI::send("🔑 <b>Redefinição de senha solicitada</b>\nLogin: <code>{$login}</code>\nEmail: <code>{$email}</code>\n🔗 <a href='{$link}'>Clique aqui para redefinir</a>", true);
 
+			$smtpHost = getenv('SMTP_HOST') ?: 'mail.sistemameucar.com.br';
+			$smtpPort = getenv('SMTP_PORT') ?: '465';
+			$smtpUser = getenv('SMTP_USER_ADMIN') ?: '?';
+			$smtpSsl  = getenv('SMTP_SSL') ?: 'ssl';
+
 			try{
 				if($attach){
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
 				}
 				$result = $mail->send($transport);
-				TelegramAPI::send("✅ <b>Email redefinição enviado com sucesso</b>\nPara: <code>{$email}</code>", true);
+				TelegramAPI::send("✅ <b>Email redefinição enviado</b>\nPara: <code>{$email}</code>\nSMTP: <code>{$smtpHost}:{$smtpPort}</code>\nConta: <code>{$smtpUser}</code>", true);
 				return $result;
 			}catch(Exception $e){
-				TelegramAPI::send("❌ <b>Falha ao enviar email</b>\nErro: <code>" . $e->getMessage() . "</code>", true);
+				TelegramAPI::send("❌ <b>Falha ao enviar email</b>\nErro: <code>" . $e->getMessage() . "</code>\nSMTP: <code>{$smtpHost}:{$smtpPort}</code> ssl=<code>{$smtpSsl}</code>\nConta: <code>{$smtpUser}</code>", true);
 			}
 
 	}
