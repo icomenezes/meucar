@@ -16,6 +16,7 @@ class Internas_MailConfig
             'username' => $config['username'],
             'password' => $config['password'],
             'port'     => $config['port'],
+            'ssl'      => 'tls',
         ]);
     }
 
