@@ -10,8 +10,10 @@ if ($_envFile && is_readable($_envFile)) {
         [$_key, $_val] = explode('=', $_line, 2);
         $_key = trim($_key);
         $_val = trim($_val);
-        if ($_key !== '' && getenv($_key) === false) {
+        if ($_key !== '') {
             putenv("$_key=$_val");
+            $_ENV[$_key] = $_val;
+            $_SERVER[$_key] = $_val;
         }
     }
     unset($_envFile, $_line, $_key, $_val);
