@@ -29,7 +29,7 @@ class Internas_MailConfig
     private static function getConfig($conta)
     {
         $host = getenv('SMTP_HOST') ?: 'mail.sistemameucar.com.br';
-        $port = getenv('SMTP_PORT') ?: '587';
+        $port = getenv('SMTP_PORT') ?: '465';
 
         $map = [
             self::CONTA_SISTEMA  => ['SMTP_USER_SISTEMA',  'SMTP_PASS_SISTEMA',  $host, $port],
