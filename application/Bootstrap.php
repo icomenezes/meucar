@@ -8,6 +8,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         date_default_timezone_set('America/Sao_Paulo');
     }
 
+    protected function _initConfig()
+    {
+        $config = new Zend_Config($this->getOptions());
+        Zend_Registry::set('config', $config);
+        return $config;
+    }
+
     protected function _initDbSqlMode()
     {
         $this->bootstrap('db');

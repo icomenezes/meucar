@@ -8,23 +8,31 @@ class Internas_MailConfig
     const CONTA_SUPORTE  = 'suporte';
     const CONTA_ADMIN    = 'admin';
 
-    private static function env($key, $default = '')
+    private static function cfg($key, $default = '')
     {
-        $v = getenv($key);
-        if ($v !== false && $v !== '') return $v;
-        return isset($_ENV[$key]) && $_ENV[$key] !== '' ? $_ENV[$key] : $default;
+        try {
+            $config = Zend_Registry::get('config');
+            $parts  = explode('.', $key);
+            $value  = $config;
+            foreach ($parts as $part) {
+                if (!isset($value->$part)) return $default;
+                $value = $value->$part;
+            }
+            return (string) $value ?: $default;
+        } catch (Exception $e) {
+            return $default;
+        }
     }
 
     public static function getTransport($conta = self::CONTA_SISTEMA)
     {
         $config = self::getConfig($conta);
-        $ssl = self::env('SMTP_SSL', 'ssl');
         return new Zend_Mail_Transport_Smtp($config['host'], [
             'auth'     => 'login',
             'username' => $config['username'],
             'password' => $config['password'],
             'port'     => $config['port'],
-            'ssl'      => $ssl,
+            'ssl'      => $config['ssl'],
         ]);
     }
 
@@ -35,48 +43,50 @@ class Internas_MailConfig
 
     private static function getConfig($conta)
     {
-        $host = self::env('SMTP_HOST', 'mail.sistemameucar.com.br');
-        $port = self::env('SMTP_PORT', '465');
+        $host = self::cfg('smtp.host', 'mail.sistemameucar.com.br');
+        $port = self::cfg('smtp.port', '465');
+        $ssl  = self::cfg('smtp.ssl',  'ssl');
 
         $map = [
-            self::CONTA_SISTEMA  => ['SMTP_USER_SISTEMA',  'SMTP_PASS_SISTEMA',  $host, $port],
-            self::CONTA_CONTATO  => ['SMTP_USER_CONTATO',  'SMTP_PASS_CONTATO',  $host, $port],
-            self::CONTA_PROPOSTA => ['SMTP_USER_PROPOSTA', 'SMTP_PASS_PROPOSTA', $host, $port],
-            self::CONTA_SUPORTE  => ['SMTP_USER_SUPORTE',  'SMTP_PASS_SUPORTE',  $host, $port],
-            self::CONTA_ADMIN    => ['SMTP_USER_ADMIN',    'SMTP_PASS_ADMIN',    self::env('SMTP_HOST_ADMIN', $host), $port],
+            self::CONTA_SISTEMA  => ['smtp.sistema.user',  'smtp.sistema.pass'],
+            self::CONTA_CONTATO  => ['smtp.contato.user',  'smtp.contato.pass'],
+            self::CONTA_PROPOSTA => ['smtp.proposta.user', 'smtp.proposta.pass'],
+            self::CONTA_SUPORTE  => ['smtp.suporte.user',  'smtp.suporte.pass'],
+            self::CONTA_ADMIN    => ['smtp.admin.user',    'smtp.admin.pass'],
         ];
 
         if (!isset($map[$conta])) {
             $conta = self::CONTA_SISTEMA;
         }
 
-        [$userEnv, $passEnv, $smtpHost, $smtpPort] = $map[$conta];
+        [$userKey, $passKey] = $map[$conta];
 
         return [
-            'host'     => $smtpHost,
-            'username' => self::env($userEnv),
-            'password' => self::env($passEnv),
-            'port'     => $smtpPort,
+            'host'     => $host,
+            'username' => self::cfg($userKey),
+            'password' => self::cfg($passKey),
+            'port'     => $port,
+            'ssl'      => $ssl,
         ];
     }
 
     public static function getEmailSuporte()
     {
-        return self::env('EMAIL_SUPORTE', 'suporte@sistemameucar.com.br');
+        return self::cfg('email.suporte', 'suporte@sistemameucar.com.br');
     }
 
     public static function getEmailNotifLojista()
     {
-        return self::env('EMAIL_NOTIF_LOJISTA', 'guilherme@selectveiculos.com.br');
+        return self::cfg('email.notif_lojista', 'guilherme@selectveiculos.com.br');
     }
 
     public static function getEmailBccLojista()
     {
-        return self::env('EMAIL_BCC_LOJISTA', 'guilherme@sistemameucar.com.br');
+        return self::cfg('email.bcc_lojista', 'guilherme@sistemameucar.com.br');
     }
 
     public static function getEmailErro()
     {
-        return self::env('EMAIL_ERRO', 'icomenezes@hotmail.com');
+        return self::cfg('email.erro', 'icomenezes@hotmail.com');
     }
 }
