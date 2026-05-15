@@ -1631,20 +1631,25 @@ class IndexController extends Zend_Controller_Action {
 
 			TelegramAPI::send("🔑 <b>Redefinição de senha solicitada</b>\nLogin: <code>{$login}</code>\nEmail: <code>{$email}</code>\n🔗 <a href='{$link}'>Clique aqui para redefinir</a>", true);
 
-			$smtpHost = getenv('SMTP_HOST') ?: 'mail.sistemameucar.com.br';
-			$smtpPort = getenv('SMTP_PORT') ?: '465';
-			$smtpUser = getenv('SMTP_USER_ADMIN') ?: '?';
-			$smtpSsl  = getenv('SMTP_SSL') ?: 'ssl';
+			$smtpUser = Internas_MailConfig::getFrom(Internas_MailConfig::CONTA_ADMIN);
+
+			// debug: lê config direto do Zend_Registry
+			try {
+				$_cfg = Zend_Registry::get('config');
+				$_dbg = "host=" . $_cfg->smtp->host . " port=" . $_cfg->smtp->port . " ssl=" . $_cfg->smtp->ssl . " user=" . $_cfg->smtp->admin->user;
+			} catch (Exception $_ex) {
+				$_dbg = "Registry erro: " . $_ex->getMessage();
+			}
 
 			try{
 				if($attach){
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
 				}
 				$result = $mail->send($transport);
-				TelegramAPI::send("✅ <b>Email redefinição enviado</b>\nPara: <code>{$email}</code>\nSMTP: <code>{$smtpHost}:{$smtpPort}</code>\nConta: <code>{$smtpUser}</code>", true);
+				TelegramAPI::send("✅ <b>Email redefinição enviado</b>\nPara: <code>{$email}</code>\nConta: <code>{$smtpUser}</code>\nConfig: <code>{$_dbg}</code>", true);
 				return $result;
 			}catch(Exception $e){
-				TelegramAPI::send("❌ <b>Falha ao enviar email</b>\nErro: <code>" . $e->getMessage() . "</code>\nSMTP: <code>{$smtpHost}:{$smtpPort}</code> ssl=<code>{$smtpSsl}</code>\nConta: <code>{$smtpUser}</code>", true);
+				TelegramAPI::send("❌ <b>Falha ao enviar email</b>\nErro: <code>" . $e->getMessage() . "</code>\nConta: <code>{$smtpUser}</code>\nConfig: <code>{$_dbg}</code>", true);
 			}
 
 	}
