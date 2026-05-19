@@ -1588,19 +1588,6 @@ class NovosRelatoriosController extends Zend_Controller_Action
 
 			$arrUsuarios = $dbUsuarios->usuariosNegociacoes($arr);
 
-			// DEBUG TELEGRAM - folha_pagamento
-			require_once 'Classes/TelegramAPI.php';
-			TelegramAPI::send(
-				"📊 <b>DEBUG Folha Pagamento</b>\n" .
-				"🏢 Empresa: <code>" . $_SESSION['sessionUser']['id_empresa'] . " - " . $_SESSION['sessionUser']['empresa'] . "</code>\n" .
-				"👤 Usuário session: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
-				"📅 Filtro datas: <code>" . $arr['data_inicial'] . " até " . $arr['data_final'] . "</code>\n" .
-				"🔍 Filtro id_perfil: <code>" . ($arr['id_perfil'] ?: 'Indiferente') . "</code>\n" .
-				"🔍 Filtro id_usuario: <code>" . ($arr['id_usuario'] ?: 'Indiferente') . "</code>\n" .
-				"👥 Total funcionários retornados: <code>" . count($arrUsuarios) . "</code>",
-				false
-			);
-
 			$colunaSupervisor = true;
 			if(count($arrUsuarios) == 1){
 				if($arrUsuarios[0]['id_perfil'] == 3){
@@ -1631,6 +1618,7 @@ class NovosRelatoriosController extends Zend_Controller_Action
 			$totalRetorno = 0;
 			$totalComissaoRetorno = 0;
 			$cont = 0;
+			$arrContVeiculos = [];
 			
 			foreach($arrUsuarios as $key=>$usuarios){
 
@@ -1669,18 +1657,7 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				
 				$contador = 1;
 
-				// Manda SQL apenas no primeiro funcionário para diagnóstico
-				if($key === 0){ $arrFiltroVendas['_debug_folha'] = true; }
 				$arrVendas = $dbNegociacoes->getVendasPorUsuario($arrFiltroVendas);
-				unset($arrFiltroVendas['_debug_folha']);
-
-				// DEBUG TELEGRAM - resultado por funcionário
-				TelegramAPI::send(
-					"👤 <b>Funcionário:</b> <code>" . $usuarios['nome'] . "</code> | Perfil: <code>" . $usuarios['perfil'] . " (id:" . $usuarios['id_perfil'] . ")</code>\n" .
-					"🔍 Filtros: <code>" . json_encode(array_intersect_key($arrFiltroVendas, array_flip(['id_vendedor','id_supervisor','id_gerente','data_inicial_concretizacao','data_final_concretizacao','id_empresa'])), JSON_UNESCAPED_UNICODE) . "</code>\n" .
-					"📦 Vendas encontradas: <code>" . count($arrVendas) . "</code>",
-					false
-				);
 
 				unset($arrFiltroVendas['id_vendedor']);
 				unset($arrFiltroVendas['id_supervisor']);

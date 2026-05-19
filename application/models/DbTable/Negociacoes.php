@@ -218,11 +218,7 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 		
 		$row->where('n.aprovada = 1');
 
-		// DEBUG TELEGRAM - SQL da folha_pagamento
-		if(isset($arr['_debug_folha'])){
-			require_once 'Classes/TelegramAPI.php';
-			TelegramAPI::send("🗄 <b>SQL getVendasPorUsuario</b>\n<code>" . $row->__toString() . "</code>", false);
-		}
+		//echo $row->__toString();
 
 		return $row->query()->fetchAll();
 		

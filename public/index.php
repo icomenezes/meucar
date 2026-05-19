@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_WARNING);
+ini_set('display_errors', 0);
 
 // Carrega variáveis do .env (sem dependência externa)
 $_envFile = realpath(dirname(__FILE__) . '/../.env');
