@@ -1585,8 +1585,21 @@ class NovosRelatoriosController extends Zend_Controller_Action
 			$arrFiltroVendas['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 
 			$totalComissaoSobreVenda = 0;
-			
+
 			$arrUsuarios = $dbUsuarios->usuariosNegociacoes($arr);
+
+			// DEBUG TELEGRAM - folha_pagamento
+			require_once 'Classes/TelegramAPI.php';
+			TelegramAPI::send(
+				"📊 <b>DEBUG Folha Pagamento</b>\n" .
+				"🏢 Empresa: <code>" . $_SESSION['sessionUser']['id_empresa'] . " - " . $_SESSION['sessionUser']['empresa'] . "</code>\n" .
+				"👤 Usuário session: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
+				"📅 Filtro datas: <code>" . $arr['data_inicial'] . " até " . $arr['data_final'] . "</code>\n" .
+				"🔍 Filtro id_perfil: <code>" . ($arr['id_perfil'] ?: 'Indiferente') . "</code>\n" .
+				"🔍 Filtro id_usuario: <code>" . ($arr['id_usuario'] ?: 'Indiferente') . "</code>\n" .
+				"👥 Total funcionários retornados: <code>" . count($arrUsuarios) . "</code>",
+				false
+			);
 
 			$colunaSupervisor = true;
 			if(count($arrUsuarios) == 1){
@@ -1655,13 +1668,21 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				}
 				
 				$contador = 1;
-				
+
 				$arrVendas = $dbNegociacoes->getVendasPorUsuario($arrFiltroVendas);
-				
+
+				// DEBUG TELEGRAM - resultado por funcionário
+				TelegramAPI::send(
+					"👤 <b>Funcionário:</b> <code>" . $usuarios['nome'] . "</code> | Perfil: <code>" . $usuarios['perfil'] . " (id:" . $usuarios['id_perfil'] . ")</code>\n" .
+					"🔍 Filtros: <code>" . json_encode(array_intersect_key($arrFiltroVendas, array_flip(['id_vendedor','id_supervisor','id_gerente','data_inicial_concretizacao','data_final_concretizacao','id_empresa'])), JSON_UNESCAPED_UNICODE) . "</code>\n" .
+					"📦 Vendas encontradas: <code>" . count($arrVendas) . "</code>",
+					false
+				);
+
 				unset($arrFiltroVendas['id_vendedor']);
 				unset($arrFiltroVendas['id_supervisor']);
 				unset($arrFiltroVendas['id_gerente']);
-				
+
 				$totalFixo += $usuarios['valor_fixo_mensal'];
 
 				$totalComissaoSobreVenda += $comissaoSobreVenda;
