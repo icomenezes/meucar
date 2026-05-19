@@ -1669,7 +1669,10 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				
 				$contador = 1;
 
+				// Manda SQL apenas no primeiro funcionário para diagnóstico
+				if($key === 0){ $arrFiltroVendas['_debug_folha'] = true; }
 				$arrVendas = $dbNegociacoes->getVendasPorUsuario($arrFiltroVendas);
+				unset($arrFiltroVendas['_debug_folha']);
 
 				// DEBUG TELEGRAM - resultado por funcionário
 				TelegramAPI::send(
