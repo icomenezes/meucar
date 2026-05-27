@@ -1290,7 +1290,7 @@
 			
 			<?php
 				$arrData = explode("-",$this->dados['data']);
-				$data = @date('d/m/Y', mktime(0,0,0,$arrData[1],$arrData[2]+15,$arrData[0]));
+				$data = @date('d/m/Y', mktime(0,0,0,$arrData[1],$arrData[2]+1,$arrData[0]));
 			?>
 			
 			dataAtual = '<?php echo $data; ?>';
