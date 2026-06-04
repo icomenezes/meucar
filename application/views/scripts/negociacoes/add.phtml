@@ -805,7 +805,7 @@
 	
 </form>
 
-<div class="msg" id="msg" name="msg"><?php echo $this->mensagem;?></div>
+<div class="msg <?php echo $this->erroVendedor ? 'erro' : ''; ?>" id="msg" name="msg"><?php echo $this->erroVendedor ? 'Na aba Comissões um Vendedor deve ser selecionado.' : $this->mensagem; ?></div>
 
 <script type="text/javascript">
 
@@ -2016,12 +2016,20 @@ function validaCampo(){
 	
 	});
 	
-	if($("#valor_base_calculo").val() == ""){
-		
+	if($("#id_vendedor").val() == ""){
+
 		erro = true;
-			
+
+		msg += "<br>Na aba Comiss&otilde;es um Vendedor deve ser selecionado.";
+
+	}
+
+	if($("#valor_base_calculo").val() == ""){
+
+		erro = true;
+
 		msg += "<br>Na aba Comiss&otilde;es o campo valor base para c&aacute;lculo de comiss&atilde;o deve ser preenchido.";
-	
+
 	}
 	
 	if($("#diferenca").val() != "0"){

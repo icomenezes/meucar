@@ -965,16 +965,23 @@ class NegociacoesController extends Zend_Controller_Action {
 		  
 		 unset($_POST['km']);
 		 
-		if($_POST['id_gerente'] == ""){
-		 
-			unset($_POST['id_gerente']);
-			
+		if(empty($_POST['id_vendedor'])){
+
+			$this->view->erroVendedor = true;
+			return;
+
 		}
-		
+
+		if($_POST['id_gerente'] == ""){
+
+			unset($_POST['id_gerente']);
+
+		}
+
 		if($_POST['id_supervisor'] == ""){
-		 
+
 			unset($_POST['id_supervisor']);
-			
+
 		}
 
 
