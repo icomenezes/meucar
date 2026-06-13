@@ -3558,7 +3558,7 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				$arrBusca['id_grupo'] = $_POST['grupo'];
 
 			}
-			if(isset($_POST['item']) && $_POST['item'] != "0"){
+			if(isset($_POST['item']) && $_POST['item'] != "0" && $_POST['item'] !== ""){
 				$arrBusca['item'] = $_POST['item'];
 			}
 			$arrBusca['baixado'] = $_POST['baixado'];
