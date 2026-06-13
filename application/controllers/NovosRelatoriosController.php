@@ -3563,8 +3563,20 @@ class NovosRelatoriosController extends Zend_Controller_Action
 			}
 			$arrBusca['baixado'] = $_POST['baixado'];
 			$arrBusca['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
-				
+
 			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
+
+			require_once 'Classes/TelegramAPI.php';
+			TelegramAPI::send(
+				"🔍 <b>DEBUG Despesas [POST]</b>\n" .
+				"🏢 Empresa ID: <code>" . $arrBusca['id_empresa'] . "</code>\n" .
+				"👤 Usuário: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
+				"📅 data_inicial POST: <code>" . $_POST['data_inicial'] . "</code>\n" .
+				"📅 data_final POST: <code>" . $_POST['data_final'] . "</code>\n" .
+				"🔄 data_inicial convertida: <code>" . $arrBusca['data_inicial'] . "</code>\n" .
+				"🔄 data_final convertida: <code>" . $arrBusca['data_final'] . "</code>\n" .
+				"📊 Resultados retornados: <code>" . count($arrGruposFinanceiros) . "</code>"
+			);
 
 
 			$panGrupo = 0;
@@ -3641,12 +3653,22 @@ class NovosRelatoriosController extends Zend_Controller_Action
 		}else{
 
 			$_POST['grupo'] = 0;
-			
+
 			$arrBusca['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			$arrBusca['credito'] = false;
 			$arrBusca['data_inicial'] = @date("Y")."-".@date("m")."-01";
-			
+
 			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
+
+			require_once 'Classes/TelegramAPI.php';
+			TelegramAPI::send(
+				"🔍 <b>DEBUG Despesas [GET]</b>\n" .
+				"🏢 Empresa ID: <code>" . $arrBusca['id_empresa'] . "</code>\n" .
+				"👤 Usuário: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
+				"📅 data_inicial: <code>" . $arrBusca['data_inicial'] . "</code>\n" .
+				"📅 data_final: <code>(sem filtro)</code>\n" .
+				"📊 Resultados retornados: <code>" . count($arrGruposFinanceiros) . "</code>"
+			);
 			
 			$panGrupo = 0;
 			$countCor = 0;
