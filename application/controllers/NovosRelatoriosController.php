@@ -3566,20 +3566,6 @@ class NovosRelatoriosController extends Zend_Controller_Action
 
 			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
 
-			require_once 'Classes/TelegramAPI.php';
-			TelegramAPI::send(
-				"🔍 <b>DEBUG Despesas [POST]</b>\n" .
-				"🏢 Empresa ID: <code>" . $arrBusca['id_empresa'] . "</code>\n" .
-				"👤 Usuário: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
-				"📅 data_inicial POST: <code>" . $_POST['data_inicial'] . "</code>\n" .
-				"📅 data_final POST: <code>" . $_POST['data_final'] . "</code>\n" .
-				"🔄 data_inicial convertida: <code>" . $arrBusca['data_inicial'] . "</code>\n" .
-				"🔄 data_final convertida: <code>" . $arrBusca['data_final'] . "</code>\n" .
-				"📊 Resultados retornados: <code>" . count($arrGruposFinanceiros) . "</code>\n" .
-				"🗄 SQL: <code>" . $dbGruposFinanceiros->_sqlDespesas . "</code>"
-			);
-
-
 			$panGrupo = 0;
 			$countCor = 0;
 				
@@ -3661,17 +3647,6 @@ class NovosRelatoriosController extends Zend_Controller_Action
 
 			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
 
-			require_once 'Classes/TelegramAPI.php';
-			TelegramAPI::send(
-				"🔍 <b>DEBUG Despesas [GET]</b>\n" .
-				"🏢 Empresa ID: <code>" . $arrBusca['id_empresa'] . "</code>\n" .
-				"👤 Usuário: <code>" . $_SESSION['sessionUser']['nome'] . "</code>\n" .
-				"📅 data_inicial: <code>" . $arrBusca['data_inicial'] . "</code>\n" .
-				"📅 data_final: <code>(sem filtro)</code>\n" .
-				"📊 Resultados retornados: <code>" . count($arrGruposFinanceiros) . "</code>\n" .
-				"🗄 SQL: <code>" . $dbGruposFinanceiros->_sqlDespesas . "</code>"
-			);
-			
 			$panGrupo = 0;
 			$countCor = 0;
 			
