@@ -413,7 +413,7 @@ function reprova(id, idCheckbox, idVeiculo){
 function buscaModelo(strMmarca){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
 			async: true,
 			type : 'POST',
 			dataType: 'text',

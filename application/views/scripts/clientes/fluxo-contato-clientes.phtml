@@ -39,7 +39,7 @@
 							break;
 						
 						case 3:
-							$option =  "Março - ".$anoNum;
+							$option =  "Marï¿½o - ".$anoNum;
 							break;
 							
 						case 4:
@@ -152,7 +152,7 @@
 	function buscaModelo(strMmarca){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
 			async: true,
 			type : 'POST',
 			dataType: 'text',

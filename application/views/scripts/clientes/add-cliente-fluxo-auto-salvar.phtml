@@ -1063,12 +1063,12 @@
 	function buscaModelo(strMmarca, numId){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
 			async: true,
 			type : 'POST',
 			dataType: 'text',
 			success: function(data){
-				
+
 				$("#veiculo_"+numId).html(data);
 				
 			}
@@ -1080,12 +1080,12 @@
 	function buscaModeloTroca(strMmarca){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
 			async: true,
 			type : 'POST',
 			dataType: 'text',
 			success: function(data){
-				
+
 				$("#veiculo_troca").html(data);
 				
 			}

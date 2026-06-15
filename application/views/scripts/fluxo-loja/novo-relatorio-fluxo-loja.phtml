@@ -501,7 +501,7 @@
 	function usuarios(){
 
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+strMmarca,
+			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
 			async: false,
 			type : 'POST',
 			dataType: 'text',
