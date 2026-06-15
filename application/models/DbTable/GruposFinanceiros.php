@@ -258,9 +258,7 @@ class Application_Model_DbTable_GruposFinanceiros extends Zend_Db_Table_Abstract
 		}
 		
 		$row->order('fg.id');
-		
-		//echo $row->__toString();
-		
+
 		return $row->query()->fetchAll();
 	
 	}

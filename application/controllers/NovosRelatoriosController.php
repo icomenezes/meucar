@@ -3558,14 +3558,13 @@ class NovosRelatoriosController extends Zend_Controller_Action
 				$arrBusca['id_grupo'] = $_POST['grupo'];
 
 			}
-			if(isset($_POST['item']) && $_POST['item'] != "0"){
+			if(isset($_POST['item']) && $_POST['item'] != "0" && $_POST['item'] !== ""){
 				$arrBusca['item'] = $_POST['item'];
 			}
 			$arrBusca['baixado'] = $_POST['baixado'];
 			$arrBusca['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
-				
-			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
 
+			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
 
 			$panGrupo = 0;
 			$countCor = 0;
@@ -3641,13 +3640,13 @@ class NovosRelatoriosController extends Zend_Controller_Action
 		}else{
 
 			$_POST['grupo'] = 0;
-			
+
 			$arrBusca['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 			$arrBusca['credito'] = false;
 			$arrBusca['data_inicial'] = @date("Y")."-".@date("m")."-01";
-			
+
 			$arrGruposFinanceiros = $dbGruposFinanceiros->getLancamentosPorGrupos($arrBusca);
-			
+
 			$panGrupo = 0;
 			$countCor = 0;
 			
