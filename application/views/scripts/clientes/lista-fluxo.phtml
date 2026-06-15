@@ -225,7 +225,8 @@
 	function buscaModelo(strMmarca){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
+			url : '/modelos/ajax/fn/busca_modelos',
+			data : {marca: strMmarca},
 			async: true,
 			type : 'POST',
 			dataType: 'text',

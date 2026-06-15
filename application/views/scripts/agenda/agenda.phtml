@@ -424,7 +424,8 @@ if(false && $_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUse
 	function buscaModelo(strMmarca){
 	
 		$.ajax({
-			url : '/modelos/ajax/fn/busca_modelos/marca/'+encodeURIComponent(strMmarca),
+			url : '/modelos/ajax/fn/busca_modelos',
+			data : {marca: strMmarca},
 			async: false,
 			type : 'POST',
 			dataType: 'text',
