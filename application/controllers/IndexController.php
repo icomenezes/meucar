@@ -362,11 +362,11 @@ class IndexController extends Zend_Controller_Action {
 
 			   	}
 
-			   	if($usuario[0]['id'] != 1){
-
-			   		$this->enviaEmailNovaEmpresa();
-
-			   	}
+			   	// NOTA: enviaEmailNovaEmpresa() (notificacao "novo lojista", so para
+			   	// empresas com novo_lojista=1) foi REMOVIDO do login porque o
+			   	// $mail->send() SMTP e sincrono e travava o login ate o timeout do
+			   	// PHP/Apache (503) - ex.: ATN Motors id 256. E-mail nunca deve rodar
+			   	// sincrono no caminho do login; mover para cron/painel se necessario.
 
 
 			   	// NOTA: o envio do e-mail de fluxo de vendedores (empresas 3/239 - Select)
