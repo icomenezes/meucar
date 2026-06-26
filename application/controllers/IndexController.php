@@ -369,42 +369,9 @@ class IndexController extends Zend_Controller_Action {
 			   	}
 
 
-			   	if($_SESSION['sessionUser']['id_empresa'] == 3 || $_SESSION['sessionUser']['id_empresa'] == 239){
-
-			   		$dbAcaoAutomatica = new Application_Model_DbTable_AcaoAutomatica();
-
-			   		$arr = $dbAcaoAutomatica->_get(array('acao'=>'email_vendedor'));
-
-			   		if($arr[0]['data'] != @date('Y-m-d')){
-
-			   			$dbUsuarios = new Application_Model_DbTable_Usuarios();
-			   			$dbFluxoClientes = new Application_Model_DbTable_FluxoClientes();
-
-			   			$arrVendedores = $dbUsuarios->getVendedoresAptosEmails();
-
-			   			foreach($arrVendedores as $vendedores){
-
-			   				$data = date('Y-m-d', mktime(0, 0, 0, date('m'), date('d')-1, date('Y')));
-
-			   				if(!$dbFluxoClientes->getFluxoVendedor($vendedores['id'], $data)){
-
-			   					$arrEmail[$vendedores['id']]['nome'] = $vendedores['nome'];
-
-			   				}
-
-			   			}
-
-			   			if($arrEmail){
-
-			   				$this->enviaEmailFluxo($arrEmail);
-
-			   			}
-
-			   			$dbAcaoAutomatica->edt($arr[0]['id'],array('data'=>@date('Y-m-d')));
-
-			   		}
-
-			   	}
+			   	// NOTA: o envio do e-mail de fluxo de vendedores (empresas 3/239 - Select)
+			   	// foi REMOVIDO daqui porque o $mail->send() SMTP e sincrono e travava o
+			   	// login ate o timeout do PHP/Apache (503). Mover para cron, nunca no login.
 
 			   	if((!isset($usuario[0]['email']) || $usuario[0]['email'] == "") && isset($_SESSION['sessionUser']['id'])){
 			   		$this->_helper->redirector->gotoUrl("/index/add-email");
@@ -1325,6 +1292,12 @@ class IndexController extends Zend_Controller_Action {
 				</html>";
 
 
+			// Nao deixa o e-mail travar o login: se o SMTP nao responder rapido,
+			// pula o envio (o login segue normalmente).
+			if(!Internas_MailConfig::smtpDisponivel(Internas_MailConfig::CONTA_SISTEMA)){
+				return false;
+			}
+
 			$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 			$mail = new Zend_Mail('UTF-8');
@@ -1333,27 +1306,27 @@ class IndexController extends Zend_Controller_Action {
 			$mail->addTo(Internas_MailConfig::getEmailNotifLojista());
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
-			
-		   
+
+
 
 			try{
 
 				if($attach){
 
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
-			 
+
 				}
 
 				return $mail->send($transport);
-				
+
 			}catch(Exception $e){
 
-				echo $e->getMessage();
-				
+				@error_log('[enviaEmailNovaEmpresa] ' . $e->getMessage());
+
 			}
-		
+
 		}
-		
+
 	}
 	
 	
@@ -1395,6 +1368,12 @@ class IndexController extends Zend_Controller_Action {
 				</html>";
 			
 
+			// Nao deixa o e-mail travar a requisicao: se o SMTP nao responder
+			// rapido, pula o envio.
+			if(!Internas_MailConfig::smtpDisponivel(Internas_MailConfig::CONTA_SISTEMA)){
+				return false;
+			}
+
 			$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 			$mail = new Zend_Mail('UTF-8');
@@ -1403,23 +1382,23 @@ class IndexController extends Zend_Controller_Action {
 			$mail->addTo(Internas_MailConfig::getEmailNotifLojista());
 			//$mail->addBcc('icomenezes@hotmail.com');
 			$mail->setSubject($assunto);
-			
-		   
+
+
 
 			try{
 
 				if($attach){
 
 					$mail->createAttachment(file_get_contents($attach), 'text/plain', Zend_Mime::DISPOSITION_ATTACHMENT, Zend_Mime::ENCODING_BASE64, $attach);
-			 
+
 				}
 
 				return $mail->send($transport);
-				
+
 			}catch(Exception $e){
 
-				echo $e->getMessage();
-				
+				@error_log('[enviaEmailFluxo] ' . $e->getMessage());
+
 			}
 
 	}
