@@ -13,7 +13,10 @@
       "Bash(grep -v \"//\\\\|^\\\\s*//\")",
       "Bash(grep -v \"^\\\\s*//\")",
       "Bash(awk -F: '$1>=8254 && $1<=8500')",
-      "Bash(awk -F: '$1>=400 && $1<=595')"
+      "Bash(awk -F: '$1>=400 && $1<=595')",
+      "Bash(find /www/wwwlogs -name \"*.log\" 2>/dev/null | head -20; find /www/wwwroot/sitemeucar.trsystem.com.br/template -name \"header.php\" 2>/dev/null)",
+      "Read(//www/**)",
+      "Read(//www/wwwroot/sitemeucar.trsystem.com.br/**)"
     ]
   }
 }
