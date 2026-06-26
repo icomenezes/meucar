@@ -27,13 +27,45 @@ class Internas_MailConfig
     public static function getTransport($conta = self::CONTA_SISTEMA)
     {
         $config = self::getConfig($conta);
-        return new Zend_Mail_Transport_Smtp($config['host'], [
+        return new Zend_Mail_Transport_Smtp($config['host'], array(
             'auth'     => 'login',
             'username' => $config['username'],
             'password' => $config['password'],
             'port'     => $config['port'],
             'ssl'      => $config['ssl'],
-        ]);
+        ));
+    }
+
+    /**
+     * Verifica rapidamente se o servidor SMTP esta acessivel, com timeout curto.
+     *
+     * Usado para NUNCA deixar um envio de e-mail travar uma requisicao critica
+     * (ex.: login). O Zend usa TIMEOUT_CONNECTION=30s fixo; este pre-teste
+     * (default 3s) evita esperar 30s+ quando o SMTP esta fora/lento.
+     *
+     * @param string $conta
+     * @return bool  true se da pra conectar; false se deve pular o envio
+     */
+    public static function smtpDisponivel($conta = self::CONTA_SISTEMA)
+    {
+        $config  = self::getConfig($conta);
+        $timeout = (int) self::cfg('smtp.connect_timeout', '3');
+
+        $ssl    = strtolower((string) $config['ssl']);
+        $prefix = ($ssl === 'ssl') ? 'ssl://' : '';
+        $remote = $prefix . $config['host'] . ':' . $config['port'];
+
+        $errno = 0;
+        $errstr = '';
+        $socket = @stream_socket_client($remote, $errno, $errstr, $timeout);
+
+        if ($socket === false) {
+            @error_log('[MailConfig] SMTP indisponivel (' . $remote . '): ' . $errstr);
+            return false;
+        }
+
+        @fclose($socket);
+        return true;
     }
 
     public static function getFrom($conta = self::CONTA_SISTEMA)
