@@ -96,10 +96,94 @@ class EmpresasController extends Zend_Controller_Action
 		
 		
 		
-		}elseif($this->_getParam('fn') == 'busca_cidade'){
-		
+		}elseif($this->_getParam('fn') == 'deleta_quem_somos_1'){
+
 			$dbEmpresa = new Application_Model_DbTable_Empresas();
-			
+
+			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
+
+			$path = $arrEmpresas[0]['path_quem_somos_1'];
+
+			$dadosUp['path_quem_somos_1'] = null;
+			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
+
+				unlink($path);
+
+				echo "Sucesso";
+
+			}else{
+
+				echo "Erro ao deletar imagem";
+
+			}
+
+		}elseif($this->_getParam('fn') == 'deleta_quem_somos_2'){
+
+			$dbEmpresa = new Application_Model_DbTable_Empresas();
+
+			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
+
+			$path = $arrEmpresas[0]['path_quem_somos_2'];
+
+			$dadosUp['path_quem_somos_2'] = null;
+			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
+
+				unlink($path);
+
+				echo "Sucesso";
+
+			}else{
+
+				echo "Erro ao deletar imagem";
+
+			}
+
+		}elseif($this->_getParam('fn') == 'deleta_quem_somos_3'){
+
+			$dbEmpresa = new Application_Model_DbTable_Empresas();
+
+			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
+
+			$path = $arrEmpresas[0]['path_quem_somos_3'];
+
+			$dadosUp['path_quem_somos_3'] = null;
+			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
+
+				unlink($path);
+
+				echo "Sucesso";
+
+			}else{
+
+				echo "Erro ao deletar imagem";
+
+			}
+
+		}elseif($this->_getParam('fn') == 'deleta_quem_somos_4'){
+
+			$dbEmpresa = new Application_Model_DbTable_Empresas();
+
+			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
+
+			$path = $arrEmpresas[0]['path_quem_somos_4'];
+
+			$dadosUp['path_quem_somos_4'] = null;
+			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
+
+				unlink($path);
+
+				echo "Sucesso";
+
+			}else{
+
+				echo "Erro ao deletar imagem";
+
+			}
+
+		}elseif($this->_getParam('fn') == 'busca_cidade'){
+
+			$dbEmpresa = new Application_Model_DbTable_Empresas();
+
 			$arrEmpresas = $dbEmpresa->getCidadeEmpresaPorModelo($this->_getParam('id_modelo'));
 			
 			$cidades = "<option value=''>Qualquer</option>";
@@ -299,13 +383,70 @@ class EmpresasController extends Zend_Controller_Action
 					}
 					
 					if($copied){
-					
+
 						$dadosUp['path_frente_loja_2'] = $novoNome;
 						$dbEmpresa->update($dadosUp,"id = ".$idEmpresa);
-						
-					
+
+
 					}
-				
+
+				}
+
+
+				$quemSomosCampos = array(
+					'quem_somos_1' => 'loja-1-4',
+					'quem_somos_2' => 'loja-2-4',
+					'quem_somos_3' => 'loja-3-4',
+					'quem_somos_4' => 'loja-4-4'
+				);
+
+				foreach($quemSomosCampos as $campo => $nomeArquivo){
+
+					if(in_array($_FILES[$campo]['type'], array("image/pjpeg", "image/jpeg", "image/jpg", "image/png", "image/gif", "image/bmp"))){
+
+						if(!file_exists("frente_loja_empresas/".$idEmpresa)){
+							mkdir("frente_loja_empresas/".$idEmpresa);
+							chmod("frente_loja_empresas/".$idEmpresa, 0755);
+						}
+
+						$novoNome = "frente_loja_empresas/".$idEmpresa."/".$nomeArquivo.".jpeg";
+
+						$copied = false;
+
+						if($_FILES[$campo]['tmp_name'] != ""){
+
+							/////////////////REDIMENCIONA IMAGEM///////////////////////
+							$input_image = $_FILES[$campo]['tmp_name'];
+
+							$size = getimagesize( $input_image );
+
+							$thumb_width = "800";
+
+							$thumb_height = ( int )(( $thumb_width/$size[0] )*$size[1] );
+
+							$thumbnail = ImageCreateTrueColor( $thumb_width, $thumb_height );
+
+							$src_img = ImageCreateFromJPEG( $input_image );
+
+							ImageCopyResampled( $thumbnail, $src_img, 0, 0, 0, 0, $thumb_width, $thumb_height, $size[0], $size[1] );
+
+							$copied = ImageJPEG( $thumbnail, $novoNome);
+							chmod($novoNome, 0755);
+
+							ImageDestroy( $thumbnail );
+
+						}
+
+						if($copied){
+
+							$colunaUp = array();
+							$colunaUp["path_".$campo] = $novoNome;
+							$dbEmpresa->update($colunaUp,"id = ".$idEmpresa);
+
+						}
+
+					}
+
 				}
 
 
@@ -571,14 +712,69 @@ class EmpresasController extends Zend_Controller_Action
 				}
 			
 			}else{
-				
+
 				$this->view->mensagem = "Concession&aacute;ria editada com sucesso. N&atilde;o foi poss&iacute;vel realizar o upload da imagem de frente de loja 2, formato do arquivo inv&aacute;lido ou n&atilde;o foi alterada a imagem.";
-				
+
 			}
-			
-			
+
+
+			$quemSomosCampos = array(
+				'quem_somos_1' => 'loja-1-4',
+				'quem_somos_2' => 'loja-2-4',
+				'quem_somos_3' => 'loja-3-4',
+				'quem_somos_4' => 'loja-4-4'
+			);
+
+			foreach($quemSomosCampos as $campo => $nomeArquivo){
+
+				if(in_array($_FILES[$campo]['type'], array("image/pjpeg", "image/jpeg", "image/jpg", "image/png", "image/gif", "image/bmp"))){
+
+					if(!file_exists("frente_loja_empresas/".$idEmpresa)){
+						mkdir("frente_loja_empresas/".$idEmpresa);
+						chmod("frente_loja_empresas/".$idEmpresa, 0755);
+					}
+
+					$novoNome = "frente_loja_empresas/".$idEmpresa."/".$nomeArquivo.".jpeg";
+
+					$copied = false;
+
+					if($_FILES[$campo]['tmp_name'] != ""){
+
+						/////////////////REDIMENCIONA IMAGEM///////////////////////
+						$input_image = $_FILES[$campo]['tmp_name'];
+
+						$size = getimagesize( $input_image );
+
+						$thumb_width = "800";
+
+						$thumb_height = ( int )(( $thumb_width/$size[0] )*$size[1] );
+
+						$thumbnail = ImageCreateTrueColor( $thumb_width, $thumb_height );
+
+						$src_img = ImageCreateFromJPEG( $input_image );
+
+						ImageCopyResampled( $thumbnail, $src_img, 0, 0, 0, 0, $thumb_width, $thumb_height, $size[0], $size[1] );
+
+						$copied = ImageJPEG( $thumbnail, $novoNome);
+						chmod($novoNome, 0755);
+
+						ImageDestroy( $thumbnail );
+
+					}
+
+					if($copied){
+
+						$coluna = "path_".$campo; // path_quem_somos_N
+						$_POST[$coluna] = $novoNome;
+
+					}
+
+				}
+
+			}
+
 			$dbEmpresas->update($_POST,"id = ".$idEmpresa);
-		
+
 		}
 		
 		$dados = $dbEmpresas->fetchAll("id = " . $this->_getParam('id'));

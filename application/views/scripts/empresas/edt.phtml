@@ -801,7 +801,51 @@
 	<?php } ?>
 		</div>
 	</div>
-	
+
+	<div class="inline" style="clear:both;height:auto;margin-bottom:10px;margin-top:20px;">
+		<label class="label">QUEM SOMOS (Fotos da Loja)</label>
+	</div>
+
+	<div class="inline" style="height:10%;clear:both;" id="upload_quem_somos_1">
+		<div id="up_quem_somos_1"><label class="label">Foto Loja 1</label>
+	<?php if($this->empresa['path_quem_somos_1'] !=  ""){?>
+		<table class="table"><tr><td><img style="width:170px; height:110px;" src="/<?php echo $this->empresa['path_quem_somos_1']; ?>"/></td><td><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDeleteQuemSomos1(<?php echo $this->empresa['id'];?>);"/></td></tr></table>
+	<?php }else{ ?>
+		<input type="file" id="quem_somos_1" name="quem_somos_1" class="text" value=""/>
+	<?php } ?>
+		</div>
+	</div>
+
+	<div class="inline" style="height:10%;" id="upload_quem_somos_2">
+		<div id="up_quem_somos_2"><label class="label">Foto Loja 2</label>
+	<?php if($this->empresa['path_quem_somos_2'] !=  ""){?>
+		<table class="table"><tr><td><img style="width:170px; height:110px;" src="/<?php echo $this->empresa['path_quem_somos_2']; ?>"/></td><td><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDeleteQuemSomos2(<?php echo $this->empresa['id'];?>);"/></td></tr></table>
+	<?php }else{ ?>
+		<input type="file" id="quem_somos_2" name="quem_somos_2" class="text" value=""/>
+	<?php } ?>
+		</div>
+	</div>
+
+	<div class="inline" style="height:10%;" id="upload_quem_somos_3">
+		<div id="up_quem_somos_3"><label class="label">Foto Loja 3</label>
+	<?php if($this->empresa['path_quem_somos_3'] !=  ""){?>
+		<table class="table"><tr><td><img style="width:170px; height:110px;" src="/<?php echo $this->empresa['path_quem_somos_3']; ?>"/></td><td><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDeleteQuemSomos3(<?php echo $this->empresa['id'];?>);"/></td></tr></table>
+	<?php }else{ ?>
+		<input type="file" id="quem_somos_3" name="quem_somos_3" class="text" value=""/>
+	<?php } ?>
+		</div>
+	</div>
+
+	<div class="inline" style="height:10%;" id="upload_quem_somos_4">
+		<div id="up_quem_somos_4"><label class="label">Foto Loja 4</label>
+	<?php if($this->empresa['path_quem_somos_4'] !=  ""){?>
+		<table class="table"><tr><td><img style="width:170px; height:110px;" src="/<?php echo $this->empresa['path_quem_somos_4']; ?>"/></td><td><input type="button" class="btn-small btn-del" value="Deletar" onclick="confirmaDeleteQuemSomos4(<?php echo $this->empresa['id'];?>);"/></td></tr></table>
+	<?php }else{ ?>
+		<input type="file" id="quem_somos_4" name="quem_somos_4" class="text" value=""/>
+	<?php } ?>
+		</div>
+	</div>
+
 
 	<div class="inline">
 		<label class="label">Endere&ccedil;o loja 2</label>
@@ -1620,16 +1664,137 @@ function confirmaDeleteFrenteLoja2(id){
 				
 					$("#upload_frente_loja_2").html("<label class='label'>Upload Frente Loja 2</label><input type='file' id='frente_loja_2' name='frente_loja_2' class='text' value=''/>");
 					$("#up_frente_loja_2").remove();
-					
+
 				}else{
-				
+
 					alert(retorno);
-				
+
 				}
-		
+
 			}
 		})
-		
+
+	}
+
+}
+
+
+function confirmaDeleteQuemSomos1(id){
+
+	decisao = confirm("Deseja realmente deletar a imagem?");
+
+	if (decisao){
+
+		$.ajax({
+			type: "POST",
+			url:"/empresas/ajax/fn/deleta_quem_somos_1/id/"+id,
+			dataType:"html",
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#upload_quem_somos_1").html("<label class='label'>Foto Loja 1</label><input type='file' id='quem_somos_1' name='quem_somos_1' class='text' value=''/>");
+					$("#up_quem_somos_1").remove();
+
+				}else{
+
+					alert(retorno);
+
+				}
+
+			}
+		})
+
+	}
+
+}
+
+function confirmaDeleteQuemSomos2(id){
+
+	decisao = confirm("Deseja realmente deletar a imagem?");
+
+	if (decisao){
+
+		$.ajax({
+			type: "POST",
+			url:"/empresas/ajax/fn/deleta_quem_somos_2/id/"+id,
+			dataType:"html",
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#upload_quem_somos_2").html("<label class='label'>Foto Loja 2</label><input type='file' id='quem_somos_2' name='quem_somos_2' class='text' value=''/>");
+					$("#up_quem_somos_2").remove();
+
+				}else{
+
+					alert(retorno);
+
+				}
+
+			}
+		})
+
+	}
+
+}
+
+function confirmaDeleteQuemSomos3(id){
+
+	decisao = confirm("Deseja realmente deletar a imagem?");
+
+	if (decisao){
+
+		$.ajax({
+			type: "POST",
+			url:"/empresas/ajax/fn/deleta_quem_somos_3/id/"+id,
+			dataType:"html",
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#upload_quem_somos_3").html("<label class='label'>Foto Loja 3</label><input type='file' id='quem_somos_3' name='quem_somos_3' class='text' value=''/>");
+					$("#up_quem_somos_3").remove();
+
+				}else{
+
+					alert(retorno);
+
+				}
+
+			}
+		})
+
+	}
+
+}
+
+function confirmaDeleteQuemSomos4(id){
+
+	decisao = confirm("Deseja realmente deletar a imagem?");
+
+	if (decisao){
+
+		$.ajax({
+			type: "POST",
+			url:"/empresas/ajax/fn/deleta_quem_somos_4/id/"+id,
+			dataType:"html",
+			success:function(retorno){
+
+				if(retorno == "Sucesso"){
+
+					$("#upload_quem_somos_4").html("<label class='label'>Foto Loja 4</label><input type='file' id='quem_somos_4' name='quem_somos_4' class='text' value=''/>");
+					$("#up_quem_somos_4").remove();
+
+				}else{
+
+					alert(retorno);
+
+				}
+
+			}
+		})
+
 	}
 
 }
