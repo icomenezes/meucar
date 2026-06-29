@@ -96,81 +96,29 @@ class EmpresasController extends Zend_Controller_Action
 		
 		
 		
-		}elseif($this->_getParam('fn') == 'deleta_quem_somos_1'){
+		}elseif(in_array($this->_getParam('fn'), array('deleta_quem_somos_1','deleta_quem_somos_2','deleta_quem_somos_3','deleta_quem_somos_4'))){
+
+			$this->validaAcesso('gerenciar_concessionarias');
+
+			$coluna = 'path_'.substr($this->_getParam('fn'), strlen('deleta_')); // path_quem_somos_N
+
+			$idEmpresa = (int)$this->_getParam('id');
 
 			$dbEmpresa = new Application_Model_DbTable_Empresas();
 
-			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
+			$arrEmpresas = $dbEmpresa->getEmpresa($idEmpresa);
 
-			$path = $arrEmpresas[0]['path_quem_somos_1'];
+			$path = $arrEmpresas[0][$coluna];
 
-			$dadosUp['path_quem_somos_1'] = null;
-			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
+			$dadosUp = array($coluna => null);
+			if($dbEmpresa->update($dadosUp,"id = ".$idEmpresa)){
 
-				unlink($path);
-
-				echo "Sucesso";
-
-			}else{
-
-				echo "Erro ao deletar imagem";
-
-			}
-
-		}elseif($this->_getParam('fn') == 'deleta_quem_somos_2'){
-
-			$dbEmpresa = new Application_Model_DbTable_Empresas();
-
-			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
-
-			$path = $arrEmpresas[0]['path_quem_somos_2'];
-
-			$dadosUp['path_quem_somos_2'] = null;
-			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
-
-				unlink($path);
-
-				echo "Sucesso";
-
-			}else{
-
-				echo "Erro ao deletar imagem";
-
-			}
-
-		}elseif($this->_getParam('fn') == 'deleta_quem_somos_3'){
-
-			$dbEmpresa = new Application_Model_DbTable_Empresas();
-
-			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
-
-			$path = $arrEmpresas[0]['path_quem_somos_3'];
-
-			$dadosUp['path_quem_somos_3'] = null;
-			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
-
-				unlink($path);
-
-				echo "Sucesso";
-
-			}else{
-
-				echo "Erro ao deletar imagem";
-
-			}
-
-		}elseif($this->_getParam('fn') == 'deleta_quem_somos_4'){
-
-			$dbEmpresa = new Application_Model_DbTable_Empresas();
-
-			$arrEmpresas = $dbEmpresa->getEmpresa($this->_getParam('id'));
-
-			$path = $arrEmpresas[0]['path_quem_somos_4'];
-
-			$dadosUp['path_quem_somos_4'] = null;
-			if($dbEmpresa->update($dadosUp,"id = ".$this->_getParam('id'))){
-
-				unlink($path);
+				// So apaga arquivos dentro de frente_loja_empresas/ (defesa contra path arbitrario)
+				$baseDir = realpath("frente_loja_empresas");
+				$realPath = $path ? realpath($path) : false;
+				if($realPath && $baseDir && strpos($realPath, $baseDir.DIRECTORY_SEPARATOR) === 0){
+					unlink($realPath);
+				}
 
 				echo "Sucesso";
 
