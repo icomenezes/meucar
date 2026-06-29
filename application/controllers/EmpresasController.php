@@ -368,7 +368,7 @@ class EmpresasController extends Zend_Controller_Action
 
 							$size = getimagesize( $input_image );
 
-							$thumb_width = "800";
+							$thumb_width = "640";
 
 							$thumb_height = ( int )(( $thumb_width/$size[0] )*$size[1] );
 
@@ -693,7 +693,7 @@ class EmpresasController extends Zend_Controller_Action
 
 						$size = getimagesize( $input_image );
 
-						$thumb_width = "800";
+						$thumb_width = "640";
 
 						$thumb_height = ( int )(( $thumb_width/$size[0] )*$size[1] );
 
