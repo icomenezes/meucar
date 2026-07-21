@@ -1473,7 +1473,10 @@
 
 function impressaoRevisoes(){
 
-	window.open("/veiculos/impressao-revisao/id_veiculo/"+$('#id').val()+"/veiculo/"+$('#id_marca').val()+"-"+encodeURIComponent($('#descricao_site').val())+"/placa/"+$('#placa').val());
+	var modelo = ($('#id_marca').val()+"-"+$('#descricao_site').val()).replace(/\s+/g, '-');
+	var placa = $('#placa').val().replace(/\s+/g, '-');
+
+	window.open("/veiculos/impressao-revisao/id_veiculo/"+$('#id').val()+"/veiculo/"+modelo+"/placa/"+placa);
 
 }
 
