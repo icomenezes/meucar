@@ -121,14 +121,14 @@ class Application_Model_DbTable_Empresas extends Zend_Db_Table_Abstract
 		array('*')
 		);
 		
-		$row->where('e.id = ' .$idEmpresa);
+		$row->where('e.id = ?', $idEmpresa);
 
 		$row->limit(1);
-		
+
 		return $row->query()->fetchAll();
-		
+
 	}
-	
+
 	public function getEmpresas(){
  
 		$row = $this->select();

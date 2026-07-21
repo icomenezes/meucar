@@ -1222,6 +1222,12 @@ class NegociacoesController extends Zend_Controller_Action {
 
          $idNegociacao = $this->_getParam('id');
 
+         if (empty($_POST['id_veiculo']) || count($dbVeiculos->find($_POST['id_veiculo'])) == 0) {
+
+            $this->view->mensagem = "Selecione um ve&iacute;culo v&aacute;lido antes de salvar.";
+            return;
+         }
+
          $arrDados['id_veiculo'] = $_POST['id_veiculo'];
 
          if ($_POST['id_gerente']){

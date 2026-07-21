@@ -1113,20 +1113,22 @@ class VeiculosController extends Zend_Controller_Action
 	}
 	
 	public function imprimeInformativoAction(){
-	
+
+		if(empty($_SESSION['sessionUser']['id_empresa'])){
+			return $this->_helper->redirector->gotoUrl(URL."/index/bad-access");
+		}
+
 		$dbVeiculo = new Application_Model_DbTable_Veiculos();
 		$dbEmpresas = new Application_Model_DbTable_Empresas();
 		$dbOpcionaisVeiculos = new Application_Model_DbTable_OpcionaisVeiculos();
-		
+
 		$arr['id'] = $this->_getParam('id');
-		
-		
+
+
 		$this->view->veiculo = $dbVeiculo->_get($arr);
 		$this->view->empresa = $dbEmpresas->getEmpresa($_SESSION['sessionUser']['id_empresa']);
 		$this->view->opcionais = $dbOpcionaisVeiculos->getVeiculosOpcionais($this->_getParam('id'));
 
-		//var_export($dbEmpresas->getEmpresa($_SESSION['sessionUser']['id_empresa']));
-		
 	}
 	
 	public function ajaxAction(){
