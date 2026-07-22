@@ -92,11 +92,15 @@ class ValeReciboController extends Zend_Controller_Action
 	}
 	
 	public function imprimirReciboAction(){
-	
+
+		if(empty($_SESSION['sessionUser']['id'])){
+			return $this->_helper->redirector->gotoUrl(URL."/index/bad-access");
+		}
+
 		$dbRecibos = new Application_Model_DbTable_Recibos();
-		
-		
-				
+
+
+
 		$layout = $this->_helper->layout();
 	  	$layout->setLayout('no-layout');
 		
