@@ -1867,6 +1867,8 @@ class ClientesController extends Zend_Controller_Action
 			}else{
 				$arrFluxoAgendada = $dbFluxoClientes->getClientesFluxoAgendado($dados);
 				$arrFluxoCliente = array_merge($arrFluxoAgendada, $arrFluxo);
+
+				$arrFluxoCliente = array_values(array_column($arrFluxoCliente, null, 'id'));
 			}
 
 			$strFluxo = "<style>
