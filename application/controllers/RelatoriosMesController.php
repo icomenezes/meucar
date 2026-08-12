@@ -231,6 +231,7 @@ class RelatoriosMesController extends Zend_Controller_Action
 						</tr>";
 						
 		$_buscaRelatorio['data_final'] = @date("Y")."-12-31";
+		$_buscaRelatorio['id_empresa'] = $_SESSION['sessionUser']['id_empresa'];
 		$arrPatrimonioGeral = $dbPatrimonio->getPatrimonios($_buscaRelatorio);
 		
 		$arrPatrimonioGeral = array_reverse($arrPatrimonioGeral);
