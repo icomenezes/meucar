@@ -251,7 +251,7 @@ class RelatoriosMesController extends Zend_Controller_Action
 		
 		$strTabela .=   "<tr>
 							<td style='border-left: solid 2px; border-top: solid 2px; border-bottom: solid 2px; text-align:right;'><b>MÉDIA</b></td>
-							<td style='border-right: solid 2px; border-top: solid 2px; border-bottom: solid 2px;'><b>R$ ".money_format("%i",$somaPatrimonio/count($arrPatrimonioGeral))."</b></td>
+							<td style='border-right: solid 2px; border-top: solid 2px; border-bottom: solid 2px;'><b>R$ ".money_format("%i",count($arrPatrimonioGeral) > 0 ? $somaPatrimonio/count($arrPatrimonioGeral) : 0)."</b></td>
 						</tr>";
 		
 		$strTabela .= "</tabela>";
