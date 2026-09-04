@@ -218,7 +218,7 @@ class Application_Model_DbTable_Veiculos extends Zend_Db_Table_Abstract
 			array('modelo','marca','ano_modelo','cod_fipe','segmento')
 		);
 		
-		$row->where("v.id = ".$idVeiculo);
+		$row->where("v.id = ?", (int)$idVeiculo);
 
 		return $row->query()->fetchAll();
 		

@@ -1,11 +1,23 @@
 
 <?php 
 
-	if($this->veiculo['id'] == ""){
+	if(empty($this->veiculo['id'])){
 		
-		$id = end(explode("/",$_SERVER ['REQUEST_URI']));
+		// Usa o id da rota, e nao o ultimo pedaco da URL: em URLs com slug do modelo
+		// (.../VolksWagen-Up) o redirect montava /vendido/VolksWagen-Up e quebrava o SQL.
+		$id = Zend_Controller_Front::getInstance()->getRequest()->getParam('id');
 		
-		header("location: http://www.sistemameucar.com.br/carros-usados/vendido/".$id);
+		if(ctype_digit((string)$id)){
+			
+			header("location: http://www.sistemameucar.com.br/carros-usados/vendido/".(int)$id);
+		
+		}else{
+			
+			header("location: /carros-usados");
+		
+		}
+
+		exit;
 
 	}
 
