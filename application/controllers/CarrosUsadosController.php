@@ -838,7 +838,24 @@ class CarrosUsadosController extends Zend_Controller_Action {
 		$dbVeiculos = new Application_Model_DbTable_Veiculos();
 		$dbFotosVeiculos = new Application_Model_DbTable_FotosVeiculos();
 
-		$arrVeiculo = $dbVeiculos->getVeiculoEstoque(end(explode("/",$_SERVER ['REQUEST_URI'])));
+		// O id vem como ultimo segmento da URL (/carros-usados/vendido/123), nao como parametro
+		// nomeado. Sem validar, qualquer texto ia cru para o WHERE do SQL.
+		$segmentos = explode("/", trim((string)parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), "/"));
+		$idVeiculo = end($segmentos);
+
+		if(!ctype_digit((string)$idVeiculo)){
+
+			return $this->_redirect('/carros-usados');
+
+		}
+
+		$arrVeiculo = $dbVeiculos->getVeiculoEstoque((int)$idVeiculo);
+
+		if(!$arrVeiculo){
+
+			return $this->_redirect('/carros-usados');
+
+		}
 		
 		$arrVeiculos = $dbVeiculos->_getVeiculosParecidos(current(explode(" ",$arrVeiculo[0]['modelo'])));
 
