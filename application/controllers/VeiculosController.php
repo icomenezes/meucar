@@ -515,7 +515,7 @@ class VeiculosController extends Zend_Controller_Action
 
 			}
 			
-			$this->geraSitemap();
+			// Sitemap e feeds XML dos portais sao gerados pelo cron (veiculos/gera-feeds), nao a cada veiculo salvo
 	
 			if($mensagem == ""){
 				
@@ -3246,14 +3246,6 @@ class VeiculosController extends Zend_Controller_Action
 		}
 		
 		$this->view->veiculos = $arrVeiculoCompleto;
-		
-		//$this->geraSitemap();
-		//$this->geraXMLGlix();
-		//$this->geraXMLIbiubi();
-		//$this->geraXMLFisgo();
-		$this->geraXMLTrovit();
-		//$this->geraXMLBuscaAcelerada();
-		//$this->geraXMLMitula();
 	
 	}
 	
@@ -6495,6 +6487,34 @@ class VeiculosController extends Zend_Controller_Action
 	
 	}
 
+	// Regenera sitemap e feeds XML dos portais. Chamado pelo cron do servidor via curl local,
+	// por isso so aceita requisicoes vindas do proprio servidor.
+	public function geraFeedsAction(){
+
+		$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+
+		if(!in_array($_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))){
+
+			$this->getResponse()->setHttpResponseCode(403);
+			return;
+
+		}
+
+		Zend_Session::writeClose(false);
+
+		$this->geraSitemap();
+		$this->geraXMLGlix();
+		$this->geraXMLIbiubi();
+		$this->geraXMLFisgo();
+		$this->geraXMLTrovit();
+		$this->geraXMLBuscaAcelerada();
+		$this->geraXMLMitula();
+
+		echo "ok";
+
+	}
+
 	private function geraSitemap(){
 		
 		$dbVeiculos = new Application_Model_DbTable_Veiculos();
@@ -8757,19 +8777,7 @@ class VeiculosController extends Zend_Controller_Action
 
 			}
 			
-			$this->geraSitemap();
-			
-			$this->geraXMLGlix();
-			
-			$this->geraXMLIbiubi();
-			
-			$this->geraXMLFisgo();
-			
-			$this->geraXMLTrovit();
-			
-			$this->geraXMLBuscaAcelerada();
-			
-			$this->geraXMLMitula();
+			// Sitemap e feeds XML dos portais sao gerados pelo cron (veiculos/gera-feeds), nao a cada veiculo salvo
 
 			if($mensagem == ""){
 				

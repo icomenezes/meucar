@@ -24,8 +24,11 @@ class ModelosController extends Zend_Controller_Action
 
 		$layout = $this->_helper->layout();
 	  	$layout->setLayout('no-layout');
-		
+
 		header("Access-Control-Allow-Origin: *");
+
+		// So le a sessao: libera o lock para as outras chamadas AJAX da tela nao ficarem na fila
+		Zend_Session::writeClose(false);
 
 		if($this->_getParam('fn') == 'getByModelo'){
 			
@@ -374,29 +377,8 @@ class ModelosController extends Zend_Controller_Action
 			$fonte    = 'fipe_local';
 			$arrMarcas = [];
 
-			if ($rows) {
-				foreach ($rows as $r) {
-					$arrMarcas[] = ['Value' => $r['marca_id'], 'Label' => $r['marca']];
-				}
-			} else {
-				// Fallback: APIs externas (tabela fipe ainda não importada)
-				$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
-				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
-				$fonte          = 'fipe';
-				$tabelaRef      = $this->getTabelaReferenciaFipe();
-				$arrMarcasRaw   = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarMarcas', [
-					'codigoTabelaReferencia' => $tabelaRef,
-					'codigoTipoVeiculo'      => $tipoFipe
-				]);
-				if (is_array($arrMarcasRaw) && !empty($arrMarcasRaw) && isset($arrMarcasRaw[0]['Label'])) {
-					$arrMarcas = $arrMarcasRaw;
-				} else {
-					$fonte = 'parallelum';
-					$raw   = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands");
-					if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
-						foreach ($raw as $v) { $arrMarcas[] = ['Value' => $v['code'], 'Label' => $v['name']]; }
-					}
-				}
+			foreach ($rows as $r) {
+				$arrMarcas[] = ['Value' => $r['marca_id'], 'Label' => $r['marca']];
 			}
 
 			$marcas     = '<option disabled="disabled" selected="selected" value="" data-fonte="'.$fonte.'">Selecione</option>';
@@ -433,33 +415,11 @@ class ModelosController extends Zend_Controller_Action
 			$fonte = 'fipe_local';
 			$lista = [];
 
-			if ($rows) {
-				foreach ($rows as $r) {
-					$lista[] = ['Value' => $r['modelo_id'], 'Label' => $r['modelo']];
-				}
-			} else {
-				// Fallback: APIs externas
-				$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
-				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
-				$fonte          = 'fipe';
-				$tabelaRef      = $this->getTabelaReferenciaFipe();
-				$resultado      = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarModelos', [
-					'codigoTabelaReferencia' => $tabelaRef,
-					'codigoTipoVeiculo'      => $tipoFipe,
-					'codigoMarca'            => $marcaId
-				]);
-				if ($resultado && isset($resultado['Modelos']) && !empty($resultado['Modelos'])) {
-					foreach ($resultado['Modelos'] as $v) { $lista[] = ['Value' => $v['Value'], 'Label' => $v['Label']]; }
-				} else {
-					$fonte = 'parallelum';
-					$raw   = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models");
-					if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
-						foreach ($raw as $v) { $lista[] = ['Value' => $v['code'], 'Label' => $v['name']]; }
-					}
-				}
+			foreach ($rows as $r) {
+				$lista[] = ['Value' => $r['modelo_id'], 'Label' => $r['modelo']];
 			}
 
-			$modelos = '<option disabled="disabled" selected="selected" value="" data-fonte="'.$fonte.'">Selecione</option>';
+			$modelos ='<option disabled="disabled" selected="selected" value="" data-fonte="'.$fonte.'">Selecione</option>';
 			foreach ($lista as $v) {
 				$modelos .= '<option value="'.htmlspecialchars($v['Value']).'">'.htmlspecialchars($v['Label']).'</option>';
 			}
@@ -482,31 +442,8 @@ class ModelosController extends Zend_Controller_Action
 			$fonte = 'fipe_local';
 			$lista = [];
 
-			if ($rows) {
-				foreach ($rows as $r) {
-					$lista[] = ['Value' => $r['codigo'], 'Label' => str_replace('32000', 'Zero', $r['ano_label'])];
-				}
-			} else {
-				// Fallback: APIs externas
-				$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
-				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
-				$fonte          = 'fipe';
-				$tabelaRef      = $this->getTabelaReferenciaFipe();
-				$arrAnos        = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarAnoModelo', [
-					'codigoTabelaReferencia' => $tabelaRef,
-					'codigoTipoVeiculo'      => $tipoFipe,
-					'codigoMarca'            => $marcaId,
-					'codigoModelo'           => $modeloId
-				]);
-				if (is_array($arrAnos) && !empty($arrAnos) && isset($arrAnos[0]['Value'])) {
-					foreach ($arrAnos as $v) { $lista[] = ['Value' => $v['Value'], 'Label' => str_replace('32000','Zero',$v['Label'])]; }
-				} else {
-					$fonte = 'parallelum';
-					$raw   = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models/{$modeloId}/years");
-					if (is_array($raw) && !empty($raw) && isset($raw[0]['code'])) {
-						foreach ($raw as $v) { $lista[] = ['Value' => $v['code'], 'Label' => str_replace('32000','Zero',$v['name'])]; }
-					}
-				}
+			foreach ($rows as $r) {
+				$lista[] = ['Value' => $r['codigo'], 'Label' => str_replace('32000', 'Zero', $r['ano_label'])];
 			}
 
 			$anos = '<option disabled="disabled" selected="selected" value="" data-fonte="'.$fonte.'">Selecione</option>';
@@ -543,53 +480,14 @@ class ModelosController extends Zend_Controller_Action
 					'mes_referencia' => $row['mes_referencia'],
 				]);
 			} else {
-				// Fallback: APIs externas (modelo não está na tabela fipe local)
-				$tipoFipe       = $this->getTipoVeiculoFipe($tipo);
-				$tipoParallelum = $tipo == 'motos' ? 'motorcycles' : ($tipo == 'caminhoes' ? 'trucks' : 'cars');
-				$partes          = explode('-', $codigoAno);
-				$anoModelo       = $partes[0];
-				$tipoCombustivel = isset($partes[1]) ? $partes[1] : 1;
-				$tabelaRef       = $this->getTabelaReferenciaFipe();
-				$arrFipe         = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarValorComTodosParametros', [
-					'codigoTabelaReferencia' => $tabelaRef,
-					'codigoTipoVeiculo'      => $tipoFipe,
-					'codigoMarca'            => $marcaId,
-					'codigoModelo'           => $modeloId,
-					'anoModelo'              => $anoModelo,
-					'codigoTipoCombustivel'  => $tipoCombustivel,
-					'tipoConsulta'           => 'tradicional'
+				echo json_encode([
+					'fonte'       => 'local',
+					'valor'       => '',
+					'codigo_fipe' => '',
+					'combustivel' => '',
+					'ano_modelo'  => $codigoAno,
+					'id'          => 0
 				]);
-				if ($arrFipe && isset($arrFipe['Valor'])) {
-					echo json_encode([
-						'fonte'          => 'fipe',
-						'valor'          => $arrFipe['Valor'],
-						'codigo_fipe'    => $arrFipe['CodigoFipe'],
-						'combustivel'    => $arrFipe['Combustivel'],
-						'ano_modelo'     => $arrFipe['AnoModelo'],
-						'mes_referencia' => isset($arrFipe['MesReferencia']) ? $arrFipe['MesReferencia'] : ''
-					]);
-				} else {
-					$arrFipeP = $this->parallelumApiGet("https://parallelum.com.br/fipe/api/v2/{$tipoParallelum}/brands/{$marcaId}/models/{$modeloId}/years/{$codigoAno}");
-					if ($arrFipeP && isset($arrFipeP['price'])) {
-						echo json_encode([
-							'fonte'          => 'parallelum',
-							'valor'          => $arrFipeP['price'],
-							'codigo_fipe'    => isset($arrFipeP['codeFipe'])      ? $arrFipeP['codeFipe']      : '',
-							'combustivel'    => isset($arrFipeP['fuel'])           ? $arrFipeP['fuel']           : '',
-							'ano_modelo'     => isset($arrFipeP['modelYear'])      ? $arrFipeP['modelYear']      : $codigoAno,
-							'mes_referencia' => isset($arrFipeP['referenceMonth']) ? $arrFipeP['referenceMonth'] : ''
-						]);
-					} else {
-						echo json_encode([
-							'fonte'       => 'local',
-							'valor'       => '',
-							'codigo_fipe' => '',
-							'combustivel' => '',
-							'ano_modelo'  => $codigoAno,
-							'id'          => 0
-						]);
-					}
-				}
 			}
 
 		}elseif($this->_getParam('fn') == 'get_modelo'){
@@ -688,7 +586,8 @@ class ModelosController extends Zend_Controller_Action
 		$cod_fipe   = $this->_getParam('cod_fipe');
 		$codigo_ano = $this->_getParam('codigo_ano');
 		$tipo       = $this->_getParam('tipo') ?: 'carros';
-		$segmento   = $tipo === 'motos' ? 'motos' : ($tipo === 'caminhoes' ? 'caminhoes' : 'carros');
+		// Aceita o segmento da tabela fipe (carros/motos/caminhoes) e o do modelos_11 (carro/moto/caminhao)
+		$segmento   = in_array($tipo, ['motos', 'moto']) ? 'motos' : (in_array($tipo, ['caminhoes', 'caminhao']) ? 'caminhoes' : 'carros');
 
 		if ($cod_fipe && $codigo_ano) {
 			$db  = Zend_Db_Table::getDefaultAdapter();
@@ -889,81 +788,6 @@ class ModelosController extends Zend_Controller_Action
 		}
 		curl_close($ch);
 		return json_decode($res, true);
-	}
-
-	private function parallelumApiGet($url)
-	{
-		$ch = curl_init();
-		curl_setopt_array($ch, [
-			CURLOPT_URL            => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_TIMEOUT        => 10,
-			CURLOPT_HTTPHEADER     => ['Accept: application/json'],
-			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_FOLLOWLOCATION => true
-		]);
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) { curl_close($ch); return null; }
-		curl_close($ch);
-		return json_decode($response, true);
-	}
-
-	private function fipeApiPost($url, $params)
-	{
-		$postData = http_build_query($params, '', '&');
-
-		$ch = curl_init();
-		curl_setopt_array($ch, [
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_POST => true,
-			CURLOPT_POSTFIELDS => $postData,
-			CURLOPT_TIMEOUT => 30,
-			CURLOPT_HTTPHEADER => [
-				'Accept: application/json, text/javascript, */*; q=0.01',
-				'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.6,en;q=0.4',
-				'Content-Type: application/x-www-form-urlencoded; charset=UTF-8',
-				'Host: veiculos.fipe.org.br',
-				'Origin: https://veiculos.fipe.org.br',
-				'Referer: https://veiculos.fipe.org.br/',
-				'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-			],
-			CURLOPT_SSL_VERIFYPEER => false,
-			CURLOPT_FOLLOWLOCATION => true
-		]);
-
-		$response = curl_exec($ch);
-		if (curl_errno($ch)) {
-			curl_close($ch);
-			return null;
-		}
-		curl_close($ch);
-		return json_decode($response, true);
-	}
-
-	private function getTabelaReferenciaFipe()
-	{
-		if (isset($_SESSION['fipe_tabela_ref']) && isset($_SESSION['fipe_tabela_ref_time'])
-			&& (time() - $_SESSION['fipe_tabela_ref_time']) < 3600) {
-			return $_SESSION['fipe_tabela_ref'];
-		}
-
-		$tabelas = $this->fipeApiPost('https://veiculos.fipe.org.br/api/veiculos/ConsultarTabelaDeReferencia', []);
-
-		if (!$tabelas || empty($tabelas)) {
-			return null;
-		}
-
-		$_SESSION['fipe_tabela_ref'] = $tabelas[0]['Codigo'];
-		$_SESSION['fipe_tabela_ref_time'] = time();
-
-		return $tabelas[0]['Codigo'];
-	}
-
-	private function getTipoVeiculoFipe($tipo)
-	{
-		$map = ['carros' => 1, 'motos' => 2, 'caminhoes' => 3];
-		return isset($map[$tipo]) ? $map[$tipo] : 1;
 	}
 
 }

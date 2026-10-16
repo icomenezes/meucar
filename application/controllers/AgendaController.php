@@ -222,6 +222,9 @@ class AgendaController extends Zend_Controller_Action {
       $layout = $this->_helper->layout();
       $layout->setLayout('no-layout');
 
+      // So le a sessao: libera o lock para as outras chamadas AJAX da agenda nao ficarem na fila
+      Zend_Session::writeClose(false);
+
       if(empty($_SESSION['sessionUser']['id_empresa'])) return;
 
       $idUsuario = $_SESSION['sessionUser']['id'];
