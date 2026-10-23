@@ -888,6 +888,12 @@ class NegociacoesController extends Zend_Controller_Action {
 
    public function imprimirPromissoriaAction(){
 
+      // sessao expirada: sem id_empresa o getEmpresa quebra o SQL
+      if (empty($_SESSION['sessionUser']['id_empresa'])) {
+
+         $this->_helper->redirector->gotoUrl(URL);
+      }
+
       $layout = $this->_helper->layout();
       $layout->setLayout('no-layout');
 
@@ -1201,6 +1207,12 @@ class NegociacoesController extends Zend_Controller_Action {
    public function edtAction(){
 
       $this->validaAcesso('gerenciar_vendas');
+
+      // /negociacoes/edt sem id (ex.: Enter na barra de endereco depois de salvar)
+      if (!ctype_digit((string) $this->_getParam('id'))) {
+
+         $this->_helper->redirector->gotoUrl("negociacoes/lista");
+      }
 
       $dbFinanceira = new Application_Model_DbTable_Financeiras();
       $dbNegociacoes = new Application_Model_DbTable_Negociacoes();
