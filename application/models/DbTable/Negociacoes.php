@@ -426,7 +426,7 @@ class Application_Model_DbTable_Negociacoes extends Zend_Db_Table_Abstract
 			array('valor_fixo','percentual_venda')
 		);
 		
-		$row->where('n.id = ' .$id);
+		$row->where('n.id = ?', (int) $id);
 		
 		//echo $row->__toString();
 		
