@@ -81,7 +81,12 @@ class NegociacoesController extends Zend_Controller_Action {
 		$dbUsuarios = new Application_Model_DbTable_Usuarios();
 		
 
-		if ($this->getRequest()->isPost()) {
+		// veiculo vazio ou excluido quebra a FK fk_negociacoes__ref_veiculos no update
+		if ($this->getRequest()->isPost() && (empty($_POST['id_veiculo']) || count($dbVeiculos->find($_POST['id_veiculo'])) == 0)) {
+
+			$this->view->mensagem = "Selecione um ve&iacute;culo v&aacute;lido antes de salvar.";
+
+		} else if ($this->getRequest()->isPost()) {
 
 			$idNegociacao = $this->_getParam('id');
 
