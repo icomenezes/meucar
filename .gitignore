@@ -1,1 +1,5 @@
 .env
+
+# Config de producao: fica so no servidor (senhas de banco e SMTP). Modelo em application.ini.example
+application/configs/application.ini
+application/configs/application.ini_bk
