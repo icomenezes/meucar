@@ -2041,6 +2041,13 @@ class NegociacoesController extends Zend_Controller_Action {
 						</html>";
 
 
+					// Pre-check com timeout curto: um SMTP fora do ar ou mal configurado
+					// nunca pode travar o cadastro da venda (a negociacao ja foi gravada acima).
+					if(!Internas_MailConfig::smtpDisponivel(Internas_MailConfig::CONTA_SISTEMA)){
+						error_log('[NegociacoesController] indicacao corretora: SMTP indisponivel, e-mail nao enviado (empresa ' . $idEmpresa . ', corretora ' . $idCorretora . ')');
+						return false;
+					}
+
 					$transport = Internas_MailConfig::getTransport(Internas_MailConfig::CONTA_SISTEMA);
 
 					$mail = new Zend_Mail('UTF-8');
@@ -2062,8 +2069,9 @@ class NegociacoesController extends Zend_Controller_Action {
 						
 					}catch(Exception $e){
 
-						echo $e->getMessage();
-						
+						error_log('[NegociacoesController] indicacao corretora: falha ao enviar e-mail para ' . $emailCorretora . ': ' . $e->getMessage());
+						return false;
+
 					}
 
 				}
