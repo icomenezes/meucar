@@ -11,11 +11,11 @@ resources.frontController.params.displayExceptions = 1
 resources.layout.layoutPath = APPLICATION_PATH "/layouts/scripts/"
 
 resources.db.adapter = PDO_MYSQL
-resources.db.params.host = 127.0.0.1
+resources.db.params.host = "TROCAR"
 resources.db.params.port = 3306
-resources.db.params.username = meucar
-resources.db.params.password = LhF75SypNTLdedpt
-resources.db.params.dbname = meucar
+resources.db.params.username = "TROCAR"
+resources.db.params.password = "TROCAR"
+resources.db.params.dbname = "TROCAR"
 resources.db.params.driver_options.1002 = "SET SESSION sql_mode=''"
 resources.db.isDefaultTableAdapter = true
 
@@ -28,19 +28,19 @@ smtp.port = 465
 smtp.ssl  = "ssl"
 
 smtp.sistema.user  = "contato@sistemameucar.com.br"
-smtp.sistema.pass  = "Sistema@2026"
+smtp.sistema.pass  = "TROCAR"
 
 smtp.contato.user  = "contato@sistemameucar.com.br"
-smtp.contato.pass  = "Contato@2026"
+smtp.contato.pass  = "TROCAR"
 
 smtp.proposta.user = "contato@sistemameucar.com.br"
-smtp.proposta.pass = "Proposta@2026"
+smtp.proposta.pass = "TROCAR"
 
 smtp.suporte.user  = "suporte@sistemameucar.com.br"
-smtp.suporte.pass  = "Suporte@2026"
+smtp.suporte.pass  = "TROCAR"
 
 smtp.admin.user    = "administrador@sistemameucar.com.br"
-smtp.admin.pass    = "Administrador@2026"
+smtp.admin.pass    = "TROCAR"
 
 email.suporte      = "suporte@sistemameucar.com.br"
 email.notif_lojista = "guilherme@selectveiculos.com.br"
@@ -58,9 +58,9 @@ phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
 resources.frontController.params.displayExceptions = 1
 recaptcha.enabled = 0
-resources.db.params.host = 127.0.0.1
+resources.db.params.host = "TROCAR"
 resources.db.params.port = 3306
-resources.db.params.username = meucar
-resources.db.params.password = LhF75SypNTLdedpt
-resources.db.params.dbname = meucar
+resources.db.params.username = "TROCAR"
+resources.db.params.password = "TROCAR"
+resources.db.params.dbname = "TROCAR"
 resources.db.params.driver_options.1002 = "SET SESSION sql_mode=''"

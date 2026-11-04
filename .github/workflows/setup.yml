@@ -8,7 +8,8 @@ on:
       # - '/public/.htaccess'
       # - '/public/.user.ini'
       # - '/public/index.php'
-      - '/application/configs/application.ini'
+      - 'application/configs/application.ini'
+      - 'application/configs/application.ini_bk'
       - 'tmp/**'
       - '**/.vscode'
       - '**/.git*'
@@ -28,11 +29,8 @@ jobs:
             -rptgoDOqi 
             --chown=www:www
             --exclude='.git'
-            # --exclude='.htaccess'
-            # --exclude='public/.htaccess'
-            # --exclude='public/.user.ini'
-            # --exclude='public/index.php'
-            # --exclude='application/configs/application.ini'
+            --exclude='application/configs/application.ini'
+            --exclude='application/configs/application.ini_bk'
             --exclude='.github'
             --exclude='app/database'
             --exclude='app/config/'
